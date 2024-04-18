@@ -13,7 +13,7 @@ namespace Saga
         public static bool mainLoop = true;
 
 
-
+        //Github test kommentar
         static void Main(string[] args) {
             Start();
             Encounters.FirstEncounter();
