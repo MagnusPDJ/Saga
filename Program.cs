@@ -51,10 +51,22 @@ namespace Saga
             return p;
         }
         public static void Quit() {
-            save();
-            Console.WriteLine("Game has been saved!");
-            Console.ReadKey();
-            Environment.Exit(0);
+            while (true) {
+                Console.Clear();
+                Console.WriteLine("Want to save? (Y/N)");
+               string input = Console.ReadLine().ToLower();
+                if (input == "y") {
+                    save();
+                    Console.WriteLine("Game has been saved!");
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                }
+                else if (input == "n") {
+                    Console.WriteLine("Game Over");
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                }
+            }
         }
         
         public static void save() {

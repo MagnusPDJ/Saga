@@ -68,7 +68,8 @@ namespace Saga
                 Console.WriteLine("Strength: " + p + " / HP: " + h);
                 Console.WriteLine("-----------------------");
                 Console.WriteLine(Program.currentPlayer.name + "'s Stats:");
-                Console.WriteLine("Gold: " + Program.currentPlayer.gold + " || Healing Potions: " + Program.currentPlayer.potion + " ||  Health: " + Program.currentPlayer.health);
+                Console.WriteLine( "Healing Potions: " + Program.currentPlayer.potion + " || Health: " + Program.currentPlayer.health);
+                Console.WriteLine("Gold:           $" + Program.currentPlayer.gold + " || Armor:  " + Program.currentPlayer.armorValue);
                 Console.WriteLine("=========Actions=======");
                 Console.WriteLine("| (A)ttack (D)efend   |");
                 Console.WriteLine("| (R)un    (H)eal     |");
@@ -82,7 +83,7 @@ namespace Saga
                     int damage = p - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = rand.Next(1, Program.currentPlayer.weaponValue) + rand.Next(0, 4);
+                    int attack = rand.Next(1, 1+Program.currentPlayer.weaponValue) + rand.Next(0, 4);
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
@@ -93,7 +94,7 @@ namespace Saga
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = rand.Next(0, 3+Program.currentPlayer.weaponValue) / 2;
+                    int attack = rand.Next(0, 4+Program.currentPlayer.weaponValue) / 2;
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
