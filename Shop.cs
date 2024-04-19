@@ -39,11 +39,11 @@ namespace Saga
                 Console.WriteLine();
                 Console.WriteLine("   " + p.name + "'s Stats     ");
                 Console.WriteLine("=====================");
-                Console.WriteLine("Current Health: " + p.health);
-                Console.WriteLine("Gold:           $" + p.gold);
+                Console.WriteLine("Current Health:    " + p.health);
+                Console.WriteLine("| Gold:           $" + p.gold);
                 Console.WriteLine("| Weapon Strength: " + p.weaponValue);
-                Console.WriteLine("| Armor Strength: " + p.armorValue);
-                Console.WriteLine("| Potions: " + p.potion);
+                Console.WriteLine("| Armor Strength:  " + p.armorValue);
+                Console.WriteLine("| Potions:         " + p.potion);
                 Console.WriteLine("| Difficulty Mods: " + p.mods);
                 Console.WriteLine("=====================");
 

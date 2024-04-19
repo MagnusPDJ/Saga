@@ -5,3 +5,10 @@ C:\Users\Magnus\source\repos\Saga\obj\Debug\Saga.csproj.AssemblyReference.cache
 C:\Users\Magnus\source\repos\Saga\obj\Debug\Saga.csproj.CoreCompileInputs.cache
 C:\Users\Magnus\source\repos\Saga\obj\Debug\Saga.exe
 C:\Users\Magnus\source\repos\Saga\obj\Debug\Saga.pdb
+C:\Users\magnu\Documents\GitHub\Saga\bin\Debug\Saga.exe.config
+C:\Users\magnu\Documents\GitHub\Saga\bin\Debug\Saga.exe
+C:\Users\magnu\Documents\GitHub\Saga\bin\Debug\Saga.pdb
+C:\Users\magnu\Documents\GitHub\Saga\obj\Debug\Saga.csproj.AssemblyReference.cache
+C:\Users\magnu\Documents\GitHub\Saga\obj\Debug\Saga.csproj.CoreCompileInputs.cache
+C:\Users\magnu\Documents\GitHub\Saga\obj\Debug\Saga.exe
+C:\Users\magnu\Documents\GitHub\Saga\obj\Debug\Saga.pdb
