@@ -37,9 +37,9 @@ namespace Saga
             Console.Clear();
             Console.WriteLine("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
             Console.WriteLine("anything about your past.");
-            if (currentPlayer.name == "") {
+            if (String.IsNullOrWhiteSpace(p.name) == true) {
                 Console.WriteLine("You can't even remember your own name...");
-                currentPlayer.name = "Adventurer";
+                p.name = "Adventurer";
             } else {
                 Console.WriteLine("You know your name is " + p.name + ".");
             }

@@ -35,7 +35,7 @@ namespace Saga
                 Console.WriteLine("| (D)ifficulty Mod:   $" + difP);
                 Console.WriteLine("|========================");
                 Console.WriteLine("| (S)ell    Potion    $" + potionP/2);
-                Console.WriteLine("|  Sell (5x)Potion       ");
+                Console.WriteLine("|  Sell (5x)Potions   $" +(potionP/2)*5);
                 Console.WriteLine("=========================");
                 Console.WriteLine(" (E)xit      (Q)uit game ");
                 Console.WriteLine();
@@ -67,7 +67,7 @@ namespace Saga
                 else if (input == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", potionP / 2, p);
                 }
-                else if (input == "s" || input == "sell" || input == "sell potion") {
+                else if (input == "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
                     TrySell("5x potion", potionP / 2, p);
                 }
                 else if (input == "q" || input == "quit" || input == "quit game") {
