@@ -9,8 +9,7 @@ namespace Saga
     [Serializable]
     public class Player
     {
-        Random rand = new Random();
-
+        //Player Stats
         public string name;
         public int id;
         public int gold = 0;
@@ -20,24 +19,27 @@ namespace Saga
         public int potion = 5;
         public int weaponValue = 0;
         public int potionValue = 5;
-
         public int mods = 0;
 
+        //Monster liv skaleret på spilleren.
         public int GetHealth() {
             int upper = (2 * mods+5);
             int lower = (mods+2);
-            return rand.Next(lower, upper);
+            return Program.rand.Next(lower, upper);
         }
+
+        //Monster skade skaleret på spilleren.
         public int GetPower() {
             int upper = (2 * mods + 3);
             int lower = (mods + 1);
-            return rand.Next(lower, upper);
+            return Program.rand.Next(lower, upper);
         }
 
+        //Guld drop skaleret på spilleren.
         public int GetGold() {
             int upper = (15 * mods + 50);
             int lower = (10 * mods + 10);
-            return rand.Next(lower, upper);
+            return Program.rand.Next(lower, upper);
         }
     }
 }

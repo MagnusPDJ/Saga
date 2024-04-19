@@ -8,11 +8,11 @@ namespace Saga
 {
     public class Encounters
     {   
-        static Random rand = new Random();
-        //Encounter Generic
+     //Encounter Generic
         
 
-        //Encounters
+     //Encounters
+        //Det Encounter som køres når en ny karakter startes.
         public static void FirstEncounter() {
             Console.WriteLine("You throw open the door, grapping a rusty sword, while charging toward your captor.");
             Console.WriteLine("He turns...");
@@ -20,6 +20,7 @@ namespace Saga
             BasicCombat(false, "Human captor", 1, 5);
         }
 
+        //Encounter der "spawner" en random fjende som skal dræbes.
         public static void BasicFightEncounter() {
             Console.Clear();
             Console.WriteLine("You turn the corner and there you see a foe...");
@@ -27,6 +28,7 @@ namespace Saga
             BasicCombat(true, "", 0, 0);
         }
 
+        //Encounter der "spawner" en specifik fjende som skal dræbes.
         public static void WizardEncounter() {
             Console.Clear();
             Console.WriteLine("The door slowly creaks open as you peer into the dark room. You see a tall man with a ");
@@ -36,9 +38,10 @@ namespace Saga
         }
 
 
-        //Encounter Tools
+     //Encounter Tools
+        //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (rand.Next(0, 9)) {
+            switch (Program.rand.Next(0, 9)) {
                 case int n when (n>0):
                     BasicFightEncounter();
                     break;
@@ -48,6 +51,7 @@ namespace Saga
             }
         }
 
+        //Metode til at køre kamp.
         public static void BasicCombat(bool random, string name, int power, int health) {
             string n = "";
             int p = 0;
@@ -83,7 +87,7 @@ namespace Saga
                     int damage = p - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = rand.Next(1, 1+Program.currentPlayer.weaponValue) + rand.Next(0, 4);
+                    int attack = Program.rand.Next(1, 1+Program.currentPlayer.weaponValue) + Program.rand.Next(0, 4);
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
@@ -94,14 +98,14 @@ namespace Saga
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = rand.Next(0, 4+Program.currentPlayer.weaponValue) / 2;
+                    int attack = Program.rand.Next(0, 4+Program.currentPlayer.weaponValue) / 2;
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
                 }
                 else if (input.ToLower() == "r" || input.ToLower() == "run") {
                     //Run
-                    if (rand.Next(0, 2) == 0) {
+                    if (Program.rand.Next(0, 2) == 0) {
                         Console.WriteLine("As you sprint away from the " + n + ", it strikes you and knocks you down");
                         int damage = p - Program.currentPlayer.armorValue;
                         if (damage < 0)
@@ -116,8 +120,6 @@ namespace Saga
                         Shop.Loadshop(Program.currentPlayer);
                         break;
                     }
-
-
                 }
                 else if (input.ToLower() == "h" || input.ToLower() == "heal") {
                     //Heal
@@ -151,9 +153,10 @@ namespace Saga
             }
             if (h <= 0)
             {
+                //Loot
                 int g = Program.currentPlayer.GetGold();
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-                var pot = rand.Next(0, numbers.Length);
+                var pot = Program.rand.Next(0, numbers.Length);
                 Console.WriteLine("You Won against " + n + "! You loot " + g + " gold coins.");
                 if (numbers[pot] != 0)
                 {
@@ -165,8 +168,9 @@ namespace Saga
             }
         }
 
+        //Monster navne
         public static string GetName() {
-            switch(rand.Next(0, 10)) {
+            switch(Program.rand.Next(0, 10)) {
                 case 0:
                     return "Skeleton";
                 case 1:

@@ -8,12 +8,12 @@ namespace Saga
 {
     public class Shop
     {
-        
-
+        //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
             Runshop(p);
         }
 
+        //Metode til at køre shoppen.
         public static void Runshop(Player p) {
             int potionP;
             int armorP;
@@ -21,6 +21,7 @@ namespace Saga
             int difP;
 
             while (true) {
+                //Sætter prisen i shoppen skaleret på spilleren.
                 potionP = 20 + 10 * p.mods;
                 armorP = 100 * (p.armorValue+1);
                 weaponP = 100 * (p.weaponValue+1);
@@ -79,6 +80,7 @@ namespace Saga
             }
         }
 
+        //Metode til at købe fra shoppen.
         static void TryBuy(string item, int cost, Player p) {
             if (p.gold >= cost) {
                 switch (item) {
@@ -102,6 +104,8 @@ namespace Saga
                 Console.ReadKey();
             }
         }
+
+        //Metode til at sælge til shoppen.
         static void TrySell(string item, int cost, Player p) {
                 switch (item) {
                     case "potion":
