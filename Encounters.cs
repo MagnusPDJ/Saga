@@ -81,7 +81,7 @@ namespace Saga
                 
                 Console.WriteLine("Choose an action...");
                 string input = Program.PlayerPrompt();
-                Console.WriteLine("");
+
                 if (input.ToLower() == "a" || input == "attack") {
                     //Attack
                     Console.WriteLine("You attack and " + n + " retaliates.");

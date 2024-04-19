@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Configuration;
+using System.Collections.Specialized;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Saga
 {
@@ -27,6 +30,8 @@ namespace Saga
             if(!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
             }
+            //Kalder MainMenu metoden.
+            MainMenu();
 
             //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
             currentPlayer = Load(out bool newP);
@@ -94,8 +99,7 @@ namespace Saga
                         Player newPlayer = NewStart(idCount);
                         newP = true;
                         return newPlayer;
-                    } 
-                    else {
+                    } else {
                         foreach (Player player in players) {
                             if (player.name == data[0]) {
                                 return player;
@@ -157,14 +161,62 @@ namespace Saga
                 }
             }
         }
+        //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
+        public static void MainMenu() {
+            while(true) {
+                Console.Clear();
+                Console.WriteLine("~~~~~~~~ Saga title ~~~~~~~~");
+                Console.WriteLine("1.         Play");
+                Console.WriteLine("2.       Settings");
+                Console.WriteLine("3.       Quit Game");
+                string input = Console.ReadKey().Key.ToString();
+                if (input == "D1" || input == "NumPad1") {
+                    break;
+                }
+                else if (input == "D2" || input == "NumPad2") {
+                    EditSettings();
+                }
+                else if (input == "D3" || input == "NumPad3") {
+                    Console.WriteLine("");
+                    Environment.Exit(0);
+                }
+            }
+        }
+
+        //Metode til at ændre og gemme settings i en tilhørende configfil.
+        private static void EditSettings() {
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
+            while (true) {
+                Console.Clear();
+                Console.WriteLine("Settings");
+                Console.WriteLine("============================");
+                Console.WriteLine("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value);
+                string input = Console.ReadKey().Key.ToString();
+
+                if (input == "D1"|| input == "NumPad1") {
+                    if (settings["toggleReadLine"].Value == "true") {
+                        settings["toggleReadLine"].Value = "false";
+                    }
+                    else {
+                        settings["toggleReadLine"].Value = "true";
+                    }
+                } else if (input == "Escape") {
+                    configFile.Save(ConfigurationSaveMode.Minimal);
+                    break;
+                }
+            }
+        }
 
         //Metode til at toggle ReadLine/ReadKey baseret på spiller settings
         public static string PlayerPrompt() {
-            //if (setting == "Yes") {
-            //    return Console.ReadLine().ToLower();
-            //} else {
-                return Console.ReadKey().Key.ToString();
-            //}
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleReadLine")) == true) {
+                return Console.ReadLine().ToLower();
+            } else {
+                string x = Console.ReadKey().Key.ToString();
+                Console.WriteLine("");
+                return x;
+            }
         }
     }
 }

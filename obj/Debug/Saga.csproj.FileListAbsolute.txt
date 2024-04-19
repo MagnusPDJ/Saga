@@ -19,3 +19,6 @@ C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.csproj.AssemblyReference.ca
 C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.csproj.CoreCompileInputs.cache
 C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.exe
 C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.pdb
+C:\Users\Magnus\Documents\GitHub\Saga\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\Magnus\Documents\GitHub\Saga\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.csproj.Up2Date
