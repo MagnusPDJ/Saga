@@ -66,11 +66,14 @@ namespace Saga
                 Console.Clear();
                 Console.WriteLine("Fighting: " + n + "!");
                 Console.WriteLine("Strength: " + p + " / HP: " + h);
-                Console.WriteLine("=====================");
-                Console.WriteLine("| (A)ttack (D)efend |");
-                Console.WriteLine("| (R)un    (H)eal   |");
-                Console.WriteLine("=====================");
+                Console.WriteLine("-----------------------");
+                Console.WriteLine(Program.currentPlayer.name + "'s Stats:");
                 Console.WriteLine("Gold: " + Program.currentPlayer.gold + " || Healing Potions: " + Program.currentPlayer.potion + " ||  Health: " + Program.currentPlayer.health);
+                Console.WriteLine("=========Actions=======");
+                Console.WriteLine("| (A)ttack (D)efend   |");
+                Console.WriteLine("| (R)un    (H)eal     |");
+                Console.WriteLine("=======================");
+                
                 Console.WriteLine("Choose an action...");
                 string input = Console.ReadLine();
                 if (input.ToLower() == "a" || input.ToLower() == "attack") {
@@ -90,7 +93,7 @@ namespace Saga
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = rand.Next(0, 2+Program.currentPlayer.weaponValue) / 2;
+                    int attack = rand.Next(0, 3+Program.currentPlayer.weaponValue) / 2;
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
@@ -110,6 +113,7 @@ namespace Saga
                         Console.WriteLine("You use your crazy ninja moves to evade the " + n + " and you successfully escape!");
                         Console.ReadKey();
                         Shop.Loadshop(Program.currentPlayer);
+                        break;
                     }
 
 
@@ -134,7 +138,6 @@ namespace Saga
                             damage = 0;
                         Console.WriteLine("You lose " + damage + " health");
                     }
-                    Console.ReadKey();
                 }
                 if (Program.currentPlayer.health <= 0) {
                     //Death code
@@ -142,18 +145,23 @@ namespace Saga
                     Console.ReadKey();
                     System.Environment.Exit(0);
                 }
+                Console.WriteLine("Press to continue...");
                 Console.ReadKey();
             }
-            int g = Program.currentPlayer.GetGold();
-            int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-            var pot = rand.Next(0, numbers.Length);
-            Console.WriteLine("You Won against " + n + "! You loot " + g + " gold coins.");
-            if (numbers[pot] != 0) { 
-            Console.WriteLine("You loot " + numbers[pot] + " healing potions");
-            Program.currentPlayer.potion += numbers[pot];
-        }
-            Program.currentPlayer.gold += g;
-            Console.ReadKey();
+            if (h <= 0)
+            {
+                int g = Program.currentPlayer.GetGold();
+                int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+                var pot = rand.Next(0, numbers.Length);
+                Console.WriteLine("You Won against " + n + "! You loot " + g + " gold coins.");
+                if (numbers[pot] != 0)
+                {
+                    Console.WriteLine("You loot " + numbers[pot] + " healing potions");
+                    Program.currentPlayer.potion += numbers[pot];
+                }
+                Program.currentPlayer.gold += g;
+                Console.ReadKey();
+            }
         }
 
         public static string GetName() {

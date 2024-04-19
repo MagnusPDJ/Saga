@@ -13,7 +13,7 @@ namespace Saga
         public static bool mainLoop = true;
 
 
-        //Github test kommentar
+        //
         static void Main(string[] args) {
             Start();
             Encounters.FirstEncounter();
@@ -32,6 +32,7 @@ namespace Saga
             Console.WriteLine("anything about your past.");
             if (currentPlayer.name == "") {
                 Console.WriteLine("You can't even remember your own name...");
+                currentPlayer.name = "Adventurer";
             } else {
                 Console.WriteLine("You know your name is " + currentPlayer.name + ".");
             }
