@@ -157,5 +157,14 @@ namespace Saga
                 }
             }
         }
+
+        //Metode til at toggle ReadLine/ReadKey baseret på spiller settings
+        public static string PlayerPrompt() {
+            //if (setting == "Yes") {
+            //    return Console.ReadLine().ToLower();
+            //} else {
+                return Console.ReadKey().Key.ToString();
+            //}
+        }
     }
 }

@@ -52,29 +52,29 @@ namespace Saga
                 Console.WriteLine("=========================");
 
                 //Wait for input
-                string input = Console.ReadLine().ToLower();
-                if (input == "p" || input == "potion") {
+                string input = Program.PlayerPrompt();
+                if (input.ToLower() == "p" || input == "potion") {
                     TryBuy("potion", potionP, p);
                 }
-                else if (input == "w" || input == "weapon") {
+                else if (input.ToLower() == "w" || input == "weapon") {
                     TryBuy("weapon", weaponP, p);
                 }
-                else if (input == "a" || input == "armor") {
+                else if (input.ToLower() == "a" || input == "armor") {
                     TryBuy("armor", armorP, p);
                 }
-                else if (input == "d" || input == "difficulty mod") {
+                else if (input.ToLower() == "d" || input == "difficulty mod") {
                     TryBuy("dif", difP, p);
                 }
-                else if (input == "s" || input == "sell" || input == "sell potion") {
+                else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", potionP / 2, p);
                 }
-                else if (input == "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
+                else if (input.ToLower() == "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
                     TrySell("5x potion", potionP / 2, p);
                 }
-                else if (input == "q" || input == "quit" || input == "quit game") {
+                else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
                     Program.Quit();
                 }
-                else if (input == "e" || input == "exit") {
+                else if (input.ToLower() == "e" || input == "exit") {
                     break;
                 }
             }

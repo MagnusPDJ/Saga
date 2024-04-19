@@ -80,8 +80,9 @@ namespace Saga
                 Console.WriteLine("=======================");
                 
                 Console.WriteLine("Choose an action...");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "a" || input.ToLower() == "attack") {
+                string input = Program.PlayerPrompt();
+                Console.WriteLine("");
+                if (input.ToLower() == "a" || input == "attack") {
                     //Attack
                     Console.WriteLine("You attack and " + n + " retaliates.");
                     int damage = p - Program.currentPlayer.armorValue;
@@ -92,7 +93,7 @@ namespace Saga
                     Program.currentPlayer.health -= damage;
                     h -= attack;
                 }
-                else if (input.ToLower() == "d" || input.ToLower() == "defend") {
+                else if (input.ToLower() == "d" || input == "defend") {
                     //Defend
                     Console.WriteLine("You defend the incoming attack from " + n);
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
@@ -103,7 +104,7 @@ namespace Saga
                     Program.currentPlayer.health -= damage;
                     h -= attack;
                 }
-                else if (input.ToLower() == "r" || input.ToLower() == "run") {
+                else if (input.ToLower() == "r" || input == "run") {
                     //Run
                     if (Program.rand.Next(0, 2) == 0) {
                         Console.WriteLine("As you sprint away from the " + n + ", it strikes you and knocks you down");
@@ -121,7 +122,7 @@ namespace Saga
                         break;
                     }
                 }
-                else if (input.ToLower() == "h" || input.ToLower() == "heal") {
+                else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
                     if (Program.currentPlayer.potion == 0) {
                         Console.WriteLine("No potions left!");
