@@ -14,11 +14,6 @@ namespace Saga
         public static Player currentPlayer = new Player();
         public static bool mainLoop = true;
 
-<<<<<<< HEAD
-=======
-
-        //
->>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
         static void Main(string[] args) {
             if(!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
@@ -33,6 +28,7 @@ namespace Saga
         }
 
         static Player NewStart(int i) {
+            Console.Clear();
             Player p = new Player();
             Console.WriteLine("Saga title");
             Console.Write("Enter a name: ");
@@ -54,10 +50,16 @@ namespace Saga
             Console.WriteLine("standing with his back to you outside the door");
             return p;
         }
+        public static void Quit() {
+            save();
+            Console.WriteLine("Game has been saved!");
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
         
         public static void save() {
             BinaryFormatter binForm = new BinaryFormatter();
-            string path = "saves/" + currentPlayer.id.ToString();
+            string path = "saves/" + currentPlayer.id.ToString() + ".player";
             FileStream file = File.Open(path,FileMode.OpenOrCreate);
             binForm.Serialize(file, currentPlayer);
             file.Close();
@@ -65,7 +67,7 @@ namespace Saga
         public static Player Load(out bool newP) {
             newP = false;
             Console.Clear();
-            string[] paths = Directory.GetDirectories("saves");
+            string[] paths = Directory.GetFiles("saves");
             List<Player> players = new List<Player>();
             int idCount = 0;
 

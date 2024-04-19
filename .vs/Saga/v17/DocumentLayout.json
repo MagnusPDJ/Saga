@@ -1,48 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\",
+  "WorkspaceRootPath": "C:\\Users\\Magnus\\source\\repos\\Saga\\",
   "Documents": [
     {
-<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\source\\repos\\saga\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-<<<<<<< Updated upstream
       "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-=======
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
->>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-=======
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
->>>>>>> Stashed changes
-    },
-    {
-<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-<<<<<<< Updated upstream
-=======
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
->>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
-=======
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
->>>>>>> Stashed changes
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -56,21 +30,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Shop.cs",
-              "DocumentMoniker": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Shop.cs",
+              "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Shop.cs",
               "RelativeDocumentMoniker": "Shop.cs",
-              "ToolTip": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Shop.cs",
+              "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Shop.cs",
               "RelativeToolTip": "Shop.cs",
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-              "ViewState": "AQIAAAgAAAAAAAAAAAAxwCQAAAAsAAAA",
-=======
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACwAAABIAAAA",
->>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
-=======
-              "ViewState": "AQIAABAAAAAAAAAAAAAgwCQAAAAsAAAA",
->>>>>>> Stashed changes
+              "ViewState": "AQIAAAgAAAAAAAAAAAAxwEAAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-18T10:53:00.546Z",
               "EditorCaption": ""
@@ -79,32 +45,24 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Encounters.cs",
-              "DocumentMoniker": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Encounters.cs",
+              "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Encounters.cs",
               "RelativeDocumentMoniker": "Encounters.cs",
-              "ToolTip": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Encounters.cs",
+              "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Encounters.cs",
               "RelativeToolTip": "Encounters.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAGIAAAAgAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAJ0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-16T21:24:07.975Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Player.cs",
-              "DocumentMoniker": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Player.cs",
+              "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Player.cs",
               "RelativeDocumentMoniker": "Player.cs",
-              "ToolTip": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Player.cs",
+              "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Player.cs",
               "RelativeToolTip": "Player.cs",
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAjAAAA",
-=======
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAiAAAA",
->>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
-=======
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACsAAAAAAAAA",
->>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-16T21:09:46.5Z",
               "EditorCaption": ""
@@ -113,19 +71,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\magnu\\Documents\\GitHub\\Saga\\Program.cs",
+              "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Program.cs",
               "RelativeToolTip": "Program.cs",
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAsAAAA",
-=======
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAAAAAA",
->>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
-=======
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAAAAAA",
->>>>>>> Stashed changes
+              "ViewState": "AQIAABAAAAAAAAAAAAA1wD8AAAAzAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-16T21:04:37.595Z",
               "EditorCaption": ""
