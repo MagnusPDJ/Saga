@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Magnus\\source\\repos\\Saga\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\source\\repos\\saga\\encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\source\\repos\\saga\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\source\\repos\\saga\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\source\\repos\\Saga\\encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,24 +26,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Shop.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Shop.cs",
               "RelativeDocumentMoniker": "Shop.cs",
               "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Shop.cs",
               "RelativeToolTip": "Shop.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADAAAAAAAAAA",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAxwCQAAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-18T10:53:00.546Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Encounters.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Encounters.cs",
               "RelativeDocumentMoniker": "Encounters.cs",
@@ -51,31 +51,30 @@
               "RelativeToolTip": "Encounters.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAJ0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-16T21:24:07.975Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-16T21:24:07.975Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Player.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Player.cs",
               "RelativeDocumentMoniker": "Player.cs",
               "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Player.cs",
               "RelativeToolTip": "Player.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACYAAAAJAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-16T21:09:46.5Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\source\\repos\\Saga\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\Magnus\\source\\repos\\Saga\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAUAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-16T21:04:37.595Z",
               "EditorCaption": ""
