@@ -18,7 +18,7 @@ namespace Saga
         public int damage = 1;
         public int armorValue = 0;
         public int potion = 5;
-        public int weaponValue = 2;
+        public int weaponValue = 1;
         public int potionValue = 5;
 
         public int mods = 0;

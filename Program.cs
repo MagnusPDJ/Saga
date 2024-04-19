@@ -14,6 +14,11 @@ namespace Saga
         public static Player currentPlayer = new Player();
         public static bool mainLoop = true;
 
+<<<<<<< HEAD
+=======
+
+        //
+>>>>>>> bbca3fa97f77b19a4e52c92c1107b8721f7f1f8a
         static void Main(string[] args) {
             if(!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
@@ -38,6 +43,7 @@ namespace Saga
             Console.WriteLine("anything about your past.");
             if (currentPlayer.name == "") {
                 Console.WriteLine("You can't even remember your own name...");
+                currentPlayer.name = "Adventurer";
             } else {
                 Console.WriteLine("You know your name is " + p.name + ".");
             }
