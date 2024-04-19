@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Saga
 {
+    [Serializable]
     public class Player
     {
         Random rand = new Random();
 
         public string name;
+        public int id;
         public int gold = 0;
         public int health = 10;
         public int damage = 1;
