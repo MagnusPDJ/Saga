@@ -28,8 +28,8 @@ namespace Saga
                 difP = 300 + 100 * p.mods;
 
                 Console.Clear();
-                Console.WriteLine("           Shop          ");
-                Console.WriteLine("=========================");
+                Console.WriteLine("        Gheed's Shop      ");
+                Console.WriteLine("==========================");
                 Console.WriteLine("| (W)eapon:           $" + weaponP);
                 Console.WriteLine("| (A)rmor:            $" + armorP);
                 Console.WriteLine("| (P)otions:          $" + potionP);
@@ -37,8 +37,8 @@ namespace Saga
                 Console.WriteLine("|========================");
                 Console.WriteLine("| (S)ell    Potion    $" + potionP/2);
                 Console.WriteLine("|  Sell (5x)Potions   $" +(potionP/2)*5);
-                Console.WriteLine("=========================");
-                Console.WriteLine(" (E)xit      (Q)uit game ");
+                Console.WriteLine("==========================");
+                Console.WriteLine(" (E)xit Shop   (Q)uit game ");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine("   " + p.name + "'s Stats    ");
@@ -55,26 +55,19 @@ namespace Saga
                 string input = Program.PlayerPrompt();
                 if (input.ToLower() == "p" || input == "potion") {
                     TryBuy("potion", potionP, p);
-                }
-                else if (input.ToLower() == "w" || input == "weapon") {
+                } else if (input.ToLower() == "w" || input == "weapon") {
                     TryBuy("weapon", weaponP, p);
-                }
-                else if (input.ToLower() == "a" || input == "armor") {
+                } else if (input.ToLower() == "a" || input == "armor") {
                     TryBuy("armor", armorP, p);
-                }
-                else if (input.ToLower() == "d" || input == "difficulty mod") {
+                } else if (input.ToLower() == "d" || input == "difficulty mod") {
                     TryBuy("dif", difP, p);
-                }
-                else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
+                } else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", potionP / 2, p);
-                }
-                else if (input.ToLower() == "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
+                } else if (input.ToLower() == "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
                     TrySell("5x potion", potionP / 2, p);
-                }
-                else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
+                } else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
                     Program.Quit();
-                }
-                else if (input.ToLower() == "e" || input == "exit") {
+                } else if (input.ToLower() == "e" || input == "exit") {
                     break;
                 }
             }

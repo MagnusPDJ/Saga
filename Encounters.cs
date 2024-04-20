@@ -12,7 +12,7 @@ namespace Saga
         
 
      //Encounters
-        //Det Encounter som køres når en ny karakter startes.
+        //Det Encounter som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
             Console.WriteLine("You throw open the door, grapping a rusty sword, while charging toward your captor.");
             Console.WriteLine("He turns...");
@@ -20,12 +20,35 @@ namespace Saga
             BasicCombat(false, "Human captor", 1, 5);
         }
 
+        //Encounter som køres når en ny karkter startes
+        public static void ShopEncounter() {
+            Console.Clear();
+            Console.WriteLine("After cleaning the blood of your captor from your new sword, you find someone else captured.");
+            Console.WriteLine("Freeing him from his shackles, he thanks you and gets up.");
+            Console.WriteLine("'Gheed is the name and trade is my game', he gives a wink.");
+            Program.PlayerPrompt();
+            Console.Clear();
+            Console.WriteLine("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
+            Console.WriteLine("'Then Run back to me, I will then have been able to set up a shop where you can spend ");
+            Console.WriteLine("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
+            Console.WriteLine("You nod and prepare your sword, then start walking down a dark corridor...");
+            Program.PlayerPrompt();
+        }
+
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void BasicFightEncounter() {
             Console.Clear();
-            Console.WriteLine("You turn the corner and there you see a foe...");
+            string n = GetName();
+            switch (Program.rand.Next(0,2)) {
+                case int x when (x == 0):
+                    Console.WriteLine("You turn a corner and there you see a " + n + "...");
+                    break;
+                case int x when (x == 1):
+                    Console.WriteLine("You break down a door and find a " + n + " inside!");
+                    break;
+            }
             Console.ReadKey();
-            BasicCombat(true, "", 0, 0);
+            BasicCombat(true, n, 0, 0);
         }
 
         //Encounter der "spawner" en specifik fjende som skal dræbes.
@@ -58,7 +81,7 @@ namespace Saga
             int h = 0;
 
             if (random) {
-                n = GetName();
+                n = name;
                 p = Program.currentPlayer.GetPower();
                 h = Program.currentPlayer.GetHealth();
             } else {
@@ -92,8 +115,7 @@ namespace Saga
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
-                }
-                else if (input.ToLower() == "d" || input == "defend") {
+                } else if (input.ToLower() == "d" || input == "defend") {
                     //Defend
                     Console.WriteLine("You defend the incoming attack from " + n);
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
@@ -103,17 +125,15 @@ namespace Saga
                     Console.WriteLine("You lose " + damage + " health and you deal " + attack + " damage");
                     Program.currentPlayer.health -= damage;
                     h -= attack;
-                }
-                else if (input.ToLower() == "r" || input == "run") {
+                } else if (input.ToLower() == "r" || input == "run") {
                     //Run
-                    if (Program.rand.Next(0, 2) == 0) {
+                    if (Program.rand.Next(0, 2) == 0 || n == "Human captor") {
                         Console.WriteLine("As you sprint away from the " + n + ", it strikes you and knocks you down");
                         int damage = p - Program.currentPlayer.armorValue;
                         if (damage < 0)
                             damage = 0;
                         Console.WriteLine("You lose " + damage + " health and are unable to escape.");
                         Program.currentPlayer.health -= damage;
-                        Console.ReadKey();
 
                     } else {
                         Console.WriteLine("You use your crazy ninja moves to evade the " + n + " and you successfully escape!");
@@ -121,8 +141,7 @@ namespace Saga
                         Shop.Loadshop(Program.currentPlayer);
                         break;
                     }
-                }
-                else if (input.ToLower() == "h" || input == "heal") {
+                } else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
                     if (Program.currentPlayer.potion == 0) {
                         Console.WriteLine("No potions left!");
@@ -133,24 +152,32 @@ namespace Saga
                         Program.currentPlayer.health -= damage;
                     } else {
                         Console.WriteLine("You use a potion");
-                        Console.WriteLine("You gain " + Program.currentPlayer.potionValue + " health");
                         Program.currentPlayer.health += Program.currentPlayer.potionValue;
+                        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+                            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+                        }
                         Program.currentPlayer.potion -= 1;
+                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                            Console.WriteLine("You heal to max health!");
+                        } else {
+                            Console.WriteLine("You gain " + Program.currentPlayer.potionValue + " health");
+                        }
                         Console.WriteLine("As you drink, the " + n + " strikes you.");
                         int damage = (p / 2) - Program.currentPlayer.armorValue;
                         if (damage < 0)
                             damage = 0;
                         Console.WriteLine("You lose " + damage + " health");
+                        Program.currentPlayer.health -= damage;
                     }
                 }
                 if (Program.currentPlayer.health <= 0) {
                     //Death code
                     Console.WriteLine("As the " + n + " stands menacingly and comes down to strike. You have been slain by the mighty " + n);
-                    Console.ReadKey();
+                    Console.ReadKey(true);
                     System.Environment.Exit(0);
                 }
                 Console.WriteLine("Press to continue...");
-                Console.ReadKey();
+                Console.ReadKey(true);
             }
             if (h <= 0)
             {
@@ -158,14 +185,14 @@ namespace Saga
                 int g = Program.currentPlayer.GetGold();
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
                 var pot = Program.rand.Next(0, numbers.Length);
-                Console.WriteLine("You Won against " + n + "! You loot " + g + " gold coins.");
+                Console.WriteLine("You Won against the " + n + "! You loot " + g + " gold coins.");
                 if (numbers[pot] != 0)
                 {
                     Console.WriteLine("You loot " + numbers[pot] + " healing potions");
                     Program.currentPlayer.potion += numbers[pot];
                 }
                 Program.currentPlayer.gold += g;
-                Console.ReadKey();
+                Console.ReadKey(true);
             }
         }
 

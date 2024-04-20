@@ -27,7 +27,7 @@ namespace Saga
         static void Main(string[] args) {
 
             //Danner en saves mappe hvis den ikke eksistere.
-            if(!Directory.Exists("saves")) {
+            if (!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
             }
             //Kalder MainMenu metoden.
@@ -39,6 +39,7 @@ namespace Saga
             //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true.
             if (newP) {
                 Encounters.FirstEncounter();
+                Encounters.ShopEncounter();
             }
             while (mainLoop) {
                 Encounters.RandomEncounter();
@@ -69,16 +70,17 @@ namespace Saga
                 file.Close();
                 players.Add(player);
             }
-
             idCount = players.Count;
-
             while (true) {
                 Console.Clear();
-                Console.WriteLine("Choose your player");
+                Console.WriteLine("Choose a save!  ");
+                Console.WriteLine("----------------");
+                Console.WriteLine("#:playername");
                 foreach (Player p in players) {
                     Console.WriteLine(p.id + ": " + p.name);
                 }
-                Console.WriteLine("Please input player name or id (id:# or playername) or write 'new game'.");
+                Console.WriteLine("----------------");
+                Console.WriteLine("Please input 'id:#' or 'playername'. For new game write 'new game'.");
                 string[] data = Console.ReadLine().Split(':');
 
                 try {
@@ -113,16 +115,23 @@ namespace Saga
                     Console.ReadKey();
                 }
             }
-
         }
 
         //Metode til at genere ny karakter efter at have inputtet 'new game' i Load() metoden.
         static Player NewStart(int i) {
             Console.Clear();
             Player p = new Player();
-            Console.WriteLine("Saga title");
+            Console.WriteLine("//////////////");
             Console.Write("Enter a name: ");
-            p.name = Console.ReadLine();
+            string input;
+            do {
+                input = Console.ReadLine();
+                if (input.Any(c => !char.IsLetter(c))) {
+                    Console.WriteLine("Invalid name");
+                } else {
+                }
+            } while (input.Any(c => !char.IsLetter(c)));
+            p.name = input;
             p.id = i;
             Console.Clear();
             Console.WriteLine("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
@@ -130,15 +139,14 @@ namespace Saga
             if (String.IsNullOrWhiteSpace(p.name) == true) {
                 Console.WriteLine("You can't even remember your own name...");
                 p.name = "Adventurer";
-            }
-            else {
+            } else {
                 Console.WriteLine("You know your name is " + p.name + ".");
             }
             Console.ReadKey();
             Console.Clear();
             Console.WriteLine("You grope around in the darkness until you find a door handle. You feel some resistance as");
             Console.WriteLine("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
-            Console.WriteLine("standing with his back to you outside the door");
+            Console.WriteLine("standing with his back to you outside the door.");
             return p;
         }
 
@@ -147,17 +155,19 @@ namespace Saga
             while (true) {
                 Console.Clear();
                 Console.WriteLine("Want to save? (Y/N)");
-                string input = Console.ReadLine().ToLower();
+                string input = PlayerPrompt();
                 if (input == "y") {
                     save();
                     Console.WriteLine("Game has been saved!");
-                    Console.ReadKey();
+                    Console.ReadKey(true);
                     Environment.Exit(0);
-                }
-                else if (input == "n") {
+                } else if (input == "n") {
                     Console.WriteLine("Game Over");
-                    Console.ReadKey();
+                    Console.ReadKey(true);
                     Environment.Exit(0);
+                } else {
+                    Console.WriteLine("Wrong Input");
+                    PlayerPrompt();
                 }
             }
         }
@@ -169,16 +179,17 @@ namespace Saga
                 Console.WriteLine("1.         Play");
                 Console.WriteLine("2.       Settings");
                 Console.WriteLine("3.       Quit Game");
-                string input = Console.ReadKey().Key.ToString();
-                if (input == "D1" || input == "NumPad1") {
+                string input = PlayerPrompt();
+                if (input == "1") {
                     break;
-                }
-                else if (input == "D2" || input == "NumPad2") {
+                } else if (input == "2") {
                     EditSettings();
-                }
-                else if (input == "D3" || input == "NumPad3") {
+                } else if (input == "3") {
                     Console.WriteLine("");
                     Environment.Exit(0);
+                } else {
+                    Console.WriteLine("Wrong Input");
+                    PlayerPrompt();
                 }
             }
         }
@@ -191,19 +202,24 @@ namespace Saga
                 Console.Clear();
                 Console.WriteLine("Settings");
                 Console.WriteLine("============================");
+                Console.WriteLine("                            ");
                 Console.WriteLine("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value);
-                string input = Console.ReadKey().Key.ToString();
+                Console.WriteLine("                            ");
+                Console.WriteLine("===Press Esc to go back=====");
+                string input = PlayerPrompt();
 
-                if (input == "D1"|| input == "NumPad1") {
+                if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {
                         settings["toggleReadLine"].Value = "false";
-                    }
-                    else {
+                    } else {
                         settings["toggleReadLine"].Value = "true";
                     }
-                } else if (input == "Escape") {
+                } else if (input == "\u001b") {
                     configFile.Save(ConfigurationSaveMode.Minimal);
                     break;
+                } else {
+                    Console.WriteLine("No setting selected");
+                    PlayerPrompt();
                 }
             }
         }
@@ -213,7 +229,7 @@ namespace Saga
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleReadLine")) == true) {
                 return Console.ReadLine().ToLower();
             } else {
-                string x = Console.ReadKey().Key.ToString();
+                string x = Console.ReadKey().KeyChar.ToString();
                 Console.WriteLine("");
                 return x;
             }

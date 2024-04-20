@@ -13,6 +13,7 @@ namespace Saga
         public string name;
         public int id;
         public int gold = 0;
+        public int maxHealth = 10;
         public int health = 10;
         public int damage = 1;
         public int armorValue = 0;
