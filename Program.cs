@@ -9,6 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Media;
 
 namespace Saga
 {
@@ -16,6 +18,14 @@ namespace Saga
     {
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player currentPlayer = new Player();
+
+        //Genere et objekt som kan spille en lyd.
+        public static SoundPlayer soundTypeWriter = new SoundPlayer("sounds/typewriter.wav");
+        public static SoundPlayer soundMainMenu = new SoundPlayer("sounds/mainmenu.wav");
+        public static SoundPlayer soundKamp = new SoundPlayer("sounds/kamp.wav");
+        public static SoundPlayer soundWin = new SoundPlayer("sounds/win.wav");
+        public static SoundPlayer soundGameOver = new SoundPlayer("sounds/gameover.wav");
+        public static SoundPlayer soundShop = new SoundPlayer("sounds/shop.wav");
 
         //Sætter Game Loopet til true så man kan spille indefinitely.
         public static bool mainLoop = true;
@@ -31,10 +41,12 @@ namespace Saga
                 Directory.CreateDirectory("saves");
             }
             //Kalder MainMenu metoden.
+            soundMainMenu.PlayLooping();
             MainMenu();
 
             //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
             currentPlayer = Load(out bool newP);
+            soundMainMenu.Stop();
 
             //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true.
             if (newP) {
@@ -74,15 +86,14 @@ namespace Saga
             while (true) {
                 Console.Clear();
                 Console.WriteLine("Choose a save!  ");
-                Console.WriteLine("----------------");
-                Console.WriteLine("#:playername");
+                Program.Print("----------------");
+                Program.Print("#: playername");
                 foreach (Player p in players) {
-                    Console.WriteLine(p.id + ": " + p.name);
+                    Program.Print(p.id + ": " + p.name);
                 }
-                Console.WriteLine("----------------");
+                Program.Print("----------------");
                 Console.WriteLine("Please input 'id:#' or 'playername'. For new game write 'new game'.");
                 string[] data = Console.ReadLine().Split(':');
-
                 try {
                     if (data[0] == "id") {
                         if (int.TryParse(data[1], out int id)) {
@@ -106,9 +117,9 @@ namespace Saga
                             if (player.name == data[0]) {
                                 return player;
                             }
-                            Console.WriteLine("There is no player with that name!");
-                            Console.ReadKey();
                         }
+                        Console.WriteLine("There is no player with that name!");
+                        Console.ReadKey(true);
                     }
                 } catch(IndexOutOfRangeException) {
                     Console.WriteLine("Your id needs to be a number! Press to continue!");
@@ -121,8 +132,10 @@ namespace Saga
         static Player NewStart(int i) {
             Console.Clear();
             Player p = new Player();
+            //soundTypeWriter.PlayLooping();
             Console.WriteLine("//////////////");
-            Console.Write("Enter a name: ");
+            Print("Enter a name: ");
+            //soundTypeWriter.Stop();
             string input;
             do {
                 input = Console.ReadLine();
@@ -134,19 +147,23 @@ namespace Saga
             p.name = input;
             p.id = i;
             Console.Clear();
-            Console.WriteLine("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
-            Console.WriteLine("anything about your past.");
+            soundTypeWriter.PlayLooping();
+            Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
+            Print("anything about your past.");
             if (String.IsNullOrWhiteSpace(p.name) == true) {
-                Console.WriteLine("You can't even remember your own name...");
+                Print("You can't even remember your own name...");
                 p.name = "Adventurer";
             } else {
-                Console.WriteLine("You know your name is " + p.name + ".");
+                Print("You know your name is " + p.name + ".");
             }
-            Console.ReadKey();
+            soundTypeWriter.Stop();
+            Console.ReadKey(true);
             Console.Clear();
-            Console.WriteLine("You grope around in the darkness until you find a door handle. You feel some resistance as");
-            Console.WriteLine("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
-            Console.WriteLine("standing with his back to you outside the door.");
+            soundTypeWriter.PlayLooping();
+            Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
+            Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
+            Print("standing with his back to you outside the door.");
+            soundTypeWriter.Stop();
             return p;
         }
 
@@ -198,15 +215,22 @@ namespace Saga
         private static void EditSettings() {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
+            Console.Clear();
+            Print("          Settings       ", 20);
+            Console.WriteLine("==============================");
+            Console.WriteLine("                            ");
+            Print("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value, 20);
+            Print("2. Toggle Slow-printing text: " + settings["toggleSlowPrint"].Value, 20);
             while (true) {
                 Console.Clear();
-                Console.WriteLine("Settings");
-                Console.WriteLine("============================");
+                Console.WriteLine("          Settings       ");
+                Console.WriteLine("==============================");
                 Console.WriteLine("                            ");
                 Console.WriteLine("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value);
+                Console.WriteLine("2. Toggle Slow-printing text: " + settings["toggleSlowPrint"].Value);
                 Console.WriteLine("                            ");
-                Console.WriteLine("===Press Esc to go back=====");
-                string input = PlayerPrompt();
+                Console.WriteLine("=====Press Esc to go back=====");
+                string input = Console.ReadKey().KeyChar.ToString();
 
                 if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {
@@ -214,8 +238,16 @@ namespace Saga
                     } else {
                         settings["toggleReadLine"].Value = "true";
                     }
+                } else if (input == "2") {
+                    if (settings["toggleSlowPrint"].Value == "true") {
+                        settings["toggleSlowPrint"].Value = "false";
+                    } else {
+                        settings["toggleSlowPrint"].Value = "true";
+                    }
                 } else if (input == "\u001b") {
                     configFile.Save(ConfigurationSaveMode.Minimal);
+                    Print("SSettings saved! Please restart the game...", 20);
+                    PlayerPrompt();
                     break;
                 } else {
                     Console.WriteLine("No setting selected");
@@ -234,5 +266,29 @@ namespace Saga
                 return x;
             }
         }
+
+        //Metode til at "Slow-print" tekst
+        public static void Print(string text, int time = 40) {
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
+                Task t = Task.Run(() => {
+                    foreach (char c in text) {
+                        Console.Write(c);
+                        Thread.Sleep(time);
+                    }
+                    Console.WriteLine();
+                });
+                t.Wait();
+            } else {
+                Task t = Task.Run(() => {
+                    foreach (char c in text) {
+                        Console.Write(c);
+                        Thread.Sleep(0);
+                    }
+                    Console.WriteLine();
+                });
+                t.Wait();
+            }
+        }
+        
     }
 }

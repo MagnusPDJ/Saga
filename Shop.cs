@@ -10,6 +10,7 @@ namespace Saga
     {
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
+            Program.soundShop.PlayLooping();
             Runshop(p);
         }
 
@@ -50,6 +51,7 @@ namespace Saga
                 Console.WriteLine("| Potions:            " + p.potion);
                 Console.WriteLine("| Difficulty Mods:    " + p.mods);
                 Console.WriteLine("=========================");
+                Console.WriteLine(" (U)se Potion            ");
 
                 //Wait for input
                 string input = Program.PlayerPrompt();
@@ -63,9 +65,28 @@ namespace Saga
                     TryBuy("dif", difP, p);
                 } else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", potionP / 2, p);
-                } else if (input.ToLower() == "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
+                } else if (input.ToLower() == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
                     TrySell("5x potion", potionP / 2, p);
-                } else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
+                } else if (input.ToLower() == "u" || input == "use" || input == "heal") {
+                    if (Program.currentPlayer.potion == 0) {
+                        Program.Print("No potions left!", 20);
+                    } else {
+                        Program.Print("You use a potion", 20);
+                        Program.currentPlayer.health += Program.currentPlayer.potionValue;
+                        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+                            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+                        }
+                        Program.currentPlayer.potion -= 1;
+                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                            Program.Print("You heal to max health!", 20);
+                        }
+                        else {
+                            Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
+                        }
+                    }
+                    Program.PlayerPrompt();
+                }
+                else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
                     Program.Quit();
                 } else if (input.ToLower() == "e" || input == "exit") {
                     break;
