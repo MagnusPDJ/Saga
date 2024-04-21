@@ -101,7 +101,8 @@ namespace Saga
             Program.Print($"EXP  [{Program.ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}]",10);
             Program.Print("------------------------------------",10);
             Console.WriteLine($"Max Health: { Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
-            Console.WriteLine($"Weapon Damage: {1+0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 2 : 0)}-{1 + Program.currentPlayer.weaponValue+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 2 : 0)}\tArmor Rating: {Program.currentPlayer.armorValue}");
+            Console.WriteLine($"Weapon Damage: {1+0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 2 : 0)}-{1 + Program.currentPlayer.weaponValue+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 2 : 0)}\tTotal Armor Rating: {Program.currentPlayer.armorValue}");
+            Console.WriteLine("*********Equipment*********");
             Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tGold: ${Program.currentPlayer.gold}");
             Console.WriteLine($"Weapon: {Program.currentPlayer.equippedWeapon}\tWeapon damage: +{equippedWeaponValue}");
             Console.WriteLine($"Armor: {Program.currentPlayer.equippedArmor}\t\tArmor rating: +{equippedArmorValue}");
@@ -124,18 +125,18 @@ namespace Saga
         public static void Loot(string monster, string message) {
                 Sounds.soundWin.Play();
                 int g = Program.currentPlayer.GetGold();
-                int x = Program.currentPlayer.GetXP() * ((monster == "Dark Wizard") ? + 2 : 0);
+                int x = Program.currentPlayer.GetXP() * ((monster == "Dark Wizard") ? + 2 : 1);
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
                 var pot = Program.rand.Next(0, numbers.Length);
                 Program.Print(message, 15);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Program.Print("You've gained "+ x + " experience points!",10);
+                Program.Print($"You've gained {x} experience points!",10);
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Program.Print("You loot " + g + " gold coins.", 15);
+                Program.Print($"You loot {g} gold coins.", 15);
                 Console.ResetColor();
                 if (numbers[pot] != 0) {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Program.Print("You loot " + numbers[pot] + " healing potions", 20);
+                    Program.Print($"You loot {numbers[pot]} healing potions", 20);
                     Console.ResetColor();
                     Program.currentPlayer.potion += numbers[pot];
                 }

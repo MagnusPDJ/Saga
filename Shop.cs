@@ -30,28 +30,28 @@ namespace Saga
                 Console.Clear();
                 Console.WriteLine("         Gheed's Shop        ");
                 Console.WriteLine("=============================");
-                Console.WriteLine("| (W)eapon Upgrade        $" + weaponP);
-                Console.WriteLine("| (A)rmor Upgrade:        $" + armorP);
-                Console.WriteLine("| (P)otions:              $" + potionP);
+                Console.WriteLine($"| (W)eapon Upgrade        $ {weaponP}");
+                Console.WriteLine($"| (A)rmor Upgrade:        $ {armorP}");
+                Console.WriteLine($"| (P)otions:              $ {potionP}");
                 Console.WriteLine("|============================");
-                Console.WriteLine("| (S)ell    Potion      $" + potionP/2);
-                Console.WriteLine("|  Sell (5)xPotions     $" +(potionP/2)*5);
+                Console.WriteLine($"| (S)ell    Potion      $ {potionP / 2}");
+                Console.WriteLine($"|  Sell (5)xPotions     $ {(potionP/2)*5}");
                 Console.WriteLine("=============================");
                 Console.WriteLine("  (E)xit Shop    (Q)uit game ");
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine("   " + p.currentClass+" " + p.name + "'s Stats  ");
-                Console.WriteLine("=============================");
-                Console.WriteLine("| Level: " + p.level);
+                Console.WriteLine($"  {p.currentClass} {p.name}'s Stats");
+                Console.WriteLine($"=============================");
+                Console.WriteLine($"| Level: {p.level}");
                 Console.Write("| EXP  ");
                 Console.Write("[");
                 Program.ProgressBar("+", " ", ((decimal)p.xp / (decimal)p.GetLevelUpValue()),20);
                 Console.WriteLine("]");
-                Console.WriteLine("| Current Health:         " + p.health);
-                Console.WriteLine("| Gold:                  $" + p.gold);
-                Console.WriteLine("| Weapon Strength:        " + p.weaponValue);
-                Console.WriteLine("| Armor Rating:           " + p.armorValue);
-                Console.WriteLine("| Potions:                " + p.potion);
+                Console.WriteLine($"| Current Health:         {p.health}");
+                Console.WriteLine($"| Gold:                  ${p.gold}");
+                Console.WriteLine($"| Weapon Strength:        {p.weaponValue}");
+                Console.WriteLine($"| Armor Rating:           {p.armorValue}");
+                Console.WriteLine($"| Potions:                {p.potion}");
                 Console.WriteLine("=============================");
                 Console.WriteLine(" (U)se Potion (C)haracter screen");
                 Console.WriteLine("");
@@ -75,7 +75,7 @@ namespace Saga
                     if (Program.currentPlayer.potion == 0) {
                         Program.Print("No potions left!", 20);
                     } else {
-                        Program.Print("You use a potion", 20);
+                        Program.Print("You used a potion", 20);
                         Program.currentPlayer.health += Program.currentPlayer.potionValue;
                         if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
                             Program.currentPlayer.health = Program.currentPlayer.maxHealth;

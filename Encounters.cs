@@ -25,11 +25,11 @@ namespace Saga
                     Program.currentPlayer.equippedArmor = "Rags";
                     break;
                 case "Mage":
-                    Program.currentPlayer.equippedWeapon = "Gnarled Wand";
+                    Program.currentPlayer.equippedWeapon = "Cracked Wand";
                     Program.currentPlayer.equippedArmor = "Rags";
                     break;
             }
-            Program.Print("You throw open the door, grabbing a "+ Program.currentPlayer.equippedWeapon +", while charging toward your captor.");
+            Program.Print($"You throw open the door, grabbing a {Program.currentPlayer.equippedWeapon}, while charging toward your captor.");
             Program.Print("He turns...");
             Sounds.soundTypeWriter.Stop();
             Console.ReadKey();
@@ -42,7 +42,7 @@ namespace Saga
             Console.Clear();
             Sounds.soundTypeWriter.PlayLooping();
             if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                Program.Print("After dusting off your" + Program.currentPlayer.equippedArmor + "and tucking in your new wand, you find someone else captured.");
+                Program.Print($"After dusting off your {Program.currentPlayer.equippedArmor} and tucking in your new wand, you find someone else captured.");
             } else if (Program.currentPlayer.currentClass==Player.PlayerClass.Archer) {
                 Program.Print("After retrieving the last arrow from your captors corpse, you find someone else captured.");
             } else {
@@ -57,7 +57,7 @@ namespace Saga
             Program.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
             Program.Print("'Then Run back to me, I will then have been able to set up a shop where you can spend ");
             Program.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
-            Program.Print("You nod and prepare your " + Program.currentPlayer.equippedWeapon + ", then you start walking down a dark corridor...");
+            Program.Print($"You nod and prepare your {Program.currentPlayer.equippedWeapon}, then you start walking down a dark corridor...");
             Sounds.soundTypeWriter.Stop();
             Program.PlayerPrompt();
         }
@@ -69,10 +69,10 @@ namespace Saga
             string n = GetName();
             switch (Program.rand.Next(0,2)) {
                 case int x when (x == 0):
-                    Program.Print("You turn a corner and there you see a " + n + "...", 20);
+                    Program.Print($"You turn a corner and there you see a {n}...", 20);
                     break;
                 case int x when (x == 1):
-                    Program.Print("You break down a door and find a " + n + " inside!", 20);
+                    Program.Print($"You break down a door and find a {n} inside!", 20);
                     break;
             }
             Console.ReadKey();
@@ -90,7 +90,6 @@ namespace Saga
             Sounds.soundMainMenu.PlayLooping();
             BasicCombat(false, "Dark Wizard", 4+Program.currentPlayer.level, 2+Program.currentPlayer.level);
         }
-
 
      //Encounter Tools
         //Metode til at vælge tilfældigt mellem encounters.
@@ -121,17 +120,17 @@ namespace Saga
                 h = health;
             }
             Console.Clear();
-            Program.Print("Fighting: " + n + "!", 20);
-            Program.Print("Strength: " + p + " / HP: " + h, 20);
+            Program.Print($"Fighting: {n}!", 20);
+            Program.Print($"Strength: {p} / HP: {h}", 20);
             Program.Print("-----------------------", 20);
             while (h > 0) {
                 Console.Clear();
-                Console.WriteLine("Fighting: " + n + "!");
-                Console.WriteLine("Strength: " + p + " / HP: " + h);
+                Console.WriteLine($"Fighting: {n}!");
+                Console.WriteLine($"Strength: {p} / HP: {h}");
                 Console.WriteLine("---------------------------");
-                Console.WriteLine(Program.currentPlayer.currentClass + " " + Program.currentPlayer.name + "'s Stats:");
-                Console.WriteLine("Health: " + Program.currentPlayer.health + "\t|| Healing Potions: " + Program.currentPlayer.potion);
-                Console.WriteLine("Level: " + Program.currentPlayer.level + "\t|| Gold: $" + Program.currentPlayer.gold);
+                Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}'s Stats:");
+                Console.WriteLine($"Health: {Program.currentPlayer.health}\t|| Healing Potions: {Program.currentPlayer.potion}");
+                Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
                 Console.Write("EXP  ");
                 Console.Write("[");
                 Program.ProgressBar("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 20);
@@ -147,46 +146,44 @@ namespace Saga
                 if (input.ToLower() == "a" || input == "attack") {
                     //Attack
                     if (Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) {
-                        Program.Print("You swing your " + Program.currentPlayer.equippedWeapon + " and " + n + " retaliates.", 15);
+                        Program.Print($"You swing your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 15);
                     } else if (Program.currentPlayer.currentClass== Player.PlayerClass.Mage) {
-                        Program.Print("You shoot an arcane missile from your " + Program.currentPlayer.equippedWeapon + " and " + n + " retaliates.", 10);
+                        Program.Print($"You shoot an arcane missile from your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 10);
                     } else {
-                        Program.Print("You fire an arrow with your " + Program.currentPlayer.equippedWeapon + " and " + n + " retaliates.", 10);
+                        Program.Print($"You fire an arrow with your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 10);
                     }
                     int damage = p - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
                     int attack = Program.rand.Next(1, 1+Program.currentPlayer.weaponValue) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass==Player.PlayerClass.Warrior)?2:0);
-                    Program.Print("You lose " + damage + " health and you deal " + attack + " damage" ,20);
+                    Program.Print($"You lose {damage} health and you deal {attack} damage" ,20);
                     Program.currentPlayer.health -= damage;
                     h -= attack;
                 } else if (input.ToLower() == "d" || input == "defend") {
                     //Defend
-                    Program.Print("You defend the incoming attack from " + n, 20);
+                    Program.Print($"You defend the incoming attack from {n}", 20);
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
                     int attack = Program.rand.Next(2, 4+Program.currentPlayer.weaponValue) / 2;
-                    Program.Print("You lose " + damage + " health and you deal " + attack + " damage", 20);
+                    Program.Print($"You lose {damage} health and you deal {attack} damage", 20);
                     Program.currentPlayer.health -= damage;
                     h -= attack;
                 } else if (input.ToLower() == "r" || input == "run") {
                     //Run
                     if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || n == "Human captor") {
-                        Program.Print("You try to sprint away from the " + n + ", it strikes and knocks you down", 20);
+                        Program.Print($"You try to sprint away from the {n}, it strikes and knocks you down", 20);
                         int damage = p - Program.currentPlayer.armorValue;
                         if (damage < 0)
                             damage = 0;
-                        Program.Print("You lose " + damage + " health and are unable to escape.", 20);
+                        Program.Print($"You lose {damage} health and are unable to escape.", 20);
                         Program.currentPlayer.health -= damage;
-
                     } else {
                         if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
-                            Program.Print("You use your crazy ninja moves to evade the " + n + " and you successfully escape!");
+                            Program.Print($"You use your crazy ninja moves to evade the {n} and you successfully escape!");
                         } else {
-                            Program.Print("You barely manage to shake off the " + n + " and you successfully escape.");
+                            Program.Print($"You barely manage to shake off the {n} and you successfully escape.");
                         }
-                        
                         Console.ReadKey();
                         Shop.Loadshop(Program.currentPlayer);
                         break;
@@ -198,7 +195,7 @@ namespace Saga
                         int damage = p - Program.currentPlayer.armorValue;
                         if (damage < 0)
                             damage = 0;
-                        Program.Print("The " + n + " attacks you while you fumble in your bags and lose " + damage + " health!", 20);
+                        Program.Print($"The {n} attacks you while you fumble in your bags and lose {damage} health!", 20);
                         Program.currentPlayer.health -= damage;
                     } else {
                         if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
@@ -214,25 +211,25 @@ namespace Saga
                         if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
                             Program.Print("You heal to max health!", 20);
                         } else {
-                            Program.Print("You gain " + Program.currentPlayer.potionValue + " health", 20);
+                            Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
                         }
-                        Program.Print("As you drink, the " + n + " strikes you.", 20);
+                        Program.Print($"As you drink, the {n} strikes you.", 20);
                         int damage = (p / 2) - Program.currentPlayer.armorValue;
                         if (damage < 0)
                             damage = 0;
-                        Program.Print("You lose " + damage + " health", 20);
+                        Program.Print($"You lose {damage} health", 20);
                         Program.currentPlayer.health -= damage;
                     }
                 } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                     Player.CharacterScreen();
                 }
                 //Død
-                Player.DeathCode("As the " + n + " menacingly comes down to strike, you are slain by the mighty " + n + ".");
+                Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.");
                 Program.Print("Press to continue...", 1);
                 Console.ReadKey(true);
             }
             if (h <= 0) {
-                Player.Loot(n, "You Won against the " + n + "!");
+                Player.Loot(n, $"You Won against the {n}!");
                 if (Program.currentPlayer.CanLevelUp()) {
                     Program.currentPlayer.LevelUp();
                 }
