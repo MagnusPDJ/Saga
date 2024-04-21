@@ -78,6 +78,6 @@ namespace Saga
         public static SoundPlayer soundWin = new SoundPlayer("sounds/win.wav");
         public static SoundPlayer soundGameOver = new SoundPlayer("sounds/gameover.wav");
         public static SoundPlayer soundShop = new SoundPlayer("sounds/shop.wav");
-
+        public static SoundPlayer soundLvlUp = new SoundPlayer("sounds/levelup.wav");
     }
 }

@@ -50,7 +50,7 @@ namespace Saga
         }
         
         //Metode til at gemme spillet ved først at tjekke for om der er en eksisterende save med det korrekte navn, som så overskrives, eller så dannes helt en ny.
-        public static void save() {
+        public static void Save() {
             BinaryFormatter binForm = new BinaryFormatter();
             string path = "saves/" + currentPlayer.id.ToString() + ".player";
             FileStream file = File.Open(path,FileMode.OpenOrCreate);
@@ -179,7 +179,7 @@ namespace Saga
                 Console.WriteLine("Want to save? (Y/N)");
                 string input = PlayerPrompt();
                 if (input == "y") {
-                    save();
+                    Save();
                     Console.WriteLine("Game has been saved!");
                     Console.ReadKey(true);
                     Environment.Exit(0);
@@ -318,6 +318,33 @@ namespace Saga
                 t.Wait();
             }
         }
-        
+
+        //En metode til at printe en progress bar til f.eks. lvl progress.
+        public static void ProgressBar(string fillerChar, string backgroundChar, decimal value, int size) {
+            int dif = (int)(value * size);
+            for (int i = 0; i < size; i++) {
+                if (i < dif) {
+                    Console.Write(fillerChar);
+                } else {
+                    Console.Write(backgroundChar);
+                }
+                
+            }
+        }
+
+        public static string ProgressBarForPrint(string fillerChar, string backgroundChar, decimal value, int size) {
+            int dif = (int)(value * size);
+            string output = "";
+            for (int i = 0; i < size; i++) {
+                if (i < dif) {
+                    output += fillerChar;
+                }
+                else {
+                    output += backgroundChar;
+                }
+            }
+            return output;
+        }
+
     }
 }

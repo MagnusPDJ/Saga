@@ -37,7 +37,7 @@ namespace Saga
             BasicCombat(false, "Human captor", 1, 5);
         }
 
-        //Encounter som køres når en ny karkter startes
+        //Encounter som køres introducere shopkeeperen
         public static void ShopEncounter() {
             Console.Clear();
             Sounds.soundTypeWriter.PlayLooping();
@@ -88,7 +88,7 @@ namespace Saga
             Sounds.soundTypeWriter.Stop();
             Console.ReadKey();
             Sounds.soundMainMenu.PlayLooping();
-            BasicCombat(false, "Dark Wizard", 4, 2);
+            BasicCombat(false, "Dark Wizard", 4+Program.currentPlayer.level, 2+Program.currentPlayer.level);
         }
 
 
@@ -111,7 +111,6 @@ namespace Saga
             int p;
             int h;
 
-            //Program.soundKamp.PlayLooping();
             if (random) {
                 n = name;
                 p = Program.currentPlayer.GetPower();
@@ -130,16 +129,22 @@ namespace Saga
                 Console.WriteLine("Fighting: " + n + "!");
                 Console.WriteLine("Strength: " + p + " / HP: " + h);
                 Console.WriteLine("-----------------------");
-                Console.WriteLine(Program.currentPlayer.name + "'s Stats:");
-                Console.WriteLine( "Healing Potions: " + Program.currentPlayer.potion + " || Health: " + Program.currentPlayer.health);
-                Console.WriteLine("Gold:           $" + Program.currentPlayer.gold + " || Armor:  " + Program.currentPlayer.armorValue);
-                Console.WriteLine("=========Actions=======");
-                Console.WriteLine("| (A)ttack (D)efend   |");
-                Console.WriteLine("| (R)un    (H)eal     |");
-                Console.WriteLine("=======================");
-                
+                Console.WriteLine(Program.currentPlayer.currentClass + " " + Program.currentPlayer.name + "'s Stats:");
+                Console.WriteLine("Health: " + Program.currentPlayer.health + "\t|| Healing Potions: " + Program.currentPlayer.potion);
+                Console.WriteLine("Armor:  " + Program.currentPlayer.armorValue + "\t|| Gold: $" + Program.currentPlayer.gold);
+                Console.WriteLine("Level: " + Program.currentPlayer.level);
+                Console.Write("EXP  ");
+                Console.Write("[");
+                Program.ProgressBar("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 20);
+                Console.WriteLine("]");
+                Console.WriteLine("===========Actions=========");
+                Console.WriteLine("| (A)ttack     (D)efend   |");
+                Console.WriteLine("| (R)un        (H)eal     |");
+                Console.WriteLine("===========================");
+                Console.WriteLine(" (C)haracter screen        ");
+                Console.WriteLine("");
                 Console.WriteLine("Choose an action...");
-                string input = Program.PlayerPrompt();
+                string input = Program.PlayerPrompt().ToLower();
 
                 if (input.ToLower() == "a" || input == "attack") {
                     //Attack
@@ -170,7 +175,7 @@ namespace Saga
                 } else if (input.ToLower() == "r" || input == "run") {
                     //Run
                     if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || n == "Human captor") {
-                        Program.Print("As you sprint away from the " + n + ", it strikes you and knocks you down", 20);
+                        Program.Print("You try to sprint away from the " + n + ", it strikes and knocks you down", 20);
                         int damage = p - Program.currentPlayer.armorValue;
                         if (damage < 0)
                             damage = 0;
@@ -181,7 +186,7 @@ namespace Saga
                         if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
                             Program.Print("You use your crazy ninja moves to evade the " + n + " and you successfully escape!");
                         } else {
-                            Program.Print("You barely manage to shake off the " + n + " and you sussessfully escape.");
+                            Program.Print("You barely manage to shake off the " + n + " and you successfully escape.");
                         }
                         
                         Console.ReadKey();
@@ -220,12 +225,17 @@ namespace Saga
                         Program.Print("You lose " + damage + " health", 20);
                         Program.currentPlayer.health -= damage;
                     }
+                } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
+                    Player.CharacterScreen();
                 }
+
                 if (Program.currentPlayer.health <= 0) {
                     //Death code
                     Sounds.soundGameOver.Play();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Program.Print("As the " + n + " menacingly comes down to strike, you are slain by the mighty " + n, 25);
                     Console.ReadKey(true);
+                    Console.ResetColor();
                     System.Environment.Exit(0);
                 }
                 Program.Print("Press to continue...", 1);
@@ -236,16 +246,24 @@ namespace Saga
                 //Loot
                 Sounds.soundWin.Play();
                 int g = Program.currentPlayer.GetGold();
+                int x = Program.currentPlayer.GetXP() + ((n == "Dark Wizard")?+Program.currentPlayer.GetXP():0);
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
                 var pot = Program.rand.Next(0, numbers.Length);
-                Program.Print("You Won against the " + n + "! You loot " + g + " gold coins.", 20);
+                Program.Print("You Won against the " + n + "! " + x + " experience points gained.", 15);
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Program.Print("You loot " + g + " gold coins.", 15);
+                Console.ResetColor();
                 if (numbers[pot] != 0)
                 {
                     Program.Print("You loot " + numbers[pot] + " healing potions", 20);
                     Program.currentPlayer.potion += numbers[pot];
                 }
                 Program.currentPlayer.gold += g;
+                Program.currentPlayer.xp += x;
                 Console.ReadKey(true);
+                if (Program.currentPlayer.CanLevelUp()) {
+                    Program.currentPlayer.LevelUp();
+                }
             }
         }
 

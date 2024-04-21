@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\documents\\github\\saga\\encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\documents\\github\\saga\\sounds.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:sounds.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\documents\\github\\saga\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:Encounters.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:Player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|c:\\users\\magnus\\documents\\github\\saga\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\sounds.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D115BA6-D800-4F36-9F1F-05E92AF288E8}|Saga.csproj|solutionrelative:sounds.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,66 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Sounds.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Sounds.cs",
               "RelativeDocumentMoniker": "Sounds.cs",
               "ToolTip": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Sounds.cs",
               "RelativeToolTip": "Sounds.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADsAAAACAAAA",
+              "ViewState": "AQIAADAAAAAAAAAAAAAiwFMAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-21T09:22:07.112Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Shop.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Shop.cs",
               "RelativeDocumentMoniker": "Shop.cs",
               "ToolTip": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Shop.cs",
               "RelativeToolTip": "Shop.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAiwBwAAAAqAAAA",
+              "ViewState": "AQIAAFoAAAAAAAAAAAAowIIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-18T10:53:00.546Z"
+              "WhenOpened": "2024-04-21T13:31:35.909Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Encounters.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Encounters.cs",
               "RelativeDocumentMoniker": "Encounters.cs",
               "ToolTip": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Encounters.cs",
               "RelativeToolTip": "Encounters.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAACQAAAAGAAAA",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAQwAwBAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-16T21:24:07.975Z"
+              "WhenOpened": "2024-04-21T13:31:40.839Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "Player.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Player.cs",
               "RelativeDocumentMoniker": "Player.cs",
               "ToolTip": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Player.cs",
               "RelativeToolTip": "Player.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB0AAAAAAAAA",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAmwGQAAAA/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-16T21:09:46.5Z"
+              "WhenOpened": "2024-04-16T21:09:46.5Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\Magnus\\Documents\\GitHub\\Saga\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAPMAAAAAAAAAAAAAABwBAAANAAAA",
+              "ViewState": "AQIAAC0BAAAAAAAAAAAYwFIBAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-16T21:04:37.595Z",
               "EditorCaption": ""

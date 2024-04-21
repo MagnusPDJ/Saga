@@ -19,50 +19,57 @@ namespace Saga
             int potionP;
             int armorP;
             int weaponP;
-            int difP;
+            //int difP;
 
             while (true) {
                 //Sætter prisen i shoppen skaleret på spilleren.
                 potionP = 20 + 10 * p.mods;
                 armorP = 100 * (p.armorValue+1);
                 weaponP = 100 * (p.weaponValue+1);
-                difP = 300 + 100 * p.mods;
+                //difP = 300 + 100 * p.mods;
 
                 Console.Clear();
-                Console.WriteLine("        Gheed's Shop      ");
-                Console.WriteLine("==========================");
-                Console.WriteLine("| (W)eapon:           $" + weaponP);
-                Console.WriteLine("| (A)rmor:            $" + armorP);
-                Console.WriteLine("| (P)otions:          $" + potionP);
-                Console.WriteLine("| (D)ifficulty Mod:   $" + difP);
-                Console.WriteLine("|========================");
-                Console.WriteLine("| (S)ell    Potion    $" + potionP/2);
-                Console.WriteLine("|  Sell (5x)Potions   $" +(potionP/2)*5);
-                Console.WriteLine("==========================");
-                Console.WriteLine(" (E)xit Shop   (Q)uit game ");
+                Console.WriteLine("         Gheed's Shop        ");
+                Console.WriteLine("=============================");
+                Console.WriteLine("| (W)eapon:             $" + weaponP);
+                Console.WriteLine("| (A)rmor:              $" + armorP);
+                Console.WriteLine("| (P)otions:            $" + potionP);
+                //Console.WriteLine("| (D)ifficulty Mod:     $" + difP);
+                Console.WriteLine("|============================");
+                Console.WriteLine("| (S)ell    Potion      $" + potionP/2);
+                Console.WriteLine("|  Sell (5)xPotions     $" +(potionP/2)*5);
+                Console.WriteLine("=============================");
+                Console.WriteLine("  (E)xit Shop    (Q)uit game ");
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine(p.currentClass+" " + p.name + "'s Stats    ");
-                Console.WriteLine("=========================");
-                Console.WriteLine("Current Health:       " + p.health);
-                Console.WriteLine("| Gold:              $" + p.gold);
-                Console.WriteLine("| Weapon Strength:    " + p.weaponValue);
-                Console.WriteLine("| Armor Strength:     " + p.armorValue);
-                Console.WriteLine("| Potions:            " + p.potion);
-                Console.WriteLine("| Difficulty Mods:    " + p.mods);
-                Console.WriteLine("=========================");
-                Console.WriteLine(" (U)se Potion            ");
+                Console.WriteLine("   " + p.currentClass+" " + p.name + "'s Stats  ");
+                Console.WriteLine("=============================");
+                Console.WriteLine("| Level: " + p.level);
+                Console.Write("| EXP  ");
+                Console.Write("[");
+                Program.ProgressBar("+", " ", ((decimal)p.xp / (decimal)p.GetLevelUpValue()),20);
+                Console.WriteLine("]");
+                Console.WriteLine("| Current Health:         " + p.health);
+                Console.WriteLine("| Gold:                  $" + p.gold);
+                Console.WriteLine("| Weapon Strength:        " + p.weaponValue);
+                Console.WriteLine("| Armor Strength:         " + p.armorValue);
+                Console.WriteLine("| Potions:                " + p.potion);
+                //Console.WriteLine("| Difficulty Mods:        " + p.mods);
+                Console.WriteLine("=============================");
+                Console.WriteLine(" (U)se Potion (C)haracter screen");
+                Console.WriteLine("");
+                Console.WriteLine("Choose what to buy or sell");
 
                 //Wait for input
-                string input = Program.PlayerPrompt();
+                string input = Program.PlayerPrompt().ToLower();
                 if (input.ToLower() == "p" || input == "potion") {
                     TryBuy("potion", potionP, p);
                 } else if (input.ToLower() == "w" || input == "weapon") {
                     TryBuy("weapon", weaponP, p);
                 } else if (input.ToLower() == "a" || input == "armor") {
                     TryBuy("armor", armorP, p);
-                } else if (input.ToLower() == "d" || input == "difficulty mod") {
-                    TryBuy("dif", difP, p);
+                //} else if (input.ToLower() == "d" || input == "difficulty mod") {
+                //    TryBuy("dif", difP, p);
                 } else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", potionP / 2, p);
                 } else if (input.ToLower() == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
@@ -85,8 +92,11 @@ namespace Saga
                         }
                     }
                     Program.PlayerPrompt();
-                }
-                else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
+                } else if (input == "c" || input == "character" || input == "character screen") {
+                    Player.CharacterScreen();
+                    Program.Print("Press to go back...",1);
+                    Console.ReadKey();
+                } else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
                     Program.Quit();
                 } else if (input.ToLower() == "e" || input == "exit") {
                     break;
