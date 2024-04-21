@@ -122,10 +122,10 @@ namespace Saga
                                 }
                             }
                             Console.WriteLine("There is no player with that id!");
-                            Console.ReadKey();
+                            Console.ReadKey(true);
                         } else {
                             Console.WriteLine("Your id needs to be a number! Press to continue!");
-                            Console.ReadKey();
+                            Console.ReadKey(true);
                         }
                     } else if (data[0] == "new game") {
                         Player newPlayer = NewStart(idCount);
@@ -142,9 +142,10 @@ namespace Saga
                     }
                 } catch(IndexOutOfRangeException) {
                     Console.WriteLine("Your id needs to be a number! Press to continue!");
-                    Console.ReadKey();
+                    Console.ReadKey(true);
                 }
             }
+
         }
 
         //Metode til at genere ny karakter efter at have inputtet 'new game' i Load() metoden.
@@ -227,22 +228,22 @@ namespace Saga
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
             Console.Clear();
-            Print("          Settings       ", 20);
-            Console.WriteLine("==============================");
-            Console.WriteLine("                            ");
-            Print($"1. Toggle 'Press to continue': {settings["toggleReadLine"].Value}", 20);
-            Print($"2. Toggle Slow-printing text:  {settings["toggleSlowPrint"].Value}", 20);
-            Print($"3. System Volume:              {Sounds.GetVolume()}", 20);
+            Print("            Settings", 20);
+            Console.WriteLine("==================================");
+            Console.WriteLine("");
+            Print($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}", 20);
+            Print($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}", 20);
+            Print($"3. System Volume:                 {Sounds.GetVolume()}", 20);
             while (true) {
                 Console.Clear();
-                Console.WriteLine("          Settings       ");
-                Console.WriteLine("==============================");
+                Console.WriteLine("            Settings       ");
+                Console.WriteLine("==================================");
                 Console.WriteLine("                            ");
-                Console.WriteLine($"1. Toggle 'Press to continue': {settings["toggleReadLine"].Value}");
-                Console.WriteLine($"2. Toggle Slow-printing text:  {settings["toggleSlowPrint"].Value}");
-                Console.WriteLine($"3. System Volume:              {Sounds.GetVolume()}");
+                Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
+                Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
+                Console.WriteLine($"3. System Volume:                 {Sounds.GetVolume()}");
                 Console.WriteLine("                            ");
-                Console.WriteLine("=====Press Esc to go back=====");
+                Console.WriteLine("=======Press Esc to go back=======");
                 string input = Console.ReadKey().KeyChar.ToString();
                 if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {

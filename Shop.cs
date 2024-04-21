@@ -92,7 +92,7 @@ namespace Saga
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     Player.CharacterScreen();
                     Program.Print("Press to go back...",1);
-                    Console.ReadKey();
+                    Program.PlayerPrompt();
                 } else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
                     Program.Quit();
                 } else if (input.ToLower() == "e" || input == "exit") {
@@ -122,7 +122,7 @@ namespace Saga
 
             } else {
                 Console.WriteLine("You don't have enough gold!");
-                Console.ReadKey();
+                Program.PlayerPrompt();
             }
         }
 
@@ -136,7 +136,7 @@ namespace Saga
                         break;
                     } else {
                         Console.WriteLine("You don't have any potions to sell!");
-                        Console.ReadKey();
+                        Program.PlayerPrompt();
                         break;
                     }
                 case "5x potion":
@@ -146,7 +146,7 @@ namespace Saga
                         break;
                     } else {
                         Console.WriteLine("You don't that many potions to sell!");
-                        Console.ReadKey();
+                        Program.PlayerPrompt();
                         break;
                     }
                 }

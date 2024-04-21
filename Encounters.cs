@@ -18,23 +18,29 @@ namespace Saga
             switch (Program.currentPlayer.currentClass.ToString()) {
                 case "Warrior":
                     Program.currentPlayer.equippedWeapon = "Rusty Sword";
+                    Program.currentPlayer.equippedWeaponValue = 1;
                     Program.currentPlayer.equippedArmor = "Rags";
+                    Program.currentPlayer.equippedArmorValue = 2;
                     break;
                 case "Archer":
                     Program.currentPlayer.equippedWeapon = "Flimsy Bow";
+                    Program.currentPlayer.equippedWeaponValue = 1;
                     Program.currentPlayer.equippedArmor = "Rags";
+                    Program.currentPlayer.equippedArmorValue = 2;
                     break;
                 case "Mage":
                     Program.currentPlayer.equippedWeapon = "Cracked Wand";
+                    Program.currentPlayer.equippedWeaponValue = 1;
                     Program.currentPlayer.equippedArmor = "Rags";
+                    Program.currentPlayer.equippedArmorValue = 2;
                     break;
             }
             Program.Print($"You throw open the door, grabbing a {Program.currentPlayer.equippedWeapon}, while charging toward your captor.");
             Program.Print("He turns...");
             Sounds.soundTypeWriter.Stop();
-            Console.ReadKey();
+            Program.PlayerPrompt();
             Sounds.soundKamp.PlayLooping();
-            BasicCombat(false, "Human captor", 1, 5);
+            BasicCombat(false, "Human captor", 3, 5);
         }
 
         //Encounter som køres introducere shopkeeperen
@@ -44,7 +50,7 @@ namespace Saga
             if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
                 Program.Print($"After dusting off your {Program.currentPlayer.equippedArmor} and tucking in your new wand, you find someone else captured.");
             } else if (Program.currentPlayer.currentClass==Player.PlayerClass.Archer) {
-                Program.Print("After retrieving the last arrow from your captors corpse, you find someone else captured.");
+                Program.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
             } else {
                 Program.Print("After cleaning the blood of your captor from your new sword, you find someone else captured.");
             }
@@ -75,7 +81,7 @@ namespace Saga
                     Program.Print($"You break down a door and find a {n} inside!", 20);
                     break;
             }
-            Console.ReadKey();
+            Program.PlayerPrompt();
             BasicCombat(true, n, 0, 0);
         }
 
@@ -86,7 +92,7 @@ namespace Saga
             Program.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ");
             Program.Print("long beard and pointy hat, looking at a large tome.");
             Sounds.soundTypeWriter.Stop();
-            Console.ReadKey();
+            Program.PlayerPrompt();
             Sounds.soundMainMenu.PlayLooping();
             BasicCombat(false, "Dark Wizard", 4+Program.currentPlayer.level, 2+Program.currentPlayer.level);
         }
@@ -109,22 +115,25 @@ namespace Saga
             string n;
             int p;
             int h;
+            int t =1;
 
             if (random) {
                 n = name;
-                p = Program.currentPlayer.GetPower();
-                h = Program.currentPlayer.GetHealth();
+                p = Program.currentPlayer.GetPower(n);
+                h = Program.currentPlayer.GetHealth(n);
             } else {
                 n = name;
                 p = power;
                 h = health;
             }
             Console.Clear();
+            Program.Print($"Turn: {t}");
             Program.Print($"Fighting: {n}!", 20);
             Program.Print($"Strength: {p} / HP: {h}", 20);
             Program.Print("-----------------------", 20);
             while (h > 0) {
                 Console.Clear();
+                Console.WriteLine($"Turn: {t}");
                 Console.WriteLine($"Fighting: {n}!");
                 Console.WriteLine($"Strength: {p} / HP: {h}");
                 Console.WriteLine("---------------------------");
@@ -152,39 +161,42 @@ namespace Saga
                     } else {
                         Program.Print($"You fire an arrow with your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 10);
                     }
-                    int damage = p - Program.currentPlayer.armorValue;
+                    int damage = p - Program.currentPlayer.armorValue-Program.currentPlayer.equippedArmorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = Program.rand.Next(1, 1+Program.currentPlayer.weaponValue) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass==Player.PlayerClass.Warrior)?2:0);
+                    int attack = Program.rand.Next((1+Program.currentPlayer.TotalWeaponValue())/2, 1+Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass==Player.PlayerClass.Warrior)?1+Program.currentPlayer.level:0);
                     Program.Print($"You lose {damage} health and you deal {attack} damage" ,20);
                     Program.currentPlayer.health -= damage;
                     h -= attack;
+                    t++;
                 } else if (input.ToLower() == "d" || input == "defend") {
                     //Defend
                     Program.Print($"You defend the incoming attack from {n}", 20);
-                    int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
+                    int damage = 1+(p / 4) - Program.currentPlayer.armorValue-Program.currentPlayer.equippedArmorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = Program.rand.Next(2, 4+Program.currentPlayer.weaponValue) / 2;
+                    int attack = Program.rand.Next(2, 4+Program.currentPlayer.TotalWeaponValue()) / 2;
                     Program.Print($"You lose {damage} health and you deal {attack} damage", 20);
                     Program.currentPlayer.health -= damage;
                     h -= attack;
+                    t++;
                 } else if (input.ToLower() == "r" || input == "run") {
                     //Run
                     if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || n == "Human captor") {
                         Program.Print($"You try to sprint away from the {n}, it strikes and knocks you down", 20);
-                        int damage = p - Program.currentPlayer.armorValue;
+                        int damage = p - Program.currentPlayer.armorValue-Program.currentPlayer.equippedArmorValue;
                         if (damage < 0)
                             damage = 0;
-                        Program.Print($"You lose {damage} health and are unable to escape.", 20);
+                        Program.Print($"You lose {damage} health and are unable to escape this round.", 20);
                         Program.currentPlayer.health -= damage;
+                        t++;
                     } else {
                         if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
                             Program.Print($"You use your crazy ninja moves to evade the {n} and you successfully escape!");
                         } else {
                             Program.Print($"You barely manage to shake off the {n} and you successfully escape.");
                         }
-                        Console.ReadKey();
+                        Program.PlayerPrompt();
                         Shop.Loadshop(Program.currentPlayer);
                         break;
                     }
@@ -192,7 +204,7 @@ namespace Saga
                     //Heal
                     if (Program.currentPlayer.potion == 0) {
                         Program.Print("No potions left!", 20);
-                        int damage = p - Program.currentPlayer.armorValue;
+                        int damage = p - Program.currentPlayer.armorValue-Program.currentPlayer.equippedArmorValue;
                         if (damage < 0)
                             damage = 0;
                         Program.Print($"The {n} attacks you while you fumble in your bags and lose {damage} health!", 20);
@@ -214,53 +226,83 @@ namespace Saga
                             Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
                         }
                         Program.Print($"As you drink, the {n} strikes you.", 20);
-                        int damage = (p / 2) - Program.currentPlayer.armorValue;
+                        int damage = (p / 2) - Program.currentPlayer.armorValue-Program.currentPlayer.equippedArmorValue;
                         if (damage < 0)
                             damage = 0;
                         Program.Print($"You lose {damage} health", 20);
                         Program.currentPlayer.health -= damage;
                     }
+                    t++;
                 } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                     Player.CharacterScreen();
                 }
                 //Død
                 Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.");
                 Program.Print("Press to continue...", 1);
-                Console.ReadKey(true);
+                Program.PlayerPrompt();
             }
             if (h <= 0) {
-                Player.Loot(n, $"You Won against the {n}!");
+                Player.Loot(n, $"You Won against the {n} on turn {t-1}!");
                 if (Program.currentPlayer.CanLevelUp()) {
                     Program.currentPlayer.LevelUp();
                 }
             }
         }
-
-        //Monster navne
+ 
+        //Monster navne/type låst efter level
         public static string GetName() {
-            switch(Program.rand.Next(0, 10)) {
+            if (Program.currentPlayer.level < 5) {
+                switch (Program.rand.Next(0, 4 + 1)) {
+                    case 0:
+                        return "Skeleton";
+                    case 1:
+                        return "Zombie";
+                    case 2:
+                        return "Giant Rat";
+                    case 3:
+                        return "Grave Robber";
+                    case 4:
+                        return "Giant Bat";
+                }
+            }
+            else if (5 <= Program.currentPlayer.level &&Program.currentPlayer.level < 10) {
+                switch (Program.rand.Next(0, 8 + 1)) {
+                    case 0:
+                        return "Skeleton";
+                    case 1:
+                        return "Zombie";
+                    case 2:
+                        return "Human Cultist";
+                    case 3:
+                        return "Grave Robber";
+                    case 4:
+                        return "Giant Bat";
+                    case 5:
+                        return "Human Rogue";
+                    case 6:
+                        return "Giant Rat";
+                    case 7:
+                        return "Bandit";
+                    case 8:
+                        return "Dire Wolf";
+                }
+            } switch(Program.rand.Next(0,6+1)) {
                 case 0:
-                    return "Skeleton";
-                case 1:
-                    return "Zombie";
-                case 2:
                     return "Human Cultist";
-                case 3:
+                case 1:
                     return "Grave Robber";
-                case 4:
-                    return "Bat";
-                case 5:
+                case 2:
                     return "Human Rogue";
-                case 6:
+                case 3:
                     return "Vampire";
-                case 7:
+                case 4:
                     return "Werewolf";
-                case 8:
-                    return "Wolf";
-                case 9:
+                case 5:
+                    return "Dire Wolf";
+                case 6:
                     return "Bandit";
             }
-            return "Rat";
+            return "";
         }
     }
 }
