@@ -1,6 +1,6 @@
 # Saga
  
-1. Download filer fra mappen Debug; Saga.exe, saga.exe.config, sounds mappen og System.Configuration.ConfigurationManager.dll
+1. Download filer fra mappen Bin/Debug; Saga.exe, saga.exe.config, sounds mappen og System.Configuration.ConfigurationManager.dll
 2. Gem dem i en fælles mappe
 
 3. Kør Saga.exe
