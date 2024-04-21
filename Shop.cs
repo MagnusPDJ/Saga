@@ -26,15 +26,13 @@ namespace Saga
                 potionP = 20 + 10 * p.mods;
                 armorP = 100 * (p.armorValue+1);
                 weaponP = 100 * (p.weaponValue+1);
-                //difP = 300 + 100 * p.mods;
 
                 Console.Clear();
                 Console.WriteLine("         Gheed's Shop        ");
                 Console.WriteLine("=============================");
-                Console.WriteLine("| (W)eapon:             $" + weaponP);
-                Console.WriteLine("| (A)rmor:              $" + armorP);
-                Console.WriteLine("| (P)otions:            $" + potionP);
-                //Console.WriteLine("| (D)ifficulty Mod:     $" + difP);
+                Console.WriteLine("| (W)eapon Upgrade        $" + weaponP);
+                Console.WriteLine("| (A)rmor Upgrade:        $" + armorP);
+                Console.WriteLine("| (P)otions:              $" + potionP);
                 Console.WriteLine("|============================");
                 Console.WriteLine("| (S)ell    Potion      $" + potionP/2);
                 Console.WriteLine("|  Sell (5)xPotions     $" +(potionP/2)*5);
@@ -52,9 +50,8 @@ namespace Saga
                 Console.WriteLine("| Current Health:         " + p.health);
                 Console.WriteLine("| Gold:                  $" + p.gold);
                 Console.WriteLine("| Weapon Strength:        " + p.weaponValue);
-                Console.WriteLine("| Armor Strength:         " + p.armorValue);
+                Console.WriteLine("| Armor Rating:           " + p.armorValue);
                 Console.WriteLine("| Potions:                " + p.potion);
-                //Console.WriteLine("| Difficulty Mods:        " + p.mods);
                 Console.WriteLine("=============================");
                 Console.WriteLine(" (U)se Potion (C)haracter screen");
                 Console.WriteLine("");

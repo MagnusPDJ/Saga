@@ -31,41 +31,69 @@ namespace Saga
             if (!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
             }
+
             //Kalder MainMenu metoden.
-            Sounds.soundMainMenu.PlayLooping();
             MainMenu();
 
-            //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
-            currentPlayer = Load(out bool newP);
-            Sounds.soundMainMenu.Stop();
-
-            //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true.
-            if (newP) {
-                Encounters.FirstEncounter();
-                Encounters.ShopEncounter();
-            }
+            //Spillets loop
             while (mainLoop) {
                 Encounters.RandomEncounter();
             }
         }
-        
-        //Metode til at gemme spillet ved først at tjekke for om der er en eksisterende save med det korrekte navn, som så overskrives, eller så dannes helt en ny.
+
+        //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
+        public static void MainMenu() {
+            Sounds.soundMainMenu.PlayLooping();
+            while (true) {
+                Console.Clear();
+                Console.WriteLine("~~~~~~~~ Saga title ~~~~~~~~");
+                Console.WriteLine("1.         Play");
+                Console.WriteLine("2.       Settings");
+                Console.WriteLine("3.       Quit Game");
+                string input = PlayerPrompt();
+                if (input == "1") {
+
+                    //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
+                    currentPlayer = Load(out bool newP);
+                    Sounds.soundMainMenu.Stop();
+
+                    //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true
+                    if (newP) {
+                        Encounters.FirstEncounter();
+                        Encounters.ShopEncounter();
+                        break;
+                    }
+                    break;
+                }
+                else if (input == "2") {
+                    EditSettings();
+                }
+                else if (input == "3") {
+                    Console.WriteLine("Come back soon!");
+                    Environment.Exit(0);
+                }
+                else {
+                    Console.WriteLine("Wrong Input");
+                    PlayerPrompt();
+                }
+            }
+        }
+
+        //Metode til at gemme spillet ved først at tjekke for om der er en eksisterende save med det korrekte navn, som så overskrives, eller så dannes en helt ny en.
         public static void Save() {
             BinaryFormatter binForm = new BinaryFormatter();
-            string path = "saves/" + currentPlayer.id.ToString() + ".player";
+            string path = $"saves/{currentPlayer.id}.player";
             FileStream file = File.Open(path,FileMode.OpenOrCreate);
             binForm.Serialize(file, currentPlayer);
             file.Close();
         }
 
-        //Metode til at loade gemte karaktere og vise dem og vælge hvilken til at spille videre på eller lave en helt ny karakter.
+        //Metode til at loade gemte karakterer, vise dem og vælge hvilken til at spille videre på eller lave en helt ny karakter.
         public static Player Load(out bool newP) {
             newP = false;
             Console.Clear();
             string[] paths = Directory.GetFiles("saves");
             List<Player> players = new List<Player>();
-            int idCount = 0;
-
             BinaryFormatter binForm = new BinaryFormatter();
             foreach (string p in paths) {
                 FileStream file = File.Open(p, FileMode.Open);
@@ -73,17 +101,17 @@ namespace Saga
                 file.Close();
                 players.Add(player);
             }
-            idCount = players.Count;
+            int idCount = players.Count;
             while (true) {
                 Console.Clear();
                 Console.WriteLine("Choose a save!  ");
-                Program.Print("----------------");
+                Program.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",15);
                 Program.Print("#: playername");
                 foreach (Player p in players) {
-                    Program.Print(p.id + ": " + p.name);
+                    Program.Print(p.id + ": " + p.name, 20);
                 }
-                Program.Print("----------------");
-                Console.WriteLine("Please input 'id:#' or 'playername'. For new game write 'new game'.");
+                Program.Print("<><><><><><><><><><><><><><><><>",15);
+                Program.Print("Please input 'id:#' or 'playername'. For new game write 'new game'.",1);
                 string[] data = Console.ReadLine().Split(':');
                 try {
                     if (data[0] == "id") {
@@ -159,7 +187,7 @@ namespace Saga
                 Print("You can't even remember your own name...");
                 p.name = "Adventurer";
             } else {
-                Print("You know your name is " + p.name + ".");
+                Print($"You know your name is {p.name}.");
             }
             Sounds.soundTypeWriter.Stop();
             Console.ReadKey(true);
@@ -172,7 +200,7 @@ namespace Saga
             return p;
         }
 
-        //Metode til at 'Save and Exit'.
+        //Metode til at 'Save and Quit' spillet.
         public static void Quit() {
             while (true) {
                 Console.Clear();
@@ -193,28 +221,6 @@ namespace Saga
                 }
             }
         }
-        //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
-        public static void MainMenu() {
-            while(true) {
-                Console.Clear();
-                Console.WriteLine("~~~~~~~~ Saga title ~~~~~~~~");
-                Console.WriteLine("1.         Play");
-                Console.WriteLine("2.       Settings");
-                Console.WriteLine("3.       Quit Game");
-                string input = PlayerPrompt();
-                if (input == "1") {
-                    break;
-                } else if (input == "2") {
-                    EditSettings();
-                } else if (input == "3") {
-                    Console.WriteLine("");
-                    Environment.Exit(0);
-                } else {
-                    Console.WriteLine("Wrong Input");
-                    PlayerPrompt();
-                }
-            }
-        }
 
         //Metode til at ændre og gemme settings i en tilhørende configfil.
         private static void EditSettings() {
@@ -224,20 +230,20 @@ namespace Saga
             Print("          Settings       ", 20);
             Console.WriteLine("==============================");
             Console.WriteLine("                            ");
-            Print("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value, 20);
-            Print("2. Toggle Slow-printing text: " + settings["toggleSlowPrint"].Value, 20);
+            Print($"1. Toggle 'Press to continue': {settings["toggleReadLine"].Value}", 20);
+            Print($"2. Toggle Slow-printing text:  {settings["toggleSlowPrint"].Value}", 20);
+            Print($"3. System Volume:              {Sounds.GetVolume()}", 20);
             while (true) {
                 Console.Clear();
                 Console.WriteLine("          Settings       ");
                 Console.WriteLine("==============================");
                 Console.WriteLine("                            ");
-                Console.WriteLine("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value);
-                Console.WriteLine("2. Toggle Slow-printing text:  " + settings["toggleSlowPrint"].Value);
-                Console.WriteLine("3. System Volume:              " + Sounds.GetVolume());
+                Console.WriteLine($"1. Toggle 'Press to continue': {settings["toggleReadLine"].Value}");
+                Console.WriteLine($"2. Toggle Slow-printing text:  {settings["toggleSlowPrint"].Value}");
+                Console.WriteLine($"3. System Volume:              {Sounds.GetVolume()}");
                 Console.WriteLine("                            ");
                 Console.WriteLine("=====Press Esc to go back=====");
                 string input = Console.ReadKey().KeyChar.ToString();
-
                 if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {
                         settings["toggleReadLine"].Value = "false";
@@ -285,7 +291,7 @@ namespace Saga
             }
         }
 
-        //Metode til at toggle ReadLine/ReadKey baseret på spiller settings
+        //Metode til at toggle ReadLine/ReadKey baseret på spiller settings.
         public static string PlayerPrompt() {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleReadLine")) == true) {
                 return Console.ReadLine().ToLower();
@@ -296,7 +302,7 @@ namespace Saga
             }
         }
 
-        //Metode til at "Slow-print" tekst
+        //Metode til at "Slow-print" tekst, med indbygget toggle setting.
         public static void Print(string text, int time = 40) {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
                 Task t = Task.Run(() => {
@@ -319,7 +325,7 @@ namespace Saga
             }
         }
 
-        //En metode til at printe en progress bar til f.eks. lvl progress.
+        //En metode til at printe en progress bar til f.eks. lvl progress (Måske redundant?).
         public static void ProgressBar(string fillerChar, string backgroundChar, decimal value, int size) {
             int dif = (int)(value * size);
             for (int i = 0; i < size; i++) {
@@ -327,11 +333,11 @@ namespace Saga
                     Console.Write(fillerChar);
                 } else {
                     Console.Write(backgroundChar);
-                }
-                
+                }               
             }
         }
 
+        //Samme metode men til brug sammen med slow print metoden.
         public static string ProgressBarForPrint(string fillerChar, string backgroundChar, decimal value, int size) {
             int dif = (int)(value * size);
             string output = "";
@@ -345,6 +351,5 @@ namespace Saga
             }
             return output;
         }
-
     }
 }

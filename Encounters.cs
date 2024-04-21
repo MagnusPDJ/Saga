@@ -17,15 +17,15 @@ namespace Saga
             Sounds.soundTypeWriter.PlayLooping();
             switch (Program.currentPlayer.currentClass.ToString()) {
                 case "Warrior":
-                    Program.currentPlayer.equippedWeapon = "Rusty sword";
+                    Program.currentPlayer.equippedWeapon = "Rusty Sword";
                     Program.currentPlayer.equippedArmor = "Rags";
                     break;
                 case "Archer":
-                    Program.currentPlayer.equippedWeapon = "Flimsy bow";
+                    Program.currentPlayer.equippedWeapon = "Flimsy Bow";
                     Program.currentPlayer.equippedArmor = "Rags";
                     break;
                 case "Mage":
-                    Program.currentPlayer.equippedWeapon = "Gnarled wand";
+                    Program.currentPlayer.equippedWeapon = "Gnarled Wand";
                     Program.currentPlayer.equippedArmor = "Rags";
                     break;
             }
@@ -128,21 +128,19 @@ namespace Saga
                 Console.Clear();
                 Console.WriteLine("Fighting: " + n + "!");
                 Console.WriteLine("Strength: " + p + " / HP: " + h);
-                Console.WriteLine("-----------------------");
+                Console.WriteLine("---------------------------");
                 Console.WriteLine(Program.currentPlayer.currentClass + " " + Program.currentPlayer.name + "'s Stats:");
                 Console.WriteLine("Health: " + Program.currentPlayer.health + "\t|| Healing Potions: " + Program.currentPlayer.potion);
-                Console.WriteLine("Armor:  " + Program.currentPlayer.armorValue + "\t|| Gold: $" + Program.currentPlayer.gold);
-                Console.WriteLine("Level: " + Program.currentPlayer.level);
+                Console.WriteLine("Level: " + Program.currentPlayer.level + "\t|| Gold: $" + Program.currentPlayer.gold);
                 Console.Write("EXP  ");
                 Console.Write("[");
                 Program.ProgressBar("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 20);
                 Console.WriteLine("]");
-                Console.WriteLine("===========Actions=========");
+                Console.WriteLine("==========Actions==========");
                 Console.WriteLine("| (A)ttack     (D)efend   |");
                 Console.WriteLine("| (R)un        (H)eal     |");
+                Console.WriteLine("| (C)haracter screen      |");
                 Console.WriteLine("===========================");
-                Console.WriteLine(" (C)haracter screen        ");
-                Console.WriteLine("");
                 Console.WriteLine("Choose an action...");
                 string input = Program.PlayerPrompt().ToLower();
 
@@ -168,7 +166,7 @@ namespace Saga
                     int damage = 1+(p / 4) - Program.currentPlayer.armorValue;
                     if (damage < 0)
                         damage = 0;
-                    int attack = Program.rand.Next(0, 4+Program.currentPlayer.weaponValue) / 2;
+                    int attack = Program.rand.Next(2, 4+Program.currentPlayer.weaponValue) / 2;
                     Program.Print("You lose " + damage + " health and you deal " + attack + " damage", 20);
                     Program.currentPlayer.health -= damage;
                     h -= attack;
@@ -212,7 +210,7 @@ namespace Saga
                         if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
                             Program.currentPlayer.health = Program.currentPlayer.maxHealth;
                         }
-                        Program.currentPlayer.potion -= 1;
+                        Program.currentPlayer.potion --;
                         if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
                             Program.Print("You heal to max health!", 20);
                         } else {
@@ -228,39 +226,13 @@ namespace Saga
                 } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                     Player.CharacterScreen();
                 }
-
-                if (Program.currentPlayer.health <= 0) {
-                    //Death code
-                    Sounds.soundGameOver.Play();
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Program.Print("As the " + n + " menacingly comes down to strike, you are slain by the mighty " + n, 25);
-                    Console.ReadKey(true);
-                    Console.ResetColor();
-                    System.Environment.Exit(0);
-                }
+                //Død
+                Player.DeathCode("As the " + n + " menacingly comes down to strike, you are slain by the mighty " + n + ".");
                 Program.Print("Press to continue...", 1);
                 Console.ReadKey(true);
             }
-            if (h <= 0)
-            {
-                //Loot
-                Sounds.soundWin.Play();
-                int g = Program.currentPlayer.GetGold();
-                int x = Program.currentPlayer.GetXP() + ((n == "Dark Wizard")?+Program.currentPlayer.GetXP():0);
-                int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-                var pot = Program.rand.Next(0, numbers.Length);
-                Program.Print("You Won against the " + n + "! " + x + " experience points gained.", 15);
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Program.Print("You loot " + g + " gold coins.", 15);
-                Console.ResetColor();
-                if (numbers[pot] != 0)
-                {
-                    Program.Print("You loot " + numbers[pot] + " healing potions", 20);
-                    Program.currentPlayer.potion += numbers[pot];
-                }
-                Program.currentPlayer.gold += g;
-                Program.currentPlayer.xp += x;
-                Console.ReadKey(true);
+            if (h <= 0) {
+                Player.Loot(n, "You Won against the " + n + "!");
                 if (Program.currentPlayer.CanLevelUp()) {
                     Program.currentPlayer.LevelUp();
                 }
