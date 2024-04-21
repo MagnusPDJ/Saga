@@ -252,22 +252,28 @@ namespace Saga
                     }
                 } else if (input == "3") {
                     while (true) {
-                        Console.Clear();
-                        Console.WriteLine($"Adjusting Volume (Between 0-100) - Volume {Sounds.GetVolume()}");
-                        Console.WriteLine("Write (b)ack to return");
-                        string input1 = Console.ReadLine();
-                        if (input1 == "back" || input1 == "b") {
-                            break;
-                        } else if (0 <= int.Parse(input1) && int.Parse(input1) <= 100) {
-                            Sounds.SetVolume(int.Parse(input1));
-                        } else {
-                            Console.WriteLine("Invalid. Please write a decimal number between 100 and 0");
+                        try {
+                            Console.Clear();
+                            Console.WriteLine($"Adjusting Volume (Between 0-100) - Volume {Sounds.GetVolume()}");
+                            Console.WriteLine("Write (b)ack to return");
+                            string input1 = Console.ReadLine();
+                            if (input1 == "back" || input1 == "b") {
+                                break;
+                            }
+                            else if (0 <= int.Parse(input1) && int.Parse(input1) <= 100) {
+                                Sounds.SetVolume(int.Parse(input1));
+                            }
+                            else {
+                                Console.WriteLine("Invalid. Please write a number between 100 and 0");
+                                Console.ReadKey(true);
+                            }
+                        }
+                        catch (FormatException) {
+                            Console.WriteLine("Invalid. Please write a number between 100 and 0");
                             Console.ReadKey(true);
                         }
-                        
                     }
-                }
-                else if (input == "\u001b") {
+                } else if (input == "\u001b") {
                     configFile.Save(ConfigurationSaveMode.Minimal);
                     Print("SSettings saved! Please restart the game...", 20);
                     PlayerPrompt();
