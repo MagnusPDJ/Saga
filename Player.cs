@@ -16,11 +16,21 @@ namespace Saga
         public int maxHealth = 10;
         public int health = 10;
         public int damage = 1;
-        public int armorValue = 0;
+        public int armorValue = 0 + equippedArmorValue;
         public int potion = 5;
-        public int weaponValue = 0;
+        public int weaponValue = 0 + equippedWeaponValue;
         public int potionValue = 5;
+
         public int mods = 0;
+
+        public string equippedWeapon = null;
+        public static int equippedWeaponValue = 0;
+        public string equippedArmor = null;
+        public static int equippedArmorValue = 0;
+
+        //Player classes that can be picked
+        public enum PlayerClass {Mage, Archer, Warrior};
+        public PlayerClass currentClass = PlayerClass.Warrior;
 
         //Monster liv skaleret på spilleren.
         public int GetHealth() {

@@ -26,3 +26,5 @@ C:\Users\Magnus\Documents\GitHub\Saga\bin\Debug\Saga.exe.manifest
 C:\Users\Magnus\Documents\GitHub\Saga\bin\Debug\Saga.application
 C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.exe.manifest
 C:\Users\Magnus\Documents\GitHub\Saga\obj\Debug\Saga.application
+C:\Users\Magnus\Documents\GitHub\Saga\bin\Debug\AudioSwitcher.AudioApi.CoreAudio.dll
+C:\Users\Magnus\Documents\GitHub\Saga\bin\Debug\AudioSwitcher.AudioApi.dll

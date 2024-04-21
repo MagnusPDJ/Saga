@@ -10,7 +10,7 @@ namespace Saga
     {
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
-            Program.soundShop.PlayLooping();
+            Sounds.soundShop.PlayLooping();
             Runshop(p);
         }
 
@@ -42,7 +42,7 @@ namespace Saga
                 Console.WriteLine(" (E)xit Shop   (Q)uit game ");
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine("   " + p.name + "'s Stats    ");
+                Console.WriteLine(p.currentClass+" " + p.name + "'s Stats    ");
                 Console.WriteLine("=========================");
                 Console.WriteLine("Current Health:       " + p.health);
                 Console.WriteLine("| Gold:              $" + p.gold);

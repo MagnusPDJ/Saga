@@ -10,7 +10,6 @@ using System.Configuration;
 using System.Collections.Specialized;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using System.Media;
 
 namespace Saga
 {
@@ -18,14 +17,6 @@ namespace Saga
     {
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player currentPlayer = new Player();
-
-        //Genere et objekt som kan spille en lyd.
-        public static SoundPlayer soundTypeWriter = new SoundPlayer("sounds/typewriter.wav");
-        public static SoundPlayer soundMainMenu = new SoundPlayer("sounds/mainmenu.wav");
-        public static SoundPlayer soundKamp = new SoundPlayer("sounds/kamp.wav");
-        public static SoundPlayer soundWin = new SoundPlayer("sounds/win.wav");
-        public static SoundPlayer soundGameOver = new SoundPlayer("sounds/gameover.wav");
-        public static SoundPlayer soundShop = new SoundPlayer("sounds/shop.wav");
 
         //Sætter Game Loopet til true så man kan spille indefinitely.
         public static bool mainLoop = true;
@@ -41,12 +32,12 @@ namespace Saga
                 Directory.CreateDirectory("saves");
             }
             //Kalder MainMenu metoden.
-            soundMainMenu.PlayLooping();
+            Sounds.soundMainMenu.PlayLooping();
             MainMenu();
 
             //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
             currentPlayer = Load(out bool newP);
-            soundMainMenu.Stop();
+            Sounds.soundMainMenu.Stop();
 
             //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true.
             if (newP) {
@@ -132,10 +123,8 @@ namespace Saga
         static Player NewStart(int i) {
             Console.Clear();
             Player p = new Player();
-            //soundTypeWriter.PlayLooping();
             Console.WriteLine("//////////////");
             Print("Enter a name: ");
-            //soundTypeWriter.Stop();
             string input;
             do {
                 input = Console.ReadLine();
@@ -145,9 +134,25 @@ namespace Saga
                 }
             } while (input.Any(c => !char.IsLetter(c)));
             p.name = input;
+            Print("Pick a class: Mage  Archer  Warrior");
+            bool flag = false;
+            while(flag == false) {
+                flag = true;
+                string input1 = Console.ReadLine().ToLower();
+                if (input1 == "mage") {
+                    p.currentClass = Player.PlayerClass.Mage;
+                } else if (input1 == "archer") {
+                    p.currentClass = Player.PlayerClass.Archer;
+                } else if (input1 == "warrior") {
+                    p.currentClass = Player.PlayerClass.Warrior;
+                } else {
+                    Console.WriteLine("Please choose a listed class!");
+                    flag = false;
+                }
+            }
             p.id = i;
             Console.Clear();
-            soundTypeWriter.PlayLooping();
+            Sounds.soundTypeWriter.PlayLooping();
             Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
             Print("anything about your past.");
             if (String.IsNullOrWhiteSpace(p.name) == true) {
@@ -156,14 +161,14 @@ namespace Saga
             } else {
                 Print("You know your name is " + p.name + ".");
             }
-            soundTypeWriter.Stop();
+            Sounds.soundTypeWriter.Stop();
             Console.ReadKey(true);
             Console.Clear();
-            soundTypeWriter.PlayLooping();
+            Sounds.soundTypeWriter.PlayLooping();
             Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             Print("standing with his back to you outside the door.");
-            soundTypeWriter.Stop();
+            Sounds.soundTypeWriter.Stop();
             return p;
         }
 
@@ -227,7 +232,8 @@ namespace Saga
                 Console.WriteLine("==============================");
                 Console.WriteLine("                            ");
                 Console.WriteLine("1. Toggle 'Press to continue': " + settings["toggleReadLine"].Value);
-                Console.WriteLine("2. Toggle Slow-printing text: " + settings["toggleSlowPrint"].Value);
+                Console.WriteLine("2. Toggle Slow-printing text:  " + settings["toggleSlowPrint"].Value);
+                Console.WriteLine("3. System Volume:              " + Sounds.GetVolume());
                 Console.WriteLine("                            ");
                 Console.WriteLine("=====Press Esc to go back=====");
                 string input = Console.ReadKey().KeyChar.ToString();
@@ -244,7 +250,24 @@ namespace Saga
                     } else {
                         settings["toggleSlowPrint"].Value = "true";
                     }
-                } else if (input == "\u001b") {
+                } else if (input == "3") {
+                    while (true) {
+                        Console.Clear();
+                        Console.WriteLine($"Adjusting Volume (Between 0-100) - Volume {Sounds.GetVolume()}");
+                        Console.WriteLine("Write (b)ack to return");
+                        string input1 = Console.ReadLine();
+                        if (input1 == "back" || input1 == "b") {
+                            break;
+                        } else if (0 <= int.Parse(input1) && int.Parse(input1) <= 100) {
+                            Sounds.SetVolume(int.Parse(input1));
+                        } else {
+                            Console.WriteLine("Invalid. Please write a decimal number between 100 and 0");
+                            Console.ReadKey(true);
+                        }
+                        
+                    }
+                }
+                else if (input == "\u001b") {
                     configFile.Save(ConfigurationSaveMode.Minimal);
                     Print("SSettings saved! Please restart the game...", 20);
                     PlayerPrompt();
