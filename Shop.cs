@@ -10,7 +10,10 @@ namespace Saga
     {
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
-            Sounds.soundShop.PlayLooping();
+            AudioManager.soundMainMenu.Stop();
+            AudioManager.soundTroldmandsKamp.Stop();
+            AudioManager.soundKamp.Stop();
+            AudioManager.soundShop.Play();
             Runshop(p);
         }
 
@@ -96,6 +99,7 @@ namespace Saga
                 } else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
                     Program.Quit();
                 } else if (input.ToLower() == "e" || input == "exit") {
+                    AudioManager.soundShop.Stop();
                     break;
                 }
             }

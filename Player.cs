@@ -180,7 +180,7 @@ namespace Saga
 
         //Metode til at lvl spilleren op.
         public void LevelUp() {
-            Sounds.soundLvlUp.Play();
+            AudioManager.soundLvlUp.Play();
             while(CanLevelUp()) {
                 xp-=GetLevelUpValue();
                 level++;
@@ -214,7 +214,9 @@ namespace Saga
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public static void DeathCode(string message) {
             if (Program.currentPlayer.health <= 0) {
-                Sounds.soundGameOver.Play();
+                AudioManager.soundKamp.Stop();
+                AudioManager.soundTroldmandsKamp.Stop();
+                AudioManager.soundGameOver.Play();
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Program.Print(message,25);
                 Console.ResetColor();
@@ -225,7 +227,6 @@ namespace Saga
 
         //Metode til at genere loot
         public static void Loot(string monster, string message) {
-                Sounds.soundWin.Play();
                 int g = Program.currentPlayer.GetGold();
                 int x = Program.currentPlayer.GetXP() * ((monster == "Dark Wizard") ? + 2 : 1);
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };

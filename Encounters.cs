@@ -14,7 +14,6 @@ namespace Saga
      //Encounters
         //Det Encounter som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
-            Sounds.soundTypeWriter.PlayLooping();
             switch (Program.currentPlayer.currentClass.ToString()) {
                 case "Warrior":
                     Program.currentPlayer.equippedWeapon = "Rusty Sword";
@@ -36,42 +35,45 @@ namespace Saga
                     break;
             }
             Program.Print($"You throw open the door, grabbing a {Program.currentPlayer.equippedWeapon}, while charging toward your captor.");
+            AudioManager.soundMainMenu.Stop();
+            AudioManager.soundTaunt.Play();
+            AudioManager.soundKamp.Play();
             Program.Print("He turns...");
-            Sounds.soundTypeWriter.Stop();
             Program.PlayerPrompt();
-            Sounds.soundKamp.PlayLooping();
             BasicCombat(false, "Human captor", 3, 5);
         }
 
         //Encounter som køres introducere shopkeeperen
         public static void ShopEncounter() {
+            AudioManager.soundShop.Play();
             Console.Clear();
-            Sounds.soundTypeWriter.PlayLooping();
+            AudioManager.soundTypeWriter.Play();
             if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
                 Program.Print($"After dusting off your {Program.currentPlayer.equippedArmor} and tucking in your new wand, you find someone else captured.");
             } else if (Program.currentPlayer.currentClass==Player.PlayerClass.Archer) {
                 Program.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
             } else {
-                Program.Print("After cleaning the blood of your captor from your new sword, you find someone else captured.");
+                Program.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
             }
             Program.Print("Freeing him from his shackles, he thanks you and gets up.");
             Program.Print("'Gheed is the name and trade is my game', he gives a wink.");
-            Sounds.soundTypeWriter.Stop();
             Program.PlayerPrompt();
-            Sounds.soundTypeWriter.PlayLooping();
             Console.Clear();
+            AudioManager.soundTypeWriter.Play();
             Program.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
             Program.Print("'Then Run back to me, I will then have been able to set up a shop where you can spend ");
             Program.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             Program.Print($"You nod and prepare your {Program.currentPlayer.equippedWeapon}, then you start walking down a dark corridor...");
-            Sounds.soundTypeWriter.Stop();
             Program.PlayerPrompt();
         }
 
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void BasicFightEncounter() {
             Console.Clear();
-            Sounds.soundKamp.PlayLooping();
+            AudioManager.soundShop.Stop();
+            AudioManager.soundMainMenu.Stop();
+            AudioManager.soundTroldmandsKamp.Stop();
+            AudioManager.soundKamp.Play();
             string n = GetName();
             switch (Program.rand.Next(0,2)) {
                 case int x when (x == 0):
@@ -88,12 +90,15 @@ namespace Saga
         //Encounter der "spawner" en specifik fjende som skal dræbes.
         public static void WizardEncounter() {
             Console.Clear();
-            Sounds.soundTypeWriter.PlayLooping();
-            Program.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ");
+            AudioManager.soundMainMenu.Stop();
+            AudioManager.soundKamp.Stop();
+            AudioManager.soundLaugh.Play();
+            //Wizardbattlemusic
+            Program.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",35);
+            AudioManager.soundTroldmandsKamp.Play();
             Program.Print("long beard and pointy hat, looking at a large tome.");
-            Sounds.soundTypeWriter.Stop();
+            
             Program.PlayerPrompt();
-            Sounds.soundMainMenu.PlayLooping();
             BasicCombat(false, "Dark Wizard", 4+Program.currentPlayer.level, 2+Program.currentPlayer.level);
         }
 
@@ -242,6 +247,9 @@ namespace Saga
                 Program.PlayerPrompt();
             }
             if (h <= 0) {
+                AudioManager.soundKamp.Stop();
+                AudioManager.soundWin.Play();
+                AudioManager.soundTroldmandsKamp.Stop();
                 Player.Loot(n, $"You Won against the {n} on turn {t-1}!");
                 if (Program.currentPlayer.CanLevelUp()) {
                     Program.currentPlayer.LevelUp();

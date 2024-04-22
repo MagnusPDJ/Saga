@@ -7,9 +7,8 @@ using System.Xml.Linq;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Configuration;
-using System.Collections.Specialized;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using NAudio.Wave;
 
 namespace Saga
 {
@@ -24,12 +23,21 @@ namespace Saga
         //Genere et objekt som kan returnere tilfældige tal mm.
         public static Random rand = new Random();
 
+        //Sætter variablen til Lydniveauet fra configfilen.
+        public static float volumeLevel = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
+        //Laver et objekt til at sætte lyden når spillet åbnes.
+        public static AudioManager soundVolumeController = new AudioManager("sounds/mainmenu.wav");
+
+
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
 
+            //Sætter lydniveauet til variablen sat fra configfilen.
+            soundVolumeController.Volume = volumeLevel;
+
             //Danner en saves mappe hvis den ikke eksistere.
             if (!Directory.Exists("saves")) {
-                Directory.CreateDirectory("saves");
+            Directory.CreateDirectory("saves");
             }
 
             //Kalder MainMenu metoden.
@@ -37,13 +45,14 @@ namespace Saga
 
             //Spillets loop
             while (mainLoop) {
+                AudioManager.soundShop.Stop();
                 Encounters.RandomEncounter();
             }
         }
 
         //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
         public static void MainMenu() {
-            Sounds.soundMainMenu.PlayLooping();
+            AudioManager.soundMainMenu.Play();
             while (true) {
                 Console.Clear();
                 Console.WriteLine("~~~~~~~~ Saga title ~~~~~~~~");
@@ -55,11 +64,11 @@ namespace Saga
 
                     //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
                     currentPlayer = Load(out bool newP);
-                    Sounds.soundMainMenu.Stop();
 
                     //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true
                     if (newP) {
                         Encounters.FirstEncounter();
+                        AudioManager.soundKamp.Stop();
                         Encounters.ShopEncounter();
                         break;
                     }
@@ -104,13 +113,14 @@ namespace Saga
             int idCount = players.Count;
             while (true) {
                 Console.Clear();
-                Console.WriteLine("Choose a save!  ");
-                Program.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",15);
+                AudioManager.soundTypeWriter.Play();
+                Program.Print("Choose a save!  ",15);
+                Program.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",20);
                 Program.Print("#: playername");
                 foreach (Player p in players) {
                     Program.Print(p.id + ": " + p.name, 20);
                 }
-                Program.Print("<><><><><><><><><><><><><><><><>",15);
+                Program.Print("<><><><><><><><><><><><><><><><>",20);
                 Program.Print("Please input 'id:#' or 'playername'. For new game write 'new game'.",1);
                 string[] data = Console.ReadLine().Split(':');
                 try {
@@ -145,7 +155,6 @@ namespace Saga
                     Console.ReadKey(true);
                 }
             }
-
         }
 
         //Metode til at genere ny karakter efter at have inputtet 'new game' i Load() metoden.
@@ -181,7 +190,7 @@ namespace Saga
             }
             p.id = i;
             Console.Clear();
-            Sounds.soundTypeWriter.PlayLooping();
+            AudioManager.soundTypeWriter.Play();
             Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
             Print("anything about your past.");
             if (String.IsNullOrWhiteSpace(p.name) == true) {
@@ -190,14 +199,12 @@ namespace Saga
             } else {
                 Print($"You know your name is {p.name}.");
             }
-            Sounds.soundTypeWriter.Stop();
             Console.ReadKey(true);
             Console.Clear();
-            Sounds.soundTypeWriter.PlayLooping();
+            AudioManager.soundTypeWriter.Play();
             Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             Print("standing with his back to you outside the door.");
-            Sounds.soundTypeWriter.Stop();
             return p;
         }
 
@@ -233,7 +240,7 @@ namespace Saga
             Console.WriteLine("");
             Print($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}", 20);
             Print($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}", 20);
-            Print($"3. System Volume:                 {Sounds.GetVolume()}", 20);
+            Print($"3. System Volume:                 {settings["volume"].Value}", 20);
             while (true) {
                 Console.Clear();
                 Console.WriteLine("            Settings       ");
@@ -241,7 +248,7 @@ namespace Saga
                 Console.WriteLine("                            ");
                 Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
                 Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
-                Console.WriteLine($"3. System Volume:                 {Sounds.GetVolume()}");
+                Console.WriteLine($"3. System Volume:                 {settings["volume"].Value}");
                 Console.WriteLine("                            ");
                 Console.WriteLine("=======Press Esc to go back=======");
                 string input = Console.ReadKey().KeyChar.ToString();
@@ -261,22 +268,22 @@ namespace Saga
                     while (true) {
                         try {
                             Console.Clear();
-                            Console.WriteLine($"Adjusting Volume (Between 0-100) - Volume {Sounds.GetVolume()}");
+                            Console.WriteLine($"Adjusting Volume (Between 0,0-1,0) - Volume {settings["volume"].Value}");
                             Console.WriteLine("Write (b)ack to return");
                             string input1 = Console.ReadLine();
                             if (input1 == "back" || input1 == "b") {
                                 break;
                             }
-                            else if (0 <= int.Parse(input1) && int.Parse(input1) <= 100) {
-                                Sounds.SetVolume(int.Parse(input1));
+                            else if (0 <= float.Parse(input1) && float.Parse(input1) <= 1) {
+                                settings["volume"].Value = input1;
                             }
                             else {
-                                Console.WriteLine("Invalid. Please write a number between 100 and 0");
+                                Console.WriteLine("Invalid. Please write a number between 1 and 0");
                                 Console.ReadKey(true);
                             }
                         }
                         catch (FormatException) {
-                            Console.WriteLine("Invalid. Please write a number between 100 and 0");
+                            Console.WriteLine("Invalid. Please write a number between 1 and 0");
                             Console.ReadKey(true);
                         }
                     }
@@ -286,7 +293,7 @@ namespace Saga
                     PlayerPrompt();
                     break;
                 } else {
-                    Console.WriteLine("No setting selected");
+                    Console.WriteLine("\nNo setting selected");
                     PlayerPrompt();
                 }
             }
