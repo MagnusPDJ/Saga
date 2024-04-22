@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Media;
-using System.Runtime.InteropServices;
 using NAudio.Wave;
-using System.Configuration;
 
 namespace Saga
 {

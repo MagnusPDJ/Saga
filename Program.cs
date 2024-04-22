@@ -8,7 +8,6 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Configuration;
 using System.Threading;
-using NAudio.Wave;
 
 namespace Saga
 {

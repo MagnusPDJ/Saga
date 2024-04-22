@@ -121,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="bin\Debug\Saga.application" />
+    <None Include="bin\Debug\Saga.exe.Config" />
+    <None Include="bin\Debug\Saga.exe.manifest" />
     <None Include="packages.config" />
     <None Include="Saga_TemporaryKey.pfx" />
   </ItemGroup>
@@ -164,6 +167,29 @@
     <None Include="bin\Debug\sounds\win.wav" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\System.Security.Principal.Windows.xml" />
+    <None Include="bin\Debug\System.Security.Principal.Windows.dll" />
+    <None Include="bin\Debug\System.Security.AccessControl.xml" />
+    <None Include="bin\Debug\System.Security.AccessControl.dll" />
+    <None Include="bin\Debug\System.Configuration.ConfigurationManager.xml" />
+    <None Include="bin\Debug\System.Configuration.ConfigurationManager.dll" />
+    <None Include="bin\Debug\Saga.pdb" />
+    <None Include="bin\Debug\Microsoft.Win32.Registry.dll" />
+    <None Include="bin\Debug\Microsoft.Win32.Registry.xml" />
+    <None Include="bin\Debug\NAudio.Asio.dll" />
+    <None Include="bin\Debug\NAudio.Asio.xml" />
+    <None Include="bin\Debug\NAudio.Core.dll" />
+    <None Include="bin\Debug\NAudio.Core.xml" />
+    <None Include="bin\Debug\NAudio.dll" />
+    <None Include="bin\Debug\NAudio.Midi.dll" />
+    <None Include="bin\Debug\NAudio.Midi.xml" />
+    <None Include="bin\Debug\NAudio.Wasapi.dll" />
+    <None Include="bin\Debug\NAudio.Wasapi.xml" />
+    <None Include="bin\Debug\NAudio.WinForms.dll" />
+    <None Include="bin\Debug\NAudio.WinForms.xml" />
+    <None Include="bin\Debug\NAudio.WinMM.dll" />
+    <None Include="bin\Debug\NAudio.WinMM.xml" />
+    <None Include="bin\Debug\NAudio.xml" />
     <Content Include="bin\Debug\sounds\laugh.wav" />
     <None Include="bin\Debug\sounds\taunt.wav" />
     <None Include="bin\Debug\sounds\troldmandskamp.wav" />

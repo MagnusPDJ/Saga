@@ -133,8 +133,86 @@
   <data name="mainmenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\sounds\mainmenu.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Microsoft_Win32_Registry" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Microsoft.Win32.Registry.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Microsoft_Win32_Registry1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Microsoft.Win32.Registry.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NAudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NAudio_Asio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Asio.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio_Asio1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Asio.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NAudio_Core" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Core.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio_Core1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Core.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NAudio_Midi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Midi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio_Midi1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Midi.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NAudio_Wasapi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Wasapi.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio_Wasapi1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.Wasapi.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="NAudio_WinForms" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.WinForms.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio_WinForms1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.WinForms.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="NAudio_WinMM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.WinMM.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NAudio_WinMM1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\NAudio.WinMM.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Saga" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Saga.pdb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Saga1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Saga.application;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Saga_exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Saga.exe.Config;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Saga_exe1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Saga.exe.manifest;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="shop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\sounds\shop.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="System_Configuration_ConfigurationManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\System.Configuration.ConfigurationManager.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="System_Configuration_ConfigurationManager1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\System.Configuration.ConfigurationManager.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="System_Security_AccessControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\System.Security.AccessControl.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="System_Security_AccessControl1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\System.Security.AccessControl.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="System_Security_Principal_Windows" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\System.Security.Principal.Windows.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="System_Security_Principal_Windows1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\System.Security.Principal.Windows.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="taunt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\sounds\taunt.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
