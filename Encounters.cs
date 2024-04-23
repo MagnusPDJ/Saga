@@ -18,19 +18,19 @@ namespace Saga
                     Program.currentPlayer.equippedWeapon = "Rusty Sword";
                     Program.currentPlayer.equippedWeaponValue = 1;
                     Program.currentPlayer.equippedArmor = "Rags";
-                    Program.currentPlayer.equippedArmorValue = 2;
+                    Program.currentPlayer.equippedArmorValue = 1;
                     break;
                 case "Archer":
                     Program.currentPlayer.equippedWeapon = "Flimsy Bow";
                     Program.currentPlayer.equippedWeaponValue = 1;
                     Program.currentPlayer.equippedArmor = "Rags";
-                    Program.currentPlayer.equippedArmorValue = 2;
+                    Program.currentPlayer.equippedArmorValue = 1;
                     break;
                 case "Mage":
                     Program.currentPlayer.equippedWeapon = "Cracked Wand";
                     Program.currentPlayer.equippedWeaponValue = 1;
                     Program.currentPlayer.equippedArmor = "Rags";
-                    Program.currentPlayer.equippedArmorValue = 2;
+                    Program.currentPlayer.equippedArmorValue = 1;
                     break;
             }
             Program.Print($"You throw open the door, grabbing a {Program.currentPlayer.equippedWeapon}, while charging toward your captor.");
@@ -39,7 +39,7 @@ namespace Saga
             AudioManager.soundKamp.Play();
             Program.Print("He turns...");
             Program.PlayerPrompt();
-            BasicCombat(false, "Human captor", 3, 5);
+            BasicCombat(false, "Human captor", 2, 5);
         }
 
         //Encounter som køres der introducere shopkeeperen
@@ -84,9 +84,6 @@ namespace Saga
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void BasicFightEncounter() {
             Console.Clear();
-            AudioManager.soundShop.Stop();
-            AudioManager.soundMainMenu.Stop();
-            AudioManager.soundTroldmandsKamp.Stop();
             AudioManager.soundKamp.Play();
             string n = GetName();
             switch (Program.rand.Next(0,2)) {
@@ -101,36 +98,59 @@ namespace Saga
             BasicCombat(true, n, 0, 0);
         }
 
-        //Encounter der "spawner" en specifik fjende som skal dræbes.
+        //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
             Console.Clear();
-            AudioManager.soundMainMenu.Stop();
-            AudioManager.soundKamp.Stop();
             AudioManager.soundLaugh.Play();
-            //Wizardbattlemusic
-            Program.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",35);
+            Program.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",30);
             AudioManager.soundTroldmandsKamp.Play();
             Program.Print("long beard and pointy hat, looking at a large tome.");
             
             Program.PlayerPrompt();
-            BasicCombat(false, "Dark Wizard", 6+2*Program.currentPlayer.level, 2+2*Program.currentPlayer.level+Program.currentPlayer.level/3);
+            BasicCombat(false, "Dark Wizard", 6+2*Program.currentPlayer.level, 2+2*Program.currentPlayer.level+Program.currentPlayer.level/3,2);
         }
+
+        //Encounter der "spawner" en Mimic som skal dræbes.
+        public static void MimicEncounter() {
+            Console.Clear();
+            AudioManager.soundDoorOpen.Play();
+            Program.Print("You open a door and find a treasure chest inside!");
+            Program.Print("Do you want to try and open it?\n(Y/N)");
+            string input = Program.PlayerPrompt().ToLower();
+            if (input == "n") {
+                AudioManager.soundDoorClose.Play();
+                Program.Print("You slowly back out of the room and find your way back to your camp");
+                Console.ReadKey(true);
+            } else if (input == "y") {
+                AudioManager.soundMimic.Play();
+                Program.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
+                AudioManager.soundTroldmandsKamp.Play();
+                Program.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.");
+                Program.Print($"You ready your {Program.currentPlayer.equippedWeapon}!");
+                Program.PlayerPrompt();
+                BasicCombat(false, "Mimic", 5+Program.currentPlayer.level+Program.currentPlayer.level/3, 10+2*Program.currentPlayer.level + Program.currentPlayer.level / 3, 1, 3);
+            }
+        }
+
 
      //Encounter Tools
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(0, 10+1)) {
-                case int n when (n>0):
+            switch (Program.rand.Next(1, 11+1)) {
+                case int n when (n>1):
                     BasicFightEncounter();
                     break;
                 case int n when (n==0):
                     WizardEncounter();
                     break;
+                case int n when (n==1):
+                    MimicEncounter();
+                    break;
             }
         }
 
         //Metode til at køre kamp.
-        public static void BasicCombat(bool random, string name, int power, int health) {
+        public static void BasicCombat(bool random, string name, int power, int health, int xpModifier=1, int goldModifier=1) {
             string n;
             int p;
             int h;
@@ -255,16 +275,19 @@ namespace Saga
                 } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                     Player.CharacterScreen();
                 }
-                //Død
-                Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.");
-                Program.Print("Press to continue...", 1);
+                if (Program.currentPlayer.health <= 0) {
+                    //Død
+                    h = 1;
+                    Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.\nPress to continue...");
+                    break;
+                }
                 Program.PlayerPrompt();
             }
             if (h <= 0) {
                 AudioManager.soundKamp.Stop();
-                AudioManager.soundWin.Play();
                 AudioManager.soundTroldmandsKamp.Stop();
-                Player.Loot(n, $"You Won against the {n} on turn {t-1}!");
+                AudioManager.soundWin.Play();
+                Player.Loot(xpModifier, goldModifier, $"You Won against the {n} on turn {t-1}!");
                 if (Program.currentPlayer.CanLevelUp()) {
                     Program.currentPlayer.LevelUp();
                 }

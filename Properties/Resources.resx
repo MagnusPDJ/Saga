@@ -124,6 +124,12 @@
   <data name="campmusic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\campmusic.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="doorclose" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\sounds\doorclose.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dooropen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\sounds\dooropen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="gameover" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\gameover.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -138,6 +144,9 @@
   </data>
   <data name="mainmenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\mainmenu.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="mimic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\sounds\mimic.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="shop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\shop.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

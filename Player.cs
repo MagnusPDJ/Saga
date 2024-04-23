@@ -23,8 +23,6 @@ namespace Saga
         public int potion = 5;
         public int potionValue = 5;
 
-        public int mods = 0;
-
         public string equippedWeapon = null;
         public int equippedWeaponValue = 0;
         public string equippedArmor = null;
@@ -213,22 +211,20 @@ namespace Saga
 
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public static void DeathCode(string message) {
-            if (Program.currentPlayer.health <= 0) {
                 AudioManager.soundKamp.Stop();
                 AudioManager.soundTroldmandsKamp.Stop();
                 AudioManager.soundGameOver.Play();
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Program.Print(message,25);
+                Program.Print(message,20);
                 Console.ResetColor();
                 Program.PlayerPrompt();
-                Program.MainMenu();   
-            }
+                Program.MainMenu();
         }
 
         //Metode til at genere loot
-        public static void Loot(string monster, string message) {
-                int g = Program.currentPlayer.GetGold();
-                int x = Program.currentPlayer.GetXP() * ((monster == "Dark Wizard") ? + 2 : 1);
+        public static void Loot(int xpModifier, int goldModifier, string message) {
+                int g = Program.currentPlayer.GetGold()*goldModifier;
+                int x = Program.currentPlayer.GetXP() * xpModifier;
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
                 var pot = Program.rand.Next(0, numbers.Length);
                 Program.Print(message, 15);

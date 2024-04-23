@@ -25,7 +25,7 @@ namespace Saga
 
             while (true) {
                 //Sætter prisen i shoppen skaleret på spilleren.
-                potionP = 20 + 10 * p.mods;
+                potionP = 20 + 10;
                 armorP = 100 * (p.armorValue+1);
                 weaponP = 100 * (p.weaponValue+1);
 
@@ -49,10 +49,10 @@ namespace Saga
                 Console.Write("[");
                 Program.ProgressBar("+", " ", ((decimal)p.xp / (decimal)p.GetLevelUpValue()),20);
                 Console.WriteLine("]");
-                Console.WriteLine($"| Current Health:         {p.health}");
+                Console.WriteLine($"| Health:                 {p.health}/{p.maxHealth}");
                 Console.WriteLine($"| Gold:                  ${p.gold}");
-                Console.WriteLine($"| Weapon Strength:        {p.weaponValue}");
-                Console.WriteLine($"| Armor Rating:           {p.armorValue}");
+                Console.WriteLine($"| Weapon Upgrades:        {p.weaponValue}");
+                Console.WriteLine($"| Armor Upgrades:         {p.armorValue}");
                 Console.WriteLine($"| Potions:                {p.potion}");
                 Console.WriteLine("=============================");
                 Console.WriteLine(" (U)se Potion (C)haracter screen");
@@ -114,9 +114,6 @@ namespace Saga
                         break;
                     case "armor":
                         p.armorValue++; 
-                        break;
-                    case "dif":
-                        p.mods++;
                         break;
                 }
                 p.gold -= cost;

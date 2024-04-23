@@ -81,6 +81,24 @@ namespace Saga.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream doorclose {
+            get {
+                return ResourceManager.GetStream("doorclose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream dooropen {
+            get {
+                return ResourceManager.GetStream("dooropen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream gameover {
             get {
                 return ResourceManager.GetStream("gameover", resourceCulture);
@@ -120,6 +138,15 @@ namespace Saga.Properties {
         internal static System.IO.UnmanagedMemoryStream mainmenu {
             get {
                 return ResourceManager.GetStream("mainmenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream mimic {
+            get {
+                return ResourceManager.GetStream("mimic", resourceCulture);
             }
         }
         

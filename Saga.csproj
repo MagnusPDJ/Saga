@@ -166,5 +166,14 @@
   <ItemGroup>
     <None Include="assets\sounds\campfire.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\mimic.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\dooropen.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\doorclose.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
