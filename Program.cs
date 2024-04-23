@@ -43,7 +43,9 @@ namespace Saga
 
             //Spillets loop
             while (mainLoop) {
+                AudioManager.soundMainMenu.Stop();
                 AudioManager.soundShop.Stop();
+                Encounters.Camp();
                 Encounters.RandomEncounter();
             }
         }
@@ -68,6 +70,8 @@ namespace Saga
                         Encounters.FirstEncounter();
                         AudioManager.soundKamp.Stop();
                         Encounters.ShopEncounter();
+                        Encounters.RandomEncounter();
+                        Encounters.FirstCamp();
                         break;
                     }
                     break;

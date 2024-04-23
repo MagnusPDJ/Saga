@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Saga
 {
-    public class Encounters
-    {   
-     //Encounter Generic
-        
+    public class Encounters {
+        //Encounter Generic
 
-     //Encounters
+
+        //Encounters
         //Det Encounter som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
             switch (Program.currentPlayer.currentClass.ToString()) {
@@ -43,14 +42,14 @@ namespace Saga
             BasicCombat(false, "Human captor", 3, 5);
         }
 
-        //Encounter som køres introducere shopkeeperen
+        //Encounter som køres der introducere shopkeeperen
         public static void ShopEncounter() {
             AudioManager.soundShop.Play();
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
             if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
                 Program.Print($"After dusting off your {Program.currentPlayer.equippedArmor} and tucking in your new wand, you find someone else captured.");
-            } else if (Program.currentPlayer.currentClass==Player.PlayerClass.Archer) {
+            } else if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
                 Program.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
             } else {
                 Program.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
@@ -61,11 +60,25 @@ namespace Saga
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
             Program.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
-            Program.Print("'Then Run back to me, I will then have been able to set up a shop where you can spend ");
+            Program.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             Program.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             Program.Print($"You nod and prepare your {Program.currentPlayer.equippedWeapon}, then you start walking down a dark corridor...");
             Program.PlayerPrompt();
         }
+
+        //Encounter som køres der introducere Camp
+        public static void FirstCamp() {
+            Console.Clear();
+            AudioManager.soundTypeWriter.Play();
+            Program.Print("After taking what few scraps you could find, you explore your surroundings.");
+            Program.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
+            Console.ReadKey(true);
+            Program.Print("You hastily gather some old wood scattered about and make a campfire. The");
+            Program.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
+            Program.Print("you can stay for a while.");
+            Program.PlayerPrompt();
+        }
+
 
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void BasicFightEncounter() {
@@ -142,8 +155,8 @@ namespace Saga
                 Console.WriteLine($"Fighting: {n}!");
                 Console.WriteLine($"Strength: {p} / HP: {h}");
                 Console.WriteLine("---------------------------");
-                Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}'s Stats:");
-                Console.WriteLine($"Health: {Program.currentPlayer.health}\t|| Healing Potions: {Program.currentPlayer.potion}");
+                Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
+                Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
                 Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
                 Console.Write("EXP  ");
                 Console.Write("[");
@@ -202,7 +215,7 @@ namespace Saga
                             Program.Print($"You barely manage to shake off the {n} and you successfully escape.");
                         }
                         Program.PlayerPrompt();
-                        Shop.Loadshop(Program.currentPlayer);
+                        Camp();
                         break;
                     }
                 } else if (input.ToLower() == "h" || input == "heal") {
@@ -319,6 +332,79 @@ namespace Saga
                     return "Bandit";
             }
             return "";
+        }
+
+        //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
+        public static void Camp() {
+            while (true) {
+                Console.Clear();
+                Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
+                Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
+                Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
+                Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
+                Console.Write("EXP  ");
+                Console.Write("[");
+                Program.ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
+                Console.WriteLine("]");
+                Console.WriteLine("==============Actions=================");
+                Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
+                Console.WriteLine("0 (G)heed's shop     (H)eal          0");
+                Console.WriteLine("0 (C)haracter screen                 0");
+                Console.WriteLine("======================================");
+                Console.WriteLine("  (Q)uit to Main Menu                 ");
+                Console.WriteLine("Choose an action...");
+                string input = Program.PlayerPrompt().ToLower();
+
+                if (input.ToLower() == "e" || input == "explore") {
+                    //Explore
+                    Console.WriteLine("You venture deeper...");
+                    Program.PlayerPrompt();
+                    break;
+                } 
+                else if (input.ToLower() == "s" || input == "sleep" || input == "quit" || input == "quit game") {
+                    //Sleep/save Game
+                    Program.Save();
+                    Program.Print("Game saved!");
+                    Program.PlayerPrompt();
+                }
+                else if (input.ToLower() == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
+                    //Gheed's shop
+                    Shop.Loadshop(Program.currentPlayer);
+                } 
+                else if (input.ToLower() == "h" || input == "heal") {
+                    //Heal
+                    if (Program.currentPlayer.potion == 0) {
+                        Program.Print("No potions left!", 20);                        
+                    } 
+                    else {
+                        if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
+                            Program.Print("You use a potion amplified by your magic", 30);
+                        } 
+                        else {
+                            Program.Print("You use a potion", 20);
+                        }
+                        Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? +4 : 0);
+                        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+                            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+                        }
+                        Program.currentPlayer.potion--;
+                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                            Program.Print("You heal to max health!", 20);
+                        } 
+                        else {
+                            Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
+                        }
+                    }
+                    Program.PlayerPrompt();
+                } 
+                else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
+                    Player.CharacterScreen();
+                    Program.PlayerPrompt();
+                }
+                else if (input == "q" || input == "quit" ){ 
+                    Program.Quit();
+                }
+            }
         }
     }
 }

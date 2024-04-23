@@ -40,7 +40,7 @@ namespace Saga
                 Console.WriteLine($"| (S)ell    Potion      $ {potionP / 2}");
                 Console.WriteLine($"|  Sell (5)xPotions     $ {(potionP/2)*5}");
                 Console.WriteLine("=============================");
-                Console.WriteLine("  (E)xit Shop  (Q)uit to menu");
+                Console.WriteLine("  (E)xit Shop                ");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine($"  {p.currentClass} {p.name}'s Stats");
@@ -96,8 +96,6 @@ namespace Saga
                     Player.CharacterScreen();
                     Program.Print("Press to go back...",1);
                     Program.PlayerPrompt();
-                } else if (input.ToLower() == "q" || input == "quit" || input == "quit game") {
-                    Program.Quit();
                 } else if (input.ToLower() == "e" || input == "exit") {
                     AudioManager.soundShop.Stop();
                     break;
