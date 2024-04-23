@@ -123,7 +123,6 @@
     <None Include="App.config" />
     <None Include="bin\Debug\Saga.application" />
     <None Include="bin\Debug\Saga.exe.Config" />
-    <None Include="bin\Debug\Saga.exe.manifest" />
     <None Include="packages.config" />
     <None Include="Saga_TemporaryKey.pfx" />
   </ItemGroup>
