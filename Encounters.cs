@@ -73,9 +73,10 @@ namespace Saga
             Program.Print("After taking what few scraps you could find, you explore your surroundings.");
             Program.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
             Console.ReadKey(true);
+            AudioManager.soundCampFire.Play();
             Program.Print("You hastily gather some old wood scattered about and make a campfire. The");
             Program.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
-            Program.Print("you can stay for a while.");
+            Program.Print("you can stay for a while and rest.");
             Program.PlayerPrompt();
         }
 
@@ -358,7 +359,7 @@ namespace Saga
                 if (input.ToLower() == "e" || input == "explore") {
                     //Explore
                     Console.WriteLine("You venture deeper...");
-                    Program.PlayerPrompt();
+                    Console.ReadKey(true);
                     break;
                 } 
                 else if (input.ToLower() == "s" || input == "sleep" || input == "quit" || input == "quit game") {
@@ -370,6 +371,8 @@ namespace Saga
                 else if (input.ToLower() == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
                     //Gheed's shop
                     Shop.Loadshop(Program.currentPlayer);
+                    AudioManager.soundCampFire.Play();
+                    AudioManager.soundCampMusic.Play();
                 } 
                 else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
@@ -402,6 +405,8 @@ namespace Saga
                     Program.PlayerPrompt();
                 }
                 else if (input == "q" || input == "quit" ){ 
+                    AudioManager.soundCampFire.Stop();
+                    AudioManager.soundCampMusic.Stop();
                     Program.Quit();
                 }
             }

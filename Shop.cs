@@ -10,9 +10,8 @@ namespace Saga
     {
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
-            AudioManager.soundMainMenu.Stop();
-            AudioManager.soundTroldmandsKamp.Stop();
-            AudioManager.soundKamp.Stop();
+            AudioManager.soundCampFire.Stop();
+            AudioManager.soundCampMusic.Stop();
             AudioManager.soundShop.Play();
             Runshop(p);
         }

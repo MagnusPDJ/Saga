@@ -160,5 +160,11 @@
     <None Include="assets\sounds\typewriter.wav" />
     <None Include="assets\sounds\win.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\campmusic.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\campfire.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

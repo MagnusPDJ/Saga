@@ -35,6 +35,7 @@ namespace Saga
             outputDevice.Play();
         }
 
+        //Metode til at stoppe lydfil
         public void Stop() {
             if (outputDevice != null) {
 
@@ -55,23 +56,8 @@ namespace Saga
         public static AudioManager soundGameOver = new AudioManager(Properties.Resources.gameover);
         public static AudioManager soundShop = new AudioManager(Properties.Resources.shop);
         public static AudioManager soundLvlUp = new AudioManager(Properties.Resources.levelup);
-
-        public static void Play(string lyd) {
-            switch (lyd) {
-                case "mainmenu":
-                    var reader0 = new WaveFileReader(Properties.Resources.mainmenu.ToString());
-                    var waveOut0 = new WaveOutEvent();
-                    waveOut0.Init(reader0);
-                    waveOut0.Play();
-                    break;
-                case "type":
-                    var reader1 = new WaveFileReader(Properties.Resources.typewriter.ToString());
-                    var waveOut1 = new WaveOutEvent();
-                    waveOut1.Init(reader1);
-                    waveOut1.Play();
-                    break;
-            }
-        }
+        public static AudioManager soundCampFire = new AudioManager(Properties.Resources.campfire);
+        public static AudioManager soundCampMusic = new AudioManager(Properties.Resources.campmusic);
 
         public static byte[] StreamToBytes(System.IO.Stream stream) {
             long originalPosition = 0;

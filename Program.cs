@@ -45,7 +45,11 @@ namespace Saga
             while (mainLoop) {
                 AudioManager.soundMainMenu.Stop();
                 AudioManager.soundShop.Stop();
+                AudioManager.soundCampFire.Play();
+                AudioManager.soundCampMusic.Play();
                 Encounters.Camp();
+                AudioManager.soundCampFire.Stop();
+                AudioManager.soundCampMusic.Stop();
                 Encounters.RandomEncounter();
             }
         }
