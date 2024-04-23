@@ -25,7 +25,7 @@ namespace Saga
         //Sætter variablen til Lydniveauet fra configfilen.
         public static float volumeLevel = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
         //Laver et objekt til at sætte lyden når spillet åbnes.
-        public static AudioManager soundVolumeController = new AudioManager("sounds/mainmenu.wav");
+        public static AudioManager soundVolumeController = new AudioManager(Properties.Resources.mainmenu);
 
         //Spillets udførelse ved opstart
         static void Main(string[] args) {

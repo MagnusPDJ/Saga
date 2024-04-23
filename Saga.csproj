@@ -55,10 +55,16 @@
     <ManifestKeyFile>Saga_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -124,6 +130,7 @@
     <None Include="bin\Debug\Saga.application" />
     <None Include="bin\Debug\Saga.exe.Config" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Saga_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +196,16 @@
     <None Include="bin\Debug\NAudio.WinMM.dll" />
     <None Include="bin\Debug\NAudio.WinMM.xml" />
     <None Include="bin\Debug\NAudio.xml" />
+    <None Include="assets\sounds\gameover.wav" />
+    <None Include="assets\sounds\kamp.wav" />
+    <None Include="assets\sounds\laugh.wav" />
+    <None Include="assets\sounds\levelup.wav" />
+    <None Include="assets\sounds\mainmenu.wav" />
+    <None Include="assets\sounds\shop.wav" />
+    <None Include="assets\sounds\taunt.wav" />
+    <None Include="assets\sounds\troldmandskamp.wav" />
+    <None Include="assets\sounds\typewriter.wav" />
+    <None Include="assets\sounds\win.wav" />
     <Content Include="bin\Debug\sounds\laugh.wav" />
     <None Include="bin\Debug\sounds\taunt.wav" />
     <None Include="bin\Debug\sounds\troldmandskamp.wav" />
