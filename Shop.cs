@@ -40,7 +40,7 @@ namespace Saga
                 Console.WriteLine($"| (S)ell    Potion      $ {potionP / 2}");
                 Console.WriteLine($"|  Sell (5)xPotions     $ {(potionP/2)*5}");
                 Console.WriteLine("=============================");
-                Console.WriteLine("  (E)xit Shop    (Q)uit game ");
+                Console.WriteLine("  (E)xit Shop  (Q)uit to menu");
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine($"  {p.currentClass} {p.name}'s Stats");

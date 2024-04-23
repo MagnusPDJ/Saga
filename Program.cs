@@ -27,7 +27,6 @@ namespace Saga
         //Laver et objekt til at sætte lyden når spillet åbnes.
         public static AudioManager soundVolumeController = new AudioManager("sounds/mainmenu.wav");
 
-
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
 
@@ -211,17 +210,19 @@ namespace Saga
         public static void Quit() {
             while (true) {
                 Console.Clear();
+                AudioManager.soundShop.Stop();
+                AudioManager.soundLaugh.Play();
                 Console.WriteLine("Want to save? (Y/N)");
                 string input = PlayerPrompt();
                 if (input == "y") {
                     Save();
                     Console.WriteLine("Game has been saved!");
                     Console.ReadKey(true);
-                    Environment.Exit(0);
+                    MainMenu();
                 } else if (input == "n") {
                     Console.WriteLine("Game Over");
                     Console.ReadKey(true);
-                    Environment.Exit(0);
+                    MainMenu();
                 } else {
                     Console.WriteLine("Wrong Input");
                     PlayerPrompt();
@@ -247,7 +248,7 @@ namespace Saga
                 Console.WriteLine("                            ");
                 Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
                 Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
-                Console.WriteLine($"3. System Volume:                 {settings["volume"].Value}");
+                Console.WriteLine($"3. Game Volume:                   {settings["volume"].Value}");
                 Console.WriteLine("                            ");
                 Console.WriteLine("=======Press Esc to go back=======");
                 string input = Console.ReadKey().KeyChar.ToString();

@@ -138,14 +138,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Saga.exe" size="78595008">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Saga.exe" size="78595520">
       <assemblyIdentity name="Saga" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>r0E0O11GmTGcnuUICJefUq3ZYnqX/M81SuleKHqxTZA=</dsig:DigestValue>
+        <dsig:DigestValue>FipcnXp3bimYszGx1WkLhY+zmtXpIObtJRYgEuMOTaQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

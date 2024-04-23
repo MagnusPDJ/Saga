@@ -128,23 +128,23 @@ namespace Saga
                     return Program.rand.Next(lower9, upper9 + 1);
                 case "Skeleton":
                     int upper = (baseModUp+2);
-                    int lower = (baseModLower+1);
+                    int lower = (baseModLower+level-level/3);
                     return Program.rand.Next(lower, upper + 1);
                 case "Zombie":
                     int upper1 = (baseModUp);
                     int lower1 = (baseModLower);
                     return Program.rand.Next(lower1, upper1 + 1);
                 case "Grave Robber":
-                    int upper3 = (baseModUp);
-                    int lower3 = (baseModLower-1);
+                    int upper3 = (baseModUp-level/4);
+                    int lower3 = (baseModLower-level/4);
                     return Program.rand.Next(lower3, upper3 + 1);
                 case "Giant Bat":
-                    int upper4 = (baseModUp-1);
-                    int lower4 = (baseModLower-2);
+                    int upper4 = (baseModUp-1-level/2-level/5);
+                    int lower4 = (baseModLower-1-level/2);
                     return Program.rand.Next(lower4, upper4 + 1);
                 case "Giant Rat":
-                    int upper0 = (baseModUp-2);
-                    int lower0 = (baseModLower-3);
+                    int upper0 = (baseModUp-3-level/2-level/5);
+                    int lower0 = (baseModLower-3-level/2);
                     return Program.rand.Next(lower0, upper0 + 1);
             }
             return 0;
@@ -166,7 +166,7 @@ namespace Saga
 
         //Metode til udregning af det exp det koster at level op.
         public int GetLevelUpValue() {
-            return 100 * level + 400;
+            return Convert.ToInt32(5000000/(1+10000*Math.Pow(1.2,1-level)));
         }
 
         //Metode til at tjekke om lvl op er muligt
@@ -200,10 +200,10 @@ namespace Saga
             Console.WriteLine("~~~~~~~~~~~~Character screen~~~~~~~~~~~~");
             Program.Print($"Name: {Program.currentPlayer.name}\tClass: {Program.currentPlayer.currentClass}",10);
             Program.Print($"Level: {Program.currentPlayer.level}", 10);
-            Program.Print($"EXP  [{Program.ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}]",10);
+            Program.Print($"EXP  [{Program.ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}] {Program.currentPlayer.xp}/{Program.currentPlayer.GetLevelUpValue()}",10);
                 Program.Print("---------------Stats--------------------",10);
             Console.WriteLine($"Max Health: { Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
-            Console.WriteLine($"Weapon Damage: {(1+Program.currentPlayer.TotalWeaponValue()) / 2 + 0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}-{1 + Program.currentPlayer.TotalWeaponValue()+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
+            Console.WriteLine($"Weapon Damage: {1+(Program.currentPlayer.TotalWeaponValue() + 0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2}-{1 + Program.currentPlayer.TotalWeaponValue()+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
             Console.WriteLine("\n**************Equipment*****************\n");
             Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\t\tGold: ${Program.currentPlayer.gold}");
             Console.WriteLine($"Weapon: {Program.currentPlayer.equippedWeapon} (+{Program.currentPlayer.equippedWeaponValue} dmg)\tWeapon upgrades: {Program.currentPlayer.weaponValue}");
