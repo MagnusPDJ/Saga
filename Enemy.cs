@@ -10,7 +10,7 @@ namespace Saga
     internal class Enemy
     {
         //Monster type låst efter level
-        public static string GetType() {
+        public static new string GetType() {
             if (Program.currentPlayer.level < 3) {
                 switch (Program.rand.Next(0, 2 + 1)) {
                     case 0:

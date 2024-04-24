@@ -77,20 +77,24 @@ namespace Saga
         //HUDS
         public static void SlowSettings() {
             Console.Clear();
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
             Print("            Settings", 10);
             Print("==================================\n",5);
-            Print($"1. Toggle 'Press Enter continue': {ConfigurationManager.AppSettings.Get("toggleReadLine")}", 10);
-            Print($"2. Toggle Slow-printing text:     {ConfigurationManager.AppSettings.Get("toggleSlowPrint")}", 10);
-            Print($"3. System Volume:                 {ConfigurationManager.AppSettings.Get("volume")}\n", 10);
+            Print($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}", 10);
+            Print($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}", 10);
+            Print($"3. Game Volume:                   {settings["volume"].Value}\n", 10);
             Print("=======Press Esc to go back=======",5);
         }
         public static void InstantSettings() {
             Console.Clear();
+            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var settings = configFile.AppSettings.Settings;
             Console.WriteLine("            Settings       ");
             Console.WriteLine("==================================\n");
-            Console.WriteLine($"1. Toggle 'Press Enter continue': {ConfigurationManager.AppSettings.Get("toggleReadLine")}");
-            Console.WriteLine($"2. Toggle Slow-printing text:     {ConfigurationManager.AppSettings.Get("toggleSlowPrint")}");
-            Console.WriteLine($"3. Game Volume:                   {ConfigurationManager.AppSettings.Get("volume")}\n");
+            Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
+            Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
+            Console.WriteLine($"3. Game Volume:                   {settings["volume"].Value}\n");
             Console.WriteLine("=======Press Esc to go back=======");
         }
         public static void SlowShopHUD() {

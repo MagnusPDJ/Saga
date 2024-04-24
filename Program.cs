@@ -13,7 +13,7 @@ using static Saga.Player;
 namespace Saga
 {
     internal class Program
-    {  
+    {
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player currentPlayer = new Player();
 
@@ -30,6 +30,8 @@ namespace Saga
 
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
+
+
 
             //Gør unicode karaktere "runer" læselige i consolen
             Console.OutputEncoding = Encoding.UTF8;
@@ -292,7 +294,6 @@ namespace Saga
         private static void EditSettings() {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
-            HUDTools.SlowSettings();
             while (true) {
                 HUDTools.InstantSettings();
                 string input = Console.ReadKey().KeyChar.ToString();
@@ -340,6 +341,7 @@ namespace Saga
                     Console.WriteLine("\nNo setting selected");
                     HUDTools.PlayerPrompt();
                 }
+                configFile.Save(ConfigurationSaveMode.Minimal);
             }
         }
     }
