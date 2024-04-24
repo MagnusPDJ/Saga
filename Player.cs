@@ -196,15 +196,16 @@ namespace Saga
         //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
         public static void CharacterScreen() { 
             Console.Clear();
-            Console.WriteLine("~~~~~~~~~~~~~~Character screen~~~~~~~~~~~~");
+            Console.WriteLine("~~~~~~~~~~~~~~Character screen~~~~~~~~~~~~~~");
             Program.Print($"Name: {Program.currentPlayer.name}\t\tClass: {Program.currentPlayer.currentClass}",10);
             Program.Print($"Level: {Program.currentPlayer.level}", 10);
             Program.Print($"EXP  [{Program.ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}] {Program.currentPlayer.xp}/{Program.currentPlayer.GetLevelUpValue()}",10);
-                Program.Print("-----------------Stats--------------------",10);
+                Program.Print("-----------------Stats----------------------",10);
             Console.WriteLine($"Max Health: { Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
             Console.WriteLine($"Weapon Damage: {1+(Program.currentPlayer.TotalWeaponValue() + 0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2}-{1 + Program.currentPlayer.TotalWeaponValue()+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
             Console.WriteLine("\n*****************Equipment********************\n");
-            Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tGold: ${Program.currentPlayer.gold}");
+            Console.WriteLine($"Gold: ${Program.currentPlayer.gold}");
+            Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tPotion Strength: +{Program.currentPlayer.potionValue}");
             Console.WriteLine($"Weapon upgrades: {Program.currentPlayer.weaponValue}\tWeapon: {Program.currentPlayer.equippedWeapon} (+{Program.currentPlayer.equippedWeaponValue} dmg)");
             Console.WriteLine($"Armor upgrades:  {Program.currentPlayer.armorValue}\tArmor: {Program.currentPlayer.equippedArmor} (+{Program.currentPlayer.equippedArmorValue} armor)");
             Console.WriteLine("");

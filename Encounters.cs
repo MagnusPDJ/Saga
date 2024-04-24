@@ -338,7 +338,7 @@ namespace Saga
                         } else {
                             Program.Print("You use a potion", 20);
                         }
-                        Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass==Player.PlayerClass.Mage)?+4:0);
+                        Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass==Player.PlayerClass.Mage)? 3+Program.currentPlayer.level:0);
                         if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
                             Program.currentPlayer.health = Program.currentPlayer.maxHealth;
                         }

@@ -21,13 +21,14 @@ namespace Saga
             int potionP;
             int armorP;
             int weaponP;
-            //int difP;
+            int potionupgradeP;
 
             while (true) {
                 //Sætter prisen i shoppen skaleret på spilleren.
                 potionP = 20 + 10;
                 armorP = 100 * (p.armorValue+1);
                 weaponP = 100 * (p.weaponValue+1);
+                potionupgradeP = 200*p.potionValue;
 
                 Console.Clear();
                 Console.WriteLine("         Gheed's Shop        ");
@@ -35,6 +36,7 @@ namespace Saga
                 Console.WriteLine($"| (W)eapon Upgrade        $ {weaponP}");
                 Console.WriteLine($"| (A)rmor Upgrade:        $ {armorP}");
                 Console.WriteLine($"| (P)otions:              $ {potionP}");
+                Console.WriteLine($"| Up(g)rade potion        $ {potionupgradeP}");
                 Console.WriteLine("|============================");
                 Console.WriteLine($"| (S)ell    Potion      $ {potionP / 2}");
                 Console.WriteLine($"|  Sell (5)xPotions     $ {(potionP/2)*5}");
@@ -67,8 +69,8 @@ namespace Saga
                     TryBuy("weapon", weaponP, p);
                 } else if (input.ToLower() == "a" || input == "armor") {
                     TryBuy("armor", armorP, p);
-                //} else if (input.ToLower() == "d" || input == "difficulty mod") {
-                //    TryBuy("dif", difP, p);
+                } else if (input.ToLower() == "g" || input == "upgrade potion") {
+                    TryBuy("upgradepotion", potionupgradeP, p);
                 } else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", potionP / 2, p);
                 } else if (input.ToLower() == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
@@ -114,6 +116,9 @@ namespace Saga
                         break;
                     case "armor":
                         p.armorValue++; 
+                        break;
+                    case "upgradepotion":
+                        p.potionValue += 5;
                         break;
                 }
                 p.gold -= cost;
