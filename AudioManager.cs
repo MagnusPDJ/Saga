@@ -45,9 +45,9 @@ namespace Saga
             outputDevice.Init(ws);
         }
 
-        //Genere et objekt som kan spille en lyd.
+        //Instantierer et objekt som kan spille en lyd.
         public static AudioManager soundTaunt = new AudioManager(Properties.Resources.taunt);
-        public static AudioManager soundTroldmandsKamp = new AudioManager(Properties.Resources.troldmandskamp);
+        public static AudioManager soundBossKamp = new AudioManager(Properties.Resources.troldmandskamp);
         public static AudioManager soundLaugh = new AudioManager(Properties.Resources.laugh);
         public static AudioManager soundTypeWriter = new AudioManager(Properties.Resources.typewriter);
         public static AudioManager soundMainMenu = new AudioManager(Properties.Resources.mainmenu);

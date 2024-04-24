@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,99 +11,65 @@ namespace Saga
     {
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
-            AudioManager.soundCampFire.Stop();
-            AudioManager.soundCampMusic.Stop();
             AudioManager.soundShop.Play();
             Runshop(p);
+            AudioManager.soundShop.Stop();
         }
 
         //Metode til at køre shoppen.
         public static void Runshop(Player p) {
-            int potionP;
-            int armorP;
-            int weaponP;
-            int potionupgradeP;
-
             while (true) {
-                //Sætter prisen i shoppen skaleret på spilleren.
-                potionP = 20 + 10;
-                armorP = 100 * (p.armorValue+1);
-                weaponP = 100 * (p.weaponValue+1);
-                potionupgradeP = 200*p.potionValue;
-
-                Console.Clear();
-                Console.WriteLine("         Gheed's Shop        ");
-                Console.WriteLine("=============================");
-                Console.WriteLine($"| (W)eapon Upgrade        $ {weaponP}");
-                Console.WriteLine($"| (A)rmor Upgrade:        $ {armorP}");
-                Console.WriteLine($"| (P)otions:              $ {potionP}");
-                Console.WriteLine($"| Up(g)rade potion        $ {potionupgradeP}");
-                Console.WriteLine("|============================");
-                Console.WriteLine($"| (S)ell    Potion      $ {potionP / 2}");
-                Console.WriteLine($"|  Sell (5)xPotions     $ {(potionP/2)*5}");
-                Console.WriteLine("=============================");
-                Console.WriteLine("  (E)xit Shop                ");
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine($"  {p.currentClass} {p.name}'s Stats");
-                Console.WriteLine($"=============================");
-                Console.WriteLine($"| Level: {p.level}");
-                Console.Write("| EXP  ");
-                Console.Write("[");
-                Program.ProgressBar("+", " ", ((decimal)p.xp / (decimal)p.GetLevelUpValue()),20);
-                Console.WriteLine("]");
-                Console.WriteLine($"| Health:                 {p.health}/{p.maxHealth}");
-                Console.WriteLine($"| Gold:                  ${p.gold}");
-                Console.WriteLine($"| Weapon Upgrades:        {p.weaponValue}");
-                Console.WriteLine($"| Armor Upgrades:         {p.armorValue}");
-                Console.WriteLine($"| Potions:                {p.potion}");
-                Console.WriteLine("=============================");
-                Console.WriteLine(" (U)se Potion (C)haracter screen");
-                Console.WriteLine("");
-                Console.WriteLine("Choose what to buy or sell");
-
+                HUDTools.InstantShopHUD();
                 //Wait for input
-                string input = Program.PlayerPrompt().ToLower();
+                string input = HUDTools.PlayerPrompt().ToLower();
                 if (input.ToLower() == "p" || input == "potion") {
-                    TryBuy("potion", potionP, p);
+                    TryBuy("potion", ShopPrice("potion"), p);
                 } else if (input.ToLower() == "w" || input == "weapon") {
-                    TryBuy("weapon", weaponP, p);
+                    TryBuy("weapon", ShopPrice("weaponupgrade"), p);
                 } else if (input.ToLower() == "a" || input == "armor") {
-                    TryBuy("armor", armorP, p);
+                    TryBuy("armor", ShopPrice("armorupgrade"), p);
                 } else if (input.ToLower() == "g" || input == "upgrade potion") {
-                    TryBuy("upgradepotion", potionupgradeP, p);
+                    TryBuy("upgradepotion", ShopPrice("potionupgrade"), p);
                 } else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
-                    TrySell("potion", potionP / 2, p);
+                    TrySell("potion", ShopPrice("sellpotion"), p);
                 } else if (input.ToLower() == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
-                    TrySell("5x potion", potionP / 2, p);
+                    TrySell("5x potion", ShopPrice("sellpotion5"), p);
                 } else if (input.ToLower() == "u" || input == "use" || input == "heal") {
-                    if (Program.currentPlayer.potion == 0) {
-                        Program.Print("No potions left!", 20);
-                    } else {
-                        Program.Print("You used a potion", 20);
-                        Program.currentPlayer.health += Program.currentPlayer.potionValue;
-                        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
-                            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
-                        }
-                        Program.currentPlayer.potion -= 1;
-                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
-                            Program.Print("You heal to max health!", 20);
-                        }
-                        else {
-                            Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
-                        }
-                    }
-                    Program.PlayerPrompt();
+                    Player.Heal(false,"",0);
                 } else if (input == "c" || input == "character" || input == "character screen") {
-                    Player.CharacterScreen();
-                    Program.Print("Press to go back...",1);
-                    Program.PlayerPrompt();
+                    HUDTools.CharacterScreen();
+                    HUDTools.PlayerPrompt();
                 } else if (input.ToLower() == "e" || input == "exit") {
-                    AudioManager.soundShop.Stop();
                     break;
                 }
             }
         }
+
+        //Metode til at genere priser i shoppen.
+        public static int ShopPrice(string item) {
+            int potionP = 20 + 10 * Program.currentPlayer.level;
+            int sellPotionP = potionP / 2;
+            switch (item) {
+                case "potion":                    
+                    return potionP;
+                case "armorupgrade":
+                    int armorP = 100 * (Program.currentPlayer.armorValue + 1);
+                    return armorP;
+                case "weaponupgrade":
+                    int weaponP = 100 * (Program.currentPlayer.weaponValue + 1);
+                    return weaponP;
+                case "potionupgrade":
+                    int potionupgradeP = 200 * Program.currentPlayer.potionValue;
+                    return potionupgradeP;
+                case "sellpotion":
+                    return sellPotionP;
+                case "sellpotion5":
+                    int sellPotionP5 = sellPotionP * 5;
+                    return sellPotionP5;
+            }
+            return 0;
+        }
+
 
         //Metode til at købe fra shoppen.
         static void TryBuy(string item, int cost, Player p) {
@@ -125,34 +92,34 @@ namespace Saga
 
             } else {
                 Console.WriteLine("You don't have enough gold!");
-                Program.PlayerPrompt();
+                HUDTools.PlayerPrompt();
             }
         }
 
         //Metode til at sælge til shoppen.
-        static void TrySell(string item, int cost, Player p) {
-                switch (item) {
-                    case "potion":
-                    if (p.potion > 0) {
-                        p.potion--;
-                        p.gold += cost;
-                        break;
-                    } else {
-                        Console.WriteLine("You don't have any potions to sell!");
-                        Program.PlayerPrompt();
-                        break;
-                    }
-                case "5x potion":
-                    if (p.potion >=5) {
-                        p.potion -= 5;
-                        p.gold += 5*cost;
-                        break;
-                    } else {
-                        Console.WriteLine("You don't that many potions to sell!");
-                        Program.PlayerPrompt();
-                        break;
-                    }
+        static void TrySell(string item, int price, Player p) {
+            switch (item) {
+                case "potion":
+                if (p.potion > 0) {
+                    p.potion--;
+                    p.gold += price;
+                    break;
+                } else {
+                    Console.WriteLine("You don't have any potions to sell!");
+                    HUDTools.PlayerPrompt();
+                    break;
                 }
+                case "5x potion":
+                if (p.potion >=5) {
+                    p.potion -= 5;
+                    p.gold += price;
+                    break;
+                } else {
+                    Console.WriteLine("You don't that many potions to sell!");
+                    HUDTools.PlayerPrompt();
+                    break;
+                }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Configuration;
 using System.Threading;
+using static Saga.Player;
 
 namespace Saga
 {
@@ -30,6 +31,7 @@ namespace Saga
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
 
+            //Gør unicode karaktere "runer" læselige i consolen
             Console.OutputEncoding = Encoding.UTF8;
 
             //Sætter lydniveauet til variablen sat fra configfilen.
@@ -42,18 +44,6 @@ namespace Saga
 
             //Kalder MainMenu metoden.
             MainMenu();
-
-            //Spillets loop
-            while (mainLoop) {
-                AudioManager.soundMainMenu.Stop();
-                AudioManager.soundShop.Stop();
-                AudioManager.soundCampFire.Play();
-                AudioManager.soundCampMusic.Play();
-                Encounters.Camp();
-                AudioManager.soundCampFire.Stop();
-                AudioManager.soundCampMusic.Stop();
-                Encounters.RandomEncounter();
-            }
         }
 
         //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
@@ -65,23 +55,9 @@ namespace Saga
                 Console.WriteLine("1.         Play");
                 Console.WriteLine("2.       Settings");
                 Console.WriteLine("3.       Quit Game");
-                string input = PlayerPrompt();
+                string input = HUDTools.PlayerPrompt();
                 if (input == "1") {
-
-                    //Kører Load() metoden og sætter spilleren ud fra hvad Load() returnere.
-                    currentPlayer = Load(out bool newP);
-
-                    //Tjekker for om det er 'new game' eller 'save game'. newP sættes til False i Load() metoden og hvorefter hvis 'new game' inputtes sættes newP til true
-                    if (newP) {
-                        Encounters.FirstEncounter();
-                        AudioManager.soundKamp.Stop();
-                        Encounters.ShopEncounter();
-                        AudioManager.soundShop.Stop();
-                        Encounters.BasicFightEncounter();
-                        Encounters.FirstCamp();
-                        break;
-                    }
-                    break;
+                    Play();
                 }
                 else if (input == "2") {
                     EditSettings();
@@ -92,8 +68,31 @@ namespace Saga
                 }
                 else {
                     Console.WriteLine("Wrong Input");
-                    PlayerPrompt();
+                    HUDTools.PlayerPrompt();
                 }
+            }
+        }
+
+        public static void Play() {
+            currentPlayer = Load(out bool newP);
+            NewStart(newP);
+
+            //Spillets loop
+            while (mainLoop) {
+                AudioManager.soundMainMenu.Stop();
+                AudioManager.soundShop.Stop();
+                Encounters.Camp();
+            }
+        }
+        
+        //Metode til at køre start introduktionen
+        public static void NewStart(bool newP) {
+            if (newP) {
+                SetStartingGear(currentPlayer);
+                Encounters.FirstEncounter();
+                Encounters.FirstShopEncounter();
+                Encounters.RandomBasicCombatEncounter();
+                Encounters.FirstCamp();
             }
         }
 
@@ -123,14 +122,14 @@ namespace Saga
             while (true) {
                 Console.Clear();
                 AudioManager.soundTypeWriter.Play();
-                Program.Print("Choose a save!  ",15);
-                Program.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",20);
-                Program.Print("#: playername");
+                HUDTools.Print("Choose a save!  ",15);
+                HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",20);
+                HUDTools.Print("#: playername");
                 foreach (Player p in players) {
-                    Program.Print(p.id + ": " + p.name, 20);
+                    HUDTools.Print(p.id + ": " + p.name, 20);
                 }
-                Program.Print("<><><><><><><><><><><><><><><><>",20);
-                Program.Print("Please input 'id:#' or 'playername'. For new game write 'new game'.",1);
+                HUDTools.Print("<><><><><><><><><><><><><><><><>",20);
+                HUDTools.Print("Please input 'id:#' or 'playername'. For new game write 'new game'.",1);
                 string[] data = Console.ReadLine().Split(':');
                 try {
                     if (data[0] == "id") {
@@ -147,7 +146,7 @@ namespace Saga
                             Console.ReadKey(true);
                         }
                     } else if (data[0] == "new game") {
-                        Player newPlayer = NewStart(idCount);
+                        Player newPlayer = NewCharacter(idCount);
                         newP = true;
                         return newPlayer;
                     } else {
@@ -167,77 +166,125 @@ namespace Saga
         }
 
         //Metode til at genere ny karakter efter at have inputtet 'new game' i Load() metoden.
-        static Player NewStart(int i) {
+        static Player NewCharacter(int i) {
             Console.Clear();
             Player p = new Player();
-            Console.WriteLine("//////////////");
-            Print("Enter a name: ");
+            PickName(p);
+            PickClass(p);
+            p.id = i;
+            Console.Clear();
+            AudioManager.soundTypeWriter.Play();
+            HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
+            HUDTools.Print("anything about your past.");
+            if (String.IsNullOrWhiteSpace(p.name) == true) {
+                HUDTools.Print("You can't even remember your own name...");
+                p.name = "Adventurer";
+            } else {
+                HUDTools.Print($"You know your name is {p.name}.");
+            }
+            Console.ReadKey(true);
+            return p;
+        }
+
+        //Metode til at vælge navn.
+        public static void PickName(Player p) {
             string input;
+            string input1;
             do {
-                input = Console.ReadLine();
-                if (input.Any(c => !char.IsLetter(c))) {
-                    Console.WriteLine("Invalid name");
-                } else {
-                }
-            } while (input.Any(c => !char.IsLetter(c)));
+                Console.Clear();
+                Console.WriteLine("//////////////");
+                HUDTools.Print("Enter a name: ",10);
+                do {
+                    input = Console.ReadLine();
+                    if (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027')) {
+                        Console.WriteLine("Invalid name");
+                    }
+                    else if (input.Length >= 30) {
+                        Console.WriteLine("Name is too long. Max 30 characters!");
+                    }
+                    else {
+                    }
+                } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length >= 30);
+                Console.Clear();
+                HUDTools.Print($"This is your name?\n{input}.\n(Y/N)");
+                input1 = Console.ReadLine().ToLower();
+            } while (input1 != "y");
             p.name = input;
-            Print("Pick a class: Mage  Archer  Warrior");
+        }
+
+        //Metode til at vælge Class.
+        public static void PickClass(Player p) {
+            HUDTools.Print("Pick a class: Mage  Archer  Warrior");
             bool flag = false;
-            while(flag == false) {
+            while (flag == false) {
                 flag = true;
                 string input1 = Console.ReadLine().ToLower();
                 if (input1 == "mage") {
-                    p.currentClass = Player.PlayerClass.Mage;
-                } else if (input1 == "archer") {
-                    p.currentClass = Player.PlayerClass.Archer;
-                } else if (input1 == "warrior") {
-                    p.currentClass = Player.PlayerClass.Warrior;
-                } else {
+                    p.currentClass = PlayerClass.Mage;
+                }
+                else if (input1 == "archer") {
+                    p.currentClass = PlayerClass.Archer;
+                }
+                else if (input1 == "warrior") {
+                    p.currentClass = PlayerClass.Warrior;
+                }
+                else {
                     Console.WriteLine("Please choose a listed class!");
                     flag = false;
                 }
             }
-            p.id = i;
-            Console.Clear();
-            AudioManager.soundTypeWriter.Play();
-            Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
-            Print("anything about your past.");
-            if (String.IsNullOrWhiteSpace(p.name) == true) {
-                Print("You can't even remember your own name...");
-                p.name = "Adventurer";
-            } else {
-                Print($"You know your name is {p.name}.");
-            }
-            Console.ReadKey(true);
-            Console.Clear();
-            AudioManager.soundTypeWriter.Play();
-            Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
-            Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
-            Print("standing with his back to you outside the door.");
-            return p;
         }
 
+        //Metode til at sætte start udstyr
+        public static void SetStartingGear(Player p) {
+            switch (p.currentClass) {
+                case PlayerClass.Warrior:
+                    Program.currentPlayer.equippedWeapon = "Rusty Sword";
+                    Program.currentPlayer.equippedWeaponValue = 1;
+                    Program.currentPlayer.equippedArmor = "Linen Rags";
+                    Program.currentPlayer.equippedArmorValue = 1;
+                    break;
+                case PlayerClass.Archer:
+                    Program.currentPlayer.equippedWeapon = "Flimsy Bow";
+                    Program.currentPlayer.equippedWeaponValue = 1;
+                    Program.currentPlayer.equippedArmor = "Linen Rags";
+                    Program.currentPlayer.equippedArmorValue = 1;
+                    break;
+                case PlayerClass.Mage:
+                    Program.currentPlayer.equippedWeapon = "Cracked Wand";
+                    Program.currentPlayer.equippedWeaponValue = 1;
+                    Program.currentPlayer.equippedArmor = "Linen Rags";
+                    Program.currentPlayer.equippedArmorValue = 1;
+                    break;
+            }
+        }
+        
         //Metode til at 'Save and Quit' spillet.
         public static void Quit() {
-            while (true) {
-                Console.Clear();
-                AudioManager.soundShop.Stop();
-                AudioManager.soundLaugh.Play();
-                Console.WriteLine("Want to save? (Y/N)");
-                string input = PlayerPrompt();
-                if (input == "y") {
-                    Save();
-                    Console.WriteLine("Game has been saved!");
-                    Console.ReadKey(true);
-                    MainMenu();
-                } else if (input == "n") {
-                    Console.WriteLine("Game Over");
-                    Console.ReadKey(true);
-                    MainMenu();
-                } else {
-                    Console.WriteLine("Wrong Input");
-                    PlayerPrompt();
+            HUDTools.Print("Want to Quit? (Y/N)",10);
+            string input = HUDTools.PlayerPrompt().ToLower();
+            if (input == "y") {
+                while (true) {
+                    AudioManager.soundCampFire.Stop();
+                    AudioManager.soundCampMusic.Stop();
+                    AudioManager.soundLaugh.Play();
+                    Console.WriteLine("Want to save? (Y/N)");
+                    string input1 = HUDTools.PlayerPrompt().ToLower();
+                    if (input1 == "y") {
+                        Save();
+                        Console.WriteLine("Game has been saved!");
+                        Console.ReadKey(true);
+                        break;
+                    }
+                    else if (input1 == "n") {
+                        break;
+                    }
+                    else {
+                        Console.WriteLine("Wrong Input");
+                        HUDTools.PlayerPrompt();
+                    }
                 }
+                MainMenu();
             }
         }
 
@@ -245,23 +292,9 @@ namespace Saga
         private static void EditSettings() {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
-            Console.Clear();
-            Print("            Settings", 20);
-            Console.WriteLine("==================================");
-            Console.WriteLine("");
-            Print($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}", 20);
-            Print($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}", 20);
-            Print($"3. System Volume:                 {settings["volume"].Value}", 20);
+            HUDTools.SlowSettings();
             while (true) {
-                Console.Clear();
-                Console.WriteLine("            Settings       ");
-                Console.WriteLine("==================================");
-                Console.WriteLine("                            ");
-                Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
-                Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
-                Console.WriteLine($"3. Game Volume:                   {settings["volume"].Value}");
-                Console.WriteLine("                            ");
-                Console.WriteLine("=======Press Esc to go back=======");
+                HUDTools.InstantSettings();
                 string input = Console.ReadKey().KeyChar.ToString();
                 if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {
@@ -300,75 +333,15 @@ namespace Saga
                     }
                 } else if (input == "\u001b") {
                     configFile.Save(ConfigurationSaveMode.Minimal);
-                    Print("SSettings saved! Please restart the game...", 20);
-                    PlayerPrompt();
+                    HUDTools.Print("SSettings saved! Please restart the game...", 20);
+                    HUDTools.PlayerPrompt();
                     break;
                 } else {
                     Console.WriteLine("\nNo setting selected");
-                    PlayerPrompt();
+                    HUDTools.PlayerPrompt();
                 }
             }
-        }
-
-        //Metode til at toggle ReadLine/ReadKey baseret på spiller settings.
-        public static string PlayerPrompt() {
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleReadLine")) == true) {
-                return Console.ReadLine().ToLower();
-            } else {
-                string x = Console.ReadKey().KeyChar.ToString();
-                Console.WriteLine("");
-                return x;
-            }
-        }
-
-        //Metode til at "Slow-print" tekst, med indbygget toggle setting.
-        public static void Print(string text, int time = 40) {
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
-                Task t = Task.Run(() => {
-                    foreach (char c in text) {
-                        Console.Write(c);
-                        Thread.Sleep(time);
-                    }
-                    Console.WriteLine();
-                });
-                t.Wait();
-            } else {
-                Task t = Task.Run(() => {
-                    foreach (char c in text) {
-                        Console.Write(c);
-                        Thread.Sleep(0);
-                    }
-                    Console.WriteLine();
-                });
-                t.Wait();
-            }
-        }
-
-        //En metode til at printe en progress bar til f.eks. lvl progress (Måske redundant?).
-        public static void ProgressBar(string fillerChar, string backgroundChar, decimal value, int size) {
-            int dif = (int)(value * size);
-            for (int i = 0; i < size; i++) {
-                if (i < dif) {
-                    Console.Write(fillerChar);
-                } else {
-                    Console.Write(backgroundChar);
-                }               
-            }
-        }
-
-        //Samme metode men til brug sammen med slow print metoden.
-        public static string ProgressBarForPrint(string fillerChar, string backgroundChar, decimal value, int size) {
-            int dif = (int)(value * size);
-            string output = "";
-            for (int i = 0; i < size; i++) {
-                if (i < dif) {
-                    output += fillerChar;
-                }
-                else {
-                    output += backgroundChar;
-                }
-            }
-            return output;
         }
     }
 }
+ 

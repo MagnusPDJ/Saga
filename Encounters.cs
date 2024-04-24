@@ -7,94 +7,77 @@ using System.Threading.Tasks;
 namespace Saga
 {
     public class Encounters {
-        //Encounter Generic
+        //Encounters:
 
-
-        //Encounters
         //Det Encounter som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
-            switch (Program.currentPlayer.currentClass.ToString()) {
-                case "Warrior":
-                    Program.currentPlayer.equippedWeapon = "Rusty Sword";
-                    Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Linen Rags";
-                    Program.currentPlayer.equippedArmorValue = 1;
-                    break;
-                case "Archer":
-                    Program.currentPlayer.equippedWeapon = "Flimsy Bow";
-                    Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Linen Rags";
-                    Program.currentPlayer.equippedArmorValue = 1;
-                    break;
-                case "Mage":
-                    Program.currentPlayer.equippedWeapon = "Cracked Wand";
-                    Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Linen Rags";
-                    Program.currentPlayer.equippedArmorValue = 1;
-                    break;
-            }
-            Program.Print($"You throw open the door, grabbing a {Program.currentPlayer.equippedWeapon}, while charging toward your captor.");
+            Console.Clear();
+            AudioManager.soundTypeWriter.Play();
+            HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
+            HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
+            HUDTools.Print("standing with his back to you outside the door.");
+            HUDTools.Print($"You throw open the door, grabbing a {Program.currentPlayer.equippedWeapon}, while charging toward your captor.");
             AudioManager.soundMainMenu.Stop();
             AudioManager.soundTaunt.Play();
             AudioManager.soundKamp.Play();
-            Program.Print("He turns...");
-            Program.PlayerPrompt();
+            HUDTools.Print("He turns...");
+            HUDTools.PlayerPrompt();
             BasicCombat(false, "Human captor", 2, 5);
         }
 
         //Encounter som køres der introducere shopkeeperen
-        public static void ShopEncounter() {
-            AudioManager.soundShop.Play();
+        public static void FirstShopEncounter() {
             Console.Clear();
+            AudioManager.soundShop.Play();
             AudioManager.soundTypeWriter.Play();
             if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                Program.Print($"After dusting off your {Program.currentPlayer.equippedArmor} and tucking in your new wand, you find someone else captured.");
+                HUDTools.Print($"After dusting off your {Program.currentPlayer.equippedArmor} and tucking in your new wand, you find someone else captured.");
             } else if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
-                Program.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
-            } else {
-                Program.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
+                HUDTools.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
+            } else if (Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) {
+                HUDTools.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
             }
-            Program.Print("Freeing him from his shackles, he thanks you and gets up.");
-            Program.Print("'Gheed is the name and trade is my game', he gives a wink.");
-            Program.PlayerPrompt();
+            HUDTools.Print("Freeing him from his shackles, he thanks you and gets up.");
+            HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
+            HUDTools.PlayerPrompt();
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
-            Program.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
-            Program.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
-            Program.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
-            Program.Print($"You nod and prepare your {Program.currentPlayer.equippedWeapon}, then you start walking down a dark corridor...");
-            Program.PlayerPrompt();
+            HUDTools.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
+            HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
+            HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
+            HUDTools.Print($"You nod and prepare your {Program.currentPlayer.equippedWeapon}, then you start walking down a dark corridor...");
+            HUDTools.PlayerPrompt();
+            AudioManager.soundShop.Stop();
         }
 
         //Encounter som køres der introducere Camp
         public static void FirstCamp() {
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
-            Program.Print("After taking what few scraps you could find, you explore your surroundings.");
-            Program.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
+            HUDTools.Print("After taking what few scraps you could find, you explore your surroundings.");
+            HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
             Console.ReadKey(true);
             AudioManager.soundCampFire.Play();
-            Program.Print("You hastily gather some old wood scattered about and make a campfire. The");
-            Program.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
-            Program.Print("you can stay for a while and rest.");
-            Program.PlayerPrompt();
+            HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The");
+            HUDTools.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
+            HUDTools.Print("you can stay for a while and rest.");
+            HUDTools.PlayerPrompt();
         }
 
-
         //Encounter der "spawner" en random fjende som skal dræbes.
-        public static void BasicFightEncounter() {
+        public static void RandomBasicCombatEncounter() {
             Console.Clear();
             AudioManager.soundKamp.Play();
-            string n = GetName();
+            string n = Enemy.GetType();
             switch (Program.rand.Next(0,2)) {
                 case int x when (x == 0):
-                    Program.Print($"You turn a corner and there you see a {n}...", 20);
+                    HUDTools.Print($"You turn a corner and there you see a {n}...", 10);
                     break;
                 case int x when (x == 1):
-                    Program.Print($"You break down a door and find a {n} inside!", 20);
+                    HUDTools.Print($"You break down a door and find a {n} inside!", 10);
                     break;
             }
-            Program.PlayerPrompt();
+            HUDTools.PlayerPrompt();
             BasicCombat(true, n, 0, 0);
         }
 
@@ -102,67 +85,87 @@ namespace Saga
         public static void WizardEncounter() {
             Console.Clear();
             AudioManager.soundLaugh.Play();
-            Program.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",30);
-            AudioManager.soundTroldmandsKamp.Play();
-            Program.Print("long beard and pointy hat, looking at a large tome.");
-            
-            Program.PlayerPrompt();
+            HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",30);
+            AudioManager.soundBossKamp.Play();
+            HUDTools.Print("long beard and pointy hat, looking at a large tome.");
+            HUDTools.PlayerPrompt();
             BasicCombat(false, "Dark Wizard", 6+2*Program.currentPlayer.level, 3+2*Program.currentPlayer.level+Program.currentPlayer.level/3,3,1);
         }
 
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
+            string input;
             Console.Clear();
             AudioManager.soundDoorOpen.Play();
-            Program.Print("You open a door and find a treasure chest inside!");
-            Program.Print("Do you want to try and open it?\n(Y/N)");
-            string input = Program.PlayerPrompt().ToLower();
-            if (input == "n") {
-                AudioManager.soundDoorClose.Play();
-                Program.Print("You slowly back out of the room and find your way back to your camp");
-                Console.ReadKey(true);
-            } else if (input == "y") {
-                AudioManager.soundMimic.Play();
-                Program.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
-                AudioManager.soundTroldmandsKamp.Play();
-                Program.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.");
-                Program.Print($"You ready your {Program.currentPlayer.equippedWeapon}!");
-                Program.PlayerPrompt();
-                BasicCombat(false, "Mimic", 5+Program.currentPlayer.level+Program.currentPlayer.level/3, 10+2*Program.currentPlayer.level + Program.currentPlayer.level / 3, 2, 3);
-            }
+            HUDTools.Print("You open a door and find a treasure chest inside!");
+            HUDTools.Print("Do you want to try and open it?\n(Y/N)");
+            Console.Clear();
+            do {
+                Console.WriteLine("You open a door and find a treasure chest inside!");
+                Console.WriteLine("Do you want to try and open it?\n(Y/N)");
+                input = HUDTools.PlayerPrompt().ToLower();
+                if (input == "n") {
+                    AudioManager.soundDoorClose.Play();
+                    HUDTools.Print("You slowly back out of the room and continue...", 20);
+                    Console.ReadKey(true);
+                    RandomBasicCombatEncounter();
+                    break;
+                }
+                else if (input == "y") {
+                    AudioManager.soundMimic.Play();
+                    HUDTools.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
+                    AudioManager.soundBossKamp.Play();
+                    HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",20);
+                    HUDTools.Print($"You ready your {Program.currentPlayer.equippedWeapon}!");
+                    HUDTools.PlayerPrompt();
+                    BasicCombat(false, "Mimic", 5 + Program.currentPlayer.level + Program.currentPlayer.level / 3, 10 + 2 * Program.currentPlayer.level + Program.currentPlayer.level / 3, 2, 3);
+                    break;
+                }
+            } while (input != "42");
         }
 
         //Encounter der "spawner" en treasure chest.
         public static void TreasureEncounter() {
+            string input;
             Console.Clear();
-            AudioManager.soundDoorOpen.Play();
-            Program.Print("You open a door and find a treasure chest inside!");
-            Program.Print("Do you want to try and open it?\n(Y/N)");
-            string input = Program.PlayerPrompt().ToLower();
-            if (input == "n") {
-                AudioManager.soundDoorClose.Play();
-                Program.Print("You slowly back out of the room and find your way back to your camp");
-                Console.ReadKey(true);
-            }
-            else if (input == "y") {
-                AudioManager.soundTreasure.Play();
-                Program.Print("You release the metal latch and grab both sides of the chest and peer inside.");
-                Program.PlayerPrompt();
-                AudioManager.soundWin.Play();
-                Player.Loot(0,3, "Treasure", "You find treasue!");
-            }
+            AudioManager.soundDoorOpen.Play();            
+            HUDTools.Print("You open a door and find a treasure chest inside!");
+            HUDTools.Print("Do you want to try and open it?\n(Y/N)");
+            Console.Clear();
+            do {
+                Console.WriteLine("You open a door and find a treasure chest inside!");
+                Console.WriteLine("Do you want to try and open it?\n(Y/N)");
+                input = HUDTools.PlayerPrompt().ToLower();
+                if (input == "n") {
+                    AudioManager.soundDoorClose.Play();
+                    HUDTools.Print("You slowly back out of the room and continue...",20);
+                    Console.ReadKey(true);
+                    RandomBasicCombatEncounter();
+                    break;
+                } else if (input == "y") {
+                    AudioManager.soundTreasure.Play();
+                    HUDTools.Print("You release the metal latch and grab both sides of the chest and peer inside.");
+                    HUDTools.PlayerPrompt();
+                    AudioManager.soundWin.Play();
+                    Player.Loot(0, 3, "Treasure", "You find treasue!");
+                    break;
+                } else {
+                    HUDTools.Print("Invalid input");
+                    HUDTools.PlayerPrompt();
+                    Console.Clear();
+                }
+            } while (input != "42");
         }
 
         public static void PuzzleOneEncounter() {
-            bool notDead = true;
             Console.Clear();
-            Program.Print("You are walking down the dark corridors when you see that the floor is suddenly covered in runes.");
+            HUDTools.Print("You are walking down the dark corridors when you see that the floor is suddenly covered in runes.");
             //runer
             List<char> chars = new char[] {'\u00fe', '\u00f5','\u00d0','\u0141','\u014a','\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
             List<int> positions = new List<int>();
             char c = chars[Program.rand.Next(0, 10)];
             chars.Remove(c);
-            Console.WriteLine("  o     <- You");
+            HUDTools.Print(" o     <- Your position",10);
             for (int a = 0; a < 4; a++) {
                 int pos = Program.rand.Next(0, 4);
                 positions.Add(pos);
@@ -175,46 +178,41 @@ namespace Saga
                 }
                 Console.Write("\n");
             }
-            Program.Print("Choose your path (each rune position corresponds to a number 1-4)");
+            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)");
 
             for (int i = 0; i < 4; i++) {
-                if (notDead == false) {
-                    break;
-                }
                 while (true) {
                     if (int.TryParse(Console.ReadLine(), out int input) && input < 5 && input > 0) {
                         if (positions[i] == input - 1) {
+                            HUDTools.Print($"You step on the corresponding rune, nothing happens...\n(You are now on row {i+1})",10);
                             break;
                         }
                         else {
-                            Program.Print("Darts fly out of the walls! You take 2 damage.",10);
+                            HUDTools.Print($"Darts fly out of the walls! You take 2 damage.\n(You are still on row {i})", 10);
                             Program.currentPlayer.health -= 2;
                             if (Program.currentPlayer.health <= 0) {
-                                Player.DeathCode("You start to feel sick. The poison from the darts slowly kills you");
-                                notDead = false;
-                                break;
+                                Player.DeathCode("You start to feel sick. The poison from the darts slowly kills you");                         
                             }
                         }
                     }
                     else {
-                        Console.WriteLine("Invalid Input: Whole numbers 1.4 only");
+                        Console.WriteLine("Invalid Input: Whole numbers 1-4 only");
                     }
                 }
             }
-            if (notDead == true) {
-                AudioManager.soundWin.Play();
-                Player.Loot(2,0,"Trap","You've crossed the trap successfully!");
-                Console.ResetColor();
-                BasicFightEncounter();
-            }
+            AudioManager.soundWin.Play();
+            Player.Loot(2,0,"Trap","You've crossed the trap successfully!");
+            Console.ResetColor();
+            RandomBasicCombatEncounter();
         }
 
-        //Encounter Tools
+        //Encounter Tools:
+
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
             switch (Program.rand.Next(1, 100+1)) {
                 case int n when 40 < n:
-                    BasicFightEncounter();
+                    RandomBasicCombatEncounter();
                     break;
                 case int n when n <= 10:
                     WizardEncounter();
@@ -237,139 +235,53 @@ namespace Saga
             int p;
             int h;
             int t =1;
-
             if (random) {
                 n = name;
-                p = Program.currentPlayer.GetPower(n);
-                h = Program.currentPlayer.GetHealth(n);
+                p = Enemy.GetPower(n);
+                h = Enemy.GetHealth(n);
             } else {
                 n = name;
                 p = power;
                 h = health;
             }
-            Console.Clear();
-            Program.Print($"Turn: {t}");
-            Program.Print($"Fighting: {n}!", 20);
-            Program.Print($"Strength: {p} / HP: {h}", 20);
-            Program.Print("-----------------------", 20);
+            HUDTools.TopBasicCombatHUD(n,p,h,t);
             while (h > 0) {
-                Console.Clear();
-                Console.WriteLine($"Turn: {t}");
-                Console.WriteLine($"Fighting: {n}!");
-                Console.WriteLine($"Strength: {p} / HP: {h}");
-                Console.WriteLine("---------------------------");
-                Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
-                Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
-                Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
-                Console.Write("EXP  ");
-                Console.Write("[");
-                Program.ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
-                Console.WriteLine("]");
-                Console.WriteLine("==========Actions==========");
-                Console.WriteLine("| (A)ttack     (D)efend   |");
-                Console.WriteLine("| (R)un        (H)eal     |");
-                Console.WriteLine("| (C)haracter screen      |");
-                Console.WriteLine("===========================");
-                Console.WriteLine("Choose an action...");
-                string input = Program.PlayerPrompt().ToLower();
-
+                HUDTools.FullBasicCombatHUD(n,p,h,t);
+                string input = HUDTools.PlayerPrompt().ToLower();
                 if (input.ToLower() == "a" || input == "attack") {
                     //Attack
-                    if (Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) {
-                        Program.Print($"You swing your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 15);
-                    } else if (Program.currentPlayer.currentClass== Player.PlayerClass.Mage) {
-                        Program.Print($"You shoot an arcane missile from your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 10);
-                    } else {
-                        Program.Print($"You fire an arrow with your {Program.currentPlayer.equippedWeapon} and {n} retaliates.", 10);
-                    }
-                    int damage = p - Program.currentPlayer.TotalArmorValue();
-                    if (damage < 0)
-                        damage = 0;
-                    int attack = Program.rand.Next(1+(Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2, 1+Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass==Player.PlayerClass.Warrior)?1+Program.currentPlayer.level:0);
-                    Program.Print($"You lose {damage} health and you deal {attack} damage" ,20);
-                    Program.currentPlayer.health -= damage;
-                    h -= attack;
+                    h -= Player.Attack(n, p);
                     t++;
                 } else if (input.ToLower() == "d" || input == "defend") {
                     //Defend
-                    Program.Print($"You defend the incoming attack from {n}", 20);
-                    int damage = (p / Program.currentPlayer.TotalArmorValue()) ;
-                    if (damage < 0)
-                        damage = 0;
-                    int attack = Program.rand.Next(1+Program.currentPlayer.TotalWeaponValue() / 3, (4+Program.currentPlayer.TotalWeaponValue()) / 2);
-                    Program.Print($"You lose {damage} health and you deal {attack} damage", 20);
-                    Program.currentPlayer.health -= damage;
-                    h -= attack;
+                    h -= Player.Defend(n,p);
                     t++;
                 } else if (input.ToLower() == "r" || input == "run") {
-                    //Run
-                    if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || n == "Human captor") {
-                        Program.Print($"You try to sprint away from the {n}, it strikes and knocks you down", 20);
-                        int damage = p - Program.currentPlayer.TotalArmorValue();
-                        if (damage < 0)
-                            damage = 0;
-                        Program.Print($"You lose {damage} health and are unable to escape this round.", 20);
-                        Program.currentPlayer.health -= damage;
-                        t++;
-                    } else {
-                        if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
-                            Program.Print($"You use your crazy ninja moves to evade the {n} and you successfully escape!");
-                        } else {
-                            Program.Print($"You barely manage to shake off the {n} and you successfully escape.");
-                        }
-                        Program.PlayerPrompt();
+                    //Run                   
+                    if(Player.RunAway(n, p)) {
                         AudioManager.soundKamp.Stop();
-                        AudioManager.soundTroldmandsKamp.Stop();
-                        Camp();
+                        AudioManager.soundBossKamp.Stop();
                         break;
                     }
+                    t++;
                 } else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
-                    if (Program.currentPlayer.potion == 0) {
-                        Program.Print("No potions left!", 20);
-                        int damage = p - Program.currentPlayer.TotalArmorValue();
-                        if (damage < 0)
-                            damage = 0;
-                        Program.Print($"The {n} attacks you while you fumble in your bags and lose {damage} health!", 20);
-                        Program.currentPlayer.health -= damage;
-                    } else {
-                        if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                            Program.Print("You use a potion amplified by your magic", 30);
-                        } else {
-                            Program.Print("You use a potion", 20);
-                        }
-                        Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass==Player.PlayerClass.Mage)? 3+Program.currentPlayer.level:0);
-                        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
-                            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
-                        }
-                        Program.currentPlayer.potion --;
-                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
-                            Program.Print("You heal to max health!", 20);
-                        } else {
-                            Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
-                        }
-                        Program.Print($"As you drink, the {n} strikes you.", 20);
-                        int damage = (p / 2) - Program.currentPlayer.TotalArmorValue();
-                        if (damage < 0)
-                            damage = 0;
-                        Program.Print($"You lose {damage} health", 20);
-                        Program.currentPlayer.health -= damage;
-                    }
+                    Player.Heal(true,n,p);
                     t++;
                 } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
-                    Player.CharacterScreen();
+                    HUDTools.CharacterScreen();
+                    HUDTools.PlayerPrompt();
                 }
                 if (Program.currentPlayer.health <= 0) {
                     //Død
-                    h = 1;
-                    Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.\nPress to continue...");
-                    break;
+                    AudioManager.soundKamp.Stop();
+                    AudioManager.soundBossKamp.Stop();
+                    Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.");
                 }
-                Program.PlayerPrompt();
             }
             if (h <= 0) {
                 AudioManager.soundKamp.Stop();
-                AudioManager.soundTroldmandsKamp.Stop();
+                AudioManager.soundBossKamp.Stop();
                 AudioManager.soundWin.Play();
                 Player.Loot(xpModifier, goldModifier, n, $"You Won against the {n} on turn {t-1}!");
                 if (Program.currentPlayer.CanLevelUp()) {
@@ -377,143 +289,47 @@ namespace Saga
                 }
             }
         }
-        
-        //Monster navne/type låst efter level
-        public static string GetName() {
-            if (Program.currentPlayer.level < 3) {
-                switch (Program.rand.Next(0, 2 + 1)) {
-                    case 0:
-                        return "Giant Rat";
-                    case 1:
-                        return "Grave Robber";
-                    case 2:
-                        return "Giant Bat";
-                }
-            } else if (Program.currentPlayer.level <= 5) {
-                switch (Program.rand.Next(0, 4 + 1)) {
-                    case 0:
-                        return "Skeleton";
-                    case 1:
-                        return "Zombie";
-                    case 2:
-                        return "Giant Rat";
-                    case 3:
-                        return "Grave Robber";
-                    case 4:
-                        return "Giant Bat";
-                }
-            } else if (5 < Program.currentPlayer.level &&Program.currentPlayer.level <= 15) {
-                switch (Program.rand.Next(0, 8 + 1)) {
-                    case 0:
-                        return "Skeleton";
-                    case 1:
-                        return "Zombie";
-                    case 2:
-                        return "Human Cultist";
-                    case 3:
-                        return "Grave Robber";
-                    case 4:
-                        return "Giant Bat";
-                    case 5:
-                        return "Human Rogue";
-                    case 6:
-                        return "Giant Rat";
-                    case 7:
-                        return "Bandit";
-                    case 8:
-                        return "Dire Wolf";
-                }
-            } switch(Program.rand.Next(0,6+1)) {
-                case 0:
-                    return "Human Cultist";
-                case 1:
-                    return "Skeleton";
-                case 2:
-                    return "Human Rogue";
-                case 3:
-                    return "Vampire";
-                case 4:
-                    return "Werewolf";
-                case 5:
-                    return "Dire Wolf";
-                case 6:
-                    return "Bandit";
-            }
-            return "";
-        }
-
+       
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
         public static void Camp() {
+            AudioManager.soundCampFire.Play();
+            AudioManager.soundCampMusic.Play();
+            HUDTools.TopCampHUD();
             while (true) {
-                Console.Clear();
-                Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
-                Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
-                Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
-                Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
-                Console.Write("EXP  ");
-                Console.Write("[");
-                Program.ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
-                Console.WriteLine("]");
-                Console.WriteLine("==============Actions=================");
-                Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
-                Console.WriteLine("0 (G)heed's shop     (H)eal          0");
-                Console.WriteLine("0 (C)haracter screen                 0");
-                Console.WriteLine("======================================");
-                Console.WriteLine("  (Q)uit to Main Menu                 ");
-                Console.WriteLine("Choose an action...");
-                string input = Program.PlayerPrompt().ToLower();
-
-                if (input.ToLower() == "e" || input == "explore") {
+                HUDTools.InstantCampHUD();
+                string input = HUDTools.PlayerPrompt().ToLower();
+                if (input == "e" || input == "explore") {
                     //Explore
                     Console.WriteLine("You venture deeper...");
                     Console.ReadKey(true);
+                    AudioManager.soundCampFire.Stop();
+                    AudioManager.soundCampMusic.Stop();
+                    RandomEncounter();
                     break;
                 } 
                 else if (input.ToLower() == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     //Sleep/save Game
                     Program.Save();
-                    Program.Print("Game saved!");
-                    Program.PlayerPrompt();
+                    HUDTools.Print("Game saved!");
+                    HUDTools.PlayerPrompt();
                 }
                 else if (input.ToLower() == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
                     //Gheed's shop
+                    AudioManager.soundCampFire.Stop();
+                    AudioManager.soundCampMusic.Stop();
                     Shop.Loadshop(Program.currentPlayer);
                     AudioManager.soundCampFire.Play();
                     AudioManager.soundCampMusic.Play();
                 } 
                 else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
-                    if (Program.currentPlayer.potion == 0) {
-                        Program.Print("No potions left!", 20);                        
-                    } 
-                    else {
-                        if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                            Program.Print("You use a potion amplified by your magic", 30);
-                        } 
-                        else {
-                            Program.Print("You use a potion", 20);
-                        }
-                        Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? +4 : 0);
-                        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
-                            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
-                        }
-                        Program.currentPlayer.potion--;
-                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
-                            Program.Print("You heal to max health!", 20);
-                        } 
-                        else {
-                            Program.Print($"You gain {Program.currentPlayer.potionValue} health", 20);
-                        }
-                    }
-                    Program.PlayerPrompt();
+                    Player.Heal(false,"",0);
                 } 
                 else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
-                    Player.CharacterScreen();
-                    Program.PlayerPrompt();
+                    HUDTools.CharacterScreen();
+                    HUDTools.PlayerPrompt();
                 }
                 else if (input == "q" || input == "quit" ){ 
-                    AudioManager.soundCampFire.Stop();
-                    AudioManager.soundCampMusic.Stop();
                     Program.Quit();
                 }
             }

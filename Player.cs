@@ -43,112 +43,6 @@ namespace Saga
             return Program.currentPlayer.armorValue + Program.currentPlayer.equippedArmorValue;
         }
 
-        //Monster liv skaleret på spilleren.
-        public int GetHealth(string name) {
-            int baseModUp = 3 + 2 * level;
-            int baseModLower = 4 + level;
-            switch (name) {
-                case "Vampire":
-                    int upper6 = (7+baseModUp);
-                    int lower6 = (4+baseModLower);
-                    return Program.rand.Next(lower6, upper6 + 1);
-                case "Werewolf":
-                    int upper7 = (6+baseModUp);
-                    int lower7 = (4+baseModLower);
-                    return Program.rand.Next(lower7, upper7 + 1);
-                case "Dire Wolf":
-                    int upper8 = (5+baseModUp);
-                    int lower8 = (4+baseModLower);
-                    return Program.rand.Next(lower8, upper8 + 1);
-                case "Human Cultist":
-                    int upper2 = (4+baseModUp);
-                    int lower2 = (3+baseModLower);
-                    return Program.rand.Next(lower2, upper2 + 1);
-                case "Human Rogue":
-                    int upper5 = (3+baseModUp);
-                    int lower5 = (2+baseModLower);
-                    return Program.rand.Next(lower5, upper5 + 1);
-                case "Bandit":
-                    int upper9 = (3+baseModUp+3);
-                    int lower9 = (2+baseModLower+2);
-                    return Program.rand.Next(lower9, upper9 + 1);
-                case "Skeleton":
-                    int upper = (2+baseModUp);
-                    int lower = (2+baseModLower);
-                    return Program.rand.Next(lower, upper + 1);
-                case "Zombie":
-                    int upper1 = (2+baseModUp+2);
-                    int lower1 = (2+baseModLower+1);
-                    return Program.rand.Next(lower1, upper1 + 1);
-                case "Grave Robber":
-                    int upper3 = (1+baseModUp);
-                    int lower3 = (1+baseModLower);
-                    return Program.rand.Next(lower3, upper3 + 1);
-                case "Giant Bat":
-                    int upper4 = (baseModUp-1);
-                    int lower4 = (baseModLower-2);
-                    return Program.rand.Next(lower4, upper4 + 1);
-                case "Giant Rat":
-                    int upper0 = (baseModUp);
-                    int lower0 = (baseModLower);
-                    return Program.rand.Next(lower0, upper0 + 1);
-            }
-            return 0;
-        }
-
-        //Monster skade skaleret på spilleren.
-        public int GetPower(string name) {
-            int baseModUp = 3 + 2 * level;
-            int baseModLower = 4 + level;
-            switch (name) {
-                case "Vampire":
-                    int upper6 = (7+baseModUp);
-                    int lower6 = (4+baseModLower);
-                    return Program.rand.Next(lower6, upper6 + 1);
-                case "Werewolf":
-                    int upper7 = (6+baseModUp);
-                    int lower7 = (4+baseModLower);
-                    return Program.rand.Next(lower7, upper7 + 1);
-                case "Dire Wolf":
-                    int upper8 = (5+baseModUp);
-                    int lower8 = (4+baseModLower);
-                    return Program.rand.Next(lower8, upper8 + 1);
-                case "Human Cultist":
-                    int upper2 = (4+baseModUp);
-                    int lower2 = (3+baseModLower);
-                    return Program.rand.Next(lower2, upper2 + 1);
-                case "Human Rogue":
-                    int upper5 = (2+baseModUp+3);
-                    int lower5 = (2+baseModLower+1);
-                    return Program.rand.Next(lower5, upper5 + 1);
-                case "Bandit":
-                    int upper9 = (2+baseModUp);
-                    int lower9 = (2+baseModLower);
-                    return Program.rand.Next(lower9, upper9 + 1);
-                case "Skeleton":
-                    int upper = (baseModUp+2);
-                    int lower = (baseModLower+level-level/3);
-                    return Program.rand.Next(lower, upper + 1);
-                case "Zombie":
-                    int upper1 = (baseModUp);
-                    int lower1 = (baseModLower);
-                    return Program.rand.Next(lower1, upper1 + 1);
-                case "Grave Robber":
-                    int upper3 = (baseModUp-level/4);
-                    int lower3 = (baseModLower-level/4);
-                    return Program.rand.Next(lower3, upper3 + 1);
-                case "Giant Bat":
-                    int upper4 = (baseModUp-1-level/2-level/5);
-                    int lower4 = (baseModLower-1-level/2);
-                    return Program.rand.Next(lower4, upper4 + 1);
-                case "Giant Rat":
-                    int upper0 = (baseModUp-3-level/2-level/5);
-                    int lower0 = (baseModLower-3-level/2);
-                    return Program.rand.Next(lower0, upper0 + 1);
-            }
-            return 0;
-        }
-
         //Guld drop skaleret på spilleren.
         public int GetGold() {
             int upper = (40 * level+100);
@@ -187,39 +81,20 @@ namespace Saga
             int h = 2+(level/3);
             maxHealth += h;
             Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Program.Print($"Congratulations! You are now level {level}! Your max health increased by {h}.");
+            HUDTools.Print($"Congratulations! You are now level {level}! Your max health increased by {h}.");
             Console.ResetColor();
             Program.currentPlayer.health = maxHealth;
-            Program.PlayerPrompt();
-        }
-
-        //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
-        public static void CharacterScreen() { 
-            Console.Clear();
-            Console.WriteLine("~~~~~~~~~~~~~~Character screen~~~~~~~~~~~~~~");
-            Program.Print($"Name: {Program.currentPlayer.name}\t\tClass: {Program.currentPlayer.currentClass}",10);
-            Program.Print($"Level: {Program.currentPlayer.level}", 10);
-            Program.Print($"EXP  [{Program.ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}] {Program.currentPlayer.xp}/{Program.currentPlayer.GetLevelUpValue()}",10);
-                Program.Print("-----------------Stats----------------------",10);
-            Console.WriteLine($"Max Health: { Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
-            Console.WriteLine($"Weapon Damage: {1+(Program.currentPlayer.TotalWeaponValue() + 0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2}-{1 + Program.currentPlayer.TotalWeaponValue()+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
-            Console.WriteLine("\n*****************Equipment********************\n");
-            Console.WriteLine($"Gold: ${Program.currentPlayer.gold}");
-            Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tPotion Strength: +{Program.currentPlayer.potionValue}");
-            Console.WriteLine($"Weapon upgrades: {Program.currentPlayer.weaponValue}\tWeapon: {Program.currentPlayer.equippedWeapon} (+{Program.currentPlayer.equippedWeaponValue} dmg)");
-            Console.WriteLine($"Armor upgrades:  {Program.currentPlayer.armorValue}\tArmor: {Program.currentPlayer.equippedArmor} (+{Program.currentPlayer.equippedArmorValue} armor)");
-            Console.WriteLine("");
+            HUDTools.PlayerPrompt();
         }
 
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public static void DeathCode(string message) {
-                AudioManager.soundKamp.Stop();
-                AudioManager.soundTroldmandsKamp.Stop();
                 AudioManager.soundGameOver.Play();
                 Console.ForegroundColor = ConsoleColor.DarkRed;
-                Program.Print(message,20);
+                HUDTools.Print(message,20);
+                HUDTools.Print("Press to go back to main menu...", 5); 
                 Console.ResetColor();
-                Program.PlayerPrompt();
+                HUDTools.PlayerPrompt();
                 Program.MainMenu();
         }
 
@@ -229,20 +104,20 @@ namespace Saga
             int x = Program.currentPlayer.GetXP() * xpModifier;
             int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
             var pot = Program.rand.Next(0, numbers.Length);
-            Program.Print(message, 15);
+            HUDTools.Print(message, 15);
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Program.Print($"You've gained {x} experience points!", 10);
+                HUDTools.Print($"You've gained {x} experience points!", 10);
                 Program.currentPlayer.xp += x;
             }
             if (g > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Program.Print($"You loot {g} gold coins.", 15);
+                HUDTools.Print($"You loot {g} gold coins.", 15);
                 Program.currentPlayer.gold += g;
             }
             if (numbers[pot] != 0 && name != "Trap") {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Program.Print($"You loot {numbers[pot]} healing potions", 20);
+                HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
                 Program.currentPlayer.potion += numbers[pot];
             }        
             if (name == "Treasure") {
@@ -254,17 +129,17 @@ namespace Saga
                             case "Linen Rags":
                                 Program.currentPlayer.equippedArmor = "Simple Robe";
                                 Program.currentPlayer.equippedArmorValue = 2;
-                                Program.Print("You loot a Simple Robe");
+                                HUDTools.Print("You loot a Simple Robe");
                                 break;
                             case "Simple Robe":
                                 Program.currentPlayer.equippedArmor = "Elegant Robe";
                                 Program.currentPlayer.equippedArmorValue = 5;
-                                Program.Print("You loot a Elegant Robe");
+                                HUDTools.Print("You loot a Elegant Robe");
                                 break;
                             case "Elegant Robe":
                                 Program.currentPlayer.equippedArmor = "Arcanist's Robe";
                                 Program.currentPlayer.equippedArmorValue = 9;
-                                Program.Print("You loot an Arcanist's Robe");
+                                HUDTools.Print("You loot an Arcanist's Robe");
                                 break;
                             case "Arcanist's Robe":
                                 break;
@@ -274,17 +149,17 @@ namespace Saga
                             case "Linen Rags":
                                 Program.currentPlayer.equippedArmor = "Hide Armor";
                                 Program.currentPlayer.equippedArmorValue = 3;
-                                Program.Print("You loot a Hide Armor");
+                                HUDTools.Print("You loot a Hide Armor");
                                 break;
                             case "Hide Armor":
                                 Program.currentPlayer.equippedArmor = "Leather Cuirass";
                                 Program.currentPlayer.equippedArmorValue = 6;
-                                Program.Print("You loot a Leather Cuirass");
+                                HUDTools.Print("You loot a Leather Cuirass");
                                 break;
                             case "Leather Cuirass":
                                 Program.currentPlayer.equippedArmor = "Marksman's Brigandine";
                                 Program.currentPlayer.equippedArmorValue = 10;
-                                Program.Print("You loot a Marksman's Brigandine");
+                                HUDTools.Print("You loot a Marksman's Brigandine");
                                 break;
                             case "Marksman's Brigadine":
                                 break;
@@ -294,17 +169,17 @@ namespace Saga
                             case "Linen Rags":
                                 Program.currentPlayer.equippedArmor = "Mail Shirt";
                                 Program.currentPlayer.equippedArmorValue = 4;
-                                Program.Print("You loot a Mail Shirt");
+                                HUDTools.Print("You loot a Mail Shirt");
                                 break;
                             case "Mail Shirt":
                                 Program.currentPlayer.equippedArmor = "Breast Plate";
                                 Program.currentPlayer.equippedArmorValue = 7;
-                                Program.Print("You loot a Breast Plate");
+                                HUDTools.Print("You loot a Breast Plate");
                                 break;
                             case "Breast Plate":
                                 Program.currentPlayer.equippedArmor = "Knight's Plate Armor";
                                 Program.currentPlayer.equippedArmorValue = 11;
-                                Program.Print("You loot a Knight's Plate Armor");
+                                HUDTools.Print("You loot a Knight's Plate Armor");
                                 break;
                             case "Knight's Plate Armor":
                                 break;
@@ -316,17 +191,17 @@ namespace Saga
                             case "Cracked Wand":
                                 Program.currentPlayer.equippedWeapon = "Enchanted Wand";
                                 Program.currentPlayer.equippedWeaponValue = 4;
-                                Program.Print("You loot an Enchanted Wand");
+                                HUDTools.Print("You loot an Enchanted Wand");
                                 break;
                             case "Enchanted Wand":
                                 Program.currentPlayer.equippedWeapon = "Gnarled Staff";
                                 Program.currentPlayer.equippedWeaponValue = 7;
-                                Program.Print("You loot a Gnarled Staff");
+                                HUDTools.Print("You loot a Gnarled Staff");
                                 break;
                             case "Gnarled Staff":
                                 Program.currentPlayer.equippedWeapon = "Arcanist's Staff";
                                 Program.currentPlayer.equippedWeaponValue = 11;
-                                Program.Print("You loot an Arcanist's Robe");
+                                HUDTools.Print("You loot an Arcanist's Robe");
                                 break;
                             case "Arcanist's Staff":
                                 break;
@@ -337,17 +212,17 @@ namespace Saga
                             case "Flimsy Bow":
                                 Program.currentPlayer.equippedWeapon = "Short Bow";
                                 Program.currentPlayer.equippedWeaponValue = 3;
-                                Program.Print("You loot a Short Bow");
+                                HUDTools.Print("You loot a Short Bow");
                                 break;
                             case "Short Bow":
                                 Program.currentPlayer.equippedWeapon = "Long Bow";
                                 Program.currentPlayer.equippedWeaponValue = 6;
-                                Program.Print("You loot a Long Bow");
+                                HUDTools.Print("You loot a Long Bow");
                                 break;
                             case "Long Bow":
                                 Program.currentPlayer.equippedWeapon = "Marksman's Recurve";
                                 Program.currentPlayer.equippedWeaponValue = 10;
-                                Program.Print("You loot a Marksman's Recurve");
+                                HUDTools.Print("You loot a Marksman's Recurve");
                                 break;
                             case "Marksman's Recurve":
                                 break;
@@ -358,17 +233,17 @@ namespace Saga
                             case "Rusty Sword":
                                 Program.currentPlayer.equippedWeapon = "Steel Sword";
                                 Program.currentPlayer.equippedWeaponValue = 2;
-                                Program.Print("You loot a Mail Shirt");
+                                HUDTools.Print("You loot a Mail Shirt");
                                 break;
                             case "Steel Sword":
                                 Program.currentPlayer.equippedWeapon = "Longsword";
                                 Program.currentPlayer.equippedWeaponValue = 5;
-                                Program.Print("You loot a Longsword");
+                                HUDTools.Print("You loot a Longsword");
                                 break;
                             case "Longsword":
                                 Program.currentPlayer.equippedWeapon = "Knight's Greatsword";
                                 Program.currentPlayer.equippedWeaponValue = 9;
-                                Program.Print("You loot a Knight's Greatsword");
+                                HUDTools.Print("You loot a Knight's Greatsword");
                                 break;
                             case "Knight's Greatsword":
                                 break;
@@ -377,7 +252,121 @@ namespace Saga
                 }
             }
             Console.ResetColor();
-            Program.PlayerPrompt();
+            HUDTools.PlayerPrompt();
+        }
+        public static void Heal(bool combat, string name, int power) {
+            if (combat) {
+                if (Program.currentPlayer.potion == 0) {
+                    HUDTools.Print("No potions left!", 20);
+                    int damage = power - Program.currentPlayer.TotalArmorValue();
+                    if (damage < 0)
+                        damage = 0;
+                    HUDTools.Print($"The {name} attacks you while you fumble in your bags and lose {damage} health!", 20);
+                    Program.currentPlayer.health -= damage;
+                }
+                else {
+                    if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
+                        HUDTools.Print("You use a potion amplified by your magic", 30);
+                    }
+                    else {
+                        HUDTools.Print("You use a potion", 20);
+                    }
+                    Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
+                    if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+                        Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+                    }
+                    Program.currentPlayer.potion--;
+                    if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                        HUDTools.Print("You heal to max health!", 20);
+                    }
+                    else {
+                        HUDTools.Print($"You gain {Program.currentPlayer.potionValue+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health", 20);
+                    }
+                    HUDTools.Print($"As you drink, the {name} strikes you.", 20);
+                    int damage = (power / 2) - Program.currentPlayer.TotalArmorValue();
+                    if (damage < 0)
+                        damage = 0;
+                    HUDTools.Print($"You lose {damage} health", 20);
+                    Program.currentPlayer.health -= damage;
+                }
+            } else {
+                if (Program.currentPlayer.potion == 0) {
+                    HUDTools.Print("No potions left!", 20);
+                }
+                else {
+                    if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
+                        HUDTools.Print("You use a potion amplified by your magic", 30);
+                    }
+                    else {
+                        HUDTools.Print("You use a potion", 20);
+                    }
+                    Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
+                    if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+                        Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+                    }
+                    Program.currentPlayer.potion -= 1;
+                    if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                        HUDTools.Print("You heal to max health!", 20);
+                    }
+                    else {
+                        HUDTools.Print($"You gain {Program.currentPlayer.potionValue+((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health", 20);
+                    }
+                }
+            }
+            HUDTools.PlayerPrompt();
+        }
+        public static int Attack(string name, int power) {
+            if (Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) {
+                HUDTools.Print($"You swing your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 15);
+            }
+            else if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
+                HUDTools.Print($"You shoot an arcane missile from your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 10);
+            }
+            else {
+                HUDTools.Print($"You fire an arrow with your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 10);
+            }
+            int damage = power - Program.currentPlayer.TotalArmorValue();
+            if (damage < 0)
+                damage = 0;
+            int attack = Program.rand.Next(1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2, 1 + Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0);
+            HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 10);
+            Program.currentPlayer.health -= damage;
+            HUDTools.PlayerPrompt();
+            return attack;
+        }
+        public static int Defend(string name, int power) {
+            HUDTools.Print($"You defend the incoming attack from {name}", 20);
+            int damage = (power / Program.currentPlayer.TotalArmorValue());
+            if (damage < 0)
+                damage = 0;
+            int attack = Program.rand.Next(1 + Program.currentPlayer.TotalWeaponValue() / 3, (4 + Program.currentPlayer.TotalWeaponValue()) / 2);
+            HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 20);
+            Program.currentPlayer.health -= damage;
+            HUDTools.PlayerPrompt();
+            return attack;
+        }
+        public static bool RunAway(string name, int power) {
+            bool escaped = false;
+            if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || name == "Human captor") {
+                HUDTools.Print($"You try to sprint away from the {name}, it strikes and knocks you down", 20);
+                int damage = power - Program.currentPlayer.TotalArmorValue();
+                if (damage < 0)
+                    damage = 0;
+                HUDTools.Print($"You lose {damage} health and are unable to escape this round.", 20);
+                Program.currentPlayer.health -= damage;
+                HUDTools.PlayerPrompt();
+            }
+            else {
+                if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
+                    HUDTools.Print($"You use your crazy ninja moves to evade the {name} and you successfully escape!",20);
+                }
+                else {
+                    HUDTools.Print($"You barely manage to shake off the {name} and you successfully escape.",20);
+                }
+                HUDTools.PlayerPrompt();
+                escaped = true;
+            }
+            return escaped;
         }
     }
 }
