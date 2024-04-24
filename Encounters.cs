@@ -17,19 +17,19 @@ namespace Saga
                 case "Warrior":
                     Program.currentPlayer.equippedWeapon = "Rusty Sword";
                     Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Rags";
+                    Program.currentPlayer.equippedArmor = "Linen Rags";
                     Program.currentPlayer.equippedArmorValue = 1;
                     break;
                 case "Archer":
                     Program.currentPlayer.equippedWeapon = "Flimsy Bow";
                     Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Rags";
+                    Program.currentPlayer.equippedArmor = "Linen Rags";
                     Program.currentPlayer.equippedArmorValue = 1;
                     break;
                 case "Mage":
                     Program.currentPlayer.equippedWeapon = "Cracked Wand";
                     Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Rags";
+                    Program.currentPlayer.equippedArmor = "Linen Rags";
                     Program.currentPlayer.equippedArmorValue = 1;
                     break;
             }
@@ -107,7 +107,7 @@ namespace Saga
             Program.Print("long beard and pointy hat, looking at a large tome.");
             
             Program.PlayerPrompt();
-            BasicCombat(false, "Dark Wizard", 6+2*Program.currentPlayer.level, 2+2*Program.currentPlayer.level+Program.currentPlayer.level/3,2);
+            BasicCombat(false, "Dark Wizard", 6+2*Program.currentPlayer.level, 3+2*Program.currentPlayer.level+Program.currentPlayer.level/3,3,1);
         }
 
         //Encounter der "spawner" en Mimic som skal dræbes.
@@ -128,7 +128,7 @@ namespace Saga
                 Program.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.");
                 Program.Print($"You ready your {Program.currentPlayer.equippedWeapon}!");
                 Program.PlayerPrompt();
-                BasicCombat(false, "Mimic", 5+Program.currentPlayer.level+Program.currentPlayer.level/3, 10+2*Program.currentPlayer.level + Program.currentPlayer.level / 3, 1, 3);
+                BasicCombat(false, "Mimic", 5+Program.currentPlayer.level+Program.currentPlayer.level/3, 10+2*Program.currentPlayer.level + Program.currentPlayer.level / 3, 2, 3);
             }
         }
 
@@ -148,25 +148,85 @@ namespace Saga
                 AudioManager.soundTreasure.Play();
                 Program.Print("You release the metal latch and grab both sides of the chest and peer inside.");
                 Program.PlayerPrompt();
-                Player.Loot(0,3, null);
+                AudioManager.soundWin.Play();
+                Player.Loot(0,3, "Treasure", "You find treasue!");
+            }
+        }
+
+        public static void PuzzleOneEncounter() {
+            bool notDead = true;
+            Console.Clear();
+            Program.Print("You are walking down the dark corridors when you see that the floor is suddenly covered in runes.");
+            //runer
+            List<char> chars = new char[] {'\u00fe', '\u00f5','\u00d0','\u0141','\u014a','\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
+            List<int> positions = new List<int>();
+            char c = chars[Program.rand.Next(0, 10)];
+            chars.Remove(c);
+            Console.WriteLine("  o     <- You");
+            for (int a = 0; a < 4; a++) {
+                int pos = Program.rand.Next(0, 4);
+                positions.Add(pos);
+                for (int b = 0; b < 4; b++) {
+                    if ( b == pos) {
+                        Console.Write(c);
+                    } else {
+                        Console.Write(chars[Program.rand.Next(0, 8)]);
+                    }
+                }
+                Console.Write("\n");
+            }
+            Program.Print("Choose your path (each rune position corresponds to a number 1-4)");
+
+            for (int i = 0; i < 4; i++) {
+                if (notDead == false) {
+                    break;
+                }
+                while (true) {
+                    if (int.TryParse(Console.ReadLine(), out int input) && input < 5 && input > 0) {
+                        if (positions[i] == input - 1) {
+                            break;
+                        }
+                        else {
+                            Program.Print("Darts fly out of the walls! You take 2 damage.",10);
+                            Program.currentPlayer.health -= 2;
+                            if (Program.currentPlayer.health <= 0) {
+                                Player.DeathCode("You start to feel sick. The poison from the darts slowly kills you");
+                                notDead = false;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        Console.WriteLine("Invalid Input: Whole numbers 1.4 only");
+                    }
+                }
+            }
+            if (notDead == true) {
+                AudioManager.soundWin.Play();
+                Player.Loot(2,0,"Trap","You've crossed the trap successfully!");
+                Console.ResetColor();
+                BasicFightEncounter();
             }
         }
 
         //Encounter Tools
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(1, 13+1)) {
-                case int n when n>2:
+            switch (Program.rand.Next(1, 100+1)) {
+                case int n when 40 < n:
                     BasicFightEncounter();
                     break;
-                case int n when n==0:
+                case int n when n <= 10:
                     WizardEncounter();
                     break;
-                case int n when n==1:
+                case int n when 10 < n && n <=20:
                     MimicEncounter();
                     break;
-                case int n when n == 1|| n == 2:
+                case int n when 20 < n && n <=30:
                     TreasureEncounter();
+                    break;
+                case int n when 30< n && n <= 40:
+                    PuzzleOneEncounter();
                     break;
             }
         }
@@ -225,7 +285,7 @@ namespace Saga
                     int damage = p - Program.currentPlayer.TotalArmorValue();
                     if (damage < 0)
                         damage = 0;
-                    int attack = Program.rand.Next((1+(Program.currentPlayer.TotalWeaponValue()) + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2, 1+Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass==Player.PlayerClass.Warrior)?1+Program.currentPlayer.level:0);
+                    int attack = Program.rand.Next(1+(Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2, 1+Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass==Player.PlayerClass.Warrior)?1+Program.currentPlayer.level:0);
                     Program.Print($"You lose {damage} health and you deal {attack} damage" ,20);
                     Program.currentPlayer.health -= damage;
                     h -= attack;
@@ -258,6 +318,8 @@ namespace Saga
                             Program.Print($"You barely manage to shake off the {n} and you successfully escape.");
                         }
                         Program.PlayerPrompt();
+                        AudioManager.soundKamp.Stop();
+                        AudioManager.soundTroldmandsKamp.Stop();
                         Camp();
                         break;
                     }
@@ -309,7 +371,7 @@ namespace Saga
                 AudioManager.soundKamp.Stop();
                 AudioManager.soundTroldmandsKamp.Stop();
                 AudioManager.soundWin.Play();
-                Player.Loot(xpModifier, goldModifier, $"You Won against the {n} on turn {t-1}!");
+                Player.Loot(xpModifier, goldModifier, n, $"You Won against the {n} on turn {t-1}!");
                 if (Program.currentPlayer.CanLevelUp()) {
                     Program.currentPlayer.LevelUp();
                 }

@@ -12,7 +12,7 @@ using System.Threading;
 namespace Saga
 {
     internal class Program
-    {
+    {  
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player currentPlayer = new Player();
 
@@ -29,6 +29,8 @@ namespace Saga
 
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
+
+            Console.OutputEncoding = Encoding.UTF8;
 
             //Sætter lydniveauet til variablen sat fra configfilen.
             soundVolumeController.Volume = volumeLevel;
@@ -74,7 +76,8 @@ namespace Saga
                         Encounters.FirstEncounter();
                         AudioManager.soundKamp.Stop();
                         Encounters.ShopEncounter();
-                        Encounters.RandomEncounter();
+                        AudioManager.soundShop.Stop();
+                        Encounters.BasicFightEncounter();
                         Encounters.FirstCamp();
                         break;
                     }

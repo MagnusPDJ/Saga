@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -195,17 +196,17 @@ namespace Saga
         //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
         public static void CharacterScreen() { 
             Console.Clear();
-            Console.WriteLine("~~~~~~~~~~~~Character screen~~~~~~~~~~~~");
-            Program.Print($"Name: {Program.currentPlayer.name}\tClass: {Program.currentPlayer.currentClass}",10);
+            Console.WriteLine("~~~~~~~~~~~~~~Character screen~~~~~~~~~~~~");
+            Program.Print($"Name: {Program.currentPlayer.name}\t\tClass: {Program.currentPlayer.currentClass}",10);
             Program.Print($"Level: {Program.currentPlayer.level}", 10);
             Program.Print($"EXP  [{Program.ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}] {Program.currentPlayer.xp}/{Program.currentPlayer.GetLevelUpValue()}",10);
-                Program.Print("---------------Stats--------------------",10);
+                Program.Print("-----------------Stats--------------------",10);
             Console.WriteLine($"Max Health: { Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
             Console.WriteLine($"Weapon Damage: {1+(Program.currentPlayer.TotalWeaponValue() + 0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0))/2}-{1 + Program.currentPlayer.TotalWeaponValue()+4+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
-            Console.WriteLine("\n**************Equipment*****************\n");
-            Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\t\tGold: ${Program.currentPlayer.gold}");
-            Console.WriteLine($"Weapon: {Program.currentPlayer.equippedWeapon} (+{Program.currentPlayer.equippedWeaponValue} dmg)\tWeapon upgrades: {Program.currentPlayer.weaponValue}");
-            Console.WriteLine($"Armor: {Program.currentPlayer.equippedArmor} (+{Program.currentPlayer.equippedArmorValue} armor)\t\tArmor upgrades: {Program.currentPlayer.armorValue}");
+            Console.WriteLine("\n*****************Equipment********************\n");
+            Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tGold: ${Program.currentPlayer.gold}");
+            Console.WriteLine($"Weapon upgrades: {Program.currentPlayer.weaponValue}\tWeapon: {Program.currentPlayer.equippedWeapon} (+{Program.currentPlayer.equippedWeaponValue} dmg)");
+            Console.WriteLine($"Armor upgrades:  {Program.currentPlayer.armorValue}\tArmor: {Program.currentPlayer.equippedArmor} (+{Program.currentPlayer.equippedArmorValue} armor)");
             Console.WriteLine("");
         }
 
@@ -222,26 +223,160 @@ namespace Saga
         }
 
         //Metode til at genere loot
-        public static void Loot(int xpModifier, int goldModifier, string message) {
-                int g = Program.currentPlayer.GetGold()*goldModifier;
-                int x = Program.currentPlayer.GetXP() * xpModifier;
-                int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-                var pot = Program.rand.Next(0, numbers.Length);
-                Program.Print(message, 15);
+        public static void Loot(int xpModifier, int goldModifier, string name, string message) {
+            int g = Program.currentPlayer.GetGold()*goldModifier;
+            int x = Program.currentPlayer.GetXP() * xpModifier;
+            int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+            var pot = Program.rand.Next(0, numbers.Length);
+            Program.Print(message, 15);
+            if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Program.Print($"You've gained {x} experience points!",10);
+                Program.Print($"You've gained {x} experience points!", 10);
+                Program.currentPlayer.xp += x;
+            }
+            if (g > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Program.Print($"You loot {g} gold coins.", 15);
-                Console.ResetColor();
-                if (numbers[pot] != 0) {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Program.Print($"You loot {numbers[pot]} healing potions", 20);
-                    Console.ResetColor();
-                    Program.currentPlayer.potion += numbers[pot];
-                }
                 Program.currentPlayer.gold += g;
-                Program.currentPlayer.xp += x;
-                Program.PlayerPrompt();
+            }
+            if (numbers[pot] != 0 && name != "Trap") {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Program.Print($"You loot {numbers[pot]} healing potions", 20);
+                Program.currentPlayer.potion += numbers[pot];
+            }        
+            if (name == "Treasure") {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                int getTreasure = Program.rand.Next(0, 100);
+                if (getTreasure <=10) {
+                    if (Program.currentPlayer.currentClass == PlayerClass.Mage) {
+                        switch (Program.currentPlayer.equippedArmor) {
+                            case "Linen Rags":
+                                Program.currentPlayer.equippedArmor = "Simple Robe";
+                                Program.currentPlayer.equippedArmorValue = 2;
+                                Program.Print("You loot a Simple Robe");
+                                break;
+                            case "Simple Robe":
+                                Program.currentPlayer.equippedArmor = "Elegant Robe";
+                                Program.currentPlayer.equippedArmorValue = 5;
+                                Program.Print("You loot a Elegant Robe");
+                                break;
+                            case "Elegant Robe":
+                                Program.currentPlayer.equippedArmor = "Arcanist's Robe";
+                                Program.currentPlayer.equippedArmorValue = 9;
+                                Program.Print("You loot an Arcanist's Robe");
+                                break;
+                            case "Arcanist's Robe":
+                                break;
+                        }
+                    } else if (Program.currentPlayer.currentClass == PlayerClass.Archer) {
+                        switch (Program.currentPlayer.equippedArmor) {
+                            case "Linen Rags":
+                                Program.currentPlayer.equippedArmor = "Hide Armor";
+                                Program.currentPlayer.equippedArmorValue = 3;
+                                Program.Print("You loot a Hide Armor");
+                                break;
+                            case "Hide Armor":
+                                Program.currentPlayer.equippedArmor = "Leather Cuirass";
+                                Program.currentPlayer.equippedArmorValue = 6;
+                                Program.Print("You loot a Leather Cuirass");
+                                break;
+                            case "Leather Cuirass":
+                                Program.currentPlayer.equippedArmor = "Marksman's Brigandine";
+                                Program.currentPlayer.equippedArmorValue = 10;
+                                Program.Print("You loot a Marksman's Brigandine");
+                                break;
+                            case "Marksman's Brigadine":
+                                break;
+                        }
+                    } else if (Program.currentPlayer.currentClass == PlayerClass.Warrior) {
+                        switch (Program.currentPlayer.equippedArmor) {
+                            case "Linen Rags":
+                                Program.currentPlayer.equippedArmor = "Mail Shirt";
+                                Program.currentPlayer.equippedArmorValue = 4;
+                                Program.Print("You loot a Mail Shirt");
+                                break;
+                            case "Mail Shirt":
+                                Program.currentPlayer.equippedArmor = "Breast Plate";
+                                Program.currentPlayer.equippedArmorValue = 7;
+                                Program.Print("You loot a Breast Plate");
+                                break;
+                            case "Breast Plate":
+                                Program.currentPlayer.equippedArmor = "Knight's Plate Armor";
+                                Program.currentPlayer.equippedArmorValue = 11;
+                                Program.Print("You loot a Knight's Plate Armor");
+                                break;
+                            case "Knight's Plate Armor":
+                                break;
+                        }
+                    }
+                } else if (10 < getTreasure && getTreasure <=20) {
+                    if (Program.currentPlayer.currentClass == PlayerClass.Mage) {
+                        switch (Program.currentPlayer.equippedWeapon) {
+                            case "Cracked Wand":
+                                Program.currentPlayer.equippedWeapon = "Enchanted Wand";
+                                Program.currentPlayer.equippedWeaponValue = 4;
+                                Program.Print("You loot an Enchanted Wand");
+                                break;
+                            case "Enchanted Wand":
+                                Program.currentPlayer.equippedWeapon = "Gnarled Staff";
+                                Program.currentPlayer.equippedWeaponValue = 7;
+                                Program.Print("You loot a Gnarled Staff");
+                                break;
+                            case "Gnarled Staff":
+                                Program.currentPlayer.equippedWeapon = "Arcanist's Staff";
+                                Program.currentPlayer.equippedWeaponValue = 11;
+                                Program.Print("You loot an Arcanist's Robe");
+                                break;
+                            case "Arcanist's Staff":
+                                break;
+                        }
+                    }
+                    else if (Program.currentPlayer.currentClass == PlayerClass.Archer) {
+                        switch (Program.currentPlayer.equippedWeapon) {
+                            case "Flimsy Bow":
+                                Program.currentPlayer.equippedWeapon = "Short Bow";
+                                Program.currentPlayer.equippedWeaponValue = 3;
+                                Program.Print("You loot a Short Bow");
+                                break;
+                            case "Short Bow":
+                                Program.currentPlayer.equippedWeapon = "Long Bow";
+                                Program.currentPlayer.equippedWeaponValue = 6;
+                                Program.Print("You loot a Long Bow");
+                                break;
+                            case "Long Bow":
+                                Program.currentPlayer.equippedWeapon = "Marksman's Recurve";
+                                Program.currentPlayer.equippedWeaponValue = 10;
+                                Program.Print("You loot a Marksman's Recurve");
+                                break;
+                            case "Marksman's Recurve":
+                                break;
+                        }
+                    }
+                    else if (Program.currentPlayer.currentClass == PlayerClass.Warrior) {
+                        switch (Program.currentPlayer.equippedArmor) {
+                            case "Rusty Sword":
+                                Program.currentPlayer.equippedWeapon = "Steel Sword";
+                                Program.currentPlayer.equippedWeaponValue = 2;
+                                Program.Print("You loot a Mail Shirt");
+                                break;
+                            case "Steel Sword":
+                                Program.currentPlayer.equippedWeapon = "Longsword";
+                                Program.currentPlayer.equippedWeaponValue = 5;
+                                Program.Print("You loot a Longsword");
+                                break;
+                            case "Longsword":
+                                Program.currentPlayer.equippedWeapon = "Knight's Greatsword";
+                                Program.currentPlayer.equippedWeaponValue = 9;
+                                Program.Print("You loot a Knight's Greatsword");
+                                break;
+                            case "Knight's Greatsword":
+                                break;
+                        }
+                    }
+                }
+            }
+            Console.ResetColor();
+            Program.PlayerPrompt();
         }
     }
 }
