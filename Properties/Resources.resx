@@ -154,6 +154,9 @@
   <data name="taunt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\taunt.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="treasure" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\sounds\treasure.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="troldmandskamp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\troldmandskamp.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

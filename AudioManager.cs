@@ -61,6 +61,7 @@ namespace Saga
         public static AudioManager soundMimic = new AudioManager(Properties.Resources.mimic);
         public static AudioManager soundDoorOpen = new AudioManager(Properties.Resources.dooropen);
         public static AudioManager soundDoorClose = new AudioManager(Properties.Resources.doorclose);
+        public static AudioManager soundTreasure = new AudioManager (Properties.Resources.treasure);
 
         public static byte[] StreamToBytes(System.IO.Stream stream) {
             long originalPosition = 0;
@@ -68,9 +69,7 @@ namespace Saga
             if (stream.CanSeek) {
                 originalPosition = stream.Position;
                 stream.Position = 0;
-            }
-
-            try {
+            } try {
                 byte[] readBuffer = new byte[4096];
 
                 int totalBytesRead = 0;
@@ -97,8 +96,7 @@ namespace Saga
                     Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
                 }
                 return buffer;
-            }
-            finally {
+            } finally {
                 if (stream.CanSeek) {
                     stream.Position = originalPosition;
                 }

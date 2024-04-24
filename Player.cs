@@ -150,8 +150,8 @@ namespace Saga
 
         //Guld drop skaleret på spilleren.
         public int GetGold() {
-            int upper = (50 * level+100);
-            int lower = (20 * level);
+            int upper = (40 * level+100);
+            int lower = (10 * level);
             return Program.rand.Next(lower, upper+1);
         }
 

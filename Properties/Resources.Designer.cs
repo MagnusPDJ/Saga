@@ -171,6 +171,15 @@ namespace Saga.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream treasure {
+            get {
+                return ResourceManager.GetStream("treasure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream troldmandskamp {
             get {
                 return ResourceManager.GetStream("troldmandskamp", resourceCulture);

@@ -132,19 +132,41 @@ namespace Saga
             }
         }
 
+        //Encounter der "spawner" en treasure chest.
+        public static void TreasureEncounter() {
+            Console.Clear();
+            AudioManager.soundDoorOpen.Play();
+            Program.Print("You open a door and find a treasure chest inside!");
+            Program.Print("Do you want to try and open it?\n(Y/N)");
+            string input = Program.PlayerPrompt().ToLower();
+            if (input == "n") {
+                AudioManager.soundDoorClose.Play();
+                Program.Print("You slowly back out of the room and find your way back to your camp");
+                Console.ReadKey(true);
+            }
+            else if (input == "y") {
+                AudioManager.soundTreasure.Play();
+                Program.Print("You release the metal latch and grab both sides of the chest and peer inside.");
+                Program.PlayerPrompt();
+                Player.Loot(0,3, null);
+            }
+        }
 
-     //Encounter Tools
+        //Encounter Tools
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(1, 11+1)) {
-                case int n when (n>1):
+            switch (Program.rand.Next(1, 13+1)) {
+                case int n when n>2:
                     BasicFightEncounter();
                     break;
-                case int n when (n==0):
+                case int n when n==0:
                     WizardEncounter();
                     break;
-                case int n when (n==1):
+                case int n when n==1:
                     MimicEncounter();
+                    break;
+                case int n when n == 1|| n == 2:
+                    TreasureEncounter();
                     break;
             }
         }
