@@ -5,4 +5,5 @@
 5. Kør Saga.exe
 6. Enjoy
    
-![SAGA](https://github.com/MagnusPDJ/Saga/assets/31377822/4cf073f6-97a9-48bc-a5c7-40cd12add3d0)
+
+![SAGA-removedbg](https://github.com/MagnusPDJ/Saga/assets/31377822/d381e6bd-e514-46cf-92fb-52512b7c1c42)
