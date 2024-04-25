@@ -1,4 +1,4 @@
-# Saga, nu med realese feature!
+# Saga, nu med release feature!
 1. På landing page, klik på releases i højre side.
 3. Download saga.zip af seneste version
 4. Udpak alle filerne så de er deres egen mappe
