@@ -31,8 +31,6 @@ namespace Saga
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
 
-
-
             //Gør unicode karaktere "runer" læselige i consolen
             Console.OutputEncoding = Encoding.UTF8;
 

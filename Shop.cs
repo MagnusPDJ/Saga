@@ -35,7 +35,7 @@ namespace Saga
                 } else if (input.ToLower() == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
                     TrySell("5x potion", ShopPrice("sellpotion5"), p);
                 } else if (input.ToLower() == "u" || input == "use" || input == "heal") {
-                    Player.Heal(false,"",0);
+                    Player.Heal(false,"",0,0);
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
                     HUDTools.PlayerPrompt();

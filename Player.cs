@@ -254,7 +254,7 @@ namespace Saga
             Console.ResetColor();
             HUDTools.PlayerPrompt();
         }
-        public static void Heal(bool combat, string name, int power) {
+        public static void Heal(bool combat, string name, int power, int turn) {
             if (combat) {
                 if (Program.currentPlayer.potion == 0) {
                     HUDTools.Print("No potions left!", 20);
@@ -263,6 +263,7 @@ namespace Saga
                         damage = 0;
                     HUDTools.Print($"The {name} attacks you while you fumble in your bags and lose {damage} health!", 20);
                     Program.currentPlayer.health -= damage;
+                    HUDTools.WriteCombatLog("heal",turn, damage,0 );
                 }
                 else {
                     if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
@@ -274,8 +275,7 @@ namespace Saga
                     Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
                     if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
                         Program.currentPlayer.health = Program.currentPlayer.maxHealth;
-                    }
-                    Program.currentPlayer.potion--;
+                    }                    
                     if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
                         HUDTools.Print("You heal to max health!", 20);
                     }
@@ -288,6 +288,8 @@ namespace Saga
                         damage = 0;
                     HUDTools.Print($"You lose {damage} health", 20);
                     Program.currentPlayer.health -= damage;
+                    HUDTools.WriteCombatLog("heal",turn,damage,0);
+                    Program.currentPlayer.potion--;
                 }
             } else {
                 if (Program.currentPlayer.potion == 0) {
@@ -313,9 +315,10 @@ namespace Saga
                     }
                 }
             }
+
             HUDTools.PlayerPrompt();
         }
-        public static int Attack(string name, int power) {
+        public static int Attack(string name, int power, int turn) {
             if (Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) {
                 HUDTools.Print($"You swing your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 15);
             }
@@ -331,10 +334,11 @@ namespace Saga
             int attack = Program.rand.Next(1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2, 1 + Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0);
             HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 10);
             Program.currentPlayer.health -= damage;
+            HUDTools.WriteCombatLog("attack",turn,damage,attack);
             HUDTools.PlayerPrompt();
             return attack;
         }
-        public static int Defend(string name, int power) {
+        public static int Defend(string name, int power, int turn) {
             HUDTools.Print($"You defend the incoming attack from {name}", 20);
             int damage = (power / Program.currentPlayer.TotalArmorValue());
             if (damage < 0)
@@ -342,18 +346,20 @@ namespace Saga
             int attack = Program.rand.Next(1 + Program.currentPlayer.TotalWeaponValue() / 3, (4 + Program.currentPlayer.TotalWeaponValue()) / 2);
             HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 20);
             Program.currentPlayer.health -= damage;
+            HUDTools.WriteCombatLog("defend", turn,damage,attack);
             HUDTools.PlayerPrompt();
             return attack;
         }
-        public static bool RunAway(string name, int power) {
+        public static bool RunAway(string name, int power,int turn) {
             bool escaped = false;
             if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || name == "Human captor") {
                 HUDTools.Print($"You try to sprint away from the {name}, it strikes and knocks you down", 20);
                 int damage = power - Program.currentPlayer.TotalArmorValue();
                 if (damage < 0)
                     damage = 0;
-                HUDTools.Print($"You lose {damage} health and are unable to escape this round.", 20);
+                HUDTools.Print($"You lose {damage} health and are unable to escape this turn.", 20);
                 Program.currentPlayer.health -= damage;
+                HUDTools.WriteCombatLog("run",turn, damage, 0);
                 HUDTools.PlayerPrompt();
             }
             else {

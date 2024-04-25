@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Saga
 {
     internal class HUDTools
     {
+        //Get metode til at få teksten fra memory til filen.
+        public static TextWriter Out { get; }
+
         //Metode til at toggle ReadLine/ReadKey baseret på spiller settings.
         public static string PlayerPrompt() {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleReadLine")) == true) {
@@ -72,6 +78,78 @@ namespace Saga
                 }
             }
             return output;
+        }
+
+        // Metode til at skrive en logfil 
+        public static void WriteCombatLog(string action, int t, int damage, int attack) {
+            if (!File.Exists("combatlog.txt")) {
+                File.Create("combatlog.txt");
+            }
+
+            //Læser logfilen og gemmer det i memory
+            string text = File.ReadAllText("combatlog.txt");
+
+            // Åbner en text file navngivet "Geeks"  
+            // at the location of your program 
+            FileStream geeks1 = new FileStream("combatlog.txt", FileMode.Open);
+
+            //Laver et objekt som kan skrive til Logfilen
+            StreamWriter portal1 = new StreamWriter(geeks1);
+
+            // Standard Output stream is  
+            // being saved to a Textwriter 
+            TextWriter geeksave = Console.Out;
+
+            //Klar gør objektet til at skrive til memory.
+            Console.SetOut(portal1);
+
+            //Skriver den gemte tekst.
+            Console.Write($"{text}\n");
+
+            //Skriver og tilføjer den nye tekst.
+            switch (action) {
+                case "attack":
+                    Console.WriteLine($"Turn: {t}\nYou attacked and lost {damage} health and you dealt {attack} damage.");
+                    break;
+                case "defend":
+                    Console.WriteLine($"Turn: {t}\nYou defended and lost {damage} health and you dealt {attack} damage.");
+                    break;
+                case "heal":
+                    Console.WriteLine($"Turn: {t}");
+                    if (Program.currentPlayer.potion == 0) {
+                        Console.WriteLine($"You tried to drink a potion you didn't have and lost {damage} health.");
+                    }
+                    else {
+                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                            Console.WriteLine("You healed to max health by drinking a potion.");
+                        }
+                        else {
+                            Console.WriteLine($"You gained {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health by drinking a potion.");
+                        }
+                        Console.WriteLine($"You lost {damage} health while drinking the potion.");
+                    }
+                    break;
+                case "run":
+                    Console.WriteLine($"Turn: {t}");
+                    Console.WriteLine($"You tried to run. You lost {damage} health and was unable to escape this turn.");
+                    break;
+            }
+            //Skriver teksten i memory til filen.
+            Console.SetOut(geeksave);
+
+            //Lukker objektet og filen igen.
+            portal1.Close();
+        }
+
+        //Skriver Loggen i consolen.
+        public static void GetCombatLog() {
+            string text = File.ReadAllText("combatlog.txt");
+            Console.WriteLine(text);
+        }
+
+        //Rydder Log filen så den er klar til brug igen.
+        public static void ClearCombatLog() {
+            File.WriteAllText("combatlog.txt", String.Empty);
         }
 
         //HUDS
@@ -192,7 +270,9 @@ namespace Saga
             Console.WriteLine("==========Actions==========");
             Console.WriteLine("| (A)ttack     (D)efend   |");
             Console.WriteLine("| (R)un        (H)eal     |");
+            Console.WriteLine("===========Info============");
             Console.WriteLine("| (C)haracter screen      |");
+            Console.WriteLine("|  Combat (L)og           |");
             Console.WriteLine("===========================");
             Console.WriteLine("Choose an action...");
         }

@@ -231,6 +231,7 @@ namespace Saga
 
         //Metode til at køre kamp.
         public static void BasicCombat(bool random, string name, int power, int health, int xpModifier=1, int goldModifier=1) {
+            HUDTools.ClearCombatLog();
             string n;
             int p;
             int h;
@@ -250,38 +251,45 @@ namespace Saga
                 string input = HUDTools.PlayerPrompt().ToLower();
                 if (input.ToLower() == "a" || input == "attack") {
                     //Attack
-                    h -= Player.Attack(n, p);
+                    h -= Player.Attack(n, p, t);
                     t++;
                 } else if (input.ToLower() == "d" || input == "defend") {
                     //Defend
-                    h -= Player.Defend(n,p);
+                    h -= Player.Defend(n,p,t);
                     t++;
                 } else if (input.ToLower() == "r" || input == "run") {
                     //Run                   
-                    if(Player.RunAway(n, p)) {
+                    if(Player.RunAway(n, p,t)) {
                         AudioManager.soundKamp.Stop();
                         AudioManager.soundBossKamp.Stop();
+                        HUDTools.ClearCombatLog();
                         break;
                     }
                     t++;
                 } else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
-                    Player.Heal(true,n,p);
+                    Player.Heal(true,n,p,t);
                     t++;
                 } else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
+                    HUDTools.PlayerPrompt();
+                } else if (input == "l" ||  input == "log" ||  input == "combat log") {
+                    Console.Clear();
+                    HUDTools.GetCombatLog();
                     HUDTools.PlayerPrompt();
                 }
                 if (Program.currentPlayer.health <= 0) {
                     //Død
                     AudioManager.soundKamp.Stop();
                     AudioManager.soundBossKamp.Stop();
+                    HUDTools.ClearCombatLog();
                     Player.DeathCode($"As the {n} menacingly comes down to strike, you are slain by the mighty {n}.");
                 }
             }
             if (h <= 0) {
                 AudioManager.soundKamp.Stop();
                 AudioManager.soundBossKamp.Stop();
+                HUDTools.ClearCombatLog();
                 AudioManager.soundWin.Play();
                 Player.Loot(xpModifier, goldModifier, n, $"You Won against the {n} on turn {t-1}!");
                 if (Program.currentPlayer.CanLevelUp()) {
@@ -323,7 +331,7 @@ namespace Saga
                 } 
                 else if (input.ToLower() == "h" || input == "heal") {
                     //Heal
-                    Player.Heal(false,"",0);
+                    Player.Heal(false,"",0,0);
                 } 
                 else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
