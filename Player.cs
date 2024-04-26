@@ -81,7 +81,7 @@ namespace Saga
             int h = 2+(level/3);
             maxHealth += h;
             Console.ForegroundColor = ConsoleColor.DarkBlue;
-            HUDTools.Print($"Congratulations! You are now level {level}! Your max health increased by {h}.");
+            HUDTools.Print($"Congratulations! You are now level {level}! Your max health increased by {h}.",20);
             Console.ResetColor();
             Program.currentPlayer.health = maxHealth;
             HUDTools.PlayerPrompt();

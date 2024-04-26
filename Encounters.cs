@@ -85,7 +85,7 @@ namespace Saga
         public static void WizardEncounter() {
             Console.Clear();
             AudioManager.soundLaugh.Play();
-            HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",30);
+            HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",20);
             AudioManager.soundBossKamp.Play();
             HUDTools.Print("long beard and pointy hat, looking at a large tome.");
             HUDTools.PlayerPrompt();
@@ -110,8 +110,7 @@ namespace Saga
                     Console.ReadKey(true);
                     RandomBasicCombatEncounter();
                     break;
-                }
-                else if (input == "y") {
+                } else if (input == "y") {
                     AudioManager.soundMimic.Play();
                     HUDTools.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
                     AudioManager.soundBossKamp.Play();
@@ -120,6 +119,10 @@ namespace Saga
                     HUDTools.PlayerPrompt();
                     BasicCombat(false, "Mimic", 5 + Program.currentPlayer.level + Program.currentPlayer.level / 3, 10 + 2 * Program.currentPlayer.level + Program.currentPlayer.level / 3, 2, 3);
                     break;
+                } else {
+                    HUDTools.Print("Invalid input");
+                    HUDTools.PlayerPrompt();
+                    Console.Clear();
                 }
             } while (input != "42");
         }
@@ -159,35 +162,39 @@ namespace Saga
 
         public static void PuzzleOneEncounter() {
             Console.Clear();
-            HUDTools.Print("You are walking down the dark corridors when you see that the floor is suddenly covered in runes.");
+            AudioManager.soundFootsteps.Play();
+            AudioManager.soundRuneTrap.Play();
+            HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.",30);
             //runer
             List<char> chars = new char[] {'\u00fe', '\u00f5','\u00d0','\u0141','\u014a','\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
             List<int> positions = new List<int>();
             char c = chars[Program.rand.Next(0, 10)];
             chars.Remove(c);
-            HUDTools.Print(" o     <- Your position",10);
+            HUDTools.Print("   o    <- Your position",10);
             for (int a = 0; a < 4; a++) {
                 int pos = Program.rand.Next(0, 4);
                 positions.Add(pos);
                 for (int b = 0; b < 4; b++) {
                     if ( b == pos) {
-                        Console.Write(c);
+                        Console.Write(c+" ");
                     } else {
-                        Console.Write(chars[Program.rand.Next(0, 8)]);
+                        Console.Write(chars[Program.rand.Next(0, 9)]+" ");
                     }
                 }
                 Console.Write("\n");
             }
-            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)");
+            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)",30);
 
             for (int i = 0; i < 4; i++) {
                 while (true) {
                     if (int.TryParse(Console.ReadLine(), out int input) && input < 5 && input > 0) {
                         if (positions[i] == input - 1) {
+                            AudioManager.soundFootsteps.Play();
                             HUDTools.Print($"You step on the corresponding rune, nothing happens...\n(You are now on row {i+1})",10);
                             break;
                         }
                         else {
+                            AudioManager.soundDarts.Play();
                             HUDTools.Print($"Darts fly out of the walls! You take 2 damage.\n(You are still on row {i})", 10);
                             Program.currentPlayer.health -= 2;
                             if (Program.currentPlayer.health <= 0) {
@@ -200,9 +207,13 @@ namespace Saga
                     }
                 }
             }
+            AudioManager.soundRuneTrap.Stop();
             AudioManager.soundWin.Play();
             Player.Loot(2,0,"Trap","You've crossed the trap successfully!");
             Console.ResetColor();
+            if (Program.currentPlayer.CanLevelUp()) {
+                Program.currentPlayer.LevelUp();
+            }
             RandomBasicCombatEncounter();
         }
 

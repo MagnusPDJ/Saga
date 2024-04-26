@@ -61,7 +61,10 @@ namespace Saga
         public static AudioManager soundMimic = new AudioManager(Properties.Resources.mimic);
         public static AudioManager soundDoorOpen = new AudioManager(Properties.Resources.dooropen);
         public static AudioManager soundDoorClose = new AudioManager(Properties.Resources.doorclose);
-        public static AudioManager soundTreasure = new AudioManager (Properties.Resources.treasure);
+        public static AudioManager soundTreasure = new AudioManager(Properties.Resources.treasure);
+        public static AudioManager soundRuneTrap = new AudioManager(Properties.Resources.runetrap);
+        public static AudioManager soundDarts = new AudioManager(Properties.Resources.darts);
+        public static AudioManager soundFootsteps = new AudioManager(Properties.Resources.footsteps);
 
         public static byte[] StreamToBytes(System.IO.Stream stream) {
             long originalPosition = 0;

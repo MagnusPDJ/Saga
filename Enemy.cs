@@ -82,28 +82,28 @@ namespace Saga
             int baseModLower = 4 + Program.currentPlayer.level;
             switch (name) {
                 case "Vampire":
-                    int upper6 = (7 + baseModUp);
-                    int lower6 = (4 + baseModLower);
+                    int upper6 = (45 + baseModUp+Program.currentPlayer.level/2);
+                    int lower6 = (29 + baseModLower+Program.currentPlayer.level);
                     return Program.rand.Next(lower6, upper6 + 1);
                 case "Werewolf":
-                    int upper7 = (6 + baseModUp);
-                    int lower7 = (4 + baseModLower);
+                    int upper7 = (23 + baseModUp+Program.currentPlayer.level/2);
+                    int lower7 = (27 + baseModLower+Program.currentPlayer.level/3);
                     return Program.rand.Next(lower7, upper7 + 1);
                 case "Dire Wolf":
-                    int upper8 = (5 + baseModUp);
-                    int lower8 = (4 + baseModLower);
+                    int upper8 = (22 + baseModUp);
+                    int lower8 = (21 + baseModLower);
                     return Program.rand.Next(lower8, upper8 + 1);
                 case "Human Cultist":
-                    int upper2 = (4 + baseModUp);
-                    int lower2 = (3 + baseModLower);
+                    int upper2 = (12 + baseModUp);
+                    int lower2 = (11 + baseModLower);
                     return Program.rand.Next(lower2, upper2 + 1);
                 case "Human Rogue":
-                    int upper5 = (3 + baseModUp);
-                    int lower5 = (2 + baseModLower);
+                    int upper5 = (2 + baseModUp);
+                    int lower5 = (1 + baseModLower);
                     return Program.rand.Next(lower5, upper5 + 1);
                 case "Bandit":
-                    int upper9 = (3 + baseModUp + 3);
-                    int lower9 = (2 + baseModLower + 2);
+                    int upper9 = (6 + baseModUp);
+                    int lower9 = (6 + baseModLower);
                     return Program.rand.Next(lower9, upper9 + 1);
                 case "Skeleton":
                     int upper = (2 + baseModUp);

@@ -193,5 +193,14 @@
     <None Include="Resources\SAGA-removedbg.ico" />
     <None Include="Resources\SAGA.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\runetrap.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\darts.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\sounds\footsteps.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

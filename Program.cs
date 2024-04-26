@@ -123,13 +123,13 @@ namespace Saga
                 Console.Clear();
                 AudioManager.soundTypeWriter.Play();
                 HUDTools.Print("Choose a save!  ",15);
-                HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",20);
+                HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",5);
                 HUDTools.Print("#: playername");
                 foreach (Player p in players) {
-                    HUDTools.Print(p.id + ": " + p.name, 20);
+                    HUDTools.Print($"{p.id}: {p.name} - Level: {p.level}", 10);
                 }
-                HUDTools.Print("<><><><><><><><><><><><><><><><>",20);
-                HUDTools.Print("Please input 'id:#' or 'playername'. For new game write 'new game'.",1);
+                HUDTools.Print("<><><><><><><><><><><><><><><><>",5);
+                HUDTools.Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.",1);
                 string[] data = Console.ReadLine().Split(':');
                 try {
                     if (data[0] == "id") {
@@ -145,11 +145,40 @@ namespace Saga
                             Console.WriteLine("Your id needs to be a number! Press to continue!");
                             Console.ReadKey(true);
                         }
+                    } else if (data[0] == "delete") {
+                        if (int.TryParse(data[1], out int id)) {
+                            foreach (Player player in players) {
+                                if (player.id == id) {
+                                    File.Delete($"saves/{player.id}.player");
+                                    players.Remove(player);
+                                    Console.WriteLine($"Save game {player.name} - level {player.level}, was deleted");
+                                    Console.ReadKey(true);
+                                    break;
+                                } else {
+                                    Console.WriteLine("There is no player with that id!");
+                                    Console.ReadKey(true);
+                                }
+                            }
+                        } else {
+                            foreach (Player player in players) {
+                                if (data[1] == player.name) {
+                                    File.Delete($"saves/{player.id}.player");
+                                    players.Remove(player);
+                                    Console.WriteLine($"Save game {player.name} - level {player.level}, was deleted");
+                                    Console.ReadKey(true);
+                                    break;
+                                } else {
+                                    Console.WriteLine("There is no player with that name!");
+                                    Console.ReadKey(true);
+                                }
+                            }
+                        }
                     } else if (data[0] == "new game") {
                         Player newPlayer = NewCharacter(idCount);
                         newP = true;
                         return newPlayer;
-                    } else {
+                    }
+                    else {
                         foreach (Player player in players) {
                             if (player.name == data[0]) {
                                 return player;
