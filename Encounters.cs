@@ -221,7 +221,7 @@ namespace Saga
 
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(1, 100+1)) {
+            switch (Program.rand.Next(1, 150+1)) {
                 case int n when 40 < n:
                     RandomBasicCombatEncounter();
                     break;
@@ -323,7 +323,54 @@ namespace Saga
                     Console.ReadKey(true);
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
-                    RandomEncounter();
+                    bool stay = true;
+                    while (stay) {
+                        int dybde = Program.rand.Next(0,4);
+                        switch (dybde) {
+                            case 0:
+                                 for (int i = 0; i<2 ;i++) {
+                                    RandomEncounter();
+                                }
+                                break;
+                            case 1:
+                                for (int i = 0; i < 3; i++) {
+                                    RandomEncounter();
+                                }
+                                break;
+                            case 2:
+                                for (int i = 0; i < 4; i++) {
+                                    RandomEncounter();
+                                }
+                                break;
+                            case 3:
+                                for (int i = 0; i < 5; i++) {
+                                    RandomEncounter();
+                                }
+                                break;    
+                        }
+                        Console.Clear();
+                        HUDTools.Print("You gain a moment of respite and a choice...", 30);
+                        HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
+                        while (stay) {
+                            HUDTools.RespiteHUD();
+                            input = HUDTools.PlayerPrompt().ToLower();
+                            if (input == "e" || input == "explore") {
+                                HUDTools.Print("You venture deeper...", 5);
+                                HUDTools.PlayerPrompt();
+                                break;
+                            } else if (input == "h" || input == "heal") {
+                                //Heal
+                                Player.Heal(false, "", 0, 0);
+                            } else if (input == "c" || input == "character" || input == "character screen") {
+                                HUDTools.CharacterScreen();
+                                HUDTools.PlayerPrompt();
+                            } else if (input == "r" || input == "return") {
+                                stay = false;
+                                HUDTools.Print("You retrace your steps in the darkness...");
+                                HUDTools.PlayerPrompt();
+                            }
+                        }              
+                    }
                     break;
                 } 
                 else if (input.ToLower() == "s" || input == "sleep" || input == "quit" || input == "quit game") {

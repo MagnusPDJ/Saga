@@ -239,7 +239,7 @@ namespace Saga
             Print($"EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}] {Program.currentPlayer.xp}/{Program.currentPlayer.GetLevelUpValue()}", 10);
             Print("-----------------Stats----------------------", 5);
             Console.WriteLine($"Max Health: {Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
-            Console.WriteLine($"Weapon Damage: {1 + (Program.currentPlayer.TotalWeaponValue() + 0 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2}-{1 + Program.currentPlayer.TotalWeaponValue() + 4 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
+            Console.WriteLine($"Weapon Damage: {1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2}-{1 + Program.currentPlayer.TotalWeaponValue() + 3 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
             Console.WriteLine("\n*****************Equipment********************\n");
             Console.WriteLine($"Gold: ${Program.currentPlayer.gold}");
             Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tPotion Strength: +{Program.currentPlayer.potionValue}");
@@ -307,7 +307,7 @@ namespace Saga
             Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
             Console.Write("EXP  ");
             Console.Write("[");
-            HUDTools.ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
+            ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine("==============Actions=================");
             Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
@@ -316,6 +316,22 @@ namespace Saga
             Console.WriteLine("======================================");
             Console.WriteLine("  (Q)uit to Main Menu                 ");
             Console.WriteLine("Choose an action...");
+        }
+        public static void RespiteHUD() {
+            Console.Clear();
+            Console.WriteLine("You gain a moment of respite and a choice...");
+            Console.WriteLine("Do you venture deeper or turn back to your camp?");
+            Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
+            Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
+            Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
+            Console.Write("EXP  ");
+            Console.Write("[");
+            ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
+            Console.WriteLine("]");
+            Console.WriteLine("==============Actions==============");
+            Console.WriteLine("V (E)xplore            (R)eturn   V");
+            Console.WriteLine("V (C)haracter screen   (H)eal     V");
+            Console.WriteLine("===================================");
         }
     }
 }

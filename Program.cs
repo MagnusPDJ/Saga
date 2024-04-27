@@ -126,7 +126,7 @@ namespace Saga
                 HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",5);
                 HUDTools.Print("#: playername");
                 foreach (Player p in players) {
-                    HUDTools.Print($"{p.id}: {p.name} - Level: {p.level}", 10);
+                    HUDTools.Print($"{p.id}: {p.name} - Class: {p.currentClass} - Level: {p.level}", 10);
                 }
                 HUDTools.Print("<><><><><><><><><><><><><><><><>",5);
                 HUDTools.Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.",1);

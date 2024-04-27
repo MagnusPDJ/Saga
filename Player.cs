@@ -45,15 +45,15 @@ namespace Saga
 
         //Guld drop skaleret på spilleren.
         public int GetGold() {
-            int upper = (40 * level+100);
+            int upper = (30 * level+101);
             int lower = (10 * level);
             return Program.rand.Next(lower, upper+1);
         }
 
         //Metode til at udregne exp fåen skaleret på spilleren.
         public int GetXP() {
-            int upper = (20*level + 50);
-            int lower = (10*level + 10);
+            int upper = (20*level + 31);
+            int lower = (10*level);
             return Program.rand.Next(lower, upper+1);
         }
 
@@ -122,7 +122,7 @@ namespace Saga
             }        
             if (name == "Treasure") {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                int getTreasure = Program.rand.Next(0, 100);
+                int getTreasure = Program.rand.Next(0, 100+1);
                 if (getTreasure <=10) {
                     if (Program.currentPlayer.currentClass == PlayerClass.Mage) {
                         switch (Program.currentPlayer.equippedArmor) {
@@ -229,11 +229,11 @@ namespace Saga
                         }
                     }
                     else if (Program.currentPlayer.currentClass == PlayerClass.Warrior) {
-                        switch (Program.currentPlayer.equippedArmor) {
+                        switch (Program.currentPlayer.equippedWeapon) {
                             case "Rusty Sword":
                                 Program.currentPlayer.equippedWeapon = "Steel Sword";
                                 Program.currentPlayer.equippedWeaponValue = 2;
-                                HUDTools.Print("You loot a Mail Shirt");
+                                HUDTools.Print("You loot a Steel Sword");
                                 break;
                             case "Steel Sword":
                                 Program.currentPlayer.equippedWeapon = "Longsword";
@@ -331,7 +331,7 @@ namespace Saga
             int damage = power - Program.currentPlayer.TotalArmorValue();
             if (damage < 0)
                 damage = 0;
-            int attack = Program.rand.Next(1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2, 1 + Program.currentPlayer.TotalWeaponValue()) + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0);
+            int attack = Program.rand.Next(1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2, 1 + Program.currentPlayer.TotalWeaponValue() + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)+1);
             HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 10);
             Program.currentPlayer.health -= damage;
             HUDTools.WriteCombatLog("attack",turn,damage,attack);
