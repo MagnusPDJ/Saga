@@ -81,7 +81,7 @@ namespace Saga
         }
 
         // Metode til at skrive en logfil 
-        public static void WriteCombatLog(string action, int t, int damage, int attack) {
+        public static void WriteCombatLog(string action, Encounters TurnTimer, int damage=0, int attack = 0, Enemy Monster=null) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
             }
@@ -89,16 +89,16 @@ namespace Saga
             //Læser logfilen og gemmer det i memory
             string text = File.ReadAllText("combatlog.txt");
 
-            // Åbner en text file navngivet "Geeks"  
+            // Åbner en text file navngivet "combatlog"  
             // at the location of your program 
-            FileStream geeks1 = new FileStream("combatlog.txt", FileMode.Open);
+            FileStream CombatLog = new FileStream("combatlog.txt", FileMode.Open);
 
             //Laver et objekt som kan skrive til Logfilen
-            StreamWriter portal1 = new StreamWriter(geeks1);
+            StreamWriter portal1 = new StreamWriter(CombatLog);
 
             // Standard Output stream is  
             // being saved to a Textwriter 
-            TextWriter geeksave = Console.Out;
+            TextWriter combatlogsave = Console.Out;
 
             //Klar gør objektet til at skrive til memory.
             Console.SetOut(portal1);
@@ -107,35 +107,69 @@ namespace Saga
             Console.Write($"{text}\n");
 
             //Skriver og tilføjer den nye tekst.
-            switch (action) {
-                case "attack":
-                    Console.WriteLine($"Turn: {t}\nYou attacked and lost {damage} health and you dealt {attack} damage.");
-                    break;
-                case "defend":
-                    Console.WriteLine($"Turn: {t}\nYou defended and lost {damage} health and you dealt {attack} damage.");
-                    break;
-                case "heal":
-                    Console.WriteLine($"Turn: {t}");
-                    if (Program.currentPlayer.potion == 0) {
-                        Console.WriteLine($"You tried to drink a potion you didn't have and lost {damage} health.");
-                    }
-                    else {
-                        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
-                            Console.WriteLine("You healed to max health by drinking a potion.");
+            if (Program.currentPlayer.awareness > Monster.awareness) {
+                switch (action) {
+                    case "attack":
+                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou attacked and dealt {attack} damage.");
+                        break;
+                    case "defend":
+                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou defended and you dealt {attack} damage.");
+                        break;
+                    case "heal":
+                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
+                        if (Program.currentPlayer.potion == 0) {
+                            Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            Console.WriteLine($"You gained {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health by drinking a potion.");
+                            if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                                Console.WriteLine("You healed to max health by drinking a potion.");
+                            }
+                            else {
+                                Console.WriteLine($"You gained {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health by drinking a potion.");
+                            }
                         }
-                        Console.WriteLine($"You lost {damage} health while drinking the potion.");
-                    }
-                    break;
-                case "run":
-                    Console.WriteLine($"Turn: {t}");
-                    Console.WriteLine($"You tried to run. You lost {damage} health and was unable to escape this turn.");
-                    break;
+                        break;
+                    case "run":
+                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
+                        Console.WriteLine($"You tried to run but was unable to escape this turn.");
+                        break;
+                    case "enemysecond":
+                        Console.WriteLine($"{Monster.name} attacked!");
+                        break;
+                }
+            } else {
+                switch (action) {
+                    case "attack":
+                        Console.WriteLine($"You attacked and dealt {attack} damage.");
+                        break;
+                    case "defend":
+                        Console.WriteLine($"You defended and you dealt {attack} damage.");
+                        break;
+                    case "heal":
+                        if (Program.currentPlayer.potion == 0) {
+                            Console.WriteLine($"You tried to drink a potion you didn't have.");
+                        }
+                        else {
+                            if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                                Console.WriteLine("You healed to max health by drinking a potion.");
+                            }
+                            else {
+                                Console.WriteLine($"You gained {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health by drinking a potion.");
+                            }
+                        }
+                        break;
+                    case "run":
+                        Console.WriteLine($"You tried to run but was unable to escape this turn.");
+                        break;
+                    case "enemyfirst":
+                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
+                        Console.WriteLine($"{Monster.name} attacked!");
+                        break;
+                }
             }
+
             //Skriver teksten i memory til filen.
-            Console.SetOut(geeksave);
+            Console.SetOut(combatlogsave);
 
             //Lukker objektet og filen igen.
             portal1.Close();
@@ -247,19 +281,32 @@ namespace Saga
             Console.WriteLine($"Armor upgrades:  {Program.currentPlayer.armorValue}\tArmor: {Program.currentPlayer.equippedArmor} (+{Program.currentPlayer.equippedArmorValue} armor)");
             Print("Press to go back...", 1);
         }
-        public static void TopBasicCombatHUD(string name, int power, int health, int turn) {
+        public static void TopCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
-            Print($"Turn: {turn}",5);
-            Print($"Fighting: {name}!", 10);
-            Print($"Strength: {power} / HP: {health}", 10);
-            Print("-----------------------", 5);
+            Print($"Turn: {TurnTimer.turnTimer}",5);
+            Print($"Fighting: {Monster.name}!", 10);
+            Print($"Strength: {Monster.power} / HP: {Monster.health}", 10);
+            if (Program.currentPlayer.awareness > Monster.awareness) {
+                Print("---------------------------",5);
+                Print("You go first!",10);
+            }
+            else {
+                Print("The enemy go first!",10);
+                Print("---------------------------",5);
+            }
         }
-        public static void FullBasicCombatHUD(string name, int power, int health, int turn) {
+        public static void FullCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
-            Console.WriteLine($"Turn: {turn}");
-            Console.WriteLine($"Fighting: {name}!");
-            Console.WriteLine($"Strength: {power} / HP: {health}");
-            Console.WriteLine("---------------------------");
+            Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
+            Console.WriteLine($"Fighting: {Monster.name}!");
+            Console.WriteLine($"Strength: {Monster.power} / HP: {Monster.health}");
+            if (Program.currentPlayer.awareness > Monster.awareness) {
+                Console.WriteLine("---------------------------");
+                Console.WriteLine("You go first!");
+            } else {
+                Console.WriteLine("The enemy go first!");
+                Console.WriteLine("---------------------------");
+            }           
             Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
             Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
             Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
@@ -273,8 +320,7 @@ namespace Saga
             Console.WriteLine("===========Info============");
             Console.WriteLine("| (C)haracter screen      |");
             Console.WriteLine("|  Combat (L)og           |");
-            Console.WriteLine("===========================");
-            Console.WriteLine("Choose an action...");
+            Console.WriteLine("===========================");           
         }
         public static void TopCampHUD() {
             Console.Clear();

@@ -23,6 +23,8 @@ namespace Saga
         public int armorValue = 0;
         public int potion = 5;
         public int potionValue = 5;
+        public int awareness = 1;
+
 
         public string equippedWeapon = null;
         public int equippedWeaponValue = 0;
@@ -254,125 +256,110 @@ namespace Saga
             Console.ResetColor();
             HUDTools.PlayerPrompt();
         }
-        public static void Heal(bool combat, string name, int power, int turn) {
-            if (combat) {
-                if (Program.currentPlayer.potion == 0) {
-                    HUDTools.Print("No potions left!", 20);
-                    int damage = power - Program.currentPlayer.TotalArmorValue();
-                    if (damage < 0)
-                        damage = 0;
-                    HUDTools.Print($"The {name} attacks you while you fumble in your bags and lose {damage} health!", 20);
-                    Program.currentPlayer.health -= damage;
-                    HUDTools.WriteCombatLog("heal",turn, damage,0 );
+        public static void Heal() {
+            if (Program.currentPlayer.potion == 0) {
+                HUDTools.Print("No potions left!", 20);
+            } 
+            else {
+                if (Program.currentPlayer.currentClass == PlayerClass.Mage) {
+                    HUDTools.Print("You use a potion amplified by your magic", 30);
                 }
                 else {
-                    if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                        HUDTools.Print("You use a potion amplified by your magic", 30);
-                    }
-                    else {
-                        HUDTools.Print("You use a potion", 20);
-                    }
-                    Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
-                    if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
-                        Program.currentPlayer.health = Program.currentPlayer.maxHealth;
-                    }                    
-                    if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
-                        HUDTools.Print("You heal to max health!", 20);
-                    }
-                    else {
-                        HUDTools.Print($"You gain {Program.currentPlayer.potionValue+ ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health", 20);
-                    }
-                    HUDTools.Print($"As you drink, the {name} strikes you.", 20);
-                    int damage = (power / 2) - Program.currentPlayer.TotalArmorValue();
-                    if (damage < 0)
-                        damage = 0;
-                    HUDTools.Print($"You lose {damage} health", 20);
-                    Program.currentPlayer.health -= damage;
-                    HUDTools.WriteCombatLog("heal",turn,damage,0);
-                    Program.currentPlayer.potion--;
+                    HUDTools.Print("You use a potion", 20);
                 }
-            } else {
-                if (Program.currentPlayer.potion == 0) {
-                    HUDTools.Print("No potions left!", 20);
+                Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
+                Program.currentPlayer.potion--;
+                if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+                    Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+                }               
+                if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                    HUDTools.Print("You heal to max health!", 20);
                 }
                 else {
-                    if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                        HUDTools.Print("You use a potion amplified by your magic", 30);
-                    }
-                    else {
-                        HUDTools.Print("You use a potion", 20);
-                    }
-                    Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
-                    if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
-                        Program.currentPlayer.health = Program.currentPlayer.maxHealth;
-                    }
-                    Program.currentPlayer.potion -= 1;
-                    if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
-                        HUDTools.Print("You heal to max health!", 20);
-                    }
-                    else {
-                        HUDTools.Print($"You gain {Program.currentPlayer.potionValue+((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health", 20);
-                    }
+                    HUDTools.Print($"You gain {Program.currentPlayer.potionValue+((Program.currentPlayer.currentClass == PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health", 20);
                 }
             }
-
-            HUDTools.PlayerPrompt();
         }
-        public static int Attack(string name, int power, int turn) {
-            if (Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) {
-                HUDTools.Print($"You swing your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 15);
+        public static int Attack(Enemy Monster) {
+            if (Program.currentPlayer.currentClass == PlayerClass.Warrior) {
+                HUDTools.Print($"You swing your {Program.currentPlayer.equippedWeapon}", 15);
             }
-            else if (Program.currentPlayer.currentClass == Player.PlayerClass.Mage) {
-                HUDTools.Print($"You shoot an arcane missile from your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 10);
+            else if (Program.currentPlayer.currentClass == PlayerClass.Mage) {
+                HUDTools.Print($"You shoot an arcane missile from your {Program.currentPlayer.equippedWeapon}", 10);
             }
             else {
-                HUDTools.Print($"You fire an arrow with your {Program.currentPlayer.equippedWeapon} and {name} retaliates.", 10);
+                HUDTools.Print($"You fire an arrow with your {Program.currentPlayer.equippedWeapon}", 10);
             }
-            int damage = power - Program.currentPlayer.TotalArmorValue();
-            if (damage < 0)
-                damage = 0;
-            int attack = Program.rand.Next(1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2, 1 + Program.currentPlayer.TotalWeaponValue() + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)+1);
-            HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 10);
-            Program.currentPlayer.health -= damage;
-            HUDTools.WriteCombatLog("attack",turn,damage,attack);
-            HUDTools.PlayerPrompt();
+            int attack = Program.rand.Next(1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2, 1 + Program.currentPlayer.TotalWeaponValue() + Program.rand.Next(0, 4) + ((Program.currentPlayer.currentClass == PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)+1);
+            HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
             return attack;
         }
-        public static int Defend(string name, int power, int turn) {
-            HUDTools.Print($"You defend the incoming attack from {name}", 20);
-            int damage = (power / Program.currentPlayer.TotalArmorValue());
-            if (damage < 0)
-                damage = 0;
+        public static int Defend(Enemy Monster) {
+            HUDTools.Print($"You defend the incoming attack from {Monster.name}", 20);
             int attack = Program.rand.Next(1 + Program.currentPlayer.TotalWeaponValue() / 3, (4 + Program.currentPlayer.TotalWeaponValue()) / 2);
-            HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 20);
-            Program.currentPlayer.health -= damage;
-            HUDTools.WriteCombatLog("defend", turn,damage,attack);
-            HUDTools.PlayerPrompt();
+            HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
             return attack;
         }
-        public static bool RunAway(string name, int power,int turn) {
+        public static bool RunAway(Enemy Monster) {
             bool escaped = false;
-            if (Program.currentPlayer.currentClass != Player.PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || name == "Human captor") {
-                HUDTools.Print($"You try to sprint away from the {name}, it strikes and knocks you down", 20);
-                int damage = power - Program.currentPlayer.TotalArmorValue();
-                if (damage < 0)
-                    damage = 0;
-                HUDTools.Print($"You lose {damage} health and are unable to escape this turn.", 20);
-                Program.currentPlayer.health -= damage;
-                HUDTools.WriteCombatLog("run",turn, damage, 0);
-                HUDTools.PlayerPrompt();
+            if (Program.currentPlayer.currentClass != PlayerClass.Archer && Program.rand.Next(0, 2) == 0 || Monster.name == "Human captor") {
+                HUDTools.Print($"You try to run from the {Monster.name}, but it knocks you down. You are unable to escape this turn", 15);
             }
             else {
                 if (Program.currentPlayer.currentClass == Player.PlayerClass.Archer) {
-                    HUDTools.Print($"You use your crazy ninja moves to evade the {name} and you successfully escape!",20);
+                    HUDTools.Print($"You use your crazy ninja moves to evade the {Monster.name} and you successfully escape!",20);
                 }
                 else {
-                    HUDTools.Print($"You barely manage to shake off the {name} and you successfully escape.",20);
+                    HUDTools.Print($"You barely manage to shake off the {Monster.name} and you successfully escape.",20);
                 }
-                HUDTools.PlayerPrompt();
                 escaped = true;
             }
             return escaped;
+        }
+
+        public static void PlayerActions(Enemy Monster, Encounters TurnTimer) {
+            Console.WriteLine("Choose an action...");
+            string input = HUDTools.PlayerPrompt().ToLower();
+            if (input.ToLower() == "a" || input == "attack") {
+                //Attack
+                int damage = Attack(Monster);
+                Monster.health -= damage;
+                HUDTools.WriteCombatLog("attack", TurnTimer,0, damage,Monster);
+                TurnTimer.turnTimer++;                
+            }
+            else if (input.ToLower() == "d" || input == "defend") {
+                //Defend
+                int damage = Defend(Monster);  
+                Monster.health -= damage;
+                HUDTools.WriteCombatLog("defend", TurnTimer,0, damage,Monster);
+                TurnTimer.turnTimer++;
+            }
+            else if (input.ToLower() == "r" || input == "run") {
+                //Run                   
+                if (RunAway(Monster)) {
+                    AudioManager.soundKamp.Stop();
+                    AudioManager.soundBossKamp.Stop();
+                    HUDTools.ClearCombatLog();
+                    TurnTimer.ran = true;
+                } else {
+                    HUDTools.WriteCombatLog(action:"run", TurnTimer:TurnTimer,Monster:Monster);
+                    TurnTimer.turnTimer++;
+                }                
+            }
+            else if (input.ToLower() == "h" || input == "heal") {
+                //Heal
+                Heal();
+                HUDTools.WriteCombatLog(action:"heal", TurnTimer:TurnTimer,Monster:Monster);
+                TurnTimer.turnTimer++;
+            }
+            else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
+                HUDTools.CharacterScreen();
+            }
+            else if (input == "l" || input == "log" || input == "combat log") {
+                Console.Clear();
+                HUDTools.GetCombatLog();
+            }
+            Console.ReadKey(true);
         }
     }
 }

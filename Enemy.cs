@@ -1,14 +1,24 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static Saga.Player;
 
 namespace Saga
 {
-    internal class Enemy
+    public class Enemy
     {
+        public string name;
+        public int health;             
+        public int power;
+        public int awareness = 0;
+        public int xpModifier = 1;
+        public int goldModifier = 1;
+        int enemyTurn = 1;
+
         //Monster type låst efter level
         public static new string GetType() {
             if (Program.currentPlayer.level < 3) {
@@ -181,5 +191,96 @@ namespace Saga
             }
             return 0;
         }
+
+        public static void MonsterActions(Enemy Monster, Encounters TurnTimer) {
+            if (Program.currentPlayer.awareness > 0) {
+                if (Monster.enemyTurn < TurnTimer.turnTimer && Monster.health > 0) {
+                    Console.WriteLine("The Enemy Attacked!\n");
+                    HUDTools.WriteCombatLog("enemysecond", TurnTimer,0,0,Monster);
+                    Monster.enemyTurn++;
+                    Console.ReadKey(true);
+                }
+            } else {                
+                if (Monster.enemyTurn == TurnTimer.turnTimer && Monster.health > 0) {
+                    Console.ReadKey(true);
+                    Console.WriteLine("The Enemy Attacked!\n");
+                    HUDTools.WriteCombatLog("enemyfirst", TurnTimer,0,0,Monster);
+                    Monster.enemyTurn++;
+                }
+            }
+        }
+
+
+
+
+
+        ////Fra Attack
+        //int damage = Monster.power - Program.currentPlayer.TotalArmorValue();
+        //if (damage < 0)
+        //    damage = 0;
+
+        //HUDTools.Print($"You lose {damage} health", 10);
+        //Program.currentPlayer.health -= damage;
+        //HUDTools.WriteCombatLog("attack", TurnTimer, damage, attack);
+
+
+        ////Fra Defend
+        //int damage = (Monster.power / Program.currentPlayer.TotalArmorValue());
+        //if (damage < 0)
+        //    damage = 0;
+        //HUDTools.Print($"You lose {damage} health and you deal {attack} damage", 20);
+        //Program.currentPlayer.health -= damage;
+        //HUDTools.WriteCombatLog("defend", TurnTimer, damage, attack);
+
+        ////Fra Run
+        //int damage = Monster.power - Program.currentPlayer.TotalArmorValue();
+        //if (damage < 0)
+        //    damage = 0;
+        //HUDTools.Print($"You lose {damage} health and are unable to escape this turn.", 20);
+        //Program.currentPlayer.health -= damage;
+        //HUDTools.WriteCombatLog("run", TurnTimer, damage, 0);
+
+        ////Fra Heal
+        //if (combat) {
+        //    if (Program.currentPlayer.potion == 0) {
+        //        HUDTools.Print("No potions left!", 20);
+        //        int damage = Monster.power - Program.currentPlayer.TotalArmorValue();
+        //        if (damage < 0)
+        //            damage = 0;
+        //        HUDTools.Print($"The {Monster.name} attacks you while you fumble in your bags and lose {damage} health!", 20);
+        //        Program.currentPlayer.health -= damage;
+        //        HUDTools.WriteCombatLog("heal", TurnTimer, damage, 0);
+        //    }
+        //    else {
+        //        if (Program.currentPlayer.currentClass == PlayerClass.Mage) {
+        //            HUDTools.Print("You use a potion amplified by your magic", 30);
+        //        }
+        //        else {
+        //            HUDTools.Print("You use a potion", 20);
+        //        }
+        //        Program.currentPlayer.health += Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0);
+        //        if (Program.currentPlayer.health > Program.currentPlayer.maxHealth) {
+        //            Program.currentPlayer.health = Program.currentPlayer.maxHealth;
+        //        }
+        //        if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+        //            HUDTools.Print("You heal to max health!", 20);
+        //        }
+        //        else {
+        //            HUDTools.Print($"You gain {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health", 20);
+        //        }
+        //        HUDTools.Print($"As you drink, the {Monster.name} strikes you.", 20);
+        //        int damage = (Monster.power / 2) - Program.currentPlayer.TotalArmorValue();
+        //        if (damage < 0)
+        //            damage = 0;
+        //        HUDTools.Print($"You lose {damage} health", 20);
+        //        Program.currentPlayer.health -= damage;
+        //        HUDTools.WriteCombatLog("heal", TurnTimer, damage, 0);
+        //        Program.currentPlayer.potion--;
+        //    }
+        //}
+        //else
+
+
+
     }
 }
