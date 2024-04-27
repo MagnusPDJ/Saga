@@ -51,10 +51,20 @@ namespace Saga
             AudioManager.soundMainMenu.Play();
             while (true) {
                 Console.Clear();
-                Console.WriteLine("~~~~~~~~ Saga title ~~~~~~~~");
-                Console.WriteLine("1.         Play");
-                Console.WriteLine("2.       Settings");
-                Console.WriteLine("3.       Quit Game");
+                Console.WriteLine("########         ##         ##########         ##       ");
+                Console.WriteLine("########        ####        ##########        ####      ");
+                Console.WriteLine("##             ##  ##       ##               ##  ##     ");
+                Console.WriteLine("##            ##    ##      ##              ##    ##    ");
+                Console.WriteLine("########     ##      ##     ##   #####     ##      ##   ");
+                Console.WriteLine("########    ############    ##   #####    ############  ");
+                Console.WriteLine("      ##   ##############   ##      ##   ############## ");
+                Console.WriteLine("      ##   ##          ##   ##      ##   ##          ## ");
+                Console.WriteLine("########  ##            ##  ##########  ##            ##");
+                Console.WriteLine("########  ##            ##  ##########  ##            ##");
+                Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                Console.WriteLine("\t\t1.         Play\n");
+                Console.WriteLine("\t\t2.       Settings\n");
+                Console.WriteLine("\t\t3.       Quit Game\n");
                 string input = HUDTools.PlayerPrompt();
                 if (input == "1") {
                     Play();
@@ -75,13 +85,15 @@ namespace Saga
 
         public static void Play() {
             currentPlayer = Load(out bool newP);
-            NewStart(newP);
-
-            //Spillets loop
-            while (mainLoop) {
-                AudioManager.soundMainMenu.Stop();
-                AudioManager.soundShop.Stop();
-                Encounters.Camp();
+            if (currentPlayer == null) {
+            } else {
+                NewStart(newP);
+                //Spillets loop
+                while (mainLoop) {
+                    AudioManager.soundMainMenu.Stop();
+                    AudioManager.soundShop.Stop();
+                    Encounters.Camp();
+                }
             }
         }
         
@@ -122,7 +134,7 @@ namespace Saga
             while (true) {
                 Console.Clear();
                 AudioManager.soundTypeWriter.Play();
-                HUDTools.Print("Choose a save!  ",15);
+                HUDTools.Print("Choose a save! ('back' for main menu) ",15);
                 HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",5);
                 HUDTools.Print("#: playername");
                 foreach (Player p in players) {
@@ -177,6 +189,9 @@ namespace Saga
                         Player newPlayer = NewCharacter(idCount);
                         newP = true;
                         return newPlayer;
+                    }
+                    else if (data[0] == "back") {
+                        return null;
                     }
                     else {
                         foreach (Player player in players) {

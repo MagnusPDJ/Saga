@@ -170,7 +170,7 @@ namespace Saga
             List<int> positions = new List<int>();
             char c = chars[Program.rand.Next(0, 10)];
             chars.Remove(c);
-            HUDTools.Print("   o    <- Your position",10);
+            HUDTools.Print("   o    <- Starting position",10);
             for (int a = 0; a < 4; a++) {
                 int pos = Program.rand.Next(0, 4);
                 positions.Add(pos);
@@ -187,7 +187,7 @@ namespace Saga
 
             for (int i = 0; i < 4; i++) {
                 while (true) {
-                    if (int.TryParse(Console.ReadLine(), out int input) && input < 5 && input > 0) {
+                    if (int.TryParse(HUDTools.PlayerPrompt(), out int input) && input < 5 && input > 0) {
                         if (positions[i] == input - 1) {
                             AudioManager.soundFootsteps.Play();
                             HUDTools.Print($"You step on the corresponding rune, nothing happens...\n(You are now on row {i+1})",10);
@@ -366,7 +366,7 @@ namespace Saga
                                 HUDTools.PlayerPrompt();
                             } else if (input == "r" || input == "return") {
                                 stay = false;
-                                HUDTools.Print("You retrace your steps in the darkness...");
+                                HUDTools.Print("You retrace your steps in the darkness...",20);
                                 HUDTools.PlayerPrompt();
                             }
                         }              
