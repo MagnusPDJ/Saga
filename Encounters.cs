@@ -136,7 +136,7 @@ namespace Saga
                     MimicEncounter.power = 5 + Program.currentPlayer.level + Program.currentPlayer.level / 3;
                     MimicEncounter.xpModifier = 2;
                     MimicEncounter.goldModifier = 3;
-                    AdvancedCombat(MimicEncounter);
+                    AdvancedCombat(MimicEncounter); 
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
@@ -435,7 +435,10 @@ namespace Saga
                     }                   
                     if (Program.currentPlayer.health <= 0) {
                         HUDTools.ClearCombatLog();
+                        AudioManager.soundKamp.Stop();
+                        AudioManager.soundBossKamp.Stop();
                         Player.DeathCode($"As the {Monster.name} menacingly comes down to strike, you are slain by the mighty {Monster.name}.");
+                        break;
                     }
                 }
             }  else {
@@ -444,7 +447,10 @@ namespace Saga
                     Enemy.MonsterActions(Monster, TurnTimer);
                     if (Program.currentPlayer.health <= 0) {
                         HUDTools.ClearCombatLog();
+                        AudioManager.soundKamp.Stop();
+                        AudioManager.soundBossKamp.Stop();
                         Player.DeathCode($"As the {Monster.name} menacingly comes down to strike, you are slain by the mighty {Monster.name}.");
+                        break;
                     }
                     Player.PlayerActions(Monster, TurnTimer);
                 }

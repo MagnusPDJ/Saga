@@ -294,11 +294,9 @@ namespace Saga
             HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
             return attack;
         }
-        public static int Defend(Enemy Monster) {
-            HUDTools.Print($"You defend the incoming attack from {Monster.name}", 20);
-            int attack = Program.rand.Next(1 + Program.currentPlayer.TotalWeaponValue() / 3, (4 + Program.currentPlayer.TotalWeaponValue()) / 2);
-            HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
-            return attack;
+        public static void Defend(Enemy Monster) {
+            HUDTools.Print($"You defend the next two attacks from {Monster.name}", 20);
+            Monster.attackDebuff += 2;
         }
         public static bool RunAway(Enemy Monster) {
             bool escaped = false;
@@ -328,10 +326,9 @@ namespace Saga
                 TurnTimer.turnTimer++;                
             }
             else if (input.ToLower() == "d" || input == "defend") {
-                //Defend
-                int damage = Defend(Monster);  
-                Monster.health -= damage;
-                HUDTools.WriteCombatLog("defend", TurnTimer,0, damage,Monster);
+                //Defend 
+                Defend(Monster);
+                HUDTools.WriteCombatLog("defend", TurnTimer,0, 0,Monster);
                 TurnTimer.turnTimer++;
             }
             else if (input.ToLower() == "r" || input == "run") {

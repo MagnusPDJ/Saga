@@ -113,7 +113,7 @@ namespace Saga
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou attacked and dealt {attack} damage.");
                         break;
                     case "defend":
-                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou defended and you dealt {attack} damage.");
+                        Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou defended and lowered the next two attacks.");
                         break;
                     case "heal":
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
@@ -134,7 +134,7 @@ namespace Saga
                         Console.WriteLine($"You tried to run but was unable to escape this turn.");
                         break;
                     case "enemysecond":
-                        Console.WriteLine($"{Monster.name} attacked!");
+                        Console.WriteLine($"{Monster.name} attacked and dealt {damage} damage!");
                         break;
                 }
             } else {
@@ -143,7 +143,7 @@ namespace Saga
                         Console.WriteLine($"You attacked and dealt {attack} damage.");
                         break;
                     case "defend":
-                        Console.WriteLine($"You defended and you dealt {attack} damage.");
+                        Console.WriteLine($"You defended and lowered the next two attacks.");
                         break;
                     case "heal":
                         if (Program.currentPlayer.potion == 0) {
@@ -163,7 +163,7 @@ namespace Saga
                         break;
                     case "enemyfirst":
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
-                        Console.WriteLine($"{Monster.name} attacked!");
+                        Console.WriteLine($"{Monster.name} attacked and dealt {damage} damage!");
                         break;
                 }
             }

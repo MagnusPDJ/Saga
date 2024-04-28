@@ -18,7 +18,7 @@ namespace Saga
         public int xpModifier = 1;
         public int goldModifier = 1;
         int enemyTurn = 1;
-
+        public int attackDebuff = 0;
         //Monster type låst efter level
         public static new string GetType() {
             if (Program.currentPlayer.level < 3) {
@@ -195,17 +195,39 @@ namespace Saga
         public static void MonsterActions(Enemy Monster, Encounters TurnTimer) {
             if (Program.currentPlayer.awareness > 0) {
                 if (Monster.enemyTurn < TurnTimer.turnTimer && Monster.health > 0) {
-                    Console.WriteLine("The Enemy Attacked!\n");
-                    HUDTools.WriteCombatLog("enemysecond", TurnTimer,0,0,Monster);
+                    int attack = Monster.power;
+                    if (Monster.attackDebuff > 0) {
+                        attack /= Program.currentPlayer.TotalArmorValue();
+                        Program.currentPlayer.health -= attack;
+                        Monster.attackDebuff--;
+                        if (Monster.attackDebuff == 0) {
+                            HUDTools.Print("You are no longer defended!",5);
+                        }
+                    } else {
+                        attack -= Program.currentPlayer.TotalArmorValue();
+                        Program.currentPlayer.health -= attack;
+                    }
                     Monster.enemyTurn++;
+                    HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n",10);
+                    HUDTools.WriteCombatLog("enemysecond", TurnTimer,attack,0,Monster);
                     Console.ReadKey(true);
                 }
             } else {                
                 if (Monster.enemyTurn == TurnTimer.turnTimer && Monster.health > 0) {
                     Console.ReadKey(true);
-                    Console.WriteLine("The Enemy Attacked!\n");
-                    HUDTools.WriteCombatLog("enemyfirst", TurnTimer,0,0,Monster);
+                    int attack = Monster.power;
+                    if (Monster.attackDebuff > 0) {
+                        attack /= Program.currentPlayer.TotalArmorValue();
+                        Program.currentPlayer.health -= attack;
+                        Monster.attackDebuff--;
+                    }
+                    else {
+                        Program.currentPlayer.health -= attack;
+                    }
                     Monster.enemyTurn++;
+                    HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
+                    HUDTools.WriteCombatLog("enemyfirst", TurnTimer,attack,0,Monster);
+                    
                 }
             }
         }
