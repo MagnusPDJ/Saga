@@ -42,7 +42,7 @@ namespace Saga.Character
                 return (1, 1);
             }
 
-            double multiplier = 1 + TotalPrimaryAttributes.Strength / 100.0 + Program.CurrentPlayer.Level;
+            double multiplier = 1 + TotalPrimaryAttributes.Strength / 100.0 + Level;
 
             return (Convert.ToInt32(Math.Floor(weaponDPT.Item1 * multiplier)),Convert.ToInt32(Math.Floor(weaponDPT.Item2*multiplier)));
         }
