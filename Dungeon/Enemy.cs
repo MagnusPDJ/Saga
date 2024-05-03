@@ -206,6 +206,9 @@ namespace Saga.Dungeon
                         }
                     } else {
                         attack -= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        if (attack < 0) {
+                            attack = 0;
+                        }
                         Program.CurrentPlayer.Health -= attack;
                     }
                     Monster.enemyTurn++;
@@ -223,6 +226,10 @@ namespace Saga.Dungeon
                         Monster.attackDebuff--;
                     }
                     else {
+                        attack -= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        if (attack < 0) {
+                            attack = 0;
+                        }
                         Program.CurrentPlayer.Health -= attack;
                     }
                     Monster.enemyTurn++;
