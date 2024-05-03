@@ -17,6 +17,7 @@ namespace Saga.Character
         public int Exp { get; set; }
         public int Gold { get; set; }
         public int Health { get; set; }
+        public int Mana { get; set; }
         public PrimaryAttributes BasePrimaryAttributes { get; set; }
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
@@ -33,6 +34,7 @@ namespace Saga.Character
             BasePrimaryAttributes = new PrimaryAttributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, WillPower = willpower };
             CalculateTotalStats();
             Health = BaseSecondaryAttributes.MaxHealth;
+            Mana = BaseSecondaryAttributes.MaxMana; 
         }
         // <param name="levels">Number of levels to level up</param>
         public abstract void LevelUp();
@@ -169,8 +171,8 @@ namespace Saga.Character
         public SecondaryAttributes CalculateSecondaryStats() {
             return new SecondaryAttributes()
             {
-                MaxHealth = TotalPrimaryAttributes.Constitution * 10,
-                Mana = TotalPrimaryAttributes.WillPower * 10,
+                MaxHealth = 5 + TotalPrimaryAttributes.Constitution * 5,
+                MaxMana = 5 + TotalPrimaryAttributes.WillPower * 5,
                 Awareness = TotalPrimaryAttributes.Dexterity,
                 ArmorRating = TotalPrimaryAttributes.Strength + TotalPrimaryAttributes.Dexterity,
                 ElementalResistence = TotalPrimaryAttributes.Intellect

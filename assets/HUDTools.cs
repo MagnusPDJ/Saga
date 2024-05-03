@@ -278,7 +278,7 @@ namespace Saga.assets
             stats.AppendFormat($" Willpower: {totalPrimaryAttributes.WillPower}\n");
             stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
             stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {baseSecondaryAttributes.MaxHealth}\t\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
-            stats.AppendFormat($" Mana: {baseSecondaryAttributes.Mana} / 0\t\t\tAwareness: {baseSecondaryAttributes.Awareness}\n");
+            stats.AppendFormat($" Mana: {Program.CurrentPlayer.Mana} / {baseSecondaryAttributes.MaxMana}\t\t\tAwareness: {baseSecondaryAttributes.Awareness}\n");
             stats.AppendFormat($" Armor Rating: {baseSecondaryAttributes.ArmorRating}\t\tElemental Resistance: {baseSecondaryAttributes.ElementalResistence}\n");
 
             Print(stats.ToString(),0);
@@ -314,7 +314,7 @@ namespace Saga.assets
                         Console.WriteLine($" +{((Armor)entry.Value).Attributes.WillPower} Willpower");
                     }
                     if (entry.Value.ItemName == "Linen Rags") {
-                        Console.WriteLine("Offers no protection");
+                        Console.WriteLine(" Offers no protection");
                     }
                 }
             }
