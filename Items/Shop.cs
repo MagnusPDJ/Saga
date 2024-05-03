@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
+using Saga.assets;
+using Saga.Character;
 
-namespace Saga
+namespace Saga.Items
 {
     public class Shop
     {
@@ -22,25 +19,25 @@ namespace Saga
                 HUDTools.InstantShopHUD();
                 //Wait for input
                 string input = HUDTools.PlayerPrompt().ToLower();
-                if (input.ToLower() == "p" || input == "potion") {
+                if (input == "p" || input == "potion") {
                     TryBuy("potion", ShopPrice("potion"), p);
-                } else if (input.ToLower() == "w" || input == "weapon") {
+                } else if (input == "w" || input == "weapon") {
                     TryBuy("weapon", ShopPrice("weaponupgrade"), p);
-                } else if (input.ToLower() == "a" || input == "armor") {
+                } else if (input == "a" || input == "armor") {
                     TryBuy("armor", ShopPrice("armorupgrade"), p);
-                } else if (input.ToLower() == "g" || input == "upgrade potion") {
+                } else if (input == "g" || input == "upgrade potion") {
                     TryBuy("upgradepotion", ShopPrice("potionupgrade"), p);
-                } else if (input.ToLower() == "s" || input == "sell" || input == "sell potion") {
+                } else if (input == "s" || input == "sell" || input == "sell potion") {
                     TrySell("potion", ShopPrice("sellpotion"), p);
-                } else if (input.ToLower() == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
+                } else if (input == "5" || input== "5x" || input == "sell 5" || input == "sell 5x"|| input == "sell 5xpotions") {
                     TrySell("5x potion", ShopPrice("sellpotion5"), p);
-                } else if (input.ToLower() == "u" || input == "use" || input == "heal") {
-                    Player.Heal();
+                } else if (input == "u" || input == "use" || input == "heal") {
+                    Program.CurrentPlayer.Heal();
                     HUDTools.PlayerPrompt();
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
                     HUDTools.PlayerPrompt();
-                } else if (input.ToLower() == "e" || input == "exit") {
+                } else if (input == "e" || input == "exit") {
                     break;
                 }
             }
@@ -48,19 +45,19 @@ namespace Saga
 
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
-            int potionP = 20 + 10 * Program.currentPlayer.level;
+            int potionP = 20 + 10 * Program.CurrentPlayer.Level;
             int sellPotionP = potionP / 2;
             switch (item) {
                 case "potion":                    
                     return potionP;
-                case "armorupgrade":
-                    int armorP = 100 * (Program.currentPlayer.armorValue + 1);
-                    return armorP;
-                case "weaponupgrade":
-                    int weaponP = 100 * (Program.currentPlayer.weaponValue + 1);
-                    return weaponP;
+                //case "armorupgrade":
+                //    int armorP = 100 * (Program.currentPlayer.armorValue + 1);
+                //    return armorP;
+                //case "weaponupgrade":
+                //    int weaponP = 100 * (Program.currentPlayer.weaponValue + 1);
+                //    return weaponP;
                 case "potionupgrade":
-                    int potionupgradeP = 200 * Program.currentPlayer.potionValue;
+                    int potionupgradeP = 200 * ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency;
                     return potionupgradeP;
                 case "sellpotion":
                     return sellPotionP;
@@ -74,22 +71,22 @@ namespace Saga
 
         //Metode til at købe fra shoppen.
         static void TryBuy(string item, int cost, Player p) {
-            if (p.gold >= cost) {
+            if (p.Gold >= cost) {
                 switch (item) {
                     case "potion":
-                        p.potion++;
+                        ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity++;
                         break;
-                    case "weapon":
-                        p.weaponValue++; 
-                        break;
-                    case "armor":
-                        p.armorValue++; 
-                        break;
+                    //case "weapon":
+                    //    p.weaponValue++; 
+                    //    break;
+                    //case "armor":
+                    //    p.armorValue++; 
+                    //    break;
                     case "upgradepotion":
-                        p.potionValue += 5;
+                        ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionPotency += 5;
                         break;
                 }
-                p.gold -= cost;
+                p.Gold -= cost;
 
             } else {
                 Console.WriteLine("You don't have enough gold!");
@@ -101,9 +98,9 @@ namespace Saga
         static void TrySell(string item, int price, Player p) {
             switch (item) {
                 case "potion":
-                if (p.potion > 0) {
-                    p.potion--;
-                    p.gold += price;
+                if (((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity > 0) {
+                    ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity--;
+                    p.Gold += price;
                     break;
                 } else {
                     Console.WriteLine("You don't have any potions to sell!");
@@ -111,9 +108,9 @@ namespace Saga
                     break;
                 }
                 case "5x potion":
-                if (p.potion >=5) {
-                    p.potion -= 5;
-                    p.gold += price;
+                if (((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity >= 5) {
+                    ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity -= 5;
+                    p.Gold += price;
                     break;
                 } else {
                     Console.WriteLine("You don't that many potions to sell!");

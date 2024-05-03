@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using static Saga.Player;
+using Saga.assets;
 
-namespace Saga
+namespace Saga.Dungeon
 {
     public class Enemy
     {
@@ -19,9 +14,15 @@ namespace Saga
         public int goldModifier = 1;
         int enemyTurn = 1;
         public int attackDebuff = 0;
+
+        public static int GetXP() {
+            int upper = (20 * Program.CurrentPlayer.Level + 31);
+            int lower = (10 * Program.CurrentPlayer.Level);
+            return Program.rand.Next(lower, upper + 1);
+        }
         //Monster type låst efter level
         public static new string GetType() {
-            if (Program.currentPlayer.level < 3) {
+            if (Program.CurrentPlayer.Level < 3) {
                 switch (Program.rand.Next(0, 2 + 1)) {
                     case 0:
                         return "Giant Rat";
@@ -31,7 +32,7 @@ namespace Saga
                         return "Giant Bat";
                 }
             }
-            else if (Program.currentPlayer.level <= 5) {
+            else if (Program.CurrentPlayer.Level <= 5) {
                 switch (Program.rand.Next(0, 4 + 1)) {
                     case 0:
                         return "Skeleton";
@@ -45,7 +46,7 @@ namespace Saga
                         return "Giant Bat";
                 }
             }
-            else if (5 < Program.currentPlayer.level && Program.currentPlayer.level <= 15) {
+            else if (5 < Program.CurrentPlayer.Level && Program.CurrentPlayer.Level <= 15) {
                 switch (Program.rand.Next(0, 8 + 1)) {
                     case 0:
                         return "Skeleton";
@@ -88,16 +89,16 @@ namespace Saga
 
         //Monster liv skaleret på spilleren.
         public static int GetHealth(string name) {
-            int baseModUp = 3 + 2 * Program.currentPlayer.level;
-            int baseModLower = 4 + Program.currentPlayer.level;
+            int baseModUp = 3 + 2 * Program.CurrentPlayer.Level;
+            int baseModLower = 4 + Program.CurrentPlayer.Level;
             switch (name) {
                 case "Vampire":
-                    int upper6 = (45 + baseModUp+Program.currentPlayer.level/2);
-                    int lower6 = (29 + baseModLower+Program.currentPlayer.level);
+                    int upper6 = (45 + baseModUp+Program.CurrentPlayer.Level /2);
+                    int lower6 = (29 + baseModLower+Program.CurrentPlayer.Level);
                     return Program.rand.Next(lower6, upper6 + 1);
                 case "Werewolf":
-                    int upper7 = (23 + baseModUp+Program.currentPlayer.level/2);
-                    int lower7 = (27 + baseModLower+Program.currentPlayer.level/3);
+                    int upper7 = (23 + baseModUp+Program.CurrentPlayer.Level /2);
+                    int lower7 = (27 + baseModLower+Program.CurrentPlayer.Level /3);
                     return Program.rand.Next(lower7, upper7 + 1);
                 case "Dire Wolf":
                     int upper8 = (22 + baseModUp);
@@ -141,8 +142,8 @@ namespace Saga
 
         //Monster skade skaleret på spilleren.
         public static int GetPower(string name) {
-            int baseModUp = 3 + 2 * Program.currentPlayer.level;
-            int baseModLower = 4 + Program.currentPlayer.level;
+            int baseModUp = 3 + 2 * Program.CurrentPlayer.Level;
+            int baseModLower = 4 + Program.CurrentPlayer.Level;
             switch (name) {
                 case "Vampire":
                     int upper6 = (7 + baseModUp);
@@ -170,42 +171,42 @@ namespace Saga
                     return Program.rand.Next(lower9, upper9 + 1);
                 case "Skeleton":
                     int upper = (baseModUp + 2);
-                    int lower = (baseModLower + Program.currentPlayer.level - Program.currentPlayer.level / 3);
+                    int lower = (baseModLower + Program.CurrentPlayer.Level - Program.CurrentPlayer.Level / 3);
                     return Program.rand.Next(lower, upper + 1);
                 case "Zombie":
                     int upper1 = (baseModUp);
                     int lower1 = (baseModLower);
                     return Program.rand.Next(lower1, upper1 + 1);
                 case "Grave Robber":
-                    int upper3 = (baseModUp - Program.currentPlayer.level / 4);
-                    int lower3 = (baseModLower - Program.currentPlayer.level / 4);
+                    int upper3 = (baseModUp - Program.CurrentPlayer.Level / 4);
+                    int lower3 = (baseModLower - Program.CurrentPlayer.Level / 4);
                     return Program.rand.Next(lower3, upper3 + 1);
                 case "Giant Bat":
-                    int upper4 = (baseModUp - 1 - Program.currentPlayer.level / 2 - Program.currentPlayer.level / 5);
-                    int lower4 = (baseModLower - 1 - Program.currentPlayer.level / 2);
+                    int upper4 = (baseModUp - 1 - Program.CurrentPlayer.Level / 2 - Program.CurrentPlayer.Level / 5);
+                    int lower4 = (baseModLower - 1 - Program.CurrentPlayer.Level / 2);
                     return Program.rand.Next(lower4, upper4 + 1);
                 case "Giant Rat":
-                    int upper0 = (baseModUp - 3 - Program.currentPlayer.level / 2 - Program.currentPlayer.level / 5);
-                    int lower0 = (baseModLower - 3 - Program.currentPlayer.level / 2);
+                    int upper0 = (baseModUp - 3 - Program.CurrentPlayer.Level / 2 - Program.CurrentPlayer.Level / 5);
+                    int lower0 = (baseModLower - 3 - Program.CurrentPlayer.Level / 2);
                     return Program.rand.Next(lower0, upper0 + 1);
             }
             return 0;
         }
 
         public static void MonsterActions(Enemy Monster, Encounters TurnTimer) {
-            if (Program.currentPlayer.awareness > 0) {
+            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > 0) {
                 if (Monster.enemyTurn < TurnTimer.turnTimer && Monster.health > 0) {
                     int attack = Monster.power;
                     if (Monster.attackDebuff > 0) {
-                        attack /= Program.currentPlayer.TotalArmorValue();
-                        Program.currentPlayer.health -= attack;
+                        attack /= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        Program.CurrentPlayer.Health -= attack;
                         Monster.attackDebuff--;
                         if (Monster.attackDebuff == 0) {
                             HUDTools.Print("You are no longer defended!",5);
                         }
                     } else {
-                        attack -= Program.currentPlayer.TotalArmorValue();
-                        Program.currentPlayer.health -= attack;
+                        attack -= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        Program.CurrentPlayer.Health -= attack;
                     }
                     Monster.enemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n",10);
@@ -217,12 +218,12 @@ namespace Saga
                     Console.ReadKey(true);
                     int attack = Monster.power;
                     if (Monster.attackDebuff > 0) {
-                        attack /= Program.currentPlayer.TotalArmorValue();
-                        Program.currentPlayer.health -= attack;
+                        attack /= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        Program.CurrentPlayer.Health -= attack;
                         Monster.attackDebuff--;
                     }
                     else {
-                        Program.currentPlayer.health -= attack;
+                        Program.CurrentPlayer.Health -= attack;
                     }
                     Monster.enemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);

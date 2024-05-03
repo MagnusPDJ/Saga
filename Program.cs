@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Configuration;
-using System.Threading;
-using static Saga.Player;
+using Saga.Character;
+using Saga.Dungeon;
+using Saga.assets;
 
 namespace Saga
 {
-    internal class Program
-    {
+    internal class Program {
         //Genere spilleren som objekt så den kan sættes senere.
-        public static Player currentPlayer = new Player();
+        public static Player CurrentPlayer { get; set; }
+        private const int MaxLengthOfName = 30;
 
         //Sætter Game Loopet til true så man kan spille indefinitely.
         public static bool mainLoop = true;
@@ -39,7 +38,7 @@ namespace Saga
 
             //Danner en saves mappe hvis den ikke eksistere.
             if (!Directory.Exists("saves")) {
-            Directory.CreateDirectory("saves");
+                Directory.CreateDirectory("saves");
             }
 
             //Kalder MainMenu metoden.
@@ -84,8 +83,8 @@ namespace Saga
         }
 
         public static void Play() {
-            currentPlayer = Load(out bool newP);
-            if (currentPlayer == null) {
+            CurrentPlayer = Load(out bool newP);
+            if (CurrentPlayer == null) {
             } else {
                 NewStart(newP);
                 //Spillets loop
@@ -96,11 +95,11 @@ namespace Saga
                 }
             }
         }
-        
+
         //Metode til at køre start introduktionen
         public static void NewStart(bool newP) {
             if (newP) {
-                SetStartingGear(currentPlayer);
+                CurrentPlayer.SetStartingGear();
                 Encounters.FirstEncounter();
                 Encounters.FirstShopEncounter();
                 Encounters.RandomBasicCombatEncounter();
@@ -111,9 +110,9 @@ namespace Saga
         //Metode til at gemme spillet ved først at tjekke for om der er en eksisterende save med det korrekte navn, som så overskrives, eller så dannes en helt ny en.
         public static void Save() {
             BinaryFormatter binForm = new BinaryFormatter();
-            string path = $"saves/{currentPlayer.id}.player";
-            FileStream file = File.Open(path,FileMode.OpenOrCreate);
-            binForm.Serialize(file, currentPlayer);
+            string path = $"saves/{CurrentPlayer.Id}.player";
+            FileStream file = File.Open(path, FileMode.OpenOrCreate);
+            binForm.Serialize(file, CurrentPlayer);
             file.Close();
         }
 
@@ -134,20 +133,20 @@ namespace Saga
             while (true) {
                 Console.Clear();
                 AudioManager.soundTypeWriter.Play();
-                HUDTools.Print("Choose a save! ('back' for main menu) ",15);
-                HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.",5);
+                HUDTools.Print("Choose a save! ('back' for main menu) ", 15);
+                HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 5);
                 HUDTools.Print("#: playername");
                 foreach (Player p in players) {
-                    HUDTools.Print($"{p.id}: {p.name} - Class: {p.currentClass} - Level: {p.level}", 10);
+                    HUDTools.Print($"{p.Id}: {p.Name} - Class: {p.currentClass} - Level: {p.Level}", 10);
                 }
-                HUDTools.Print("<><><><><><><><><><><><><><><><>",5);
-                HUDTools.Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.",1);
+                HUDTools.Print("<><><><><><><><><><><><><><><><>", 5);
+                HUDTools.Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.", 1);
                 string[] data = Console.ReadLine().Split(':');
                 try {
                     if (data[0] == "id") {
                         if (int.TryParse(data[1], out int id)) {
                             foreach (Player player in players) {
-                                if (player.id == id) {
+                                if (player.Id == id) {
                                     return player;
                                 }
                             }
@@ -160,10 +159,10 @@ namespace Saga
                     } else if (data[0] == "delete") {
                         if (int.TryParse(data[1], out int id)) {
                             foreach (Player player in players) {
-                                if (player.id == id) {
-                                    File.Delete($"saves/{player.id}.player");
+                                if (player.Id == id) {
+                                    File.Delete($"saves/{player.Id}.player");
                                     players.Remove(player);
-                                    Console.WriteLine($"Save game {player.name} - level {player.level}, was deleted");
+                                    Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
                                     Console.ReadKey(true);
                                     break;
                                 } else {
@@ -173,10 +172,10 @@ namespace Saga
                             }
                         } else {
                             foreach (Player player in players) {
-                                if (data[1] == player.name) {
-                                    File.Delete($"saves/{player.id}.player");
+                                if (data[1] == player.Name) {
+                                    File.Delete($"saves/{player.Id}.player");
                                     players.Remove(player);
-                                    Console.WriteLine($"Save game {player.name} - level {player.level}, was deleted");
+                                    Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
                                     Console.ReadKey(true);
                                     break;
                                 } else {
@@ -195,14 +194,14 @@ namespace Saga
                     }
                     else {
                         foreach (Player player in players) {
-                            if (player.name == data[0]) {
+                            if (player.Name == data[0]) {
                                 return player;
                             }
                         }
                         Console.WriteLine("There is no player with that name!");
                         Console.ReadKey(true);
                     }
-                } catch(IndexOutOfRangeException) {
+                } catch (IndexOutOfRangeException) {
                     Console.WriteLine("Your id needs to be a number! Press to continue!");
                     Console.ReadKey(true);
                 }
@@ -211,27 +210,36 @@ namespace Saga
 
         //Metode til at genere ny karakter efter at have inputtet 'new game' i Load() metoden.
         static Player NewCharacter(int i) {
-            Console.Clear();
-            Player p = new Player();
-            PickName(p);
-            PickClass(p);
-            p.id = i;
+            Player p = CreateCharacter(PickName(), PickClass());
+            p.Id = i;
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
             HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
             HUDTools.Print("anything about your past.");
-            if (String.IsNullOrWhiteSpace(p.name) == true) {
+            if (string.IsNullOrWhiteSpace(p.Name) == true) {
                 HUDTools.Print("You can't even remember your own name...");
-                p.name = "Adventurer";
+                p.Name = "Adventurer";
             } else {
-                HUDTools.Print($"You know your name is {p.name}.");
+                HUDTools.Print($"You know your name is {p.Name}.");
             }
             Console.ReadKey(true);
             return p;
         }
 
+        public static Player CreateCharacter(string name = "Adventurer", int classes = 1) { 
+            switch (classes) {
+                default:
+                case 1:
+                    return new Warrior(name);
+                case 2:
+                    return new Archer(name);
+                case 3:
+                    return new Mage(name);
+            }
+        }
+   
         //Metode til at vælge navn.
-        public static void PickName(Player p) {
+        public static string PickName() {
             string input;
             string input1;
             do {
@@ -250,58 +258,54 @@ namespace Saga
                     }
                 } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length >= 30);
                 Console.Clear();
-                HUDTools.Print($"This is your name?\n{input}.\n(Y/N)");
+                HUDTools.Print($"This is your name?\n{input}.\n(Y/N)",10);
                 input1 = Console.ReadLine().ToLower();
             } while (input1 != "y");
-            p.name = input;
+            return input;
         }
 
         //Metode til at vælge Class.
-        public static void PickClass(Player p) {
-            HUDTools.Print("Pick a class: Mage  Archer  Warrior");
-            bool flag = false;
-            while (flag == false) {
-                flag = true;
-                string input1 = Console.ReadLine().ToLower();
-                if (input1 == "mage") {
-                    p.currentClass = PlayerClass.Mage;
+        public static int PickClass() {
+            HUDTools.Print("Pick a class, enter a # 1-3:\n1. Warrior\n2. Archer\n3. Mage",20);
+            while (true) {
+                string input1 = Console.ReadLine();
+                if (input1 == "1") {
+                    HUDTools.Print($"You want to become a Warrior?\n(Y/N)");
+                    string input2 = Console.ReadLine().ToLower();
+                    if (input2 == "y") {
+                        return 1;
+                    }
+                    else {
+                        HUDTools.Print("Enter a # 1-3:",5);
+                    }
                 }
-                else if (input1 == "archer") {
-                    p.currentClass = PlayerClass.Archer;
+                else if (input1 == "2") {
+                    HUDTools.Print($"You want to become a Archer?\n(Y/N)");
+                    string input2 = Console.ReadLine().ToLower();
+                    if (input2 == "y") {
+                        return 2;
+                    }
+                    else {
+                        HUDTools.Print("Enter a # 1-4:",5);
+                    }
                 }
-                else if (input1 == "warrior") {
-                    p.currentClass = PlayerClass.Warrior;
+                else if (input1 == "3") {
+                    HUDTools.Print($"You want to become a Mage?\n(Y/N)");
+                    string input2 = Console.ReadLine().ToLower();
+                    if (input2 == "y") {
+                        return 3;
+                    }
+                    else {
+                        HUDTools.Print("Enter a # 1-4:", 5);
+                    }
                 }
                 else {
                     Console.WriteLine("Please choose a listed class!");
-                    flag = false;
                 }
             }
         }
 
-        //Metode til at sætte start udstyr
-        public static void SetStartingGear(Player p) {
-            switch (p.currentClass) {
-                case PlayerClass.Warrior:
-                    Program.currentPlayer.equippedWeapon = "Rusty Sword";
-                    Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Linen Rags";
-                    Program.currentPlayer.equippedArmorValue = 1;
-                    break;
-                case PlayerClass.Archer:
-                    Program.currentPlayer.equippedWeapon = "Flimsy Bow";
-                    Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Linen Rags";
-                    Program.currentPlayer.equippedArmorValue = 1;
-                    break;
-                case PlayerClass.Mage:
-                    Program.currentPlayer.equippedWeapon = "Cracked Wand";
-                    Program.currentPlayer.equippedWeaponValue = 1;
-                    Program.currentPlayer.equippedArmor = "Linen Rags";
-                    Program.currentPlayer.equippedArmorValue = 1;
-                    break;
-            }
-        }
+
         
         //Metode til at 'Save and Quit' spillet.
         public static void Quit() {

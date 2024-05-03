@@ -71,7 +71,7 @@
     <StartupObject>Saga.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\SAGA-removedbg.ico</ApplicationIcon>
+    <ApplicationIcon>assets\Resources\SAGA-removedbg.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -121,17 +121,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioManager.cs" />
-    <Compile Include="Enemy.cs" />
-    <Compile Include="HUDTools.cs" />
+    <Compile Include="assets\AudioManager.cs" />
+    <Compile Include="Character\Archer.cs" />
+    <Compile Include="Character\Mage.cs" />
+    <Compile Include="Character\Player.cs" />
+    <Compile Include="Character\PrimaryAttributes.cs" />
+    <Compile Include="Character\SecondaryAttributes.cs" />
+    <Compile Include="Character\Warrior.cs" />
+    <Compile Include="Character\WeaponAttributes.cs" />
+    <Compile Include="Dungeon\Enemy.cs" />
+    <Compile Include="assets\HUDTools.cs" />
+    <Compile Include="Items\Armor.cs" />
+    <Compile Include="Items\ArmorLootTable.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\Loot.cs" />
+    <Compile Include="Items\Potion.cs" />
+    <Compile Include="Items\Weapon.cs" />
+    <Compile Include="Items\WeaponLootTable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shop.cs" />
-    <Compile Include="Encounters.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Items\Shop.cs" />
+    <Compile Include="Dungeon\Encounters.cs" />
+    <Compile Include="Character\PlayerOld.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -189,9 +203,9 @@
     <None Include="assets\sounds\treasure.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SAGA-removedbg.png" />
-    <None Include="Resources\SAGA-removedbg.ico" />
-    <None Include="Resources\SAGA.jpg" />
+    <None Include="assets\Resources\SAGA-removedbg.png" />
+    <None Include="assets\Resources\SAGA-removedbg.ico" />
+    <None Include="assets\Resources\SAGA.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\sounds\runetrap.wav" />
@@ -202,5 +216,6 @@
   <ItemGroup>
     <None Include="assets\sounds\footsteps.wav" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

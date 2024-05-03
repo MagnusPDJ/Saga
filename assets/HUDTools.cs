@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using Saga.Dungeon;
+using Saga.Items;
+using Saga.Character;
+using System.Text;
+using System.Collections.Generic;
 
-namespace Saga
+namespace Saga.assets
 {
-    internal class HUDTools
+    public class HUDTools
     {
         //Get metode til at få teksten fra memory til filen.
         public static TextWriter Out { get; }
@@ -107,7 +107,7 @@ namespace Saga
             Console.Write($"{text}\n");
 
             //Skriver og tilføjer den nye tekst.
-            if (Program.currentPlayer.awareness > Monster.awareness) {
+            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > Monster.awareness) {
                 switch (action) {
                     case "attack":
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou attacked and dealt {attack} damage.");
@@ -117,15 +117,15 @@ namespace Saga
                         break;
                     case "heal":
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
-                        if (Program.currentPlayer.potion == 0) {
+                        if (((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity == 0) {
                             Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                            if (Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth == Program.CurrentPlayer.Health) {
                                 Console.WriteLine("You healed to max health by drinking a potion.");
                             }
                             else {
-                                Console.WriteLine($"You gained {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health by drinking a potion.");
+                                Console.WriteLine($"You gained {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency} health by drinking a potion.");
                             }
                         }
                         break;
@@ -146,15 +146,15 @@ namespace Saga
                         Console.WriteLine($"You defended and lowered the next two attacks.");
                         break;
                     case "heal":
-                        if (Program.currentPlayer.potion == 0) {
+                        if (((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity == 0) {
                             Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            if (Program.currentPlayer.health == Program.currentPlayer.maxHealth) {
+                            if (Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth == Program.CurrentPlayer.Health) {
                                 Console.WriteLine("You healed to max health by drinking a potion.");
                             }
                             else {
-                                Console.WriteLine($"You gained {Program.currentPlayer.potionValue + ((Program.currentPlayer.currentClass == Player.PlayerClass.Mage) ? 3 + Program.currentPlayer.level : 0)} health by drinking a potion.");
+                                Console.WriteLine($"You gained {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency} health by drinking a potion.");
                             }
                         }
                         break;
@@ -213,8 +213,8 @@ namespace Saga
             Console.Clear();
             Print("         Gheed's Shop        ",10);
             Print("=============================",5);
-            Print($"| (W)eapon Upgrade        $ {Shop.ShopPrice("weaponupgrade")}",5);
-            Print($"| (A)rmor Upgrade:        $ {Shop.ShopPrice("armorupgrade")}", 5);
+            //Print($"| (W)eapon Upgrade        $ {Shop.ShopPrice("weaponupgrade")}",5);
+            //Print($"| (A)rmor Upgrade:        $ {Shop.ShopPrice("armorupgrade")}", 5);
             Print($"| (P)otions:              $ {Shop.ShopPrice("potion")}", 5);
             Print($"| Up(g)rade potion        $ {Shop.ShopPrice("potionupgrade")}", 5);
             Print("|============================", 1);
@@ -222,15 +222,15 @@ namespace Saga
             Print($"|  Sell (5)xPotions     $ {Shop.ShopPrice("sellpotion5")}", 5);
             Print("=============================", 1);
             Print("  (E)xit Shop                \n\n", 1);
-            Print($"  {Program.currentPlayer.currentClass} {Program.currentPlayer.name}'s Stats", 5);
+            Print($"  {Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}'s Stats", 5);
             Print($"=============================", 1);
-            Print($"| Level: {Program.currentPlayer.level}", 1);
-            Print($"| EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 20)}]", 10);
-            Print($"| Health:                 {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}", 5);
-            Print($"| Gold:                  ${Program.currentPlayer.gold}", 5);
-            Print($"| Weapon Upgrades:        {Program.currentPlayer.weaponValue}", 5);
-            Print($"| Armor Upgrades:         {Program.currentPlayer.armorValue}", 5);
-            Print($"| Potions:                {Program.currentPlayer.potion}", 5);
+            Print($"| Level: {Program.CurrentPlayer.Level}", 1);
+            Print($"| EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20)}]", 10);
+            Print($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}", 5);
+            Print($"| Gold:                  ${Program.CurrentPlayer.Gold}", 5);
+            //Print($"| Weapon Upgrades:        {Program.CurrentPlayer.weaponValue}", 5);
+            //Print($"| Armor Upgrades:         {Program.CurrentPlayer.armorValue}", 5);
+            Print($"| Potions:                {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}", 5);
             Print("=============================", 1);
             Print(" (U)se Potion (C)haracter screen\n", 5);
             Print("Choose what to buy or sell", 1);
@@ -239,8 +239,8 @@ namespace Saga
             Console.Clear();
             Console.WriteLine("         Gheed's Shop        ");
             Console.WriteLine("=============================");
-            Console.WriteLine($"| (W)eapon Upgrade        $ {Shop.ShopPrice("weaponupgrade")}");
-            Console.WriteLine($"| (A)rmor Upgrade:        $ {Shop.ShopPrice("armorupgrade")}");
+            //Console.WriteLine($"| (W)eapon Upgrade        $ {Shop.ShopPrice("weaponupgrade")}");
+            //Console.WriteLine($"| (A)rmor Upgrade:        $ {Shop.ShopPrice("armorupgrade")}");
             Console.WriteLine($"| (P)otions:              $ {Shop.ShopPrice("potion")}");
             Console.WriteLine($"| Up(g)rade potion        $ {Shop.ShopPrice("potionupgrade")}");
             Console.WriteLine("|============================");
@@ -248,45 +248,84 @@ namespace Saga
             Console.WriteLine($"|  Sell (5)xPotions     $ {Shop.ShopPrice("sellpotion5")}");
             Console.WriteLine("=============================");
             Console.WriteLine("  (E)xit Shop                \n\n");
-            Console.WriteLine($"  {Program.currentPlayer.currentClass} {Program.currentPlayer.name}'s Stats");
+            Console.WriteLine($"  {Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}'s Stats");
             Console.WriteLine($"=============================");
-            Console.WriteLine($"| Level: {Program.currentPlayer.level}");
+            Console.WriteLine($"| Level: {Program.CurrentPlayer.Level}");
             Console.Write("| EXP  ");
             Console.Write("[");
-            ProgressBar("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 20);
+            ProgressBar("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20);
             Console.WriteLine("]");
-            Console.WriteLine($"| Health:                 {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}");
-            Console.WriteLine($"| Gold:                  ${Program.currentPlayer.gold}");
-            Console.WriteLine($"| Weapon Upgrades:        {Program.currentPlayer.weaponValue}");
-            Console.WriteLine($"| Armor Upgrades:         {Program.currentPlayer.armorValue}");
-            Console.WriteLine($"| Potions:                {Program.currentPlayer.potion}");
+            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}");
+            Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
+            //Console.WriteLine($"| Weapon Upgrades:        {Program.currentPlayer.weaponValue}");
+            //Console.WriteLine($"| Armor Upgrades:         {Program.currentPlayer.armorValue}");
+            Console.WriteLine($"| Potions:                {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
             Console.WriteLine("=============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n");
             Console.WriteLine("Choose what to buy or sell");
         }
+        public static void WriteStatsToConsole(string name, int level, PrimaryAttributes totalPrimaryAttributes, SecondaryAttributes baseSecondaryAttributes, (int, int) dpt) {
+            StringBuilder stats = new StringBuilder("~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+            stats.AppendFormat($" Name: {name}\t\t\tClass: {Program.CurrentPlayer.currentClass}\n");
+            stats.AppendFormat($" Level: {level}\n");
+            stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
+            stats.AppendFormat($"\n----------------- Primary Attributes -----------------------\n");
+            stats.AppendFormat($" Strength: {totalPrimaryAttributes.Strength}\n");
+            stats.AppendFormat($" Dexterity: {totalPrimaryAttributes.Dexterity}\n");
+            stats.AppendFormat($" Constitution: {totalPrimaryAttributes.Constitution}\n");
+            stats.AppendFormat($" Intellect: {totalPrimaryAttributes.Intellect}\n");
+            stats.AppendFormat($" Willpower: {totalPrimaryAttributes.WillPower}\n");
+            stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
+            stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {baseSecondaryAttributes.MaxHealth}\t\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
+            stats.AppendFormat($" Mana: {baseSecondaryAttributes.Mana} / 0\t\t\tAwareness: {baseSecondaryAttributes.Awareness}\n");
+            stats.AppendFormat($" Armor Rating: {baseSecondaryAttributes.ArmorRating}\t\tElemental Resistance: {baseSecondaryAttributes.ElementalResistence}\n");
+
+            Print(stats.ToString(),0);
+        }
         public static void CharacterScreen() {
             //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
             Console.Clear();
-            Console.WriteLine("~~~~~~~~~~~~~~Character screen~~~~~~~~~~~~~~");
-            Print($"Name: {Program.currentPlayer.name}\t\tClass: {Program.currentPlayer.currentClass}", 5);
-            Print($"Level: {Program.currentPlayer.level}", 5);
-            Print($"EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue()), 25)}] {Program.currentPlayer.xp}/{Program.currentPlayer.GetLevelUpValue()}", 10);
-            Print("-----------------Stats----------------------", 5);
-            Console.WriteLine($"Max Health: {Program.currentPlayer.maxHealth}\t\tCurrent Health: {Program.currentPlayer.health}");
-            Console.WriteLine($"Weapon Damage: {1 + (Program.currentPlayer.TotalWeaponValue() + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)) / 2}-{1 + Program.currentPlayer.TotalWeaponValue() + 3 + ((Program.currentPlayer.currentClass == Player.PlayerClass.Warrior) ? 1 + Program.currentPlayer.level : 0)}\tTotal Armor Rating: {Program.currentPlayer.TotalArmorValue()}");
-            Console.WriteLine("\n*****************Equipment********************\n");
-            Console.WriteLine($"Gold: ${Program.currentPlayer.gold}");
-            Console.WriteLine($"Healing Potions: {Program.currentPlayer.potion}\tPotion Strength: +{Program.currentPlayer.potionValue}");
-            Console.WriteLine($"Weapon upgrades: {Program.currentPlayer.weaponValue}\tWeapon: {Program.currentPlayer.equippedWeapon} (+{Program.currentPlayer.equippedWeaponValue} dmg)");
-            Console.WriteLine($"Armor upgrades:  {Program.currentPlayer.armorValue}\tArmor: {Program.currentPlayer.equippedArmor} (+{Program.currentPlayer.equippedArmorValue} armor)");
-            Print("Press to go back...", 1);
+            Program.CurrentPlayer.DisplayStats();
+            Console.WriteLine("******************** Equipment *****************************");
+            Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($" Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}\t\tPotion Strength: +{((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency}");
+            foreach (KeyValuePair<Slot, Item> entry in Program.CurrentPlayer.Equipment) {
+                if (entry.Key == Slot.SLOT_WEAPON) {
+                    Console.WriteLine($" {entry.Value.ItemName}: +{((Weapon)entry.Value).WeaponAttributes.MinDamage}-{((Weapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                }
+                else if (entry.Key == Slot.SLOT_POTION) {
+                }
+                else {
+                    Console.Write($" {entry.Value.ItemName}:");
+                    if (((Armor)entry.Value).Attributes.Strength > 0) {
+                        Console.Write($" +{((Armor)entry.Value).Attributes.Strength} Strength");
+                    }
+                    if (((Armor)entry.Value).Attributes.Dexterity > 0) {
+                        Console.Write($" +{((Armor)entry.Value).Attributes.Dexterity} Dexterity");
+                    }
+                    if (((Armor)entry.Value).Attributes.Intellect > 0) {
+                        Console.Write($" +{((Armor)entry.Value).Attributes.Intellect} Intellect");
+                    }
+                    if (((Armor)entry.Value).Attributes.Constitution > 0) {
+                        Console.Write($" +{((Armor)entry.Value).Attributes.Constitution} Constitution");
+                    }
+                    if (((Armor)entry.Value).Attributes.WillPower > 0) {
+                        Console.WriteLine($" +{((Armor)entry.Value).Attributes.WillPower} Willpower");
+                    }
+                    if (entry.Value.ItemName == "Linen Rags") {
+                        Console.WriteLine("Offers no protection");
+                    }
+                }
+            }
+            Print("\n\nPress to go back...", 1);
         }
         public static void TopCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
             Print($"Turn: {TurnTimer.turnTimer}",5);
             Print($"Fighting: {Monster.name}!", 10);
             Print($"Strength: {Monster.power} / HP: {Monster.health}", 10);
-            if (Program.currentPlayer.awareness > Monster.awareness) {
+            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > Monster.awareness) {
                 Print("---------------------------",5);
                 Print("You go first!",10);
             }
@@ -300,19 +339,19 @@ namespace Saga
             Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
             Console.WriteLine($"Fighting: {Monster.name}!");
             Console.WriteLine($"Strength: {Monster.power} / HP: {Monster.health}");
-            if (Program.currentPlayer.awareness > Monster.awareness) {
+            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > Monster.awareness) {
                 Console.WriteLine("---------------------------");
                 Console.WriteLine("You go first!");
             } else {
                 Console.WriteLine("The enemy go first!");
                 Console.WriteLine("---------------------------");
             }           
-            Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
-            Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
-            Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
+            Console.WriteLine($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
+            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");
-            ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
+            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine("==========Actions==========");
             Console.WriteLine("| (A)ttack     (D)efend   |");
@@ -325,18 +364,18 @@ namespace Saga
         public static void TopCampHUD() {
             Console.Clear();
             Print("[][][][][][]  Camp   [][][][][][]", 5);
-            Print($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:", 10);
-            Print($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}", 10);
-            Print($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}", 5);
-            Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20)}]", 10);
+            Print($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:", 10);
+            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}", 10);
+            Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 5);
+            Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]", 10);
         }
         public static void SlowCampHUD() {
             Console.Clear();
             Print("[][][][][][]  Camp   [][][][][][]",5);
-            Print($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:",10);
-            Print($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}",10);
-            Print($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}", 10);
-            Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20)}]",10);
+            Print($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:",10);
+            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}",10);
+            Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 10);
+            Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]",10);
             Print("==============Actions=================",5);
             Print("0 (E)xplore          (S)leep (Save)  0", 10);
             Print("0 (G)heed's shop     (H)eal          0", 10);
@@ -348,12 +387,12 @@ namespace Saga
         public static void InstantCampHUD() {
             Console.Clear();
             Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
-            Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
-            Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
-            Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
+            Console.WriteLine($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
+            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");
-            ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
+            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine("==============Actions=================");
             Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
@@ -367,12 +406,12 @@ namespace Saga
             Console.Clear();
             Console.WriteLine("You gain a moment of respite and a choice...");
             Console.WriteLine("Do you venture deeper or turn back to your camp?");
-            Console.WriteLine($"{Program.currentPlayer.currentClass} {Program.currentPlayer.name}:");
-            Console.WriteLine($"Health: {Program.currentPlayer.health}/{Program.currentPlayer.maxHealth}\t|| Healing Potions: {Program.currentPlayer.potion}");
-            Console.WriteLine($"Level: {Program.currentPlayer.level}\t|| Gold: ${Program.currentPlayer.gold}");
+            Console.WriteLine($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
+            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");
-            ProgressBar("+", " ", (decimal)Program.currentPlayer.xp / (decimal)Program.currentPlayer.GetLevelUpValue(), 20);
+            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine("==============Actions==============");
             Console.WriteLine("V (E)xplore            (R)eturn   V");
