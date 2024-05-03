@@ -246,20 +246,20 @@ namespace Saga.Dungeon
 
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(1, 150+1)) {
-                case int n when 40 < n:
+            switch (Program.rand.Next(0, 150+1)) {
+                default:
                     RandomBasicCombatEncounter();
                     break;
-                case int n when n <= 10:
+                case int n when n <= 10 && Program.CurrentPlayer.Level > 1:
                     WizardEncounter();
                     break;
-                case int n when 10 < n && n <=20:
+                case int n when 10 < n && n <=20 && Program.CurrentPlayer.Level > 1:
                     MimicEncounter();
                     break;
-                case int n when 20 < n && n <=30:
+                case int n when 20 < n && n <=30 && Program.CurrentPlayer.Level > 1:
                     TreasureEncounter();
                     break;
-                case int n when 30< n && n <= 40:
+                case int n when 30 < n && n <= 40:
                     PuzzleOneEncounter();
                     break;
             }
@@ -275,7 +275,7 @@ namespace Saga.Dungeon
                 string input = HUDTools.PlayerPrompt().ToLower();
                 if (input == "e" || input == "explore") {
                     //Explore
-                    Console.WriteLine("You venture deeper...");
+                    HUDTools.Print("You venture deeper...",5);
                     Console.ReadKey(true);
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();

@@ -79,7 +79,7 @@ namespace Saga.Items
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
         public static Weapon LongSword = new Weapon() {
-            ItemName = "Long Sword",
+            ItemName = "Longsword",
             ItemLevel = 1,
             ItemSlot = Slot.SLOT_WEAPON,
             WeaponType = WeaponType.WEAPON_SWORD,

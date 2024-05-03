@@ -22,7 +22,7 @@ namespace Saga.assets
                 return Console.ReadLine().ToLower();
             }
             else {
-                string x = Console.ReadKey().KeyChar.ToString();
+                string x = Console.ReadKey().KeyChar.ToString().ToLower();
                 Console.WriteLine("");
                 return x;
             }
@@ -271,13 +271,14 @@ namespace Saga.assets
             stats.AppendFormat($" Level: {level}\n");
             stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
             stats.AppendFormat($"\n----------------- Primary Attributes -----------------------\n");
-            stats.AppendFormat($" Strength: {totalPrimaryAttributes.Strength}\n");
-            stats.AppendFormat($" Dexterity: {totalPrimaryAttributes.Dexterity}\n");
-            stats.AppendFormat($" Constitution: {totalPrimaryAttributes.Constitution}\n");
-            stats.AppendFormat($" Intellect: {totalPrimaryAttributes.Intellect}\n");
-            stats.AppendFormat($" Willpower: {totalPrimaryAttributes.WillPower}\n");
+            stats.AppendFormat($" (S)trength: {totalPrimaryAttributes.Strength}\n");
+            stats.AppendFormat($" (D)exterity: {totalPrimaryAttributes.Dexterity}\n");
+            stats.AppendFormat($" (C)onstitution: {totalPrimaryAttributes.Constitution}\n");
+            stats.AppendFormat($" (I)ntellect: {totalPrimaryAttributes.Intellect}\n");
+            stats.AppendFormat($" (W)illpower: {totalPrimaryAttributes.WillPower}\n");
+            stats.AppendFormat($"Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n");
             stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
-            stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {baseSecondaryAttributes.MaxHealth}\t\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
+            stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {baseSecondaryAttributes.MaxHealth}\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
             stats.AppendFormat($" Mana: {Program.CurrentPlayer.Mana} / {baseSecondaryAttributes.MaxMana}\t\t\tAwareness: {baseSecondaryAttributes.Awareness}\n");
             stats.AppendFormat($" Armor Rating: {baseSecondaryAttributes.ArmorRating}\t\tElemental Resistance: {baseSecondaryAttributes.ElementalResistence}\n");
 
@@ -285,40 +286,79 @@ namespace Saga.assets
         }
         public static void CharacterScreen() {
             //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
-            Console.Clear();
-            Program.CurrentPlayer.DisplayStats();
-            Console.WriteLine("******************** Equipment *****************************");
-            Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($" Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}\t\tPotion Strength: +{((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency}");
-            foreach (KeyValuePair<Slot, Item> entry in Program.CurrentPlayer.Equipment) {
-                if (entry.Key == Slot.SLOT_WEAPON) {
-                    Console.WriteLine($" {entry.Value.ItemName}: +{((Weapon)entry.Value).WeaponAttributes.MinDamage}-{((Weapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+            for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0 ; i--) {
+                Console.Clear();
+                Program.CurrentPlayer.DisplayStats();
+                Console.WriteLine("******************** Equipment *****************************");
+                Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
+                Console.WriteLine($" Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}\t\tPotion Strength: +{((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency}");
+                foreach (KeyValuePair<Slot, Item> entry in Program.CurrentPlayer.Equipment) {
+                    if (entry.Key == Slot.SLOT_WEAPON) {
+                        Console.WriteLine($" {entry.Value.ItemName}: +{((Weapon)entry.Value).WeaponAttributes.MinDamage}-{((Weapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                    }
+                    else if (entry.Key == Slot.SLOT_POTION) {
+                    }
+                    else {
+                        Console.Write($" {entry.Value.ItemName}:");
+                        if (((Armor)entry.Value).Attributes.Strength > 0) {
+                            Console.Write($" +{((Armor)entry.Value).Attributes.Strength} Strength");
+                        }
+                        if (((Armor)entry.Value).Attributes.Dexterity > 0) {
+                            Console.Write($" +{((Armor)entry.Value).Attributes.Dexterity} Dexterity");
+                        }
+                        if (((Armor)entry.Value).Attributes.Intellect > 0) {
+                            Console.Write($" +{((Armor)entry.Value).Attributes.Intellect} Intellect");
+                        }
+                        if (((Armor)entry.Value).Attributes.Constitution > 0) {
+                            Console.Write($" +{((Armor)entry.Value).Attributes.Constitution} Constitution");
+                        }
+                        if (((Armor)entry.Value).Attributes.WillPower > 0) {
+                            Console.WriteLine($" +{((Armor)entry.Value).Attributes.WillPower} Willpower");
+                        }
+                        if (entry.Value.ItemName == "Linen Rags") {
+                            Console.WriteLine(" Offers no protection");
+                        }
+                    }
                 }
-                else if (entry.Key == Slot.SLOT_POTION) {
-                }
-                else {
-                    Console.Write($" {entry.Value.ItemName}:");
-                    if (((Armor)entry.Value).Attributes.Strength > 0) {
-                        Console.Write($" +{((Armor)entry.Value).Attributes.Strength} Strength");
+                if (Program.CurrentPlayer.FreeAttributePoints > 0 && i != 0) {
+                    Print("Allocate attribute point? Type the corresponding attribute name to spent 1 point, else type no",1);
+                    while (true) {
+                        string input = PlayerPrompt();
+                        if (input == "s" || input == "strength") {
+                            Program.CurrentPlayer.BasePrimaryAttributes.Strength++;
+                            Program.CurrentPlayer.FreeAttributePoints--;
+                            break;
+                        }
+                        else if (input == "d" || input == "dexterity") {
+                            Program.CurrentPlayer.BasePrimaryAttributes.Dexterity++;
+                            Program.CurrentPlayer.FreeAttributePoints--;
+                            break;
+                        }
+                        else if (input == "i" || input == "intellect") {
+                            Program.CurrentPlayer.BasePrimaryAttributes.Intellect++;
+                            Program.CurrentPlayer.FreeAttributePoints--;
+                            break;
+                        }
+                        else if (input == "c" || input == "constitution") {
+                            Program.CurrentPlayer.BasePrimaryAttributes.Constitution++;
+                            Program.CurrentPlayer.FreeAttributePoints--;
+                            break;
+                        }
+                        else if (input == "w" || input == "willpower") {
+                            Program.CurrentPlayer.BasePrimaryAttributes.WillPower++;
+                            Program.CurrentPlayer.FreeAttributePoints--;
+                            break;
+                        }
+                        else if (input == "n" || input == "no") {
+                            i = 1;
+                            break;
+                        } else {
+                            Print("Invalid input", 1);
+                        }
                     }
-                    if (((Armor)entry.Value).Attributes.Dexterity > 0) {
-                        Console.Write($" +{((Armor)entry.Value).Attributes.Dexterity} Dexterity");
-                    }
-                    if (((Armor)entry.Value).Attributes.Intellect > 0) {
-                        Console.Write($" +{((Armor)entry.Value).Attributes.Intellect} Intellect");
-                    }
-                    if (((Armor)entry.Value).Attributes.Constitution > 0) {
-                        Console.Write($" +{((Armor)entry.Value).Attributes.Constitution} Constitution");
-                    }
-                    if (((Armor)entry.Value).Attributes.WillPower > 0) {
-                        Console.WriteLine($" +{((Armor)entry.Value).Attributes.WillPower} Willpower");
-                    }
-                    if (entry.Value.ItemName == "Linen Rags") {
-                        Console.WriteLine(" Offers no protection");
-                    }
-                }
+                }           
             }
-            Print("\n\nPress to go back...", 1);
+            Print("\nPress to go back...", 1);        
         }
         public static void TopCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();

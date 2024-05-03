@@ -20,9 +20,10 @@ namespace Saga.Character
             while (CanLevelUp()) {
                 Program.CurrentPlayer.Exp -= GetLevelUpValue();
                 Program.CurrentPlayer.Level++;
+                Program.CurrentPlayer.FreeAttributePoints++;
                 levels++;
             }
-            PrimaryAttributes levelUpValues = new PrimaryAttributes() { Constitution = 1*levels, Strength = 1*levels, Dexterity = 1*levels, Intellect = 1*levels, WillPower = 1*levels};
+            PrimaryAttributes levelUpValues = new PrimaryAttributes() { Constitution = 1*levels, Strength = 1*levels, Dexterity = 0*levels, Intellect = 0*levels, WillPower = 0*levels};
             
             BasePrimaryAttributes += levelUpValues;
 
@@ -30,7 +31,7 @@ namespace Saga.Character
             Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
 
             Console.ForegroundColor = ConsoleColor.DarkBlue;
-            HUDTools.Print($"Congratulations! You are now level {Level}!", 20);
+            HUDTools.Print($"Congratulations! You are now level {Level}! You've gained 1 attribute point.", 20);
             Console.ResetColor();            
             HUDTools.PlayerPrompt();
         }
@@ -42,9 +43,9 @@ namespace Saga.Character
                 return (1, 1);
             }
 
-            double multiplier = 1 + TotalPrimaryAttributes.Strength / 100.0 + Level;
-
-            return (Convert.ToInt32(Math.Floor(weaponDPT.Item1 * multiplier)),Convert.ToInt32(Math.Floor(weaponDPT.Item2*multiplier)));
+            int dmgfromattribute = (1 + TotalPrimaryAttributes.Strength) / 3;
+            int dmgfromwarrior = Level;
+            return (weaponDPT.Item1 + dmgfromattribute+dmgfromwarrior, weaponDPT.Item2 + dmgfromattribute+dmgfromwarrior);
         }
 
         public override string Equip(Weapon weapon) {

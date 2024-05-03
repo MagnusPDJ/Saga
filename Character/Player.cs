@@ -18,6 +18,7 @@ namespace Saga.Character
         public int Gold { get; set; }
         public int Health { get; set; }
         public int Mana { get; set; }
+        public int FreeAttributePoints { get; set; }
         public PrimaryAttributes BasePrimaryAttributes { get; set; }
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
@@ -31,6 +32,7 @@ namespace Saga.Character
             Equipment = new Dictionary<Slot, Item>();
             Exp = 0;
             Gold = 0;
+            FreeAttributePoints = 0;
             BasePrimaryAttributes = new PrimaryAttributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, WillPower = willpower };
             CalculateTotalStats();
             Health = BaseSecondaryAttributes.MaxHealth;

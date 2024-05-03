@@ -259,7 +259,7 @@ namespace Saga
                 } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length >= 30);
                 Console.Clear();
                 HUDTools.Print($"This is your name?\n{input}.\n(Y/N)",10);
-                input1 = Console.ReadLine().ToLower();
+                input1 = HUDTools.PlayerPrompt();
             } while (input1 != "y");
             return input;
         }
@@ -268,10 +268,10 @@ namespace Saga
         public static int PickClass() {
             HUDTools.Print("Pick a class, enter a # 1-3:\n1. Warrior\n2. Archer\n3. Mage",20);
             while (true) {
-                string input1 = Console.ReadLine();
+                string input1 = HUDTools.PlayerPrompt();
                 if (input1 == "1") {
                     HUDTools.Print($"You want to become a Warrior?\n(Y/N)");
-                    string input2 = Console.ReadLine().ToLower();
+                    string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
                         return 1;
                     }
@@ -281,7 +281,7 @@ namespace Saga
                 }
                 else if (input1 == "2") {
                     HUDTools.Print($"You want to become a Archer?\n(Y/N)");
-                    string input2 = Console.ReadLine().ToLower();
+                    string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
                         return 2;
                     }
@@ -291,7 +291,7 @@ namespace Saga
                 }
                 else if (input1 == "3") {
                     HUDTools.Print($"You want to become a Mage?\n(Y/N)");
-                    string input2 = Console.ReadLine().ToLower();
+                    string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
                         return 3;
                     }
