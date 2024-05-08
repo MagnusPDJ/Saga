@@ -87,9 +87,6 @@ namespace Saga.Character
             TotalPrimaryAttributes = CalculateArmorBonus();
             BaseSecondaryAttributes = CalculateSecondaryStats();
             DPT = CalculateDPT();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
-            }
         }
 
         // Calculates armor bonus

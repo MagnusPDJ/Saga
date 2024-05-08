@@ -81,6 +81,9 @@ namespace Saga.Character
             Program.CurrentPlayer.Inventory.SetValue(item, index);
             Program.CurrentPlayer.Equipment.Remove(slot);
             Program.CurrentPlayer.CalculateTotalStats();
+            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
+                Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
+            }
             return "Item unequipped!";
         }
         public override void SetStartingGear() {
