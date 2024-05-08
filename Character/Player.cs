@@ -23,6 +23,7 @@ namespace Saga.Character
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
         public Dictionary<Slot, Item> Equipment { get; set; }
+        public Item[] Inventory { get; set; }
         public (int, int) DPT { get; set; }
 
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
@@ -30,6 +31,7 @@ namespace Saga.Character
             Id = id;
             Level = 1; 
             Equipment = new Dictionary<Slot, Item>();
+            Inventory = new Item[10];
             Exp = 0;
             Gold = 0;
             FreeAttributePoints = 0;
@@ -64,7 +66,8 @@ namespace Saga.Character
         public abstract string Equip(Armor armor);
         //Equips a potion.
         public abstract string Equip(Potion potion);
-
+        //Unequips an item and places it into the inventory.
+        public abstract string UnEquip(Slot slot, Item item);
         //Metode til at sætte start udstyr
         public abstract void SetStartingGear();
 
@@ -84,22 +87,25 @@ namespace Saga.Character
             TotalPrimaryAttributes = CalculateArmorBonus();
             BaseSecondaryAttributes = CalculateSecondaryStats();
             DPT = CalculateDPT();
+            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
+                Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
+            }
         }
 
         // Calculates armor bonus
         public PrimaryAttributes CalculateArmorBonus() {
             PrimaryAttributes armorBonusValues = new PrimaryAttributes() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 };
 
-            bool hasHeadArmor = Equipment.TryGetValue(Slot.SLOT_HEADER, out Item headArmor);
-            bool hasBodyArmor = Equipment.TryGetValue(Slot.SLOT_BODY, out Item bodyArmor);
-            bool hasLegsArmor = Equipment.TryGetValue(Slot.SLOT_LEGS, out Item legsArmor);
-            bool hasFeetArmor = Equipment.TryGetValue(Slot.SLOT_FEET, out Item FeetArmor);
-            bool hasArmsArmor = Equipment.TryGetValue(Slot.SLOT_ARMS, out Item ArmsArmor);
-            bool hasShouldersArmor = Equipment.TryGetValue(Slot.SLOT_SHOULDERS, out Item ShouldersArmor);
-            bool hasBeltArmor = Equipment.TryGetValue(Slot.SLOT_BELT, out Item BeltArmor);
-            bool hasCapeArmor = Equipment.TryGetValue(Slot.SLOT_CAPE, out Item CapeArmor);
-            bool hasGlovesArmor = Equipment.TryGetValue(Slot.SLOT_GLOVES, out Item GlovesArmor);
-            bool hasAmuletArmor = Equipment.TryGetValue(Slot.SLOT_AMULET, out Item AmuletArmor);
+            bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out Item headArmor);
+            bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out Item bodyArmor);
+            bool hasLegsArmor = Equipment.TryGetValue(Slot.Legs, out Item legsArmor);
+            bool hasFeetArmor = Equipment.TryGetValue(Slot.Feet, out Item FeetArmor);
+            bool hasArmsArmor = Equipment.TryGetValue(Slot.Bracers, out Item ArmsArmor);
+            bool hasShouldersArmor = Equipment.TryGetValue(Slot.Shoulders, out Item ShouldersArmor);
+            bool hasBeltArmor = Equipment.TryGetValue(Slot.Belt, out Item BeltArmor);
+            bool hasCapeArmor = Equipment.TryGetValue(Slot.Cape, out Item CapeArmor);
+            bool hasGlovesArmor = Equipment.TryGetValue(Slot.Gloves, out Item GlovesArmor);
+            bool hasAmuletArmor = Equipment.TryGetValue(Slot.Amulet, out Item AmuletArmor);
             bool hasRing1Armor = Equipment.TryGetValue(Slot.SLOT_RING1, out Item Ring1Armor);
             bool hasRing2Armor = Equipment.TryGetValue(Slot.SLOT_RING2, out Item Ring2Armor);
             bool hasCrestArmor = Equipment.TryGetValue(Slot.SLOT_CREST, out Item CrestArmor);
@@ -183,7 +189,7 @@ namespace Saga.Character
 
         // Calculates a weapons damage per turn.
         public (int, int) CalculateWeaponDPT() {
-            bool hasWeapon = Equipment.TryGetValue(Slot.SLOT_WEAPON, out Item equippedWeapon);
+            bool hasWeapon = Equipment.TryGetValue(Slot.Weapon, out Item equippedWeapon);
             if (hasWeapon) {
                 Weapon w = (Weapon)equippedWeapon;
                 return (w.WeaponAttributes.MinDamage, w.WeaponAttributes.MaxDamage);

@@ -50,11 +50,12 @@ namespace Saga.Character
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
             }
-            if (weapon.WeaponType != WeaponType.WEAPON_TOME && weapon.WeaponType != WeaponType.WEAPON_STAFF && weapon.WeaponType != WeaponType.WEAPON_WAND) {
+            if (weapon.WeaponType != WeaponType.Tome && weapon.WeaponType != WeaponType.Staff && weapon.WeaponType != WeaponType.Wand) {
                 Console.WriteLine($"Character can't equip a {weapon.WeaponType}");
             }
 
             Equipment[weapon.ItemSlot] = weapon;
+            Program.CurrentPlayer.CalculateTotalStats();
             return "New weapon equipped!";
         }
 
@@ -62,17 +63,28 @@ namespace Saga.Character
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
             }
-            if (armor.ArmorType != ArmorType.ARMOR_CLOTH && armor.ArmorType != ArmorType.ARMOR_LEATHER) {
+            if (armor.ArmorType != ArmorType.Cloth && armor.ArmorType != ArmorType.Leather) {
                 Console.WriteLine($"Character can't equip a {armor.ArmorType}");
             }
 
             Equipment[armor.ItemSlot] = armor;
+            Program.CurrentPlayer.CalculateTotalStats();
             return "New armor piece equipped!";
         }
         public override string Equip(Potion potion) {
             Equipment[potion.ItemSlot] = potion;
+            Program.CurrentPlayer.CalculateTotalStats();
             return "New potion equipped!";
         }
+
+        public override string UnEquip(Slot slot, Item item) {
+            int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
+            Program.CurrentPlayer.Inventory.SetValue(item, index);
+            Program.CurrentPlayer.Equipment.Remove(slot);
+            Program.CurrentPlayer.CalculateTotalStats();
+            return "Item unequipped!";
+        }
+
         public override void SetStartingGear() {
             Equip(WeaponLootTable.CrackedWand);
             Equip(ArmorLootTable.LinenRags);
@@ -128,7 +140,7 @@ namespace Saga.Character
             }
             else {
                 HUDTools.Print("You use a potion amplified by your magic", 20);
-                Program.CurrentPlayer.Health += ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency+1+Program.CurrentPlayer.Level*2;
+                Program.CurrentPlayer.Health += ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency + 1 + Program.CurrentPlayer.Level * 2;
                 ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity--;
                 if (Program.CurrentPlayer.Health > Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
                     Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
@@ -137,13 +149,13 @@ namespace Saga.Character
                     HUDTools.Print("You heal to max health!", 20);
                 }
                 else {
-                    HUDTools.Print($"You gain {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency} health", 20);
+                    HUDTools.Print($"You gain {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency + 1 + Program.CurrentPlayer.Level * 2} health", 20);
                 }
             }
         }
 
         public static int Attack(Enemy Monster) {
-            HUDTools.Print($"You shoot an arcane missile from your {Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName}", 15);
+            HUDTools.Print($"You shoot an arcane missile from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
             HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
             return attack;

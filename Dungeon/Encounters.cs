@@ -21,7 +21,7 @@ namespace Saga.Dungeon
             HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName}, while charging toward your captor.");
+            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, while charging toward your captor.");
             AudioManager.soundMainMenu.Stop();
             AudioManager.soundTaunt.Play();
             AudioManager.soundKamp.Play();
@@ -41,7 +41,7 @@ namespace Saga.Dungeon
             AudioManager.soundShop.Play();
             AudioManager.soundTypeWriter.Play();
             if (Program.CurrentPlayer.currentClass == "Mage") {
-                HUDTools.Print($"After dusting off your {Program.CurrentPlayer.Equipment[Slot.SLOT_BODY].ItemName} and tucking in your new wand, you find someone else captured.");
+                HUDTools.Print($"After dusting off your {Program.CurrentPlayer.Equipment[Slot.Torso].ItemName} and tucking in your new wand, you find someone else captured.");
             } else if (Program.CurrentPlayer.currentClass == "Archer") {
                 HUDTools.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
             } else if (Program.CurrentPlayer.currentClass == "Warrior") {
@@ -55,7 +55,7 @@ namespace Saga.Dungeon
             HUDTools.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
-            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName}, then you start walking down a dark corridor...");
+            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
             HUDTools.PlayerPrompt();
             AudioManager.soundShop.Stop();
         }
@@ -133,7 +133,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
                     AudioManager.soundBossKamp.Play();
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
-                    HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName}!",15);
+                    HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     HUDTools.PlayerPrompt();
                     Enemy MimicEncounter = new Enemy {
                         name = "Mimic",
@@ -272,7 +272,7 @@ namespace Saga.Dungeon
             HUDTools.TopCampHUD();
             while (true) {
                 HUDTools.InstantCampHUD();
-                string input = HUDTools.PlayerPrompt().ToLower();
+                string input = HUDTools.PlayerPrompt();
                 if (input == "e" || input == "explore") {
                     //Explore
                     HUDTools.Print("You venture deeper...",5);
@@ -309,7 +309,7 @@ namespace Saga.Dungeon
                         HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
                         while (stay) {
                             HUDTools.RespiteHUD();
-                            input = HUDTools.PlayerPrompt().ToLower();
+                            input = HUDTools.PlayerPrompt();
                             if (input == "e" || input == "explore") {
                                 HUDTools.Print("You venture deeper...", 5);
                                 HUDTools.PlayerPrompt();
@@ -321,7 +321,11 @@ namespace Saga.Dungeon
                             } else if (input == "c" || input == "character" || input == "character screen") {
                                 HUDTools.CharacterScreen();
                                 HUDTools.PlayerPrompt();
-                            } else if (input == "r" || input == "return") {
+                            } 
+                            else if (input == "i" || input == "inventory") {
+                                HUDTools.InventoryScreen();
+                            }
+                            else if (input == "r" || input == "return") {
                                 stay = false;
                                 HUDTools.Print("You retrace your steps in the darkness...",20);
                                 HUDTools.PlayerPrompt();
@@ -330,13 +334,13 @@ namespace Saga.Dungeon
                     }
                     break;
                 } 
-                else if (input.ToLower() == "s" || input == "sleep" || input == "quit" || input == "quit game") {
+                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     //Sleep/save Game
                     Program.Save();
                     HUDTools.Print("Game saved!");
                     HUDTools.PlayerPrompt();
                 }
-                else if (input.ToLower() == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
+                else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
                     //Gheed's shop
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
@@ -344,14 +348,17 @@ namespace Saga.Dungeon
                     AudioManager.soundCampFire.Play();
                     AudioManager.soundCampMusic.Play();
                 } 
-                else if (input.ToLower() == "h" || input == "heal") {
+                else if (input == "h" || input == "heal") {
                     //Heal
                     Program.CurrentPlayer.Heal();
                     HUDTools.PlayerPrompt();
                 } 
-                else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
+                else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
                     HUDTools.PlayerPrompt();
+                }
+                else if (input == "i" || input == "inventory") {
+                    HUDTools.InventoryScreen();
                 }
                 else if (input == "q" || input == "quit" ){ 
                     Program.Quit();

@@ -40,13 +40,13 @@ namespace Saga.Items
                 int getTreasure = Program.rand.Next(0, 100 + 1);
                 if (getTreasure <= 10) {
                     if (Program.CurrentPlayer.currentClass == "Mage") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.SLOT_BODY].ItemName) {
+                        switch (Program.CurrentPlayer.Equipment[Slot.Torso].ItemName) {
                             case "Linen Rags":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.SimpleRobe);
+                                Program.CurrentPlayer.Equip(ArmorLootTable.RunedSimpleRobe);
                                 HUDTools.Print("You loot a Simple Robe");
                                 break;
                             case "Simple Robe":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.ElegantRobe);
+                                Program.CurrentPlayer.Equip(ArmorLootTable.EnchantedElegantRobe);
                                 HUDTools.Print("You loot a Elegant Robe");
                                 break;
                             case "Elegant Robe":
@@ -58,13 +58,13 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Archer") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.SLOT_BODY].ItemName) {
+                        switch (Program.CurrentPlayer.Equipment[Slot.Torso].ItemName) {
                             case "Linen Rags":
                                 Program.CurrentPlayer.Equip(ArmorLootTable.HideArmor);
                                 HUDTools.Print("You loot a Hide Armor");
                                 break;
                             case "Hide Armor":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.LeatherCuirass);
+                                Program.CurrentPlayer.Equip(ArmorLootTable.HuntersCuirass);
                                 HUDTools.Print("You loot a Leather Cuirass");
                                 break;
                             case "Leather Cuirass":
@@ -76,13 +76,13 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Warrior") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.SLOT_BODY].ItemName) {
+                        switch (Program.CurrentPlayer.Equipment[Slot.Torso].ItemName) {
                             case "Linen Rags":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.MailShirt);
+                                Program.CurrentPlayer.Equip(ArmorLootTable.SteelMailShirt);
                                 HUDTools.Print("You loot a Mail Shirt");
                                 break;
                             case "Mail Shirt":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.Breastplate);
+                                Program.CurrentPlayer.Equip(ArmorLootTable.SteelBreastplate);
                                 HUDTools.Print("You loot a Breast Plate");
                                 break;
                             case "Breast Plate":
@@ -96,7 +96,7 @@ namespace Saga.Items
                 }
                 else if (10 < getTreasure && getTreasure <= 20) {
                     if (Program.CurrentPlayer.currentClass == "Mage") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName) {
+                        switch (Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName) {
                             case "Cracked Wand":
                                 Program.CurrentPlayer.Equip(WeaponLootTable.EnchantedWand);
                                 HUDTools.Print("You loot an Enchanted Wand");
@@ -114,13 +114,13 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Archer") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName) {
+                        switch (Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName) {
                             case "Flimsy Bow":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.ShortBow);
+                                Program.CurrentPlayer.Equip(WeaponLootTable.QuickShortBow);
                                 HUDTools.Print("You loot a Short Bow");
                                 break;
                             case "Short Bow":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.LongBow);
+                                Program.CurrentPlayer.Equip(WeaponLootTable.SturdyLongBow);
                                 HUDTools.Print("You loot a Long Bow");
                                 break;
                             case "Long Bow":
@@ -132,13 +132,13 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Warrior") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName) {
+                        switch (Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName) {
                             case "Rusty Sword":
                                 Program.CurrentPlayer.Equip(WeaponLootTable.SteelSword);
                                 HUDTools.Print("You loot a Steel Sword");
                                 break;
                             case "Steel Sword":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.LongSword);
+                                Program.CurrentPlayer.Equip(WeaponLootTable.FineLongSword);
                                 HUDTools.Print("You loot a Longsword");
                                 break;
                             case "Longsword":

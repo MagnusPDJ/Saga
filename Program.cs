@@ -14,7 +14,6 @@ namespace Saga
     internal class Program {
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player CurrentPlayer { get; set; }
-        private const int MaxLengthOfName = 30;
 
         //Sætter Game Loopet til true så man kan spille indefinitely.
         public static bool mainLoop = true;
@@ -304,8 +303,6 @@ namespace Saga
                 }
             }
         }
-
-
         
         //Metode til at 'Save and Quit' spillet.
         public static void Quit() {
@@ -380,7 +377,7 @@ namespace Saga
                     }
                 } else if (input == "\u001b") {
                     configFile.Save(ConfigurationSaveMode.Minimal);
-                    HUDTools.Print("SSettings saved! Please restart the game...", 20);
+                    HUDTools.Print("Settings saved! Please restart the game...", 20);
                     HUDTools.PlayerPrompt();
                     break;
                 } else {

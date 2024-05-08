@@ -50,11 +50,12 @@ namespace Saga.Character
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
             }
-            if (weapon.WeaponType != WeaponType.WEAPON_DAGGER && weapon.WeaponType != WeaponType.WEAPON_BOW && weapon.WeaponType != WeaponType.WEAPON_CROSSBOW) {
+            if (weapon.WeaponType != WeaponType.Dagger && weapon.WeaponType != WeaponType.Bow && weapon.WeaponType != WeaponType.Crossbow) {
                 Console.WriteLine($"Character can't equip a {weapon.WeaponType}");
             }
 
             Equipment[weapon.ItemSlot] = weapon;
+            Program.CurrentPlayer.CalculateTotalStats();
             return "New weapon equipped!";
         }
 
@@ -62,16 +63,25 @@ namespace Saga.Character
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
             }
-            if (armor.ArmorType != ArmorType.ARMOR_MAIL && armor.ArmorType != ArmorType.ARMOR_LEATHER) {
+            if (armor.ArmorType != ArmorType.Mail && armor.ArmorType != ArmorType.Leather) {
                 Console.WriteLine($"Character can't equip a {armor.ArmorType}");
             }
 
             Equipment[armor.ItemSlot] = armor;
+            Program.CurrentPlayer.CalculateTotalStats();
             return "New armor piece equipped!";
         }
         public override string Equip(Potion potion) {
             Equipment[potion.ItemSlot] = potion;
+            Program.CurrentPlayer.CalculateTotalStats();
             return "New potion equipped!";
+        }
+        public override string UnEquip(Slot slot, Item item) {
+            int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
+            Program.CurrentPlayer.Inventory.SetValue(item, index);
+            Program.CurrentPlayer.Equipment.Remove(slot);
+            Program.CurrentPlayer.CalculateTotalStats();
+            return "Item unequipped!";
         }
         public override void SetStartingGear() {
             Equip(WeaponLootTable.FlimsyBow);
@@ -143,7 +153,7 @@ namespace Saga.Character
         }
 
         public static int Attack(Enemy Monster) {
-            HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.SLOT_WEAPON].ItemName}", 15);
+            HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
             HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
             return attack;

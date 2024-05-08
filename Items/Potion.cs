@@ -26,5 +26,9 @@ namespace Saga.Items
             PotionPotency = 5,
             PotionQuantity = 5
         };
+        public override int CalculateItemPrice() {
+            ItemPrice = 20+10*Program.CurrentPlayer.Level;
+            return ItemPrice;
+        }
     }
 }
