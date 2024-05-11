@@ -64,11 +64,9 @@ namespace Saga.Character
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);
                         return "New weapon equipped!";
-                    }
-                    else if (input == "n") {
+                    } else if (input == "n") {
                         return "Item not equipped";
-                    }
-                    else {
+                    } else {
                         Console.WriteLine("Invalid input");
                     }
                 }
@@ -76,8 +74,7 @@ namespace Saga.Character
                 Equipment[weapon.ItemSlot] = weapon;
                 int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
                 if (a == -1) {
-                }
-                else {
+                } else {
                     Program.CurrentPlayer.Inventory.SetValue(null, a);
                 }
                 Program.CurrentPlayer.CalculateTotalStats();

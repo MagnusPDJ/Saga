@@ -50,7 +50,7 @@ namespace Saga.Character
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
                 return "Item not equipped";
-            } else if (weapon.WeaponType != WeaponType.Tome && weapon.WeaponType != WeaponType.Staff && weapon.WeaponType != WeaponType.Wand) {
+            } else if (weapon.WeaponType != WeaponType.Dagger && weapon.WeaponType != WeaponType.Bow && weapon.WeaponType != WeaponType.Crossbow) {
                 Console.WriteLine($"Character can't equip a weapon {weapon.WeaponType}");
                 return "Item not equipped";
             }
@@ -86,7 +86,7 @@ namespace Saga.Character
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
                 return "Item not equipped";
-            } else if (armor.ArmorType != ArmorType.Cloth && armor.ArmorType != ArmorType.Leather) {
+            } else if (armor.ArmorType != ArmorType.Mail && armor.ArmorType != ArmorType.Leather) {
                 Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
                 return "Item not equipped";
             }
