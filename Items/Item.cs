@@ -32,6 +32,6 @@ namespace Saga.Items
         public int ItemPrice { get; set; }
         // Displays the type of item.
         public abstract string ItemDescription();
-        public abstract int CalculateItemPrice();
+        public abstract int CalculateItemPrice();      
     }
 }

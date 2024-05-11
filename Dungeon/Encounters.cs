@@ -246,7 +246,7 @@ namespace Saga.Dungeon
 
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(0, 150+1)) {
+            switch (Program.rand.Next(0, 125+1)) {
                 default:
                     RandomBasicCombatEncounter();
                     break;

@@ -45,63 +45,63 @@ namespace Saga.Items
         };
         public static Weapon EnchantedWand = new Weapon() {
             ItemName = "Enchanted Wand",
-            ItemLevel = 1,
+            ItemLevel = 2,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Wand,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
         public static Weapon GnarledStaff = new Weapon() {
             ItemName = "Gnarled Staff",
-            ItemLevel = 1,
+            ItemLevel = 4,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Staff,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 4, MaxDamage = 8, AttackSpeed = 1 },
         };
         public static Weapon ArcanistsStaff = new Weapon() {
             ItemName = "Arcanist's Staff",
-            ItemLevel = 1,
+            ItemLevel = 7,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Staff,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 6, MaxDamage = 16, AttackSpeed = 1 },
         };
         public static Weapon QuickShortBow = new Weapon() {
             ItemName = "Quick Shortbow",
-            ItemLevel = 1,
+            ItemLevel = 2,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
         public static Weapon SturdyLongBow = new Weapon() {
             ItemName = "Sturdy Longbow",
-            ItemLevel = 1,
+            ItemLevel = 4,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 4, MaxDamage = 8, AttackSpeed = 1 },
         };
         public static Weapon MarksmansRecurve = new Weapon() {
             ItemName = "Marksman's Recurve",
-            ItemLevel = 1,
+            ItemLevel = 7,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 6, MaxDamage = 16, AttackSpeed = 1 },
         };
         public static Weapon SteelSword = new Weapon() {
             ItemName = "Steel Sword",
-            ItemLevel = 1,
+            ItemLevel = 2,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
         public static Weapon FineLongSword = new Weapon() {
             ItemName = "Fine Longsword",
-            ItemLevel = 1,
+            ItemLevel = 4,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 4, MaxDamage = 8, AttackSpeed = 1 },
         };
         public static Weapon KnightsGreatsword = new Weapon() {
             ItemName = "Knight's Greatsword",
-            ItemLevel = 1,
+            ItemLevel = 7,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponType.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 6, MaxDamage = 16, AttackSpeed = 1 },

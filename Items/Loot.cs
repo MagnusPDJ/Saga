@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Saga.assets;
 using Saga.Character;
 using Saga.Dungeon;
@@ -37,20 +38,23 @@ namespace Saga.Items
             }
             if (name == "Treasure") {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                int getTreasure = Program.rand.Next(0, 100 + 1);
-                if (getTreasure <= 10) {
+                int getTreasure = Program.rand.Next(1, 100 + 1);
+                if (getTreasure <= 20) {
                     if (Program.CurrentPlayer.currentClass == "Mage") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.Torso].ItemName) {
-                            case "Linen Rags":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.RunedSimpleRobe);
-                                HUDTools.Print("You loot a Simple Robe");
+                        switch (Program.CurrentPlayer.Level) {
+                            case int n when 1<=n && n<4:
+                                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.RunedSimpleRobe, index);
+                                HUDTools.Print("You loot a Runed Simple Robe");
                                 break;
-                            case "Simple Robe":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.EnchantedElegantRobe);
-                                HUDTools.Print("You loot a Elegant Robe");
+                            case int n when 4<=n && n<7:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.EnchantedElegantRobe, index);
+                                HUDTools.Print("You loot an Enchanted Elegant Robe");
                                 break;
-                            case "Elegant Robe":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.ArcanistsRobe);
+                            case int n when 7<=n:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.ArcanistsRobe, index);
                                 HUDTools.Print("You loot an Arcanist's Robe");
                                 break;
                             default:
@@ -58,17 +62,20 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Archer") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.Torso].ItemName) {
-                            case "Linen Rags":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.HideArmor);
+                        switch (Program.CurrentPlayer.Level) {
+                            case int n when 1 <= n && n < 4:
+                                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.HideArmor, index);
                                 HUDTools.Print("You loot a Hide Armor");
                                 break;
-                            case "Hide Armor":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.HuntersCuirass);
-                                HUDTools.Print("You loot a Leather Cuirass");
+                            case int n when 4 <= n && n < 7:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.HuntersCuirass, index);
+                                HUDTools.Print("You loot a Hunter's Cuirass");
                                 break;
-                            case "Leather Cuirass":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.MarksmansBrigadine);
+                            case int n when 7 <= n:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.MarksmansBrigadine, index);
                                 HUDTools.Print("You loot a Marksman's Brigandine");
                                 break;
                             default:
@@ -76,17 +83,20 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Warrior") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.Torso].ItemName) {
-                            case "Linen Rags":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.SteelMailShirt);
-                                HUDTools.Print("You loot a Mail Shirt");
+                        switch (Program.CurrentPlayer.Level) {
+                            case int n when 1 <= n && n < 4:
+                                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.SteelMailShirt, index);
+                                HUDTools.Print("You loot a Steel Mail Shirt");
                                 break;
-                            case "Mail Shirt":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.SteelBreastplate);
-                                HUDTools.Print("You loot a Breast Plate");
+                            case int n when 4 <= n && n < 7:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.SteelBreastplate, index);
+                                HUDTools.Print("You loot a Steel Breast Plate");
                                 break;
-                            case "Breast Plate":
-                                Program.CurrentPlayer.Equip(ArmorLootTable.KnightsPlateArmor);
+                            case int n when 7 <= n:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(ArmorLootTable.KnightsPlateArmor, index);
                                 HUDTools.Print("You loot a Knight's Plate Armor");
                                 break;
                             default:
@@ -94,37 +104,43 @@ namespace Saga.Items
                         }
                     }
                 }
-                else if (10 < getTreasure && getTreasure <= 20) {
+                else if (20 < getTreasure && getTreasure <= 40) {
                     if (Program.CurrentPlayer.currentClass == "Mage") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName) {
-                            case "Cracked Wand":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.EnchantedWand);
+                        switch (Program.CurrentPlayer.Level) {
+                            case int n when 1 <= n && n < 4:
+                                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.EnchantedWand, index);
                                 HUDTools.Print("You loot an Enchanted Wand");
                                 break;
-                            case "Enchanted Wand":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.GnarledStaff);
+                            case int n when 4 <= n && n < 7:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.GnarledStaff, index);
                                 HUDTools.Print("You loot a Gnarled Staff");
                                 break;
-                            case "Gnarled Staff":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.ArcanistsStaff);
-                                HUDTools.Print("You loot an Arcanist's Robe");
+                            case int n when 7 <= n:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.ArcanistsStaff, index);
+                                HUDTools.Print("You loot an Arcanist's Staff");
                                 break;
                             default:
                                 break;
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Archer") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName) {
-                            case "Flimsy Bow":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.QuickShortBow);
-                                HUDTools.Print("You loot a Short Bow");
+                        switch (Program.CurrentPlayer.Level) {
+                            case int n when 1 <= n && n < 4:
+                                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.QuickShortBow, index);
+                                HUDTools.Print("You loot a Quick Short Bow");
                                 break;
-                            case "Short Bow":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.SturdyLongBow);
-                                HUDTools.Print("You loot a Long Bow");
+                            case int n when 4 <= n && n < 7:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.SturdyLongBow, index);
+                                HUDTools.Print("You loot a Sturdy Long Bow");
                                 break;
-                            case "Long Bow":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.MarksmansRecurve);
+                            case int n when 7 <= n:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.MarksmansRecurve, index);
                                 HUDTools.Print("You loot a Marksman's Recurve");
                                 break;
                             default:
@@ -132,17 +148,20 @@ namespace Saga.Items
                         }
                     }
                     else if (Program.CurrentPlayer.currentClass == "Warrior") {
-                        switch (Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName) {
-                            case "Rusty Sword":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.SteelSword);
+                        switch (Program.CurrentPlayer.Level) {
+                            case int n when 1 <= n && n < 4:
+                                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.SteelSword, index);
                                 HUDTools.Print("You loot a Steel Sword");
                                 break;
-                            case "Steel Sword":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.FineLongSword);
+                            case int n when 4 <= n && n < 7:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.FineLongSword, index);
                                 HUDTools.Print("You loot a Longsword");
                                 break;
-                            case "Longsword":
-                                Program.CurrentPlayer.Equip(WeaponLootTable.KnightsGreatsword);
+                            case int n when 7 <= n:
+                                index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                                Program.CurrentPlayer.Inventory.SetValue(WeaponLootTable.KnightsGreatsword, index);
                                 HUDTools.Print("You loot a Knight's Greatsword");
                                 break;
                             default:

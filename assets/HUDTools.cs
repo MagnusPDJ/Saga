@@ -477,24 +477,21 @@ namespace Saga.assets
                 Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname', else (b)ack", 2);
                 string[] input = Console.ReadLine().ToLower().Split('_');
                 if (input[0] == "equip") {
-                    foreach (Item item in Program.CurrentPlayer.Inventory) {
-                        if (item.ItemName.ToLower() == input[1]) {
-                            int a = Array.IndexOf(Program.CurrentPlayer.Inventory, item);
+                    if (Program.CurrentPlayer.Inventory.All(x => x == null)) {
+                        Console.WriteLine("No items in inventory...");
+                        PlayerPrompt();                                          
+                    } else {
+                        var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
+                        if (item != null) {
                             if (item.ItemSlot == Slot.Weapon) {
-                                Program.CurrentPlayer.Equip((Weapon)item);
-                                Program.CurrentPlayer.Inventory.SetValue(null, a);
-                                break;
-                            }
-                            else if (item.ItemSlot != Slot.Weapon) {
-                                Program.CurrentPlayer.Equip((Armor)item);
-                                Program.CurrentPlayer.Inventory.SetValue(null, a);
-                                break;
+                                Print(Program.CurrentPlayer.Equip((Weapon)item), 3);
+                            } else if (item.ItemSlot != Slot.Weapon) {
+                                Print(Program.CurrentPlayer.Equip((Armor)item), 3);
                             }
                         } else {
                             Console.WriteLine("No such item in inventory...");
-                            PlayerPrompt();
-                            break;
                         }
+                        PlayerPrompt();
                     }
                 } else if (input[0] == "unequip") {                  
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.ToLower() == input[1]);

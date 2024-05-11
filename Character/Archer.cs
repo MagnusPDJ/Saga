@@ -49,27 +49,73 @@ namespace Saga.Character
         public override string Equip(Weapon weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
+                return "Item not equipped";
+            } else if (weapon.WeaponType != WeaponType.Tome && weapon.WeaponType != WeaponType.Staff && weapon.WeaponType != WeaponType.Wand) {
+                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponType}");
+                return "Item not equipped";
             }
-            if (weapon.WeaponType != WeaponType.Dagger && weapon.WeaponType != WeaponType.Bow && weapon.WeaponType != WeaponType.Crossbow) {
-                Console.WriteLine($"Character can't equip a {weapon.WeaponType}");
+            if (Equipment.ContainsKey(Slot.Weapon)) {
+                Console.WriteLine($"Do you want to switch '{Equipment[Slot.Weapon].ItemName}' for '{weapon.ItemName}'? (Y/N)");
+                while (true) {
+                    string input = Console.ReadLine().ToLower();
+                    if (input == "y") {
+                        UnEquip(Slot.Weapon, Equipment[Slot.Weapon]);
+                        Equipment[weapon.ItemSlot] = weapon;
+                        int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
+                        Program.CurrentPlayer.Inventory.SetValue(null, a);
+                        return "New weapon equipped!";
+                    } else if (input == "n") {
+                        return "Item not equipped";
+                    } else {
+                        Console.WriteLine("Invalid input");
+                    }
+                }
+            } else {
+                Equipment[weapon.ItemSlot] = weapon;
+                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
+                if (a == -1) {
+                } else {
+                    Program.CurrentPlayer.Inventory.SetValue(null, a);
+                }
+                Program.CurrentPlayer.CalculateTotalStats();
+                return "New weapon equipped!";
             }
-
-            Equipment[weapon.ItemSlot] = weapon;
-            Program.CurrentPlayer.CalculateTotalStats();
-            return "New weapon equipped!";
         }
 
         public override string Equip(Armor armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
+                return "Item not equipped";
+            } else if (armor.ArmorType != ArmorType.Cloth && armor.ArmorType != ArmorType.Leather) {
+                Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
+                return "Item not equipped";
             }
-            if (armor.ArmorType != ArmorType.Mail && armor.ArmorType != ArmorType.Leather) {
-                Console.WriteLine($"Character can't equip a {armor.ArmorType}");
+            if (Equipment.ContainsKey(armor.ItemSlot)) {
+                Console.WriteLine($"Do you want to switch '{Equipment[armor.ItemSlot].ItemName}' for '{armor.ItemName}'? (Y/N)");
+                while (true) {
+                    string input = Console.ReadLine().ToLower();
+                    if (input == "y") {
+                        UnEquip(armor.ItemSlot, Equipment[armor.ItemSlot]);
+                        Equipment[armor.ItemSlot] = armor;
+                        int a = Array.IndexOf(Program.CurrentPlayer.Inventory, armor);
+                        Program.CurrentPlayer.Inventory.SetValue(null, a);
+                        return "New armor equipped!";
+                    } else if (input == "n") {
+                        return "Item not equipped";
+                    } else {
+                        Console.WriteLine("Invalid input");
+                    }
+                }
+            } else {
+                Equipment[armor.ItemSlot] = armor;
+                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, armor);
+                if (a == -1) {
+                } else {
+                    Program.CurrentPlayer.Inventory.SetValue(null, a);
+                }
+                Program.CurrentPlayer.CalculateTotalStats();
+                return "New armor piece equipped!";
             }
-
-            Equipment[armor.ItemSlot] = armor;
-            Program.CurrentPlayer.CalculateTotalStats();
-            return "New armor piece equipped!";
         }
         public override string Equip(Potion potion) {
             Equipment[potion.ItemSlot] = potion;
