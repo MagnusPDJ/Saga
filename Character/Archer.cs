@@ -26,7 +26,7 @@ namespace Saga.Character
             BasePrimaryAttributes += levelUpValues;
 
             CalculateTotalStats();
-            Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
+            Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
 
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             HUDTools.Print($"Congratulations! You are now level {Level}! You've gained 1 attribute point.", 20);
@@ -35,7 +35,7 @@ namespace Saga.Character
         }
 
         public override (int, int) CalculateDPT() {
-            TotalPrimaryAttributes = CalculateArmorBonus();
+            TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
             (int, int) weaponDPT = CalculateWeaponDPT();
             if (weaponDPT == (0, 0)) {
                 return (1, 1);
@@ -127,8 +127,8 @@ namespace Saga.Character
             Program.CurrentPlayer.Inventory.SetValue(item, index);
             Program.CurrentPlayer.Equipment.Remove(slot);
             Program.CurrentPlayer.CalculateTotalStats();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
+            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
+                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
             }
             return "Item unequipped!";
         }
@@ -143,7 +143,7 @@ namespace Saga.Character
             if (input.ToLower() == "a" || input == "attack") {
                 //Attack
                 int damage = Attack(Monster);
-                Monster.health -= damage;
+                Monster.Health -= damage;
                 HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
                 TurnTimer.turnTimer++;
             }
@@ -189,10 +189,10 @@ namespace Saga.Character
                 HUDTools.Print("You use a potion", 20);
                 Program.CurrentPlayer.Health += ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency;
                 ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity--;
-                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
-                    Program.CurrentPlayer.Health = Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth;
+                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
+                    Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
                 }
-                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth) {
+                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
                     HUDTools.Print("You heal to max health!", 20);
                 }
                 else {
@@ -204,20 +204,20 @@ namespace Saga.Character
         public static int Attack(Enemy Monster) {
             HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
-            HUDTools.Print($"You deal {attack} damage to {Monster.name}", 10);
+            HUDTools.Print($"You deal {attack} damage to {Monster.Name}", 10);
             return attack;
         }
         public static void Defend(Enemy Monster) {
-            HUDTools.Print($"You defend the next two attacks from {Monster.name}", 20);
-            Monster.attackDebuff += 2;
+            HUDTools.Print($"You defend the next two attacks from {Monster.Name}", 20);
+            Monster.AttackDebuff += 2;
         }
         public static bool RunAway(Enemy Monster) {
             bool escaped = false;
-            if (Monster.name == "Human captor") {
-                HUDTools.Print($"You try to run from the {Monster.name}, but it knocks you down. You are unable to escape this turn", 15);
+            if (Monster.Name == "Human captor") {
+                HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
             }
             else {
-                HUDTools.Print($"You use your crazy ninja moves to evade the {Monster.name} and you successfully escape!", 20);
+                HUDTools.Print($"You use your crazy ninja moves to evade the {Monster.Name} and you successfully escape!", 20);
                 escaped = true;
             }
             return escaped;

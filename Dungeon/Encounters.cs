@@ -14,7 +14,7 @@ namespace Saga.Dungeon
 
         //Encounters:
 
-        //Det Encounter som køres når en ny karakter startes for at introducere kamp.
+        //De Encounters som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
@@ -28,13 +28,31 @@ namespace Saga.Dungeon
             HUDTools.Print("He turns...");
             HUDTools.PlayerPrompt();
             Enemy FirstEncounter = new Enemy {
-                name = "Human Captor",
-                health = 5,
-                power = 3
+                Name = "Human Captor",
+                Health = 5,
+                Power = 2
             };
             AdvancedCombat(FirstEncounter);
         }
-
+        public static void SecondEncounter() {
+            Console.Clear();
+            AudioManager.soundKamp.Play();
+            switch (Program.rand.Next(0, 2)) {
+                case int x when (x == 0):
+                    HUDTools.Print($"You turn a corner and there you see a Feral Dog...", 10);
+                    break;
+                case int x when (x == 1):
+                    HUDTools.Print($"You break down a door and find a Feral Dog inside!", 10);
+                    break;
+            }
+            Enemy SecondEncounter = new Enemy {
+                Name = "Feral Dog",
+                Health = 6,
+                Power = 3
+            };
+            HUDTools.PlayerPrompt();
+            AdvancedCombat(SecondEncounter);
+        }
         //Encounter som køres der introducere shopkeeperen
         public static void FirstShopEncounter() {
             Console.Clear();
@@ -78,15 +96,15 @@ namespace Saga.Dungeon
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
             AudioManager.soundKamp.Play();
-            Enemy RandomEnemy = new Enemy { name = Enemy.GetType() };
-            RandomEnemy.health = Enemy.GetHealth(RandomEnemy.name);
-            RandomEnemy.power = Enemy.GetPower(RandomEnemy.name);
+            Enemy RandomEnemy = new Enemy { Name = Enemy.GetType() };
+            RandomEnemy.Health = Enemy.GetHealth(RandomEnemy.Name);
+            RandomEnemy.Power = Enemy.GetPower(RandomEnemy.Name);
             switch (Program.rand.Next(0,2)) {
                 case int x when (x == 0):
-                    HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.name}...", 10);
+                    HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.Name}...", 10);
                     break;
                 case int x when (x == 1):
-                    HUDTools.Print($"You break down a door and find a {RandomEnemy.name} inside!", 10);
+                    HUDTools.Print($"You break down a door and find a {RandomEnemy.Name} inside!", 10);
                     break;
             }
             HUDTools.PlayerPrompt();
@@ -102,10 +120,10 @@ namespace Saga.Dungeon
             HUDTools.Print("long beard and pointy hat, looking at a large tome.");
             HUDTools.PlayerPrompt();
             Enemy WizardEncounter = new Enemy {
-                name = "Dark Wizard",
-                health = 3 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                power = 6 + 2 * Program.CurrentPlayer.Level,
-                xpModifier = 3
+                Name = "Dark Wizard",
+                Health = 3 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
+                Power = 6 + 2 * Program.CurrentPlayer.Level,
+                XpModifier = 3
             };
             AdvancedCombat(WizardEncounter);
         }
@@ -136,11 +154,11 @@ namespace Saga.Dungeon
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     HUDTools.PlayerPrompt();
                     Enemy MimicEncounter = new Enemy {
-                        name = "Mimic",
-                        health = 10 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                        power = 5 + Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                        xpModifier = 2,
-                        goldModifier = 3
+                        Name = "Mimic",
+                        Health = 10 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
+                        Power = 5 + Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
+                        XpModifier = 2,
+                        GoldModifier = 3
                     };
                     AdvancedCombat(MimicEncounter); 
                     break;
@@ -370,8 +388,8 @@ namespace Saga.Dungeon
             HUDTools.ClearCombatLog();
             Encounters TurnTimer = new Encounters();
             HUDTools.TopCombatHUD(Monster, TurnTimer);
-            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > 0) {
-                while (Monster.health > 0 && TurnTimer.ran == false) {
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
+                while (Monster.Health > 0 && TurnTimer.ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Program.CurrentPlayer.PlayerActions(Monster, TurnTimer);
                     if (TurnTimer.ran == false) {
@@ -381,30 +399,30 @@ namespace Saga.Dungeon
                         HUDTools.ClearCombatLog();
                         AudioManager.soundKamp.Stop();
                         AudioManager.soundBossKamp.Stop();
-                        Player.DeathCode($"As the {Monster.name} menacingly comes down to strike, you are slain by the mighty {Monster.name}.");
+                        Player.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                         break;
                     }
                 }
             }  else {
-                while (Monster.health > 0 && TurnTimer.ran == false) {
+                while (Monster.Health > 0 && TurnTimer.ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Enemy.MonsterActions(Monster, TurnTimer);
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearCombatLog();
                         AudioManager.soundKamp.Stop();
                         AudioManager.soundBossKamp.Stop();
-                        Player.DeathCode($"As the {Monster.name} menacingly comes down to strike, you are slain by the mighty {Monster.name}.");
+                        Player.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                         break;
                     }
                     Program.CurrentPlayer.PlayerActions(Monster, TurnTimer);
                 }
             }
-            if (Monster.health <= 0) {
+            if (Monster.Health <= 0) {
                 AudioManager.soundKamp.Stop();
                 AudioManager.soundBossKamp.Stop();
                 HUDTools.ClearCombatLog();
                 AudioManager.soundWin.Play();
-                Loot.GetLoot(Monster.xpModifier, Monster.goldModifier, Monster.name, $"You Won against the {Monster.name} on turn {TurnTimer.turnTimer - 1}!");
+                Loot.GetLoot(Monster.XpModifier, Monster.GoldModifier, Monster.Name, $"You Won against the {Monster.Name} on turn {TurnTimer.turnTimer - 1}!");
                 if (Program.CurrentPlayer.CanLevelUp()) {
                     Program.CurrentPlayer.LevelUp();
                 }

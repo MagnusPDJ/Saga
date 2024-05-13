@@ -1,6 +1,5 @@
 ﻿using Saga.Character;
 using System;
-using System.Xml.Linq;
 
 namespace Saga.Items
 {
@@ -27,7 +26,7 @@ namespace Saga.Items
             return $"Weapon of type {WeaponType}";
         }
         public override int CalculateItemPrice() {
-            ItemPrice = ItemLevel * 100 + WeaponAttributes.MaxDamage * 100;
+            ItemPrice = Convert.ToInt32(ItemLevel * 100 + (WeaponAttributes.MaxDamage * 100 + WeaponAttributes.MinDamage*50)*(1 + 1 /(WeaponAttributes.MaxDamage-WeaponAttributes.MinDamage)) );
             return ItemPrice;
         }
         public static string RandomWeaponName(WeaponType type) {

@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Reflection.Emit;
 using Saga.assets;
 
 namespace Saga.Dungeon
 {
     public class Enemy
     {
-        public string name;
-        public int health;             
-        public int power;
-        public int awareness = 0;
-        public int xpModifier = 1;
-        public int goldModifier = 1;
-        int enemyTurn = 1;
-        public int attackDebuff = 0;
+        public string Name { get; set; }
+        public int Health { get; set; }             
+        public int Power { get; set; }
+        public int Awareness { get; set; } = 0;
+        public int XpModifier { get; set; } = 1;
+        public int GoldModifier { get; set; } = 1;
+        int EnemyTurn { get; set; } = 1;
+        public int AttackDebuff { get; set; } = 0;
 
         public static int GetXP() {
             int upper = (20 * Program.CurrentPlayer.Level + 31);
@@ -23,13 +22,13 @@ namespace Saga.Dungeon
         //Monster type låst efter level
         public static new string GetType() {
             if (Program.CurrentPlayer.Level < 3) {
-                switch (Program.rand.Next(0, 2 + 1)) {
-                    case 0:
+                switch (Program.rand.Next(0, 10 + 1)) {
+                    case int n when n < 4:
                         return "Giant Rat";
-                    case 1:
-                        return "Grave Robber";
-                    case 2:
+                    case int n when 4 <= n && n < 8 :
                         return "Giant Bat";
+                    case int n when 8<= n:
+                        return "Grave Robber";
                 }
             }
             else if (Program.CurrentPlayer.Level <= 5) {
@@ -69,6 +68,7 @@ namespace Saga.Dungeon
                 }
             }
             switch (Program.rand.Next(0, 6 + 1)) {
+                default:
                 case 0:
                     return "Human Cultist";
                 case 1:
@@ -84,7 +84,6 @@ namespace Saga.Dungeon
                 case 6:
                     return "Bandit";
             }
-            return "";
         }
 
         //Monster liv skaleret på spilleren.
@@ -180,59 +179,59 @@ namespace Saga.Dungeon
                 case "Grave Robber":
                     int upper3 = (baseModUp - Program.CurrentPlayer.Level / 4);
                     int lower3 = (baseModLower - Program.CurrentPlayer.Level / 4);
-                    return Program.rand.Next(lower3, upper3 + 1);
+                    return Program.rand.Next(lower3-1, upper3 + 1);
                 case "Giant Bat":
                     int upper4 = (baseModUp - 1 - Program.CurrentPlayer.Level / 2 - Program.CurrentPlayer.Level / 5);
                     int lower4 = (baseModLower - 1 - Program.CurrentPlayer.Level / 2);
-                    return Program.rand.Next(lower4, upper4 + 1);
+                    return Program.rand.Next(lower4-1, upper4 + 1);
                 case "Giant Rat":
                     int upper0 = (baseModUp - 3 - Program.CurrentPlayer.Level / 2 - Program.CurrentPlayer.Level / 5);
                     int lower0 = (baseModLower - 3 - Program.CurrentPlayer.Level / 2);
-                    return Program.rand.Next(lower0, upper0 + 1);
+                    return Program.rand.Next(lower0, upper0 + 2);
             }
             return 0;
         }
 
         public static void MonsterActions(Enemy Monster, Encounters TurnTimer) {
-            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > 0) {
-                if (Monster.enemyTurn < TurnTimer.turnTimer && Monster.health > 0) {
-                    int attack = Monster.power;
-                    if (Monster.attackDebuff > 0) {
-                        attack /= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
+                if (Monster.EnemyTurn < TurnTimer.turnTimer && Monster.Health > 0) {
+                    int attack = Monster.Power;
+                    if (Monster.AttackDebuff > 0) {
+                        attack /= Math.Max(2,Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating);
                         Program.CurrentPlayer.Health -= attack;
-                        Monster.attackDebuff--;
-                        if (Monster.attackDebuff == 0) {
+                        Monster.AttackDebuff--;
+                        if (Monster.AttackDebuff == 0) {
                             HUDTools.Print("You are no longer defended!",5);
                         }
                     } else {
-                        attack -= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        attack -= Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating;
                         if (attack < 0) {
                             attack = 0;
                         }
                         Program.CurrentPlayer.Health -= attack;
                     }
-                    Monster.enemyTurn++;
+                    Monster.EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n",10);
                     HUDTools.WriteCombatLog("enemysecond", TurnTimer,attack,0,Monster);
                     Console.ReadKey(true);
                 }
             } else {                
-                if (Monster.enemyTurn == TurnTimer.turnTimer && Monster.health > 0) {
+                if (Monster.EnemyTurn == TurnTimer.turnTimer && Monster.Health > 0) {
                     Console.ReadKey(true);
-                    int attack = Monster.power;
-                    if (Monster.attackDebuff > 0) {
-                        attack /= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                    int attack = Monster.Power;
+                    if (Monster.AttackDebuff > 0) {
+                        attack /= Math.Max(2,Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating);
                         Program.CurrentPlayer.Health -= attack;
-                        Monster.attackDebuff--;
+                        Monster.AttackDebuff--;
                     }
                     else {
-                        attack -= Program.CurrentPlayer.BaseSecondaryAttributes.ArmorRating;
+                        attack -= Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating;
                         if (attack < 0) {
                             attack = 0;
                         }
                         Program.CurrentPlayer.Health -= attack;
                     }
-                    Monster.enemyTurn++;
+                    Monster.EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
                     HUDTools.WriteCombatLog("enemyfirst", TurnTimer,attack,0,Monster);
                     

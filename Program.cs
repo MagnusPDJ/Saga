@@ -101,7 +101,7 @@ namespace Saga
                 CurrentPlayer.SetStartingGear();
                 Encounters.FirstEncounter();
                 Encounters.FirstShopEncounter();
-                Encounters.RandomBasicCombatEncounter();
+                Encounters.SecondEncounter();
                 Encounters.FirstCamp();
             }
         }
@@ -269,7 +269,7 @@ namespace Saga
             while (true) {
                 string input1 = HUDTools.PlayerPrompt();
                 if (input1 == "1") {
-                    HUDTools.Print($"You want to become a Warrior?\n(Y/N)");
+                    HUDTools.Print($"You want to become a Warrior?\n(Y/N)", 5);
                     string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
                         return 1;
@@ -279,7 +279,7 @@ namespace Saga
                     }
                 }
                 else if (input1 == "2") {
-                    HUDTools.Print($"You want to become a Archer?\n(Y/N)");
+                    HUDTools.Print($"You want to become a Archer?\n(Y/N)",5);
                     string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
                         return 2;
@@ -289,7 +289,7 @@ namespace Saga
                     }
                 }
                 else if (input1 == "3") {
-                    HUDTools.Print($"You want to become a Mage?\n(Y/N)");
+                    HUDTools.Print($"You want to become a Mage?\n(Y/N)",5);
                     string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
                         return 3;
@@ -299,7 +299,7 @@ namespace Saga
                     }
                 }
                 else {
-                    Console.WriteLine("Please choose a listed class!");
+                    HUDTools.Print("Please choose a listed class!",3);
                 }
             }
         }

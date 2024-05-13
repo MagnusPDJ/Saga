@@ -108,7 +108,7 @@ namespace Saga.assets
             Console.Write($"{text}\n");
 
             //Skriver og tilføjer den nye tekst.
-            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > Monster.awareness) {
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
                 switch (action) {
                     case "attack":
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}\nYou attacked and dealt {attack} damage.");
@@ -122,7 +122,7 @@ namespace Saga.assets
                             Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            if (Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth == Program.CurrentPlayer.Health) {
+                            if (Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth == Program.CurrentPlayer.Health) {
                                 Console.WriteLine("You healed to max health by drinking a potion.");
                             }
                             else {
@@ -135,7 +135,7 @@ namespace Saga.assets
                         Console.WriteLine($"You tried to run but was unable to escape this turn.");
                         break;
                     case "enemysecond":
-                        Console.WriteLine($"{Monster.name} attacked and dealt {damage} damage!");
+                        Console.WriteLine($"{Monster.Name} attacked and dealt {damage} damage!");
                         break;
                 }
             } else {
@@ -151,7 +151,7 @@ namespace Saga.assets
                             Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            if (Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth == Program.CurrentPlayer.Health) {
+                            if (Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth == Program.CurrentPlayer.Health) {
                                 Console.WriteLine("You healed to max health by drinking a potion.");
                             }
                             else {
@@ -164,7 +164,7 @@ namespace Saga.assets
                         break;
                     case "enemyfirst":
                         Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
-                        Console.WriteLine($"{Monster.name} attacked and dealt {damage} damage!");
+                        Console.WriteLine($"{Monster.Name} attacked and dealt {damage} damage!");
                         break;
                 }
             }
@@ -225,20 +225,23 @@ namespace Saga.assets
                 }
                 else {
                     Console.Write($"| ({shop.Forsale.IndexOf(item)}) Ilvl: {item.ItemLevel}, {item.ItemSlot}, {((Armor)item).ArmorType}, {item.ItemName}, $ {item.CalculateItemPrice()},");
+                    if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
+                        Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    }
                     if (((Armor)item).Attributes.Strength > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Strength");
                     }
                     if (((Armor)item).Attributes.Dexterity > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Dexterity} Dexterity");
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dexterity");
                     }
                     if (((Armor)item).Attributes.Intellect > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Intellect} Intellect");
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Intellect");
                     }
                     if (((Armor)item).Attributes.Constitution > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Constitution} Constitution");
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Constitution");
                     }
                     if (((Armor)item).Attributes.WillPower > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.WillPower} Willpower");
+                        Console.Write($", +{((Armor)item).Attributes.WillPower} Willpower");
                     }
                     Console.WriteLine($"");
                 }
@@ -252,7 +255,7 @@ namespace Saga.assets
             Console.Write("[");
             ProgressBar("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20);
             Console.WriteLine("]");
-            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}");
+            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"| Potions:                {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
@@ -264,20 +267,23 @@ namespace Saga.assets
                 }
                 else {
                     Console.Write($"| {item.ItemName}:");
+                    if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
+                        Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    }
                     if (((Armor)item).Attributes.Strength > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Strength");
                     }
                     if (((Armor)item).Attributes.Dexterity > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Dexterity} Dexterity");
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dexterity");
                     }
                     if (((Armor)item).Attributes.Intellect > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Intellect} Intellect");
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Intellect");
                     }
                     if (((Armor)item).Attributes.Constitution > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Constitution} Constitution");
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Constitution");
                     }
                     if (((Armor)item).Attributes.WillPower > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.WillPower} Willpower");
+                        Console.Write($", +{((Armor)item).Attributes.WillPower} Willpower");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -298,24 +304,27 @@ namespace Saga.assets
                 if (item == null) {
                 }
                 else if (item.ItemSlot == Slot.Weapon) {
-                    Console.WriteLine($"| ({Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg\t $ {Shop.ShopPrice(Array.IndexOf(Program.CurrentPlayer.Inventory, item).ToString())}");
+                    Console.WriteLine($"| ({Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg,\t $ {Shop.ShopPrice(Array.IndexOf(Program.CurrentPlayer.Inventory, item).ToString())}");
                 }
                 else {
                     Console.Write($"| ({Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: ");
+                    if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
+                        Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    }
                     if (((Armor)item).Attributes.Strength > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Strength");
                     }
                     if (((Armor)item).Attributes.Dexterity > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Dexterity} Dexterity");
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dexterity");
                     }
                     if (((Armor)item).Attributes.Intellect > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Intellect} Intellect");
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Intellect");
                     }
                     if (((Armor)item).Attributes.Constitution > 0) {
-                        Console.Write($" +{((Armor)item).Attributes.Constitution} Constitution");
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Constitution");
                     }
                     if (((Armor)item).Attributes.WillPower > 0) {
-                        Console.WriteLine($" +{((Armor)item).Attributes.WillPower} Willpower");
+                        Console.WriteLine($", +{((Armor)item).Attributes.WillPower} Willpower");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -334,7 +343,7 @@ namespace Saga.assets
             Console.Write("[");
             ProgressBar("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20);
             Console.WriteLine("]");
-            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}");
+            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"| Potions:                {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
             Console.WriteLine("=============================");
@@ -418,20 +427,23 @@ namespace Saga.assets
                     }
                     else {
                         Console.Write($" {entry.Value.ItemSlot} - {entry.Value.ItemName}:");
+                        if (((Armor)entry.Value).SecondaryAttributes.ArmorRating > 0) {
+                            Console.Write($" +{((Armor)entry.Value).SecondaryAttributes.ArmorRating} Armor Rating");
+                        }
                         if (((Armor)entry.Value).Attributes.Strength > 0) {
-                            Console.Write($" +{((Armor)entry.Value).Attributes.Strength} Strength");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Strength} Strength");
                         }
                         if (((Armor)entry.Value).Attributes.Dexterity > 0) {
-                            Console.Write($" +{((Armor)entry.Value).Attributes.Dexterity} Dexterity");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Dexterity} Dexterity");
                         }
                         if (((Armor)entry.Value).Attributes.Intellect > 0) {
-                            Console.Write($" +{((Armor)entry.Value).Attributes.Intellect} Intellect");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Intellect} Intellect");
                         }
                         if (((Armor)entry.Value).Attributes.Constitution > 0) {
-                            Console.Write($" +{((Armor)entry.Value).Attributes.Constitution} Constitution");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Constitution} Constitution");
                         }
                         if (((Armor)entry.Value).Attributes.WillPower > 0) {
-                            Console.Write($" +{((Armor)entry.Value).Attributes.WillPower} Willpower");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.WillPower} Willpower");
                         }
                         if (entry.Value.ItemName == "Linen Rags") {
                             Console.Write(" Offers no protection");
@@ -453,6 +465,9 @@ namespace Saga.assets
                     }
                     else {
                         Console.Write($" {item.ItemSlot} - {item.ItemName}:");
+                        if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
+                            Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                        }
                         if (((Armor)item).Attributes.Strength > 0) {
                             Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
                         }
@@ -510,9 +525,9 @@ namespace Saga.assets
         public static void TopCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
             Print($"Turn: {TurnTimer.turnTimer}",5);
-            Print($"Fighting: {Monster.name}!", 10);
-            Print($"Strength: {Monster.power} / HP: {Monster.health}", 10);
-            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > Monster.awareness) {
+            Print($"Fighting: {Monster.Name}!", 10);
+            Print($"Strength: {Monster.Power} / HP: {Monster.Health}", 10);
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
                 Print("---------------------------",5);
                 Print("You go first!",10);
             }
@@ -524,9 +539,9 @@ namespace Saga.assets
         public static void FullCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
             Console.WriteLine($"Turn: {TurnTimer.turnTimer}");
-            Console.WriteLine($"Fighting: {Monster.name}!");
-            Console.WriteLine($"Strength: {Monster.power} / HP: {Monster.health}");
-            if (Program.CurrentPlayer.BaseSecondaryAttributes.Awareness > Monster.awareness) {
+            Console.WriteLine($"Fighting: {Monster.Name}!");
+            Console.WriteLine($"Strength: {Monster.Power} / HP: {Monster.Health}");
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
                 Console.WriteLine("---------------------------");
                 Console.WriteLine("You go first!");
             } else {
@@ -534,7 +549,7 @@ namespace Saga.assets
                 Console.WriteLine("---------------------------");
             }           
             Console.WriteLine($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
             Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");
@@ -552,7 +567,7 @@ namespace Saga.assets
             Console.Clear();
             Print("[][][][][][]  Camp   [][][][][][]", 5);
             Print($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:", 10);
-            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}", 10);
+            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}", 10);
             Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 5);
             Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]", 10);
         }
@@ -560,7 +575,7 @@ namespace Saga.assets
             Console.Clear();
             Print("[][][][][][]  Camp   [][][][][][]",5);
             Print($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:",10);
-            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}",10);
+            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}",10);
             Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 10);
             Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]",10);
             Print("==============Actions=================",5);
@@ -575,7 +590,7 @@ namespace Saga.assets
             Console.Clear();
             Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
             Console.WriteLine($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
             Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");
@@ -594,7 +609,7 @@ namespace Saga.assets
             Console.WriteLine("You gain a moment of respite and a choice...");
             Console.WriteLine("Do you venture deeper or turn back to your camp?");
             Console.WriteLine($"{Program.CurrentPlayer.currentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.BaseSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity}");
             Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");

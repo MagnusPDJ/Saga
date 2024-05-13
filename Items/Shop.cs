@@ -11,7 +11,7 @@ namespace Saga.Items
     {
         public List<Item> Forsale { get; set; }      
         public void SetForsale() {            
-           Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(0), ArmorLootTable.CreateRandomArmor(1) , ArmorLootTable.CreateRandomArmor(2), WeaponLootTable.CreateRandomWeapon(0),WeaponLootTable.CreateRandomWeapon(1),WeaponLootTable.CreateRandomWeapon(2) };
+           Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(-1), ArmorLootTable.CreateRandomArmor(0) , ArmorLootTable.CreateRandomArmor(1), WeaponLootTable.CreateRandomWeapon(-1),WeaponLootTable.CreateRandomWeapon(0),WeaponLootTable.CreateRandomWeapon(1) };
         }
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p) {
@@ -115,7 +115,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[0];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice()*0.6);
                     }
                 case "1":
                     if (Program.CurrentPlayer.Inventory[1] == null) {
@@ -123,7 +123,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[1];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "2":
                     if (Program.CurrentPlayer.Inventory[2] == null) {
@@ -131,7 +131,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[2];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "3":
                     if (Program.CurrentPlayer.Inventory[3] == null) {
@@ -139,7 +139,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[3];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "4":
                     if (Program.CurrentPlayer.Inventory[4] == null) {
@@ -147,7 +147,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[4];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "5":
                     if (Program.CurrentPlayer.Inventory[5] == null) {
@@ -155,7 +155,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[5];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "6":
                     if (Program.CurrentPlayer.Inventory[6] == null) {
@@ -163,7 +163,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[6];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "7":
                     if (Program.CurrentPlayer.Inventory[7] == null) {
@@ -171,7 +171,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[7];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "8":
                     if (Program.CurrentPlayer.Inventory[8] == null) {
@@ -179,7 +179,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[8];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
                 case "9":
                     if (Program.CurrentPlayer.Inventory[9] == null) {
@@ -187,7 +187,7 @@ namespace Saga.Items
                     }
                     else {
                         var itemItem = Program.CurrentPlayer.Inventory[10];
-                        return itemItem.CalculateItemPrice();
+                        return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
             }
         }

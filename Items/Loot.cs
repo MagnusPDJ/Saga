@@ -9,7 +9,7 @@ namespace Saga.Items
     public class Loot
     {
         public static int GetGold() {
-            int upper = (30 * Program.CurrentPlayer.Level + 101);
+            int upper = (30 * Program.CurrentPlayer.Level + 71);
             int lower = (10 * Program.CurrentPlayer.Level);
             return Program.rand.Next(lower, upper + 1);
         }

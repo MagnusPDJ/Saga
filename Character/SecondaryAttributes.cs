@@ -32,5 +32,18 @@ namespace Saga.Character
             hashCode = hashCode * -1521134295 + ElementalResistence.GetHashCode();
             return hashCode;
         }
+        // <summary>
+        // Adds two PrimaryAttributes together.
+        // </summary>
+        // <param name="a">Object one</param>
+        // <param name="b">Object two</param>
+        // <returns>New PrimaryAttributes object of sum of the inputs</returns>
+        public static SecondaryAttributes operator +(SecondaryAttributes a, SecondaryAttributes b) => new SecondaryAttributes() {
+            MaxHealth = a.MaxHealth + b.MaxHealth,
+            ArmorRating = a.ArmorRating + b.ArmorRating,
+            ElementalResistence = a.ElementalResistence + b.ElementalResistence,
+            MaxMana = a.MaxMana + b.MaxMana,
+            Awareness = a.Awareness + b.Awareness
+        };
     }
 }

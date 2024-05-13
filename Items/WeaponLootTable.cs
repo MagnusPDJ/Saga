@@ -1,5 +1,4 @@
-﻿using NAudio.Codecs;
-using Saga.Character;
+﻿using Saga.Character;
 using System;
 
 namespace Saga.Items
@@ -11,10 +10,10 @@ namespace Saga.Items
             Item item;
             int weaponType = Program.rand.Next(9);
             item = new Weapon() {
-                ItemLevel = Program.CurrentPlayer.Level + level,
+                ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                 ItemSlot = Slot.Weapon,
                 WeaponType = (WeaponType)weaponType,
-                WeaponAttributes = new WeaponAttributes() { MinDamage = Program.CurrentPlayer.Level + level, MaxDamage = Program.CurrentPlayer.Level + level + Program.rand.Next(2, 6), AttackSpeed = 1 },
+                WeaponAttributes = new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level + level), MaxDamage = Math.Max(1, Program.CurrentPlayer.Level + level) + Program.rand.Next(2, 6), AttackSpeed = 1 },
                 ItemName = RandomWeaponName((WeaponType)weaponType)
             };
 

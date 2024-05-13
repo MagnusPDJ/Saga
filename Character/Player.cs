@@ -22,6 +22,7 @@ namespace Saga.Character
         public PrimaryAttributes BasePrimaryAttributes { get; set; }
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
+        public SecondaryAttributes TotalSecondaryAttributes { get; set; }
         public Dictionary<Slot, Item> Equipment { get; set; }
         public Item[] Inventory { get; set; }
         public (int, int) DPT { get; set; }
@@ -37,8 +38,8 @@ namespace Saga.Character
             FreeAttributePoints = 0;
             BasePrimaryAttributes = new PrimaryAttributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, WillPower = willpower };
             CalculateTotalStats();
-            Health = BaseSecondaryAttributes.MaxHealth;
-            Mana = BaseSecondaryAttributes.MaxMana; 
+            Health = TotalSecondaryAttributes.MaxHealth;
+            Mana = TotalSecondaryAttributes.MaxMana; 
         }
         // <param name="levels">Number of levels to level up</param>
         public abstract void LevelUp();
@@ -79,18 +80,19 @@ namespace Saga.Character
         // Calculates and outputs hero stats.
         public void DisplayStats() {
             CalculateTotalStats();
-            HUDTools.WriteStatsToConsole(Name, Level, TotalPrimaryAttributes, BaseSecondaryAttributes, DPT);
+            HUDTools.WriteStatsToConsole(Name, Level, TotalPrimaryAttributes, TotalSecondaryAttributes, DPT);
         }
 
         // Calculates total stats based on base stats and equipped items.
         public void CalculateTotalStats() {
-            TotalPrimaryAttributes = CalculateArmorBonus();
-            BaseSecondaryAttributes = CalculateSecondaryStats();
+            TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
+            BaseSecondaryAttributes = CalculateBaseSecondaryStats();
+            TotalSecondaryAttributes = CalculateSecondaryArmorBonus();
             DPT = CalculateDPT();
         }
 
         // Calculates armor bonus
-        public PrimaryAttributes CalculateArmorBonus() {
+        public PrimaryAttributes CalculatePrimaryArmorBonus() {
             PrimaryAttributes armorBonusValues = new PrimaryAttributes() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 };
 
             bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out Item headArmor);
@@ -171,15 +173,96 @@ namespace Saga.Character
             }
             return BasePrimaryAttributes + armorBonusValues;
         }
+        public SecondaryAttributes CalculateSecondaryArmorBonus() {
+            SecondaryAttributes armorBonusValues = new SecondaryAttributes() { ArmorRating = 0, MaxHealth = 0, MaxMana = 0, Awareness = 0, ElementalResistence = 0 };
+
+            bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out Item headArmor);
+            bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out Item bodyArmor);
+            bool hasLegsArmor = Equipment.TryGetValue(Slot.Legs, out Item legsArmor);
+            bool hasFeetArmor = Equipment.TryGetValue(Slot.Feet, out Item FeetArmor);
+            bool hasArmsArmor = Equipment.TryGetValue(Slot.Bracers, out Item ArmsArmor);
+            bool hasShouldersArmor = Equipment.TryGetValue(Slot.Shoulders, out Item ShouldersArmor);
+            bool hasBeltArmor = Equipment.TryGetValue(Slot.Belt, out Item BeltArmor);
+            bool hasCapeArmor = Equipment.TryGetValue(Slot.Cape, out Item CapeArmor);
+            bool hasGlovesArmor = Equipment.TryGetValue(Slot.Gloves, out Item GlovesArmor);
+            bool hasAmuletArmor = Equipment.TryGetValue(Slot.Amulet, out Item AmuletArmor);
+            bool hasRing1Armor = Equipment.TryGetValue(Slot.SLOT_RING1, out Item Ring1Armor);
+            bool hasRing2Armor = Equipment.TryGetValue(Slot.SLOT_RING2, out Item Ring2Armor);
+            bool hasCrestArmor = Equipment.TryGetValue(Slot.SLOT_CREST, out Item CrestArmor);
+            bool hasTrinketArmor = Equipment.TryGetValue(Slot.SLOT_TRINKET, out Item TrinketArmor);
+            bool hasOffhandArmor = Equipment.TryGetValue(Slot.SLOT_OFFHAND, out Item OffhandArmor);
+
+            if (hasHeadArmor) {
+                Armor a = (Armor)headArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasBodyArmor) {
+                Armor a = (Armor)bodyArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasLegsArmor) {
+                Armor a = (Armor)legsArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasFeetArmor) {
+                Armor a = (Armor)FeetArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasArmsArmor) {
+                Armor a = (Armor)ArmsArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasShouldersArmor) {
+                Armor a = (Armor)ShouldersArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasBeltArmor) {
+                Armor a = (Armor)BeltArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasCapeArmor) {
+                Armor a = (Armor)CapeArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasGlovesArmor) {
+                Armor a = (Armor)GlovesArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+            }
+            if (hasAmuletArmor) {
+                Armor a = (Armor)AmuletArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+                }
+            if (hasRing1Armor) {
+                Armor a = (Armor)Ring1Armor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+                }
+            if (hasRing2Armor) {
+                Armor a = (Armor)Ring2Armor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+                }
+            if (hasCrestArmor) {
+                Armor a = (Armor)CrestArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+                }
+            if (hasTrinketArmor) {
+                Armor a = (Armor)TrinketArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+                }
+            if (hasOffhandArmor) {
+                Armor a = (Armor)OffhandArmor;
+                armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
+                }
+            return BaseSecondaryAttributes + armorBonusValues;
+        }
 
         //Calculates secondaryAttributes
-        public SecondaryAttributes CalculateSecondaryStats() {
+        public SecondaryAttributes CalculateBaseSecondaryStats() {
             return new SecondaryAttributes()
             {
                 MaxHealth = 5 + TotalPrimaryAttributes.Constitution * 5,
                 MaxMana = 5 + TotalPrimaryAttributes.WillPower * 5,
                 Awareness = TotalPrimaryAttributes.Dexterity,
-                ArmorRating = TotalPrimaryAttributes.Strength + TotalPrimaryAttributes.Dexterity,
+                ArmorRating = (TotalPrimaryAttributes.Strength + TotalPrimaryAttributes.Dexterity)/2,
                 ElementalResistence = TotalPrimaryAttributes.Intellect
             };
         }
