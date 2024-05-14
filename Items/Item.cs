@@ -2,7 +2,7 @@
 
 namespace Saga.Items
 {
-    public enum Slot
+    public enum Slot 
     {
         Headgear,
         Torso,
@@ -20,10 +20,9 @@ namespace Saga.Items
         SLOT_CREST,
         SLOT_TRINKET,
         SLOT_OFFHAND,
-        SLOT_POTION
     }
     [Serializable]
-    public abstract class Item
+    public abstract class Item 
     {
         public string ItemName { get; set; }
         public int ItemLevel { get; set; }

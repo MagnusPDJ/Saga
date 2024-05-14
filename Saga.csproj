@@ -129,15 +129,17 @@
     <Compile Include="Character\SecondaryAttributes.cs" />
     <Compile Include="Character\Warrior.cs" />
     <Compile Include="Character\WeaponAttributes.cs" />
+    <Compile Include="Dungeon\Act1Enemy.cs" />
     <Compile Include="Dungeon\Enemy.cs" />
     <Compile Include="assets\HUDTools.cs" />
     <Compile Include="Items\Armor.cs" />
-    <Compile Include="Items\ArmorLootTable.cs" />
+    <Compile Include="Items\Loot\Act1Loot.cs" />
+    <Compile Include="Items\Loot\ArmorLootTable.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="Items\Loot.cs" />
+    <Compile Include="Items\Loot\Loot.cs" />
     <Compile Include="Items\Potion.cs" />
     <Compile Include="Items\Weapon.cs" />
-    <Compile Include="Items\WeaponLootTable.cs" />
+    <Compile Include="Items\Loot\WeaponLootTable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

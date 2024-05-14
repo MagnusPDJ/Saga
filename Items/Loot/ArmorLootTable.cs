@@ -1,7 +1,7 @@
 ﻿using Saga.Character;
 using System;
 
-namespace Saga.Items
+namespace Saga.Items.Loot
 {
     [Serializable]
     public class ArmorLootTable : Armor
@@ -27,7 +27,6 @@ namespace Saga.Items
             };
             return item;
         }
-        public static Item Empty = new Armor();
         public static Armor LinenRags = new Armor() {
             ItemName = "Linen Rags",
             ItemLevel = 1,

@@ -2,6 +2,7 @@
 using Saga.assets;
 using Saga.Dungeon;
 using Saga.Items;
+using Saga.Items.Loot;
 
 namespace Saga.Character
 {
@@ -9,7 +10,7 @@ namespace Saga.Character
     public class Archer : Player
     {
         public Archer(string name) : base(name, 0, 1, 1, 1, 1, 0) {
-            currentClass = "Archer";
+            CurrentClass = "Archer";
         }
 
         public override void LevelUp() {
@@ -135,7 +136,6 @@ namespace Saga.Character
         public override void SetStartingGear() {
             Equip(WeaponLootTable.FlimsyBow);
             Equip(ArmorLootTable.LinenRags);
-            Equip(Potion.HealingPotion);
         }
         public override void PlayerActions(Enemy Monster, Encounters TurnTimer) {
             Console.WriteLine("Choose an action...");
@@ -145,13 +145,13 @@ namespace Saga.Character
                 int damage = Attack(Monster);
                 Monster.Health -= damage;
                 HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
-                TurnTimer.turnTimer++;
+                TurnTimer.TurnTimer++;
             }
             else if (input.ToLower() == "d" || input == "defend") {
                 //Defend 
                 Defend(Monster);
                 HUDTools.WriteCombatLog("defend", TurnTimer, 0, 0, Monster);
-                TurnTimer.turnTimer++;
+                TurnTimer.TurnTimer++;
             }
             else if (input.ToLower() == "r" || input == "run") {
                 //Run                   
@@ -159,18 +159,18 @@ namespace Saga.Character
                     AudioManager.soundKamp.Stop();
                     AudioManager.soundBossKamp.Stop();
                     HUDTools.ClearCombatLog();
-                    TurnTimer.ran = true;
+                    TurnTimer.Ran = true;
                 }
                 else {
                     HUDTools.WriteCombatLog(action: "run", TurnTimer: TurnTimer, Monster: Monster);
-                    TurnTimer.turnTimer++;
+                    TurnTimer.TurnTimer++;
                 }
             }
             else if (input.ToLower() == "h" || input == "heal") {
                 //Heal
                 Heal();
                 HUDTools.WriteCombatLog(action: "heal", TurnTimer: TurnTimer, Monster: Monster);
-                TurnTimer.turnTimer++;
+                TurnTimer.TurnTimer++;
             }
             else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
@@ -182,13 +182,13 @@ namespace Saga.Character
             Console.ReadKey(true);
         }
         public override void Heal() {
-            if (((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity == 0) {
+            if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 20);
             }
             else {
                 HUDTools.Print("You use a potion", 20);
-                Program.CurrentPlayer.Health += ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency;
-                ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity--;
+                Program.CurrentPlayer.Health += Program.CurrentPlayer.CurrentHealingPotion.PotionPotency;
+                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity--;
                 if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
                     Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
                 }
@@ -196,7 +196,7 @@ namespace Saga.Character
                     HUDTools.Print("You heal to max health!", 20);
                 }
                 else {
-                    HUDTools.Print($"You gain {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency} health", 20);
+                    HUDTools.Print($"You gain {Program.CurrentPlayer.CurrentHealingPotion.PotionPotency} health", 20);
                 }
             }
         }

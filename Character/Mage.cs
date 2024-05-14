@@ -2,6 +2,7 @@
 using Saga.assets;
 using Saga.Dungeon;
 using Saga.Items;
+using Saga.Items.Loot;
 
 namespace Saga.Character
 {
@@ -9,9 +10,8 @@ namespace Saga.Character
     public class Mage : Player
     {
         public Mage(string name) : base(name, 0, 1, 1, 1, 1, 1) {
-            currentClass = "Mage";
+            CurrentClass = "Mage";
         }
-
         public override void LevelUp() {
             int levels = 0;
             AudioManager.soundLvlUp.Play();
@@ -33,7 +33,6 @@ namespace Saga.Character
             Console.ResetColor();
             HUDTools.PlayerPrompt();
         }
-
         public override (int, int) CalculateDPT() {
             TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
             (int, int) weaponDPT = CalculateWeaponDPT();
@@ -45,7 +44,6 @@ namespace Saga.Character
 
             return (weaponDPT.Item1 + dmgfromattribute, weaponDPT.Item2 + dmgfromattribute);
         }
-
         public override string Equip(Weapon weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
@@ -81,7 +79,6 @@ namespace Saga.Character
                 return "New weapon equipped!";
             }            
         }
-
         public override string Equip(Armor armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
@@ -124,7 +121,6 @@ namespace Saga.Character
             Program.CurrentPlayer.CalculateTotalStats();
             return "New potion equipped!";
         }
-
         public override string UnEquip(Slot slot, Item item) {
             int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(item, index);
@@ -135,11 +131,9 @@ namespace Saga.Character
             }
             return "Item unequipped!";
         }
-
         public override void SetStartingGear() {
             Equip(WeaponLootTable.CrackedWand);
             Equip(ArmorLootTable.LinenRags);
-            Equip(Potion.HealingPotion);
         }
         public override void PlayerActions(Enemy Monster, Encounters TurnTimer) {
             Console.WriteLine("Choose an action...");
@@ -149,13 +143,13 @@ namespace Saga.Character
                 int damage = Attack(Monster);
                 Monster.Health -= damage;
                 HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
-                TurnTimer.turnTimer++;
+                TurnTimer.TurnTimer++;
             }
             else if (input.ToLower() == "d" || input == "defend") {
                 //Defend 
                 Defend(Monster);
                 HUDTools.WriteCombatLog("defend", TurnTimer, 0, 0, Monster);
-                TurnTimer.turnTimer++;
+                TurnTimer.TurnTimer++;
             }
             else if (input.ToLower() == "r" || input == "run") {
                 //Run                   
@@ -163,18 +157,18 @@ namespace Saga.Character
                     AudioManager.soundKamp.Stop();
                     AudioManager.soundBossKamp.Stop();
                     HUDTools.ClearCombatLog();
-                    TurnTimer.ran = true;
+                    TurnTimer.Ran = true;
                 }
                 else {
                     HUDTools.WriteCombatLog(action: "run", TurnTimer: TurnTimer, Monster: Monster);
-                    TurnTimer.turnTimer++;
+                    TurnTimer.TurnTimer++;
                 }
             }
             else if (input.ToLower() == "h" || input == "heal") {
                 //Heal
                 Heal();
                 HUDTools.WriteCombatLog(action: "heal", TurnTimer: TurnTimer, Monster: Monster);
-                TurnTimer.turnTimer++;
+                TurnTimer.TurnTimer++;
             }
             else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
@@ -186,13 +180,13 @@ namespace Saga.Character
             Console.ReadKey(true);
         }
         public override void Heal() {
-            if (((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity == 0) {
+            if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 10);
             }
             else {
                 HUDTools.Print("You use a potion amplified by your magic", 10);
-                Program.CurrentPlayer.Health += ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency + 1 + Program.CurrentPlayer.Level * 2;
-                ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionQuantity--;
+                Program.CurrentPlayer.Health += Program.CurrentPlayer.CurrentHealingPotion.PotionPotency + 1 + Program.CurrentPlayer.Level * 2;
+                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity--;
                 if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
                     Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
                 }
@@ -200,11 +194,10 @@ namespace Saga.Character
                     HUDTools.Print("You heal to max health!", 10);
                 }
                 else {
-                    HUDTools.Print($"You gain {((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency + 1 + Program.CurrentPlayer.Level * 2} health", 10);
+                    HUDTools.Print($"You gain {Program.CurrentPlayer.CurrentHealingPotion.PotionPotency + 1 + Program.CurrentPlayer.Level * 2} health", 10);
                 }
             }
         }
-
         public static int Attack(Enemy Monster) {
             HUDTools.Print($"You shoot an arcane missile from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);

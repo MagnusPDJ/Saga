@@ -17,15 +17,13 @@ namespace Saga.Items
         public override string ItemDescription() {
             return $"Potion of type {PotionType}";
         }
-
-        public static Potion HealingPotion = new Potion() {
-            ItemName = "Healing Potion",
-            ItemLevel = 1,
-            ItemSlot = Slot.SLOT_POTION,
-            PotionType = PotionType.POTION_HEALING,
-            PotionPotency = 5,
-            PotionQuantity = 5
-        };
+        public Potion() {
+            ItemName = "Healing Potion";
+            ItemLevel = 1;
+            PotionType = PotionType.POTION_HEALING;
+            PotionPotency = 5;
+            PotionQuantity = 5;
+        }
         public override int CalculateItemPrice() {
             ItemPrice = 20+10*Program.CurrentPlayer.Level;
             return ItemPrice;

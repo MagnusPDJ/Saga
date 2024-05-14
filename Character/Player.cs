@@ -7,10 +7,18 @@ using Saga.Items;
 
 namespace Saga.Character
 {
+    public enum Act {
+        Act1,
+        Act2,
+        Act3,
+        Act4,
+        Act5
+    }
     [Serializable]
     public abstract class Player
     {
-        public string currentClass;
+        public string CurrentClass { get; set; }
+        public Act CurrentAct { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
         public int Level { get; set; }
@@ -19,6 +27,7 @@ namespace Saga.Character
         public int Health { get; set; }
         public int Mana { get; set; }
         public int FreeAttributePoints { get; set; }
+        public Potion CurrentHealingPotion { get; set; }
         public PrimaryAttributes BasePrimaryAttributes { get; set; }
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
@@ -26,11 +35,11 @@ namespace Saga.Character
         public Dictionary<Slot, Item> Equipment { get; set; }
         public Item[] Inventory { get; set; }
         public (int, int) DPT { get; set; }
-
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;
             Id = id;
-            Level = 1; 
+            Level = 1;
+            CurrentAct = Act.Act1;
             Equipment = new Dictionary<Slot, Item>();
             Inventory = new Item[10];
             Exp = 0;
@@ -39,26 +48,30 @@ namespace Saga.Character
             BasePrimaryAttributes = new PrimaryAttributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, WillPower = willpower };
             CalculateTotalStats();
             Health = TotalSecondaryAttributes.MaxHealth;
-            Mana = TotalSecondaryAttributes.MaxMana; 
+            Mana = TotalSecondaryAttributes.MaxMana;
+            CurrentHealingPotion = new Potion();
         }
         // <param name="levels">Number of levels to level up</param>
         public abstract void LevelUp();
-
         //Metode til udregning af det exp det koster at level op.
         public int GetLevelUpValue() {
-            return Convert.ToInt32(5000000 / (1 + 10000 * Math.Pow(1.2, 1 - Program.CurrentPlayer.Level)));
+            return Convert.ToInt32(5000000 / (1 + 10000 * Math.Pow(1.2, 1 - Level)));
         }
 
         //Metode til at tjekke om lvl op er muligt
         public bool CanLevelUp() {
-            if (Program.CurrentPlayer.Exp >= GetLevelUpValue()) {
+            if (Exp >= GetLevelUpValue()) {
                 return true;
             }
             else {
                 return false;
             }
         }
-
+        public void CheckForLevelUp() {
+            if (CanLevelUp()) {
+                LevelUp();
+            }
+        }
         // <returns> An integer with damage per turn</returns>
         public abstract (int, int) CalculateDPT();
         // Equips a weapon.

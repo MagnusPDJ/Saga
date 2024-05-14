@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Saga.assets;
 using Saga.Character;
-using static System.Net.Mime.MediaTypeNames;
+using Saga.Items.Loot;
 
 namespace Saga.Items
 {
@@ -94,7 +94,7 @@ namespace Saga.Items
 
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
-            int potionP = ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).CalculateItemPrice();
+            int potionP = Program.CurrentPlayer.CurrentHealingPotion.CalculateItemPrice();
             int sellPotionP = potionP / 2;
             switch (item) {
                 default:
@@ -102,7 +102,7 @@ namespace Saga.Items
                 case "potion":                    
                     return potionP;
                 case "potionupgrade":
-                    int potionupgradeP = 200 * ((Potion)Program.CurrentPlayer.Equipment[Slot.SLOT_POTION]).PotionPotency;
+                    int potionupgradeP = 200 * Program.CurrentPlayer.CurrentHealingPotion.PotionPotency;
                     return potionupgradeP;
                 case "sellpotion":
                     return sellPotionP;
@@ -196,7 +196,7 @@ namespace Saga.Items
             if (p.Gold >= cost) {
                 switch (item) {
                     case "potion":
-                        ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity++;
+                        p.CurrentHealingPotion.PotionQuantity++;
                         break;
                     //case "weapon":
                     //    p.weaponValue++; 
@@ -205,7 +205,7 @@ namespace Saga.Items
                     //    p.armorValue++; 
                     //    break;
                     case "upgradepotion":
-                        ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionPotency += 5;
+                        p.CurrentHealingPotion.PotionPotency += 5;
                         break;
                 }
                 p.Gold -= cost;
@@ -220,8 +220,8 @@ namespace Saga.Items
         static void TrySell(string item, int price, Player p) {
             switch (item) {
                 case "potion":
-                if (((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity > 0) {
-                    ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity--;
+                if (p.CurrentHealingPotion.PotionQuantity > 0) {
+                    p.CurrentHealingPotion.PotionQuantity--;
                     p.Gold += price;
                     break;
                 } else {
@@ -230,8 +230,8 @@ namespace Saga.Items
                     break;
                 }
                 case "5x potion":
-                if (((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity >= 5) {
-                    ((Potion)p.Equipment[Slot.SLOT_POTION]).PotionQuantity -= 5;
+                if (p.CurrentHealingPotion.PotionQuantity >= 5) {
+                    p.CurrentHealingPotion.PotionQuantity -= 5;
                     p.Gold += price;
                     break;
                 } else {

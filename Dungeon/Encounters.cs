@@ -8,10 +8,8 @@ using Saga.Character;
 namespace Saga.Dungeon
 {
     public class Encounters {
-        public int turnTimer = 1;
-        public bool ran = false;
-
-
+        public int TurnTimer { get; set; } = 1;
+        public bool Ran { get; set; } = false;
         //Encounters:
 
         //De Encounters som køres når en ny karakter startes for at introducere kamp.
@@ -27,11 +25,7 @@ namespace Saga.Dungeon
             AudioManager.soundKamp.Play();
             HUDTools.Print("He turns...");
             HUDTools.PlayerPrompt();
-            Enemy FirstEncounter = new Enemy {
-                Name = "Human Captor",
-                Health = 5,
-                Power = 2
-            };
+            Enemy FirstEncounter = new Act1Enemy("Human Captor", 5, 2);
             AdvancedCombat(FirstEncounter);
         }
         public static void SecondEncounter() {
@@ -45,11 +39,7 @@ namespace Saga.Dungeon
                     HUDTools.Print($"You break down a door and find a Feral Dog inside!", 10);
                     break;
             }
-            Enemy SecondEncounter = new Enemy {
-                Name = "Feral Dog",
-                Health = 6,
-                Power = 3
-            };
+            Enemy SecondEncounter = new Act1Enemy("Feral Dog", 6,3);
             HUDTools.PlayerPrompt();
             AdvancedCombat(SecondEncounter);
         }
@@ -58,11 +48,11 @@ namespace Saga.Dungeon
             Console.Clear();
             AudioManager.soundShop.Play();
             AudioManager.soundTypeWriter.Play();
-            if (Program.CurrentPlayer.currentClass == "Mage") {
+            if (Program.CurrentPlayer.CurrentClass == "Mage") {
                 HUDTools.Print($"After dusting off your {Program.CurrentPlayer.Equipment[Slot.Torso].ItemName} and tucking in your new wand, you find someone else captured.");
-            } else if (Program.CurrentPlayer.currentClass == "Archer") {
+            } else if (Program.CurrentPlayer.CurrentClass == "Archer") {
                 HUDTools.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
-            } else if (Program.CurrentPlayer.currentClass == "Warrior") {
+            } else if (Program.CurrentPlayer.CurrentClass == "Warrior") {
                 HUDTools.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
             }
             HUDTools.Print("Freeing him from his shackles, he thanks you and gets up.");
@@ -96,9 +86,7 @@ namespace Saga.Dungeon
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
             AudioManager.soundKamp.Play();
-            Enemy RandomEnemy = new Enemy { Name = Enemy.GetType() };
-            RandomEnemy.Health = Enemy.GetHealth(RandomEnemy.Name);
-            RandomEnemy.Power = Enemy.GetPower(RandomEnemy.Name);
+            Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
             switch (Program.rand.Next(0,2)) {
                 case int x when (x == 0):
                     HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.Name}...", 10);
@@ -119,11 +107,10 @@ namespace Saga.Dungeon
             AudioManager.soundBossKamp.Play();
             HUDTools.Print("long beard and pointy hat, looking at a large tome.");
             HUDTools.PlayerPrompt();
-            Enemy WizardEncounter = new Enemy {
-                Name = "Dark Wizard",
+            Enemy WizardEncounter = new Act1Enemy("Dark Wizard") {
                 Health = 3 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
                 Power = 6 + 2 * Program.CurrentPlayer.Level,
-                XpModifier = 3
+                ExpModifier = 3
             };
             AdvancedCombat(WizardEncounter);
         }
@@ -153,11 +140,10 @@ namespace Saga.Dungeon
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     HUDTools.PlayerPrompt();
-                    Enemy MimicEncounter = new Enemy {
-                        Name = "Mimic",
+                    Enemy MimicEncounter = new Act1Enemy("Mimic") {
                         Health = 10 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
                         Power = 5 + Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                        XpModifier = 2,
+                        ExpModifier = 2,
                         GoldModifier = 3
                     };
                     AdvancedCombat(MimicEncounter); 
@@ -193,7 +179,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("You release the metal latch and grab both sides of the chest and peer inside.");
                     HUDTools.PlayerPrompt();
                     AudioManager.soundWin.Play();
-                    Loot.GetLoot(0, 3, "Treasure", "You find treasue!");
+                    Program.CurrentLoot.GetTreasureChestLoot();
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
@@ -252,7 +238,7 @@ namespace Saga.Dungeon
             }
             AudioManager.soundRuneTrap.Stop();
             AudioManager.soundWin.Play();
-            Loot.GetLoot(2,0,"Trap","You've crossed the trap successfully!");
+            Program.CurrentLoot.GetExp(2);
             Console.ResetColor();
             if (Program.CurrentPlayer.CanLevelUp()) {
                 Program.CurrentPlayer.LevelUp();
@@ -389,11 +375,11 @@ namespace Saga.Dungeon
             Encounters TurnTimer = new Encounters();
             HUDTools.TopCombatHUD(Monster, TurnTimer);
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
-                while (Monster.Health > 0 && TurnTimer.ran == false) {
+                while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Program.CurrentPlayer.PlayerActions(Monster, TurnTimer);
-                    if (TurnTimer.ran == false) {
-                        Enemy.MonsterActions(Monster, TurnTimer);
+                    if (TurnTimer.Ran == false) {
+                        Monster.MonsterActions(Monster, TurnTimer);
                     }                   
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearCombatLog();
@@ -404,9 +390,9 @@ namespace Saga.Dungeon
                     }
                 }
             }  else {
-                while (Monster.Health > 0 && TurnTimer.ran == false) {
+                while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
-                    Enemy.MonsterActions(Monster, TurnTimer);
+                    Monster.MonsterActions(Monster, TurnTimer);
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearCombatLog();
                         AudioManager.soundKamp.Stop();
@@ -422,10 +408,7 @@ namespace Saga.Dungeon
                 AudioManager.soundBossKamp.Stop();
                 HUDTools.ClearCombatLog();
                 AudioManager.soundWin.Play();
-                Loot.GetLoot(Monster.XpModifier, Monster.GoldModifier, Monster.Name, $"You Won against the {Monster.Name} on turn {TurnTimer.turnTimer - 1}!");
-                if (Program.CurrentPlayer.CanLevelUp()) {
-                    Program.CurrentPlayer.LevelUp();
-                }
+                Program.CurrentLoot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
             }
         }
     }

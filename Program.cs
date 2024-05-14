@@ -8,12 +8,14 @@ using System.Configuration;
 using Saga.Character;
 using Saga.Dungeon;
 using Saga.assets;
+using Saga.Items.Loot;
 
 namespace Saga
 {
-    internal class Program {
+    public class Program {
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player CurrentPlayer { get; set; }
+        public static Loot CurrentLoot { get; set; }
 
         //Sætter Game Loopet til true så man kan spille indefinitely.
         public static bool mainLoop = true;
@@ -86,18 +88,34 @@ namespace Saga
             if (CurrentPlayer == null) {
             } else {
                 NewStart(newP);
-                //Spillets loop
-                while (mainLoop) {
-                    AudioManager.soundMainMenu.Stop();
-                    AudioManager.soundShop.Stop();
-                    Encounters.Camp();
+                if (CurrentPlayer.CurrentAct == Act.Act1) {
+                    if (CurrentLoot == null) {
+                        CurrentLoot = new Act1Loot();
+                    }                   
+                    while (CurrentPlayer.CurrentAct == Act.Act1) {
+                        AudioManager.soundMainMenu.Stop();
+                        AudioManager.soundShop.Stop();
+                        Encounters.Camp();
+                    }
+                } else if (CurrentPlayer.CurrentAct == Act.Act2) {
+
+                } else if (CurrentPlayer.CurrentAct == Act.Act3) {
+
+                } else if (CurrentPlayer.CurrentAct == Act.Act4) {
+
+                } else if (CurrentPlayer.CurrentAct == Act.Act5) {
+
                 }
+
+
+
             }
         }
 
         //Metode til at køre start introduktionen
         public static void NewStart(bool newP) {
             if (newP) {
+                CurrentLoot = new Act1Loot();
                 CurrentPlayer.SetStartingGear();
                 Encounters.FirstEncounter();
                 Encounters.FirstShopEncounter();
@@ -136,7 +154,7 @@ namespace Saga
                 HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 5);
                 HUDTools.Print("#: playername");
                 foreach (Player p in players) {
-                    HUDTools.Print($"{p.Id}: {p.Name} - Class: {p.currentClass} - Level: {p.Level}", 10);
+                    HUDTools.Print($"{p.Id}: {p.Name} - Class: {p.CurrentClass} - Level: {p.Level}", 10);
                 }
                 HUDTools.Print("<><><><><><><><><><><><><><><><>", 5);
                 HUDTools.Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.", 1);

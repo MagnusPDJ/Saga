@@ -1,7 +1,7 @@
 ﻿using Saga.Character;
 using System;
 
-namespace Saga.Items
+namespace Saga.Items.Loot
 {
     [Serializable]
     public class WeaponLootTable : Weapon
