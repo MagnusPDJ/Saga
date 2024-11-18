@@ -240,9 +240,7 @@ namespace Saga.Dungeon
             AudioManager.soundWin.Play();
             Program.CurrentLoot.GetExp(2);
             Console.ResetColor();
-            if (Program.CurrentPlayer.CanLevelUp()) {
-                Program.CurrentPlayer.LevelUp();
-            }
+            HUDTools.PlayerPrompt();
             RandomBasicCombatEncounter();
         }
 
@@ -273,6 +271,7 @@ namespace Saga.Dungeon
         public static void Camp() {
             AudioManager.soundCampFire.Play();
             AudioManager.soundCampMusic.Play();
+            Shop shop = Shop.SetForsale();
             HUDTools.TopCampHUD();
             while (true) {
                 HUDTools.InstantCampHUD();
@@ -348,7 +347,7 @@ namespace Saga.Dungeon
                     //Gheed's shop
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
-                    Shop.Loadshop(Program.CurrentPlayer);
+                    Shop.Loadshop(Program.CurrentPlayer, shop);
                     AudioManager.soundCampFire.Play();
                     AudioManager.soundCampMusic.Play();
                 } 

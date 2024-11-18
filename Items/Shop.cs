@@ -10,22 +10,22 @@ namespace Saga.Items
     public class Shop
     {
         public List<Item> Forsale { get; set; }      
-        public void SetForsale() {            
-           Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(-1), ArmorLootTable.CreateRandomArmor(0) , ArmorLootTable.CreateRandomArmor(1), WeaponLootTable.CreateRandomWeapon(-1),WeaponLootTable.CreateRandomWeapon(0),WeaponLootTable.CreateRandomWeapon(1) };
+        public static Shop SetForsale() {
+            Shop shop = new Shop();
+            shop.Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(-1), ArmorLootTable.CreateRandomArmor(0) , ArmorLootTable.CreateRandomArmor(1), WeaponLootTable.CreateRandomWeapon(-1),WeaponLootTable.CreateRandomWeapon(0),WeaponLootTable.CreateRandomWeapon(1) };        
+            return shop;
         }
         //Metode til at kalde og Loade shoppen.
-        public static void Loadshop(Player p) {
+        public static void Loadshop(Player p, Shop shop) {
             AudioManager.soundShop.Play();
-            Runshop(p);
+            Runshop(p, shop);
             AudioManager.soundShop.Stop();
         }
 
         //Metode til at køre shoppen.
-        public static void Runshop(Player p) {
+        public static void Runshop(Player p, Shop shop) {
             bool sell = false;
             bool buy = true;
-            Shop shop = new Shop();
-            shop.SetForsale();
             while (buy) {
                 HUDTools.BuyShopHUD(shop);
                 //Wait for input

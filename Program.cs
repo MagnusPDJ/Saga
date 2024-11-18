@@ -50,21 +50,7 @@ namespace Saga
         public static void MainMenu() {
             AudioManager.soundMainMenu.Play();
             while (true) {
-                Console.Clear();
-                Console.WriteLine("########         ##         ##########         ##       ");
-                Console.WriteLine("########        ####        ##########        ####      ");
-                Console.WriteLine("##             ##  ##       ##               ##  ##     ");
-                Console.WriteLine("##            ##    ##      ##              ##    ##    ");
-                Console.WriteLine("########     ##      ##     ##   #####     ##      ##   ");
-                Console.WriteLine("########    ############    ##   #####    ############  ");
-                Console.WriteLine("      ##   ##############   ##      ##   ############## ");
-                Console.WriteLine("      ##   ##          ##   ##      ##   ##          ## ");
-                Console.WriteLine("########  ##            ##  ##########  ##            ##");
-                Console.WriteLine("########  ##            ##  ##########  ##            ##");
-                Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-                Console.WriteLine("\t\t1.         Play\n");
-                Console.WriteLine("\t\t2.       Settings\n");
-                Console.WriteLine("\t\t3.       Quit Game\n");
+                HUDTools.MainMenu();
                 string input = HUDTools.PlayerPrompt();
                 if (input == "1") {
                     Play();
@@ -277,6 +263,9 @@ namespace Saga
                 Console.Clear();
                 HUDTools.Print($"This is your name?\n{input}.\n(Y/N)",10);
                 input1 = HUDTools.PlayerPrompt();
+                if (input1 != "y" || input1 != "n") {
+                    HUDTools.Print("Invalid input.", 3);
+                }
             } while (input1 != "y");
             return input;
         }
@@ -324,14 +313,14 @@ namespace Saga
         
         //Metode til at 'Save and Quit' spillet.
         public static void Quit() {
-            HUDTools.Print("Want to Quit? (Y/N)",10);
+            HUDTools.Print("Want to Quit? (Y)",10);
             string input = HUDTools.PlayerPrompt().ToLower();
             if (input == "y") {
+                AudioManager.soundCampFire.Stop();
+                AudioManager.soundCampMusic.Stop();
+                AudioManager.soundLaugh.Play();
+                Console.WriteLine("Want to save? (Y/N)");
                 while (true) {
-                    AudioManager.soundCampFire.Stop();
-                    AudioManager.soundCampMusic.Stop();
-                    AudioManager.soundLaugh.Play();
-                    Console.WriteLine("Want to save? (Y/N)");
                     string input1 = HUDTools.PlayerPrompt().ToLower();
                     if (input1 == "y") {
                         Save();
@@ -344,7 +333,6 @@ namespace Saga
                     }
                     else {
                         Console.WriteLine("Wrong Input");
-                        HUDTools.PlayerPrompt();
                     }
                 }
                 MainMenu();
@@ -357,7 +345,7 @@ namespace Saga
             var settings = configFile.AppSettings.Settings;
             while (true) {
                 HUDTools.InstantSettings();
-                string input = Console.ReadKey().KeyChar.ToString();
+                string input = Console.ReadKey(true).KeyChar.ToString();
                 if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {
                         settings["toggleReadLine"].Value = "false";

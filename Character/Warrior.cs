@@ -32,9 +32,7 @@ namespace Saga.Character
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             HUDTools.Print($"Congratulations! You are now level {Level}! You've gained 1 attribute point.", 20);
             Console.ResetColor();            
-            HUDTools.PlayerPrompt();
         }
-
         public override (int, int) CalculateDPT() {
             TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
             (int, int) weaponDPT = CalculateWeaponDPT();
@@ -46,7 +44,6 @@ namespace Saga.Character
             int dmgfromwarrior = Level;
             return (weaponDPT.Item1 + dmgfromattribute+dmgfromwarrior, weaponDPT.Item2 + dmgfromattribute+dmgfromwarrior);
         }
-
         public override string Equip(Weapon weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
@@ -82,7 +79,6 @@ namespace Saga.Character
                 return "New weapon equipped!";
             }
         }
-
         public override string Equip(Armor armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
@@ -133,7 +129,6 @@ namespace Saga.Character
             }
             return "Item unequipped!";
         }
-
         public override void SetStartingGear() {
             Equip(WeaponLootTable.RustySword);
             Equip(ArmorLootTable.LinenRags);
@@ -201,7 +196,6 @@ namespace Saga.Character
                 }
             }
         }
-
         public static int Attack(Enemy Monster) {
             HUDTools.Print($"You swing your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
@@ -209,8 +203,8 @@ namespace Saga.Character
             return attack;
         }
         public static void Defend(Enemy Monster) {
-            HUDTools.Print($"You defend the next two attacks from {Monster.Name}", 20);
-            Monster.AttackDebuff += 2;
+            HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
+            Monster.AttackDebuff += 3+1;
         }
         public static bool RunAway(Enemy Monster) {
             bool escaped = false;

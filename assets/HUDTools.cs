@@ -9,6 +9,7 @@ using Saga.Character;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
 
 namespace Saga.assets
 {
@@ -34,12 +35,15 @@ namespace Saga.assets
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
                 Task t = Task.Run(() => {
                     foreach (char c in text) {
+                        if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Spacebar) {
+                            time = 0;
+                        }
                         Console.Write(c);
                         Thread.Sleep(time);
                     }
                     Console.WriteLine();
                 });
-                t.Wait();
+                t.Wait();          
             }
             else {
                 Task t = Task.Run(() => {
@@ -188,6 +192,23 @@ namespace Saga.assets
         }
 
         //HUDS
+        public static void MainMenu() {
+            Console.Clear();
+            Console.WriteLine("########         ##         ##########         ##       ");
+            Console.WriteLine("########        ####        ##########        ####      ");
+            Console.WriteLine("##             ##  ##       ##               ##  ##     ");
+            Console.WriteLine("##            ##    ##      ##              ##    ##    ");
+            Console.WriteLine("########     ##      ##     ##   #####     ##      ##   ");
+            Console.WriteLine("########    ############    ##   #####    ############  ");
+            Console.WriteLine("      ##   ##############   ##      ##   ############## ");
+            Console.WriteLine("      ##   ##          ##   ##      ##   ##          ## ");
+            Console.WriteLine("########  ##            ##  ##########  ##            ##");
+            Console.WriteLine("########  ##            ##  ##########  ##            ##");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            Console.WriteLine("\t\t1.         Play\n");
+            Console.WriteLine("\t\t2.       Settings\n");
+            Console.WriteLine("\t\t3.       Quit Game\n");
+        }
         public static void SlowSettings() {
             Console.Clear();
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -376,7 +397,7 @@ namespace Saga.assets
                 Console.Clear();
                 Program.CurrentPlayer.DisplayStats();
                 if (Program.CurrentPlayer.FreeAttributePoints > 0 && i != 0) {
-                    Print("Allocate attribute point? Type the corresponding attribute name to spent 1 point, else type no",1);
+                    Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o",1);
                     while (true) {
                         string input = PlayerPrompt();
                         if (input == "s" || input == "strength") {
@@ -487,7 +508,7 @@ namespace Saga.assets
                         Console.WriteLine("");
                     }
                 }
-                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname', else (b)ack", 2);
+                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname', else (b)ack", 1);
                 string[] input = Console.ReadLine().ToLower().Split('_');
                 if (input[0] == "equip") {
                     if (Program.CurrentPlayer.Inventory.All(x => x == null)) {

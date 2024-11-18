@@ -32,7 +32,6 @@ namespace Saga.Character
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             HUDTools.Print($"Congratulations! You are now level {Level}! You've gained 1 attribute point.", 20);
             Console.ResetColor();
-            HUDTools.PlayerPrompt();
         }
 
         public override (int, int) CalculateDPT() {
@@ -208,8 +207,8 @@ namespace Saga.Character
             return attack;
         }
         public static void Defend(Enemy Monster) {
-            HUDTools.Print($"You defend the next two attacks from {Monster.Name}", 20);
-            Monster.AttackDebuff += 2;
+            HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
+            Monster.AttackDebuff += 3+1;
         }
         public static bool RunAway(Enemy Monster) {
             bool escaped = false;
