@@ -62,8 +62,7 @@ namespace Saga.Character
         public bool CanLevelUp() {
             if (Exp >= GetLevelUpValue()) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -86,7 +85,7 @@ namespace Saga.Character
         public abstract void SetStartingGear();
 
         //Metode til at vælge mellem character actions/skills/items
-        public abstract void PlayerActions(Enemy Monster, Encounters TurnTimer);
+        public abstract void CombatActions(Enemy Monster, Encounters TurnTimer);
 
         public abstract void Heal();
 
@@ -244,38 +243,37 @@ namespace Saga.Character
             if (hasAmuletArmor) {
                 Armor a = (Armor)AmuletArmor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
-                }
+            }
             if (hasRing1Armor) {
                 Armor a = (Armor)Ring1Armor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
-                }
+            }
             if (hasRing2Armor) {
                 Armor a = (Armor)Ring2Armor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
-                }
+            }
             if (hasCrestArmor) {
                 Armor a = (Armor)CrestArmor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
-                }
+            }
             if (hasTrinketArmor) {
                 Armor a = (Armor)TrinketArmor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
-                }
+            }
             if (hasOffhandArmor) {
                 Armor a = (Armor)OffhandArmor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistence = a.SecondaryAttributes.ElementalResistence };
-                }
+            }
             return BaseSecondaryAttributes + armorBonusValues;
         }
 
         //Calculates secondaryAttributes
         public SecondaryAttributes CalculateBaseSecondaryStats() {
-            return new SecondaryAttributes()
-            {
+            return new SecondaryAttributes() {
                 MaxHealth = 5 + TotalPrimaryAttributes.Constitution * 5,
                 MaxMana = 5 + TotalPrimaryAttributes.WillPower * 5,
                 Awareness = TotalPrimaryAttributes.Dexterity,
-                ArmorRating = (TotalPrimaryAttributes.Strength + TotalPrimaryAttributes.Dexterity)/2,
+                ArmorRating = (TotalPrimaryAttributes.Strength + TotalPrimaryAttributes.Dexterity) / 2,
                 ElementalResistence = TotalPrimaryAttributes.Intellect
             };
         }
@@ -286,14 +284,13 @@ namespace Saga.Character
             if (hasWeapon) {
                 Weapon w = (Weapon)equippedWeapon;
                 return (w.WeaponAttributes.MinDamage, w.WeaponAttributes.MaxDamage);
-            }
-            else {
+            } else {
                 return (1, 1);
             }
         }
 
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
-        public static void DeathCode(string message) {
+        public void DeathCode(string message) {
             AudioManager.soundGameOver.Play();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             HUDTools.Print(message, 20);
@@ -303,5 +300,21 @@ namespace Saga.Character
             Program.MainMenu();
         }
 
+        //Metode til at kalde basic actions (heal, inventory og character)
+        public void BasicActions(string input) {
+            if (input == "h" || input == "heal") {
+                //Heal
+                Program.CurrentPlayer.Heal();
+                HUDTools.PlayerPrompt();
+            }
+            if (input == "c" || input == "character" || input == "character screen") {
+                HUDTools.CharacterScreen();
+                HUDTools.PlayerPrompt();
+            }
+            if (input == "i" || input == "inventory") {
+                HUDTools.InventoryScreen();
+            }
+
+        }
     }
 }

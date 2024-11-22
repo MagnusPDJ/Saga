@@ -4,13 +4,16 @@ using System.Linq;
 using Saga.assets;
 using Saga.Items;
 using Saga.Character;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Saga.Dungeon
 {
     public class Encounters {
         public int TurnTimer { get; set; } = 1;
         public bool Ran { get; set; } = false;
-        //Encounters:
+
+      //Encounters:
 
         //De Encounters som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
@@ -19,13 +22,16 @@ namespace Saga.Dungeon
             HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, while charging toward your captor.");
+            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.");
             AudioManager.soundMainMenu.Stop();
             AudioManager.soundTaunt.Play();
             AudioManager.soundKamp.Play();
             HUDTools.Print("He turns...");
             HUDTools.PlayerPrompt();
-            Enemy FirstEncounter = new Act1Enemy("Human Captor", 5, 2);
+            Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
+                Health = 5,
+                Power = 2,
+            };
             AdvancedCombat(FirstEncounter);
         }
         public static void SecondEncounter() {
@@ -39,7 +45,10 @@ namespace Saga.Dungeon
                     HUDTools.Print($"You break down a door and find a Feral Dog inside!", 10);
                     break;
             }
-            Enemy SecondEncounter = new Act1Enemy("Feral Dog", 6,3);
+            Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
+            Health=6,
+            Power=3,
+            };
             HUDTools.PlayerPrompt();
             AdvancedCombat(SecondEncounter);
         }
@@ -67,7 +76,6 @@ namespace Saga.Dungeon
             HUDTools.PlayerPrompt();
             AudioManager.soundShop.Stop();
         }
-
         //Encounter som køres der introducere Camp
         public static void FirstCamp() {
             Console.Clear();
@@ -81,12 +89,11 @@ namespace Saga.Dungeon
             HUDTools.Print("you can stay for a while and rest.");
             HUDTools.PlayerPrompt();
         }
-
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
             AudioManager.soundKamp.Play();
-            Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
+            Act1Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
             switch (Program.rand.Next(0,2)) {
                 case int x when (x == 0):
                     HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.Name}...", 10);
@@ -98,7 +105,6 @@ namespace Saga.Dungeon
             HUDTools.PlayerPrompt();
             AdvancedCombat(RandomEnemy);
         }
-
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
             Console.Clear();
@@ -107,14 +113,13 @@ namespace Saga.Dungeon
             AudioManager.soundBossKamp.Play();
             HUDTools.Print("long beard and pointy hat, looking at a large tome.");
             HUDTools.PlayerPrompt();
-            Enemy WizardEncounter = new Act1Enemy("Dark Wizard") {
+            Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
                 Health = 3 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
                 Power = 6 + 2 * Program.CurrentPlayer.Level,
-                ExpModifier = 3
+                ExpModifier = 3,
             };
             AdvancedCombat(WizardEncounter);
         }
-
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
             string input;
@@ -140,11 +145,10 @@ namespace Saga.Dungeon
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     HUDTools.PlayerPrompt();
-                    Enemy MimicEncounter = new Act1Enemy("Mimic") {
+                    Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
                         Health = 10 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
                         Power = 5 + Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                        ExpModifier = 2,
-                        GoldModifier = 3
+                        GoldModifier = 3,
                     };
                     AdvancedCombat(MimicEncounter); 
                     break;
@@ -155,7 +159,6 @@ namespace Saga.Dungeon
                 }
             } while (input != "42");
         }
-
         //Encounter der "spawner" en treasure chest.
         public static void TreasureEncounter() {
             string input;
@@ -188,67 +191,116 @@ namespace Saga.Dungeon
                 }
             } while (input != "42");
         }
-
+        //Encounter der starter en trap med runer hvor den rigtige rune skal vælges for at kunne exit
         public static void PuzzleOneEncounter() {
             Console.Clear();
             AudioManager.soundFootsteps.Play();
             AudioManager.soundRuneTrap.Play();
-            HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.",30);
+
             //runer
-            List<char> chars = new char[] {'\u00fe', '\u00f5','\u00d0','\u0141','\u014a','\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
+            List<char> chars = new char[] { '\u0925', '\u0931', '\u09fa', '\u1bd1', '\u1bfe', '\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
+            List<char> endchars = new char[] { '\u00fe', '\u00f5', '\u00d0', '\u0141', '\u014a', '\u1c07', '\u1c1c', '\u1c59', '\u1c6c', '\u1cbe' }.ToList();
             List<int> positions = new List<int>();
             char c = chars[Program.rand.Next(0, 10)];
             chars.Remove(c);
-            HUDTools.Print("   o    <- Starting position",10);
+            
+            //Rune template
+            List<string> puzzle = new List<string>();
+
             for (int a = 0; a < 4; a++) {
                 int pos = Program.rand.Next(0, 4);
                 positions.Add(pos);
+                string row = "";
                 for (int b = 0; b < 4; b++) {
-                    if ( b == pos) {
-                        Console.Write(c+" ");
+                    if (b == pos) {
+                        row += c + " ";
+                    } else if (0<a && a<3){
+                        row += chars[Program.rand.Next(0, 9)] + " ";
                     } else {
-                        Console.Write(chars[Program.rand.Next(0, 9)]+" ");
-                    }
+                        row += endchars[Program.rand.Next(0, 9)] + " ";
+                    }             
                 }
-                Console.Write("\n");
+                puzzle.Add(row);
             }
-            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)",30);
 
-            for (int i = 0; i < 4; i++) {
-                while (true) {
-                    if (int.TryParse(HUDTools.PlayerPrompt(), out int input) && input < 5 && input > 0) {
-                        if (positions[i] == input - 1) {
-                            AudioManager.soundFootsteps.Play();
-                            HUDTools.Print($"You step on the corresponding rune, nothing happens...\n(You are now on row {i+1})",10);
-                            break;
+            //slow print:
+            Console.Clear();
+            HUDTools.SmallCharacterInfo();
+            HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 30);
+            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)", 10);
+            HUDTools.Print("   o    <- starting position", 5);
+            for (int j = 0; j < 4; j++) {
+                HUDTools.Print(puzzle[j] + "\n", 10);
+            }
+
+            //Player action sequence:
+            string location = "";
+            for (int i = 0; i < 4;) {
+                Console.Clear();               
+                HUDTools.SmallCharacterInfo();
+                if (i == 0) {
+                    HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 0);
+                    HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)", 0);
+                    HUDTools.Print("   o    <- starting position", 0);
+                    for (int j = 0; j < 4; j++) {
+                        HUDTools.Print(puzzle[j]+"\n", 0);
+                    }                  
+                } else {
+                    HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 0);
+                    HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4):", 0);
+                    for (int j = 0; j < 4; j++) {
+                        if (i == j) {
+                            Console.Write($"{location} <- Your position");
                         }
-                        else {
-                            AudioManager.soundDarts.Play();
-                            HUDTools.Print($"Darts fly out of the walls! You take 2 damage.\n(You are still on row {i})", 10);
-                            Program.CurrentPlayer.Health -= 2;
-                            if (Program.CurrentPlayer.Health <= 0) {
-                                Player.DeathCode("You start to feel sick. The poison from the darts slowly kills you");                         
-                            }
+                        HUDTools.Print("\n"+puzzle[j], 0);                        
+                    }
+                    Console.WriteLine();
+                }              
+                string input = HUDTools.PlayerPrompt();
+                if (int.TryParse(input, out int number) && number < 5 && number > 0) {
+                    if (positions[i] == number - 1) {
+                        AudioManager.soundFootsteps.Play();
+                        HUDTools.Print($"You stepped on the {c} rune, nothing happens...", 10);
+                        location = "";
+                        i++;
+                        for (int j = 1; j < number; j++) {
+                            location += "  ";
+                        }
+                        location += "o";
+                        for (int j = 4; j > number; j--) {
+                            location += "  ";
+                        }
+                        Console.ReadKey(true);
+                    } else {
+                        AudioManager.soundDarts.Play();
+                        HUDTools.Print($"Darts fly out of the walls! You take 2 damage.)", 10);
+                        Program.CurrentPlayer.Health -= 2;
+                        Console.ReadKey(true);
+                        if (Program.CurrentPlayer.Health <= 0) {
+                            Program.CurrentPlayer.DeathCode("You start to feel sick. The poison from the darts slowly kills you");
                         }
                     }
-                    else {
-                        Console.WriteLine("Invalid Input: Whole numbers 1-4 only");
-                    }
-                }
+                } else if (int.TryParse(input, out _)) {
+                    Console.WriteLine("Invalid Input: Whole numbers 1-4 only");
+                    Console.ReadKey(true);
+                } else {
+                    Program.CurrentPlayer.BasicActions(input);
+                }               
             }
             AudioManager.soundRuneTrap.Stop();
             AudioManager.soundWin.Play();
-            Program.CurrentLoot.GetExp(2);
+            Program.CurrentLoot.GetExp(2, 50*Program.CurrentPlayer.Level);
             Console.ResetColor();
             HUDTools.PlayerPrompt();
             RandomBasicCombatEncounter();
         }
 
-        //Encounter Tools:
+      //Encounter Tools:
 
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            switch (Program.rand.Next(0, 125+1)) {
+            //0, 125+1
+            switch (Program.rand.Next(0, 125 + 1)) {
                 default:
                     RandomBasicCombatEncounter();
                     break;
@@ -317,21 +369,12 @@ namespace Saga.Dungeon
                                 HUDTools.Print("You venture deeper...", 5);
                                 HUDTools.PlayerPrompt();
                                 break;
-                            } else if (input == "h" || input == "heal") {
-                                //Heal
-                                Program.CurrentPlayer.Heal();
-                                HUDTools.PlayerPrompt();
-                            } else if (input == "c" || input == "character" || input == "character screen") {
-                                HUDTools.CharacterScreen();
-                                HUDTools.PlayerPrompt();
-                            } 
-                            else if (input == "i" || input == "inventory") {
-                                HUDTools.InventoryScreen();
-                            }
-                            else if (input == "r" || input == "return") {
+                            } else if (input == "r" || input == "return") {
                                 stay = false;
                                 HUDTools.Print("You retrace your steps in the darkness...",20);
                                 HUDTools.PlayerPrompt();
+                            } else {
+                                Program.CurrentPlayer.BasicActions(input);
                             }
                         }              
                     }
@@ -369,22 +412,23 @@ namespace Saga.Dungeon
             }
         }
 
+        //Metode til at køre kamp
         public static void AdvancedCombat(Enemy Monster) {
-            HUDTools.ClearCombatLog();
+            HUDTools.ClearLog();
             Encounters TurnTimer = new Encounters();
             HUDTools.TopCombatHUD(Monster, TurnTimer);
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
-                    Program.CurrentPlayer.PlayerActions(Monster, TurnTimer);
+                    Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
                     if (TurnTimer.Ran == false) {
                         Monster.MonsterActions(Monster, TurnTimer);
                     }                   
                     if (Program.CurrentPlayer.Health <= 0) {
-                        HUDTools.ClearCombatLog();
+                        HUDTools.ClearLog();
                         AudioManager.soundKamp.Stop();
                         AudioManager.soundBossKamp.Stop();
-                        Player.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
+                        Program.CurrentPlayer.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                         break;
                     }
                 }
@@ -393,19 +437,19 @@ namespace Saga.Dungeon
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Monster.MonsterActions(Monster, TurnTimer);
                     if (Program.CurrentPlayer.Health <= 0) {
-                        HUDTools.ClearCombatLog();
+                        HUDTools.ClearLog();
                         AudioManager.soundKamp.Stop();
                         AudioManager.soundBossKamp.Stop();
-                        Player.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
+                        Program.CurrentPlayer.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                         break;
                     }
-                    Program.CurrentPlayer.PlayerActions(Monster, TurnTimer);
+                    Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
                 }
             }
             if (Monster.Health <= 0) {
                 AudioManager.soundKamp.Stop();
                 AudioManager.soundBossKamp.Stop();
-                HUDTools.ClearCombatLog();
+                HUDTools.ClearLog();
                 AudioManager.soundWin.Play();
                 Program.CurrentLoot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
             }

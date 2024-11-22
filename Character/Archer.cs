@@ -136,7 +136,7 @@ namespace Saga.Character
             Equip(WeaponLootTable.FlimsyBow);
             Equip(ArmorLootTable.LinenRags);
         }
-        public override void PlayerActions(Enemy Monster, Encounters TurnTimer) {
+        public override void CombatActions(Enemy Monster, Encounters TurnTimer) {
             Console.WriteLine("Choose an action...");
             string input = HUDTools.PlayerPrompt().ToLower();
             if (input.ToLower() == "a" || input == "attack") {
@@ -157,7 +157,7 @@ namespace Saga.Character
                 if (RunAway(Monster)) {
                     AudioManager.soundKamp.Stop();
                     AudioManager.soundBossKamp.Stop();
-                    HUDTools.ClearCombatLog();
+                    HUDTools.ClearLog();
                     TurnTimer.Ran = true;
                 }
                 else {
@@ -176,7 +176,7 @@ namespace Saga.Character
             }
             else if (input == "l" || input == "log" || input == "combat log") {
                 Console.Clear();
-                HUDTools.GetCombatLog();
+                HUDTools.GetLog();
             }
             Console.ReadKey(true);
         }

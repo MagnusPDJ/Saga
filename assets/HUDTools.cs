@@ -9,7 +9,6 @@ using Saga.Character;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
 
 namespace Saga.assets
 {
@@ -85,7 +84,7 @@ namespace Saga.assets
             return output;
         }
 
-        // Metode til at skrive en logfil 
+        // Metode til at skrive en logfil til kamp
         public static void WriteCombatLog(string action, Encounters TurnTimer, int damage=0, int attack = 0, Enemy Monster=null) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
@@ -180,14 +179,51 @@ namespace Saga.assets
             portal1.Close();
         }
 
+        //Metode til at skrive en logfil til puzzles
+        public static void SpareWriteToLog(List<int> positions, List<char> chars, char c) {
+            if (!File.Exists("combatlog.txt")) {
+                File.Create("combatlog.txt");
+            }
+            //Læser logfilen og gemmer det i memory
+            string text = File.ReadAllText("combatlog.txt");
+
+            // Åbner en text file navngivet "combatlog"  
+            // at the location of your program 
+            FileStream CombatLog = new FileStream("combatlog.txt", FileMode.Open);
+
+            //Laver et objekt som kan skrive til Logfilen
+            StreamWriter portal1 = new StreamWriter(CombatLog);
+
+            // Standard Output stream is  
+            // being saved to a Textwriter 
+            TextWriter combatlogsave = Console.Out;
+
+            //Klar gør objektet til at skrive til memory.
+            Console.SetOut(portal1);
+
+            //Skriver den gemte tekst.
+            Console.Write($"{text}\n");
+
+            //Skriver og tilføjer den nye tekst.
+
+            //
+
+
+            //Skriver teksten i memory til filen.
+            Console.SetOut(combatlogsave);
+
+            //Lukker objektet og filen igen.
+            portal1.Close();
+        }
+
         //Skriver Loggen i consolen.
-        public static void GetCombatLog() {
+        public static void GetLog() {
             string text = File.ReadAllText("combatlog.txt");
             Console.WriteLine(text);
         }
 
         //Rydder Log filen så den er klar til brug igen.
-        public static void ClearCombatLog() {
+        public static void ClearLog() {
             File.WriteAllText("combatlog.txt", String.Empty);
         }
 
@@ -234,7 +270,7 @@ namespace Saga.assets
         public static void BuyShopHUD(Shop shop) {
             Console.Clear();
             Console.WriteLine("         Gheed's Shop        ");
-            Console.WriteLine("=============================================");
+            Console.WriteLine("=======================================================");
             Console.WriteLine($"| (P)otions:              $ {Shop.ShopPrice("potion")}");
             Console.WriteLine($"| Up(g)rade potion        $ {Shop.ShopPrice("potionupgrade")}");
             Console.WriteLine($"|\n| Items for sale:");
@@ -267,10 +303,10 @@ namespace Saga.assets
                     Console.WriteLine($"");
                 }
             }
-            Console.WriteLine("=============================================");
+            Console.WriteLine("=======================================================");
             Console.WriteLine(" (S)witch to sell  (E)xit Shop\n\n");
             Console.WriteLine($"  {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}'s Stats");
-            Console.WriteLine($"=============================");
+            Console.WriteLine($"==============================");
             Console.WriteLine($"| Level: {Program.CurrentPlayer.Level}");
             Console.Write("| EXP  ");
             Console.Write("[");
@@ -312,14 +348,14 @@ namespace Saga.assets
                     Console.WriteLine("");
                 }
             }
-            Console.WriteLine("=============================");
+            Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory\n");
             Console.WriteLine("Choose what to buy");
         }
         public static void SellShopHUD() {
             Console.Clear();
             Console.WriteLine("         Gheed's Shop        ");
-            Console.WriteLine("=============================");
+            Console.WriteLine("=======================================================");
             Console.WriteLine($"| Items in inventory:");
             foreach (Item item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
@@ -354,11 +390,13 @@ namespace Saga.assets
                 }
             }
             Console.WriteLine($"|  Sell    (P)otion     $ {Shop.ShopPrice("sellpotion")}");
-            Console.WriteLine($"|  Sell (5)xPotions     $ {Shop.ShopPrice("sellpotion5")}");
-            Console.WriteLine("=============================");
+            if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity >= 5) {
+                Console.WriteLine($"|  Sell (5)xPotions     $ {Shop.ShopPrice("sellpotion5")}");
+            }
+            Console.WriteLine("=======================================================");
             Console.WriteLine(" (S)witch to Buy   (E)xit Shop\n\n");
             Console.WriteLine($"  {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}'s Stats");
-            Console.WriteLine($"=============================");
+            Console.WriteLine($"==============================");
             Console.WriteLine($"| Level: {Program.CurrentPlayer.Level}");
             Console.Write("| EXP  ");
             Console.Write("[");
@@ -367,7 +405,7 @@ namespace Saga.assets
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"| Potions:                {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
-            Console.WriteLine("=============================");
+            Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory\n");
             Console.WriteLine("Choose what to sell");
         }
@@ -581,6 +619,19 @@ namespace Saga.assets
             Console.WriteLine("| (C)haracter screen      |");
             Console.WriteLine("|  Combat (L)og           |");
             Console.WriteLine("===========================");           
+        }
+        public static void SmallCharacterInfo() {
+            Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
+            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.Write("EXP  ");
+            Console.Write("[");
+            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
+            Console.WriteLine("]");
+            Console.WriteLine("==============Actions==============");
+            Console.WriteLine("V (C)haracter screen   (H)eal     V");
+            Console.WriteLine("V (I)nventory                     V");
+            Console.WriteLine("===================================\n");
         }
         public static void TopCampHUD() {
             Console.Clear();

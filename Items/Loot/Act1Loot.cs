@@ -7,13 +7,13 @@ namespace Saga.Items.Loot
     public class Act1Loot : Loot
     {
         public override int GetGold() {
-            int upper = (30 * Program.CurrentPlayer.Level + 71);
-            int lower = (10 * Program.CurrentPlayer.Level);
+            int upper = (26 * Program.CurrentPlayer.Level + 61);
+            int lower = (5 * Program.CurrentPlayer.Level);
             return Program.rand.Next(lower, upper + 1);
         }
         public override void GetCombatLoot(Enemy monster, string message) {                      
-            HUDTools.Print(message, 15);            
-            int g = GetGold() * monster.GoldModifier;
+            HUDTools.Print(message, 15);
+            int g = (int)Math.Floor(GetGold() * monster.GoldModifier);
             if (g > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 HUDTools.Print($"You loot {g} gold coins.", 15);
@@ -21,7 +21,7 @@ namespace Saga.Items.Loot
             }
             int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
             var pot = Program.rand.Next(0, numbers.Length);
-            if (numbers[pot] != 0) {
+            if (numbers[pot] != 0 && monster.EnemyTribe != Tribe.Undead && monster.EnemyTribe != Tribe.Beast) {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
                 Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
@@ -175,10 +175,10 @@ namespace Saga.Items.Loot
             Console.ResetColor();
             HUDTools.PlayerPrompt();
         }
-        public override void GetExp(int expModifier=1) {
-            int upper = (20 * Program.CurrentPlayer.Level + 31);
-            int lower = (10 * Program.CurrentPlayer.Level);
-            int x = Program.rand.Next(lower, upper + 1)*expModifier;
+        public override void GetExp(int expModifier, int flatExp = 0) {
+            int upper = (20 * Program.CurrentPlayer.Level + 21);
+            int lower = (2 * Program.CurrentPlayer.Level);
+            int x = Program.rand.Next(lower, upper + 1)*expModifier + flatExp;
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 HUDTools.Print($"You've gained {x} experience points!", 10);

@@ -25,12 +25,12 @@ namespace Saga
 
         //Sætter variablen til Lydniveauet fra configfilen.
         public static float volumeLevel = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
+
         //Laver et objekt til at sætte lyden når spillet åbnes.
         public static AudioManager soundVolumeController = new AudioManager(Properties.Resources.mainmenu);
 
         //Spillets udførelse ved opstart
         static void Main(string[] args) {
-
             //Gør unicode karaktere "runer" læselige i consolen
             Console.OutputEncoding = Encoding.UTF8;
 
@@ -41,7 +41,7 @@ namespace Saga
             if (!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
             }
-
+            
             //Kalder MainMenu metoden.
             MainMenu();
         }
@@ -263,7 +263,7 @@ namespace Saga
                 Console.Clear();
                 HUDTools.Print($"This is your name?\n{input}.\n(Y/N)",10);
                 input1 = HUDTools.PlayerPrompt();
-                if (input1 != "y" || input1 != "n") {
+                if (input1 != "y" && input1 != "n") {
                     HUDTools.Print("Invalid input.", 3);
                 }
             } while (input1 != "y");
@@ -292,7 +292,7 @@ namespace Saga
                         return 2;
                     }
                     else {
-                        HUDTools.Print("Enter a # 1-4:",5);
+                        HUDTools.Print("Enter a # 1-3:",5);
                     }
                 }
                 else if (input1 == "3") {
@@ -302,7 +302,7 @@ namespace Saga
                         return 3;
                     }
                     else {
-                        HUDTools.Print("Enter a # 1-4:", 5);
+                        HUDTools.Print("Enter a # 1-3:", 5);
                     }
                 }
                 else {

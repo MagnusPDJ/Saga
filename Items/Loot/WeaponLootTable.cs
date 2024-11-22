@@ -7,9 +7,8 @@ namespace Saga.Items.Loot
     public class WeaponLootTable : Weapon
     {
         public static Item CreateRandomWeapon(int level) {
-            Item item;
             int weaponType = Program.rand.Next(9);
-            item = new Weapon() {
+            Item item = new Weapon() {
                 ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                 ItemSlot = Slot.Weapon,
                 WeaponType = (WeaponType)weaponType,
@@ -26,7 +25,6 @@ namespace Saga.Items.Loot
             WeaponType = WeaponType.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
         };
-
         public static Weapon CrackedWand = new Weapon() {
             ItemName = "Cracked Wand",
             ItemLevel = 1,
@@ -34,7 +32,6 @@ namespace Saga.Items.Loot
             WeaponType = WeaponType.Wand,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
         };
-
         public static Weapon FlimsyBow = new Weapon() {
             ItemName = "Flimsy Bow",
             ItemLevel = 1,

@@ -1,32 +1,46 @@
 ﻿using Saga.assets;
-using Saga.Character;
-using Saga.Items;
 using System;
-using System.Threading;
 
 namespace Saga.Dungeon
 {
+    public static class Act1EnemyExtensions
+    {
+        public static float GetGoldModifier(this Tribe tribe) {
+            switch (tribe) {
+                default: return 1;
+                case Tribe.Undead: return 0.5f;
+                case Tribe.Beast: return 0;
+            }
+        }
+        public static float GetExpModifier(this Tribe tribe) {
+            switch (tribe) { 
+                default : return 1;
+                case Tribe.Mythical: return 2;
+            }
+        }
+    }
+
+
     public class Act1Enemy : Enemy
     {
-        public Act1Enemy(string name="Worm", int health=1, int power = 1) {
+        public Act1Enemy(string name, Tribe tribe) {
             Name = name;
-            Health = health;
-            Power = power;
+            EnemyTribe = tribe;
+            ExpModifier = tribe.GetExpModifier();
+            GoldModifier = tribe.GetGoldModifier();
         }
-        public static Enemy CreateRandomAct1Enemy() {
-            Enemy monster;
-            string name = GetName();
-            monster = new Act1Enemy() {
-                Name = name,
-            };
-            monster.Health = monster.GetHealth(name);
-            monster.Power = monster.GetPower(name);
+
+        public static Act1Enemy CreateRandomAct1Enemy() {
+            (string, Tribe)getName = GetName();
+            Act1Enemy monster = new Act1Enemy(getName.Item1, getName.Item2);
+            monster.Health = monster.GetHealth(getName.Item1);
+            monster.Power = monster.GetPower(getName.Item1);
             return monster;
         }
         public override void GetExp() {
             int upper = (20 * Program.CurrentPlayer.Level + 31);
             int lower = (10 * Program.CurrentPlayer.Level);
-            int x = Program.rand.Next(lower, upper + 1)*ExpModifier;
+            int x = (int)Math.Floor(Program.rand.Next(lower, upper + 1) * ExpModifier);
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 HUDTools.Print($"You've gained {x} experience points!", 10);
@@ -35,67 +49,71 @@ namespace Saga.Dungeon
             Program.CurrentPlayer.CheckForLevelUp();
         }
         //Monster type låst efter level
-        public static string GetName() {
+        public static (string, Tribe) GetName() {
             if (Program.CurrentPlayer.Level < 3) {
-                switch (Program.rand.Next(0, 10 + 1)) {
-                    case int n when n < 4:
-                        return "Giant Rat";
-                    case int n when 4 <= n && n < 8:
-                        return "Giant Bat";
-                    case int n when 8 <= n:
-                        return "Grave Robber";
+                switch (Program.rand.Next(1, 100 + 1)) {
+                    default:
+                    case int n when n < 40:
+                        return ("Giant Rat", Tribe.Beast);
+                    case int n when 40 <= n && n < 90:
+                        return ("Giant Bat", Tribe.Beast);
+                    case int n when 90 <= n:
+                        return ("Grave Robber", Tribe.Human);
                 }
             } else if (Program.CurrentPlayer.Level <= 5) {
-                switch (Program.rand.Next(0, 4 + 1)) {
-                    case 0:
-                        return "Skeleton";
-                    case 1:
-                        return "Zombie";
-                    case 2:
-                        return "Giant Rat";
-                    case 3:
-                        return "Grave Robber";
-                    case 4:
-                        return "Giant Bat";
+                switch (Program.rand.Next(1, 100 + 1)) {
+                    default:
+                    case int n when 90 <= n:
+                        return ("Skeleton", Tribe.Undead);
+                    case int n when 80 <= n && n < 90:
+                        return ("Zombie", Tribe.Undead);
+                    case int n when 60 <= n && n < 80:
+                        return ("Grave Robber", Tribe.Human);
+                    case int n when 30 <= n && n < 60:
+                        return ("Giant Bat", Tribe.Beast);
+                    case int n when 1 <= n && n < 30:
+                        return ("Giant Rat", Tribe.Beast);
                 }
             } else if (5 < Program.CurrentPlayer.Level && Program.CurrentPlayer.Level <= 15) {
-                switch (Program.rand.Next(0, 8 + 1)) {
-                    case 0:
-                        return "Skeleton";
-                    case 1:
-                        return "Zombie";
-                    case 2:
-                        return "Human Cultist";
-                    case 3:
-                        return "Grave Robber";
-                    case 4:
-                        return "Giant Bat";
-                    case 5:
-                        return "Human Rogue";
-                    case 6:
-                        return "Giant Rat";
-                    case 7:
-                        return "Bandit";
-                    case 8:
-                        return "Dire Wolf";
+                switch (Program.rand.Next(1, 100 + 1)) {
+                    default:
+                    case int n when 1 <= n && n < 20:
+                        return ("Giant Rat", Tribe.Beast);                        
+                    case int n when 20 <= n && n < 30:
+                        return ("Giant Bat", Tribe.Beast);                        
+                    case int n when 30 <= n && n < 60:
+                        return ("Grave Robber", Tribe.Human);
+                    case int n when 60 <= n && n < 75:
+                        return ("Zombie", Tribe.Undead);
+                    case int n when 75 <= n && n < 90:
+                        return ("Skeleton", Tribe.Undead);
+                    case int n when 90 <= n && n < 95:
+                        return ("Bandit", Tribe.Human);
+                    case int n when 95 <= n && n < 97:
+                        return ("Human Rogue", Tribe.Human);
+                    case int n when 97 <= n && n < 99:
+                        return ("Human Cultist", Tribe.Human);                       
+                    case int n when 99 <= n && n <= 100:
+                        return ("Dire Wolf", Tribe.Beast);
                 }
-            }
-            switch (Program.rand.Next(0, 6 + 1)) {
-                default:
-                case 0:
-                    return "Human Cultist";
-                case 1:
-                    return "Skeleton";
-                case 2:
-                    return "Human Rogue";
-                case 3:
-                    return "Vampire";
-                case 4:
-                    return "Werewolf";
-                case 5:
-                    return "Dire Wolf";
-                case 6:
-                    return "Bandit";
+            } else {
+                switch (Program.rand.Next(1, 100 + 1)) {
+                    default:
+                    case int n when 1 <= n && n < 30:
+                        return ("Skeleton", Tribe.Undead);
+                    case int n when 30 <= n && n < 50:
+                        return ("Bandit", Tribe.Human);
+                    case int n when 50 <= n && n < 60:
+                        return ("Human Rogue", Tribe.Human);
+                    case int n when 60 <= n && n < 75:
+                        return ("Human Cultist", Tribe.Human);
+                    case int n when 75 <= n && n < 85:
+                        return ("Dire Wolf", Tribe.Beast);
+                    case int n when 85 <= n && n < 95:
+                        return ("Werewolf", Tribe.Beast);
+                    case int n when 95 <= n && n <= 100:
+                        return ("Vampire", Tribe.Undead);
+                }
             }
         }
 
