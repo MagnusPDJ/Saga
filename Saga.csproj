@@ -133,6 +133,7 @@
     <Compile Include="Dungeon\Act1Enemy.cs" />
     <Compile Include="Dungeon\Enemy.cs" />
     <Compile Include="assets\HUDTools.cs" />
+    <Compile Include="Dungeon\TribeTypeAttribute.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Loot\Act1Loot.cs" />
     <Compile Include="Items\Loot\ArmorLootTable.cs" />
