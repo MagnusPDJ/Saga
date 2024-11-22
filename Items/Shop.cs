@@ -9,10 +9,13 @@ namespace Saga.Items
 {
     public class Shop
     {
-        public List<Item> Forsale { get; set; }      
+        public List<Item> Forsale { get; set; }
+
+        //Metode til at genere ny shop ved tilbagekomst til camp
         public static Shop SetForsale() {
-            Shop shop = new Shop();
-            shop.Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(-1), ArmorLootTable.CreateRandomArmor(0) , ArmorLootTable.CreateRandomArmor(1), WeaponLootTable.CreateRandomWeapon(-1),WeaponLootTable.CreateRandomWeapon(0),WeaponLootTable.CreateRandomWeapon(1) };        
+            Shop shop = new Shop {
+                Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(-3), ArmorLootTable.CreateRandomArmor(-2), ArmorLootTable.CreateRandomArmor(-1), WeaponLootTable.CreateRandomWeapon(-3), WeaponLootTable.CreateRandomWeapon(-2), WeaponLootTable.CreateRandomWeapon(-1) }
+            };
             return shop;
         }
         //Metode til at kalde og Loade shoppen.
@@ -21,7 +24,6 @@ namespace Saga.Items
             Runshop(p, shop);
             AudioManager.soundShop.Stop();
         }
-
         //Metode til at køre shoppen.
         public static void Runshop(Player p, Shop shop) {
             bool sell = false;
@@ -31,13 +33,13 @@ namespace Saga.Items
                 //Wait for input
                 string input = HUDTools.PlayerPrompt();
                 if (input == "p" || input == "potion") {
-                    TryBuy("potion", ShopPrice("potion"), p);
+                    TryBuyPotion("potion", ShopPrice("potion"), p);
                 } else if (input == "w" || input == "weapon") {
-                    TryBuy("weapon", ShopPrice("weaponupgrade"), p);
+                    TryBuyPotion("weapon", ShopPrice("weaponupgrade"), p);
                 } else if (input == "a" || input == "armor") {
-                    TryBuy("armor", ShopPrice("armorupgrade"), p);
+                    TryBuyPotion("armor", ShopPrice("armorupgrade"), p);
                 } else if (input == "g" || input == "upgrade potion") {
-                    TryBuy("upgradepotion", ShopPrice("potionupgrade"), p);
+                    TryBuyPotion("upgradepotion", ShopPrice("potionupgrade"), p);
                 } else if (input == "u" || input == "use" || input == "heal") {
                     Program.CurrentPlayer.Heal();
                     HUDTools.PlayerPrompt();
@@ -72,10 +74,10 @@ namespace Saga.Items
                         break;
                     }
                     else if (input1 == "p" || input1 == "potion" || input1 == "sell potion") {
-                        TrySell("potion", ShopPrice("sellpotion"), p);
+                        TrySellPotion("potion", ShopPrice("sellpotion"), p);
                     }
                     else if (input1 == "5" || input1 == "5x" || input1 == "sell 5" || input1 == "sell 5x" || input1 == "sell 5xpotions") {
-                        TrySell("5x potion", ShopPrice("sellpotion5"), p);
+                        TrySellPotion("5x potion", ShopPrice("sellpotion5"), p);
                     }
                     else if (input1 == "i" || input1 == "inventory") {
                         HUDTools.InventoryScreen();
@@ -91,7 +93,6 @@ namespace Saga.Items
                 }
             }
         }
-
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
             int potionP = Program.CurrentPlayer.CurrentHealingPotion.CalculateItemPrice();
@@ -192,7 +193,7 @@ namespace Saga.Items
             }
         }
         //Metode til at købe fra shoppen.
-        static void TryBuy(string item, int cost, Player p) {
+        static void TryBuyPotion(string item, int cost, Player p) {
             if (p.Gold >= cost) {
                 switch (item) {
                     case "potion":
@@ -215,9 +216,19 @@ namespace Saga.Items
                 HUDTools.PlayerPrompt();
             }
         }
-
+        static void TryBuyItem(int index, int cost, Shop s, Player p) {
+            if (p.Gold >= cost) {
+                int index1 = Array.FindIndex(p.Inventory, i => i == null || p.Inventory.Length == 0);
+                p.Inventory.SetValue(s.Forsale[index], index1);
+                s.Forsale.RemoveAt(index);
+                p.Gold -= cost;
+                HUDTools.Print("Item bought!", 3);
+            } else {
+                HUDTools.Print("You don't have enough gold!");
+            }
+        }
         //Metode til at sælge til shoppen.
-        static void TrySell(string item, int price, Player p) {
+        static void TrySellPotion(string item, int price, Player p) {
             switch (item) {
                 case "potion":
                 if (p.CurrentHealingPotion.PotionQuantity > 0) {
@@ -252,16 +263,6 @@ namespace Saga.Items
                 HUDTools.Print("Item sold!", 3);
             }
         }
-        static void TryBuyItem(int index, int cost, Shop s, Player p) {
-            if (p.Gold >= cost) {
-                int index1 = Array.FindIndex(p.Inventory, i => i == null || p.Inventory.Length == 0);
-                p.Inventory.SetValue(s.Forsale[index], index1);
-                s.Forsale.RemoveAt(index);
-                p.Gold -= cost;
-                HUDTools.Print("Item bought!", 3);
-            } else {
-                HUDTools.Print("You don't have enough gold!");
-            }
-        }
+
     }
 }
