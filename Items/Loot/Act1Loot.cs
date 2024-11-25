@@ -26,6 +26,7 @@ namespace Saga.Items.Loot
                 HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
                 Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
             }
+            GetQuestLoot(monster);
             monster.GetExp();
             Console.ResetColor();
             HUDTools.PlayerPrompt();
@@ -185,6 +186,26 @@ namespace Saga.Items.Loot
                 Program.CurrentPlayer.Exp += x;
             }
             Program.CurrentPlayer.CheckForLevelUp();
+        }
+        public override void GetQuestLoot(int findgold, int findpotions, string questname, Enemy enemy=null) {
+            int g = GetGold() * findgold;
+            if (g > 0) {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                HUDTools.Print($"You loot {g} gold coins.", 15);
+                Program.CurrentPlayer.Gold += g;
+            }
+            int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+            var pot = Program.rand.Next(0, numbers.Length);
+            if (numbers[pot] != 0 && findpotions !=0) {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
+                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
+            }
+
+            for (int i = 0; i < ;i++) {
+
+            }
+
         }
     }
 }

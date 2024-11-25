@@ -12,5 +12,6 @@ namespace Saga.Items.Loot
         public abstract void GetCombatLoot(Enemy monster, string message);
         public abstract void GetTreasureChestLoot();
         public abstract void GetExp(int expModifier, int flatExp = 0);
+        public abstract void GetQuestLoot(int findgold, int findpotions, string questname, Enemy enemy=null);
     }
 }

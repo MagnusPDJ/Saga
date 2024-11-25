@@ -92,9 +92,6 @@ namespace Saga
                 } else if (CurrentPlayer.CurrentAct == Act.Act5) {
 
                 }
-
-
-
             }
         }
 

@@ -89,6 +89,38 @@ namespace Saga.Dungeon
             HUDTools.Print("you can stay for a while and rest.");
             HUDTools.PlayerPrompt();
         }
+
+
+        //Story or NPC Encounters
+
+        //Alchemist trader/Quest giver
+        public static void MeetFlemsha() {
+            Console.Clear();
+            AudioManager.soundTypeWriter.Play();
+            HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room, there is also a desk which probably belonged to the long gone warden.",30);            
+            bool examined = false;
+            bool searched = false;
+            while (true) {
+                while (true) {
+                    HUDTools.Print($"Do you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
+                    string input = HUDTools.PlayerPrompt();
+                    if (input == "1" && !examined) {
+                        HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages, but in a drawer you find some gold and a key.", 20);
+                        Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");
+                        break;
+                    } else if (input == "2" && !searched) {
+
+                        break;
+                    } else {
+                        Program.CurrentPlayer.BasicActions(input);
+                    }
+                }
+            }
+        }
+
+
+        //Random Encounters
+
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
@@ -295,6 +327,9 @@ namespace Saga.Dungeon
             RandomBasicCombatEncounter();
         }
 
+
+
+
       //Encounter Tools:
 
         //Metode til at vælge tilfældigt mellem encounters.
@@ -330,16 +365,16 @@ namespace Saga.Dungeon
                 string input = HUDTools.PlayerPrompt();
                 if (input == "e" || input == "explore") {
                     //Explore
-                    HUDTools.Print("You venture deeper...",5);
+                    HUDTools.Print("You venture deeper...", 5);
                     Console.ReadKey(true);
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
                     bool stay = true;
                     while (stay) {
-                        int dybde = Program.rand.Next(0,4);
+                        int dybde = Program.rand.Next(0, 4);
                         switch (dybde) {
                             case 0:
-                                 for (int i = 0; i<2 ;i++) {
+                                for (int i = 0; i < 2; i++) {
                                     RandomEncounter();
                                 }
                                 break;
@@ -357,7 +392,7 @@ namespace Saga.Dungeon
                                 for (int i = 0; i < 5; i++) {
                                     RandomEncounter();
                                 }
-                                break;    
+                                break;
                         }
                         Console.Clear();
                         HUDTools.Print("You gain a moment of respite and a choice...", 30);
@@ -371,43 +406,30 @@ namespace Saga.Dungeon
                                 break;
                             } else if (input == "r" || input == "return") {
                                 stay = false;
-                                HUDTools.Print("You retrace your steps in the darkness...",20);
+                                HUDTools.Print("You retrace your steps in the darkness...", 20);
                                 HUDTools.PlayerPrompt();
                             } else {
                                 Program.CurrentPlayer.BasicActions(input);
                             }
-                        }              
+                        }
                     }
                     break;
-                } 
-                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
+                } else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     //Sleep/save Game
                     Program.Save();
                     HUDTools.Print("Game saved!");
                     HUDTools.PlayerPrompt();
-                }
-                else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
+                } else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
                     //Gheed's shop
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
                     Shop.Loadshop(Program.CurrentPlayer, shop);
                     AudioManager.soundCampFire.Play();
                     AudioManager.soundCampMusic.Play();
-                } 
-                else if (input == "h" || input == "heal") {
-                    //Heal
-                    Program.CurrentPlayer.Heal();
-                    HUDTools.PlayerPrompt();
-                } 
-                else if (input == "c" || input == "character" || input == "character screen") {
-                    HUDTools.CharacterScreen();
-                    HUDTools.PlayerPrompt();
-                }
-                else if (input == "i" || input == "inventory") {
-                    HUDTools.InventoryScreen();
-                }
-                else if (input == "q" || input == "quit" ){ 
+                } else if (input == "q" || input == "quit") {
                     Program.Quit();
+                } else {
+                    Program.CurrentPlayer.BasicActions(input);
                 }
             }
         }
@@ -422,7 +444,7 @@ namespace Saga.Dungeon
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
                     if (TurnTimer.Ran == false) {
-                        Monster.MonsterActions(Monster, TurnTimer);
+                        Monster.MonsterActions(TurnTimer);
                     }                   
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearLog();
@@ -435,7 +457,7 @@ namespace Saga.Dungeon
             }  else {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
-                    Monster.MonsterActions(Monster, TurnTimer);
+                    Monster.MonsterActions(TurnTimer);
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearLog();
                         AudioManager.soundKamp.Stop();

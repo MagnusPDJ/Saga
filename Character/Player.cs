@@ -34,6 +34,7 @@ namespace Saga.Character
         public SecondaryAttributes TotalSecondaryAttributes { get; set; }
         public Dictionary<Slot, Item> Equipment { get; set; }
         public Item[] Inventory { get; set; }
+        public List <Quest> QuestLog { get; set; }
         public (int, int) DPT { get; set; }
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;

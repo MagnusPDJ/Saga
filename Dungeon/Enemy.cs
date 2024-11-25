@@ -32,6 +32,6 @@ namespace Saga.Dungeon
         public abstract void GetExp();
         public abstract int GetHealth(string name);
         public abstract int GetPower(string name);
-        public abstract void MonsterActions(Enemy Monster, Encounters TurnTimer);
+        public abstract void MonsterActions(Encounters TurnTimer);
     }
 }
