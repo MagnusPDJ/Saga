@@ -21,10 +21,6 @@ namespace Saga.Items
         public WeaponType WeaponType { get; set; }
         public WeaponAttributes WeaponAttributes { get; set; }
        
-        /// <inheritdoc/>
-        public override string ItemDescription() {
-            return $"Weapon of type {WeaponType}";
-        }
         public override int CalculateItemPrice() {
             ItemPrice = Convert.ToInt32(ItemLevel * 100 + (WeaponAttributes.MaxDamage * 100 + WeaponAttributes.MinDamage*50)*(1 + 1 /(WeaponAttributes.MaxDamage-WeaponAttributes.MinDamage)) );
             return ItemPrice;

@@ -56,7 +56,7 @@ namespace Saga.Items.Loot
             ItemName = "Linen Rags",
             ItemLevel = 1,
             ItemSlot = Slot.Torso,
-            ArmorType = ArmorType.Leather,
+            ArmorType = ArmorType.Cloth,
             Attributes = new PrimaryAttributes() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 },
             SecondaryAttributes =new SecondaryAttributes() { ArmorRating = 0 }
         };

@@ -1,6 +1,7 @@
 ﻿using Saga.assets;
 using Saga.Dungeon;
 using System;
+using System.Reflection;
 
 namespace Saga.Items.Loot
 {
@@ -26,7 +27,7 @@ namespace Saga.Items.Loot
                 HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
                 Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
             }
-            GetQuestLoot(monster);
+            GetQuestLoot(0,0,"",monster);
             monster.GetExp();
             Console.ResetColor();
             HUDTools.PlayerPrompt();
@@ -201,9 +202,12 @@ namespace Saga.Items.Loot
                 HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
                 Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
             }
-
-            for (int i = 0; i < ;i++) {
-
+            int getLoot = Program.rand.Next(0, 100+1);
+            if (questname == "MeetFlemsha") {
+                int index1 = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.OldKey, index1);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                HUDTools.Print($"You gain {QuestLootTable.OldKey.ItemName}", 15);
             }
 
         }

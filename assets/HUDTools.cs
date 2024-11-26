@@ -520,7 +520,7 @@ namespace Saga.assets
                     else if (item.ItemSlot == Slot.Weapon) {
                         Console.WriteLine($" {item.ItemSlot} - {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
                     }
-                    else {
+                    else if (item.ItemSlot != Slot.Quest) {
                         Console.Write($" {item.ItemSlot} - {item.ItemName}:");
                         if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
                             Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
@@ -545,17 +545,21 @@ namespace Saga.assets
                         }
                         Console.WriteLine("");
                     }
+                    else if ( item.ItemSlot == Slot.Quest) {
+                        Console.WriteLine($" Quest Item - {item.ItemName}");
+                    }
                 }
-                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname', else (b)ack", 1);
+                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname'\nTo examine item write examine_Itemname else (b)ack", 1);
                 string[] input = Console.ReadLine().ToLower().Split('_');
                 if (input[0] == "equip") {
                     if (Program.CurrentPlayer.Inventory.All(x => x == null)) {
-                        Console.WriteLine("No items in inventory...");
-                        PlayerPrompt();                                          
+                        Console.WriteLine("No items in inventory...");                    
                     } else {
                         var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
                         if (item != null) {
-                            if (item.ItemSlot == Slot.Weapon) {
+                            if (item.ItemSlot == Slot.Quest) {
+                                Print("You cannot equip this item...", 3);
+                            } else if (item.ItemSlot == Slot.Weapon) {
                                 Print(Program.CurrentPlayer.Equip((Weapon)item), 3);
                             } else if (item.ItemSlot != Slot.Weapon) {
                                 Print(Program.CurrentPlayer.Equip((Armor)item), 3);
@@ -563,17 +567,33 @@ namespace Saga.assets
                         } else {
                             Console.WriteLine("No such item in inventory...");
                         }
-                        PlayerPrompt();
                     }
-                } else if (input[0] == "unequip") {                  
+                    PlayerPrompt();
+                } else if (input[0] == "unequip") {
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.ToLower() == input[1]);
                     if (wat.Value == null) {
-                        Console.WriteLine("No such item equipped...");
-                        PlayerPrompt();
+                        Console.WriteLine("No such item equipped...");                       
                     } else {
-                        Print(Program.CurrentPlayer.UnEquip(wat.Key, wat.Value),3);
-                        PlayerPrompt();
-                    }                  
+                        Print(Program.CurrentPlayer.UnEquip(wat.Key, wat.Value), 3);                       
+                    }
+                    PlayerPrompt();
+                } else if (input[0] == "examine") {
+                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.ToLower() == input[1]);
+                    var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
+                    if (wat.Value == null && item == null) {
+                        Console.WriteLine("No such item exists...");
+                    } else if (item != null && item.ItemSlot == Slot.Weapon) {
+                        Print($"This is a weapon of type {((Weapon)item).WeaponType}.", 3);
+                    } else if (wat.Value != null && wat.Value.ItemSlot == Slot.Weapon) {
+                        Print($"This is a weapon of type {((Weapon)wat.Value).WeaponType}.", 3);
+                    } else if (item != null && item.ItemSlot == Slot.Quest) {
+                        Print(((QuestItem)item).ItemDescription, 3);
+                    } else if (item != null && item.ItemSlot != Slot.Quest && item.ItemSlot != Slot.Weapon) {
+                        Print($"This is an armor of type {((Armor)item).ArmorType}.", 3);
+                    } else if (wat.Value != null && wat.Value.ItemSlot != Slot.Quest && wat.Value.ItemSlot != Slot.Weapon) {
+                        Print($"This is an armor of type {((Armor)wat.Value).ArmorType}.", 3);
+                    }
+                    PlayerPrompt();
                 } else if (input[0] == "b" || input[0] == "back") {
                     break;
                 }

@@ -97,24 +97,46 @@ namespace Saga.Dungeon
         public static void MeetFlemsha() {
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
-            HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room, there is also a desk which probably belonged to the long gone warden.",30);            
+            HUDTools.SmallCharacterInfo();
+            HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room,\nthere is also a desk which probably belonged to the long gone warden.",30);
             bool examined = false;
             bool searched = false;
             while (true) {
-                while (true) {
-                    HUDTools.Print($"Do you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
+                while (!examined || !searched) {
+                    Console.Clear();
+                    HUDTools.SmallCharacterInfo();
+                    HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room,\nthere is also a desk which probably belonged to the long gone warden.", 0);
+                    HUDTools.Print($"\nDo you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
                     string input = HUDTools.PlayerPrompt();
                     if (input == "1" && !examined) {
-                        HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages, but in a drawer you find some gold and a key.", 20);
+                        HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
                         Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");
+                        Console.ResetColor();
+                        examined = true;
+                        HUDTools.PlayerPrompt();
                         break;
                     } else if (input == "2" && !searched) {
 
+                        HUDTools.Print("You search the prison cells and in one of them you find a man laying on the stone floor rambling to himself.", 20);
+                        HUDTools.Print("As you approach the iron grate he comes to his senses 'You must help me get out!' he exclaims", 20);
+                        HUDTools.Print("'My name is Flemsha, I'm an alchemist, I can be of help'", 20);
+                        HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);
+                        input = HUDTools.PlayerPrompt();
+                        if (input == "y") {
+                            Act1Quest FreeFlemsha = new Act1Quest("Free Flemsha", Type.Story, "Flemsha", "Old Key", 1);
+                            Program.CurrentPlayer.QuestLog.Add(FreeFlemsha);
+                            HUDTools.Print($"You've gained a quest: {FreeFlemsha.Name}!");
+                        } else if (input == "n") {
+
+                        }
+                        searched = true;
+                        HUDTools.PlayerPrompt();
                         break;
                     } else {
                         Program.CurrentPlayer.BasicActions(input);
                     }
                 }
+
             }
         }
 
@@ -335,7 +357,7 @@ namespace Saga.Dungeon
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
             //0, 125+1
-            switch (Program.rand.Next(0, 125 + 1)) {
+            switch (Program.rand.Next(41, 50 + 1)) {
                 default:
                     RandomBasicCombatEncounter();
                     break;
@@ -350,6 +372,9 @@ namespace Saga.Dungeon
                     break;
                 case int n when 30 < n && n <= 40:
                     PuzzleOneEncounter();
+                    break;
+                case int n when 40 < n && n <= 50:
+                    MeetFlemsha();
                     break;
             }
         }

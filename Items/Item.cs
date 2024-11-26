@@ -15,6 +15,7 @@ namespace Saga.Items
         Gloves,
         Weapon,
         Amulet,
+        Quest,
         SLOT_RING1,
         SLOT_RING2,
         SLOT_CREST,
@@ -28,8 +29,6 @@ namespace Saga.Items
         public int ItemLevel { get; set; }
         public Slot ItemSlot { get; set; }
         public int ItemPrice { get; set; }
-        // Displays the type of item.
-        public abstract string ItemDescription();
         public abstract int CalculateItemPrice();      
     }
 }

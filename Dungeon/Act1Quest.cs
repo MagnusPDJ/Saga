@@ -13,6 +13,7 @@ namespace Saga.Dungeon
             Name = name;
             QuestType = type;
             Giver = giver;
+            TypeExtensions.Requirements = new Dictionary<string, int>();
             type.SetRequirements(target, amount);
         }
     }

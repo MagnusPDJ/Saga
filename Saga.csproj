@@ -140,7 +140,9 @@
     <Compile Include="Items\Loot\ArmorLootTable.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\Loot\Loot.cs" />
+    <Compile Include="Items\Loot\QuestLootTable.cs" />
     <Compile Include="Items\Potion.cs" />
+    <Compile Include="Items\QuestItem.cs" />
     <Compile Include="Items\Weapon.cs" />
     <Compile Include="Items\Loot\WeaponLootTable.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

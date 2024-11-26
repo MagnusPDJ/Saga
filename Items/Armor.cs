@@ -18,9 +18,6 @@ namespace Saga.Items
         public PrimaryAttributes Attributes { get; set; }
         public SecondaryAttributes SecondaryAttributes { get; set; }
 
-        public override string ItemDescription() {
-            return $"Armor of type {ArmorType}";
-        }
         public override int CalculateItemPrice() {
             ItemPrice = Convert.ToInt32(ItemLevel*30+SecondaryAttributes.ArmorRating*95+(Math.Pow(Attributes.Strength,1/1000)*55+Math.Pow(Attributes.Dexterity,1/1000)*55+ Math.Pow(Attributes.Intellect,1/1000)*55+ Math.Pow(Attributes.Constitution,1/1000)*40+ Math.Pow(Attributes.WillPower,1/1000)*40) *(Attributes.Strength+Attributes.Dexterity+Attributes.Intellect+Attributes.Constitution+Attributes.WillPower));
             return ItemPrice;

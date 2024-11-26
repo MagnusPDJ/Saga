@@ -14,9 +14,7 @@ namespace Saga.Items
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }
         public PotionType PotionType { get; set; }
-        public override string ItemDescription() {
-            return $"Potion of type {PotionType}";
-        }
+
         public Potion() {
             ItemName = "Healing Potion";
             ItemLevel = 1;
