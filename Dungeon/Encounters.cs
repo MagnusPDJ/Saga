@@ -6,6 +6,7 @@ using Saga.Items;
 using Saga.Character;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using Saga.Items.Loot;
 
 namespace Saga.Dungeon
 {
@@ -23,6 +24,7 @@ namespace Saga.Dungeon
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
             HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.");
+            AudioManager.soundTypeWriter.Stop();
             AudioManager.soundMainMenu.Stop();
             AudioManager.soundTaunt.Play();
             AudioManager.soundKamp.Play();
@@ -74,6 +76,7 @@ namespace Saga.Dungeon
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
             HUDTools.PlayerPrompt();
+            AudioManager.soundTypeWriter.Stop();
             AudioManager.soundShop.Stop();
         }
         //Encounter som køres der introducere Camp
@@ -83,6 +86,7 @@ namespace Saga.Dungeon
             HUDTools.Print("After taking what few scraps you could find, you explore your surroundings.");
             HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
             Console.ReadKey(true);
+            AudioManager.soundTypeWriter.Stop();
             AudioManager.soundCampFire.Play();
             HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The");
             HUDTools.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
@@ -101,6 +105,7 @@ namespace Saga.Dungeon
             HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room,\nthere is also a desk which probably belonged to the long gone warden.",30);
             bool examined = false;
             bool searched = false;
+            bool leftForDead = false;
             while (true) {
                 while (!examined || !searched) {
                     Console.Clear();
@@ -111,23 +116,38 @@ namespace Saga.Dungeon
                     if (input == "1" && !examined) {
                         HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
                         Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");
+                        Program.CurrentPlayer.UpdateQuestLog();
                         Console.ResetColor();
                         examined = true;
                         HUDTools.PlayerPrompt();
                         break;
                     } else if (input == "2" && !searched) {
 
-                        HUDTools.Print("You search the prison cells and in one of them you find a man laying on the stone floor rambling to himself.", 20);
+                        HUDTools.Print("You search the prison cells and in one of them, you find a man laying on the stone floor rambling to himself.", 20);
                         HUDTools.Print("As you approach the iron grate he comes to his senses 'You must help me get out!' he exclaims", 20);
                         HUDTools.Print("'My name is Flemsha, I'm an alchemist, I can be of help'", 20);
                         HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);
                         input = HUDTools.PlayerPrompt();
                         if (input == "y") {
-                            Act1Quest FreeFlemsha = new Act1Quest("Free Flemsha", Type.Story, "Flemsha", "Old Key", 1);
+                            Act1Quest FreeFlemsha = new Act1Quest("Free Flemsha", Type.Find, "Flemsha", "Old Key") { 
+                                Objective = "You've met a prisoner who calls himself Flemsha. He claims if you free him,\nhe will offer his alchemical expertise to your cause.",
+                                TurnIn = "You have found an old key, it is likely a prison key.\nYou should return to Flemsha's cell.",
+                                Gold = 100,
+                                Exp = 100,
+                            };
                             Program.CurrentPlayer.QuestLog.Add(FreeFlemsha);
+                            Console.ForegroundColor = ConsoleColor.Cyan;
                             HUDTools.Print($"You've gained a quest: {FreeFlemsha.Name}!");
+                            Console.ResetColor();
+                            Program.CurrentPlayer.UpdateQuestLog();
                         } else if (input == "n") {
-
+                            HUDTools.Print("A locked up prisoner doesn't seem that useful to you so you decide to leave him behind");
+                            int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
+                            if (a != -1) {
+                                Program.CurrentPlayer.Inventory.SetValue(null, a);
+                            }
+                            Program.CurrentPlayer.FailedQuests.Add(new Act1Quest("Free Flemsha", Type.Find, "Failed", "Failed"));
+                            leftForDead = true;
                         }
                         searched = true;
                         HUDTools.PlayerPrompt();
@@ -137,6 +157,21 @@ namespace Saga.Dungeon
                     }
                 }
 
+                if (leftForDead) {
+                    HUDTools.Print("You close the door to the prison ward and continue on never to see the prisoner again.");
+                    HUDTools.PlayerPrompt();
+                    break;
+                }
+
+                if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == "Free Flemsha" && quest.Completed == true)) {
+                    Console.Clear();
+                    HUDTools.SmallCharacterInfo();
+                    HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and the door slides open", 20);
+                    HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
+                    Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
+                    HUDTools.PlayerPrompt();
+                    break;
+                }
             }
         }
 
@@ -357,7 +392,7 @@ namespace Saga.Dungeon
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
             //0, 125+1
-            switch (Program.rand.Next(41, 50 + 1)) {
+            switch (Program.rand.Next(0, 125 + 1)) {
                 default:
                     RandomBasicCombatEncounter();
                     break;
@@ -373,12 +408,16 @@ namespace Saga.Dungeon
                 case int n when 30 < n && n <= 40:
                     PuzzleOneEncounter();
                     break;
-                case int n when 40 < n && n <= 50:
-                    MeetFlemsha();
-                    break;
             }
         }
-     
+
+        //Metode til at vælge imellem story/NPC encounters
+        public static void ProgressTheStory() {
+            if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") || !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
+                MeetFlemsha();
+            }
+        }
+
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
         public static void Camp() {
             AudioManager.soundCampFire.Play();
@@ -419,6 +458,7 @@ namespace Saga.Dungeon
                                 }
                                 break;
                         }
+                        ProgressTheStory();
                         Console.Clear();
                         HUDTools.Print("You gain a moment of respite and a choice...", 30);
                         HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);

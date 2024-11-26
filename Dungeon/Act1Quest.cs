@@ -9,7 +9,7 @@ namespace Saga.Dungeon
     [Serializable]
     internal class Act1Quest : Quest
     {
-        public Act1Quest(string name, Type type, string giver, string target, int amount) { 
+        public Act1Quest(string name, Type type, string giver, string target, int amount=1) { 
             Name = name;
             QuestType = type;
             Giver = giver;

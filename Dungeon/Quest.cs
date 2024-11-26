@@ -13,7 +13,7 @@ namespace Saga.Dungeon
     }
     public static class TypeExtensions {
         public static Dictionary<string, int> Requirements { get; set; }
-        public static void SetRequirements(this Type type, string target, int amount) {
+        public static void SetRequirements(this Type type, string target, int amount=1) {
             switch (type) { 
                 case Type.Elimination:
                     Requirements.Add(target, amount);
@@ -32,11 +32,27 @@ namespace Saga.Dungeon
                     break;
             }
         }
+        public static bool CheckRequirements(this Type type) {
+            foreach (Item item in Program.CurrentPlayer.Inventory) {
+                if (item == null) {
+                    continue;
+                }
+                foreach (string target in Requirements.Keys) {
+                    if (item.ItemSlot == Slot.Quest && item.ItemName == target) {
+                        if (((QuestItem)item).Amount.Item1 == Requirements[target]) {
+                            return true;
+                        }
+                    }
+                }              
+            }
+            return false;
+        }
     }
     [Serializable]
     public abstract class Quest {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Objective { get; set; }
+        public string TurnIn { get; set; }
         public Type QuestType { get; set; }
         public string Giver { get; set; }
         public int Gold { get; set; }

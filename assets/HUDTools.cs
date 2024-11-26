@@ -349,7 +349,7 @@ namespace Saga.assets
                 }
             }
             Console.WriteLine("==============================");
-            Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory\n");
+            Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
             Console.WriteLine("Choose what to buy");
         }
         public static void SellShopHUD() {
@@ -406,7 +406,7 @@ namespace Saga.assets
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"| Potions:                {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
             Console.WriteLine("==============================");
-            Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory\n");
+            Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
             Console.WriteLine("Choose what to sell");
         }
         public static void WriteStatsToConsole(string name, int level, PrimaryAttributes totalPrimaryAttributes, SecondaryAttributes baseSecondaryAttributes, (int, int) dpt) {
@@ -546,7 +546,9 @@ namespace Saga.assets
                         Console.WriteLine("");
                     }
                     else if ( item.ItemSlot == Slot.Quest) {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine($" Quest Item - {item.ItemName}");
+                        Console.ResetColor();
                     }
                 }
                 Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname'\nTo examine item write examine_Itemname else (b)ack", 1);
@@ -622,7 +624,7 @@ namespace Saga.assets
                 Console.WriteLine("---------------------------");
                 Console.WriteLine("You go first!");
             } else {
-                Console.WriteLine("The enemy go first!");
+                Console.WriteLine("The enemy goes first!");
                 Console.WriteLine("---------------------------");
             }           
             Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
@@ -638,6 +640,7 @@ namespace Saga.assets
             Console.WriteLine("===========Info============");
             Console.WriteLine("| (C)haracter screen      |");
             Console.WriteLine("|  Combat (L)og           |");
+            Console.WriteLine("| (Q)uestlog              |");
             Console.WriteLine("===========================");           
         }
         public static void SmallCharacterInfo() {
@@ -650,7 +653,7 @@ namespace Saga.assets
             Console.WriteLine("]");
             Console.WriteLine("==============Actions==============");
             Console.WriteLine("V (C)haracter screen   (H)eal     V");
-            Console.WriteLine("V (I)nventory                     V");
+            Console.WriteLine("V (I)nventory          Quest(L)og V");
             Console.WriteLine("===================================\n");
         }
         public static void TopCampHUD() {
@@ -672,6 +675,7 @@ namespace Saga.assets
             Print("0 (E)xplore          (S)leep (Save)  0", 10);
             Print("0 (G)heed's shop     (H)eal          0", 10);
             Print("0 (C)haracter screen (I)nventory     0", 10);
+            Print("0 Quest(L)og                         0", 10);
             Print("======================================", 5);
             Print("  (Q)uit to Main Menu                 ", 10);
             Print("Choose an action...", 1);
@@ -690,6 +694,7 @@ namespace Saga.assets
             Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
             Console.WriteLine("0 (G)heed's shop     (H)eal          0");
             Console.WriteLine("0 (C)haracter screen (I)nventory     0");
+            Console.WriteLine("0 Quest(L)og                         0");
             Console.WriteLine("======================================");
             Console.WriteLine("  (Q)uit to Main Menu                 ");
             Console.WriteLine("Choose an action...");
@@ -708,8 +713,108 @@ namespace Saga.assets
             Console.WriteLine("==============Actions==============");
             Console.WriteLine("V (E)xplore            (R)eturn   V");
             Console.WriteLine("V (C)haracter screen   (H)eal     V");
-            Console.WriteLine("V (I)nventory                     V");
+            Console.WriteLine("V (I)nventory          Quest(L)og V");
             Console.WriteLine("===================================");
+        }
+        public static void QuestLogHUD() {
+            Console.Clear();
+            Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Level: {Program.CurrentPlayer.Level}");
+            Console.Write("EXP  ");
+            Console.Write("[");
+            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
+            Console.WriteLine("]");
+            //Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
+            //Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
+            //Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
+            //foreach (Item item in Program.CurrentPlayer.Inventory) {
+            //    if (item == null) {
+            //        Console.ForegroundColor = ConsoleColor.DarkGray;
+            //        Console.WriteLine(" Empty slot");
+            //        Console.ResetColor();
+            //    } else if (item.ItemSlot == Slot.Weapon) {
+            //        Console.WriteLine($" {item.ItemSlot} - {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
+            //    } else if (item.ItemSlot != Slot.Quest) {
+            //        Console.Write($" {item.ItemSlot} - {item.ItemName}:");
+            //        if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
+            //            Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
+            //        }
+            //        if (((Armor)item).Attributes.Strength > 0) {
+            //            Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
+            //        }
+            //        if (((Armor)item).Attributes.Dexterity > 0) {
+            //            Console.Write($" +{((Armor)item).Attributes.Dexterity} Dexterity");
+            //        }
+            //        if (((Armor)item).Attributes.Intellect > 0) {
+            //            Console.Write($" +{((Armor)item).Attributes.Intellect} Intellect");
+            //        }
+            //        if (((Armor)item).Attributes.Constitution > 0) {
+            //            Console.Write($" +{((Armor)item).Attributes.Constitution} Constitution");
+            //        }
+            //        if (((Armor)item).Attributes.WillPower > 0) {
+            //            Console.Write($" +{((Armor)item).Attributes.WillPower} Willpower");
+            //        }
+            //        if (item.ItemName == "Linen Rags") {
+            //            Console.Write(" Offers no protection");
+            //        }
+            //        Console.WriteLine("");
+            //    } else if (item.ItemSlot == Slot.Quest) {
+            //        Console.ForegroundColor = ConsoleColor.Cyan;
+            //        Console.WriteLine($" Quest Item - {item.ItemName}");
+            //        Console.ResetColor();
+            //    }
+            //}
+            Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
+            if (Program.CurrentPlayer.QuestLog.Count() == 0) {
+                Console.WriteLine("You don't have any active quests...");
+            } else {
+                foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"{quest.Name}:");
+                    Console.ResetColor();
+                    if (!quest.Completed) {
+                        Console.WriteLine(quest.Objective);
+                    } else if (quest.Completed) {
+                        Console.WriteLine(quest.TurnIn);
+                    }
+                    Console.WriteLine("Rewards:");
+                    Console.WriteLine($"{quest.Gold} gold pieces and {quest.Exp} experience points.");
+                    if (quest.Item != null) {
+                        if (quest.Item.ItemSlot == Slot.Weapon) {
+                            Console.WriteLine($" {quest.Item.ItemSlot} - {quest.Item.ItemName}: +{((Weapon)quest.Item).WeaponAttributes.MinDamage}-{((Weapon)quest.Item).WeaponAttributes.MaxDamage} dmg");
+                        } else if (quest.Item.ItemSlot != Slot.Quest) {
+                            Console.Write($" {quest.Item.ItemSlot} - {quest.Item.ItemName}:");
+                            if (((Armor)quest.Item).SecondaryAttributes.ArmorRating > 0) {
+                                Console.Write($" +{((Armor)quest.Item).SecondaryAttributes.ArmorRating} Armor Rating");
+                            }
+                            if (((Armor)quest.Item).Attributes.Strength > 0) {
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Strength} Strength");
+                            }
+                            if (((Armor)quest.Item).Attributes.Dexterity > 0) {
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Dexterity} Dexterity");
+                            }
+                            if (((Armor)quest.Item).Attributes.Intellect > 0) {
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Intellect} Intellect");
+                            }
+                            if (((Armor)quest.Item).Attributes.Constitution > 0) {
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Constitution} Constitution");
+                            }
+                            if (((Armor)quest.Item).Attributes.WillPower > 0) {
+                                Console.Write($" +{((Armor)quest.Item).Attributes.WillPower} Willpower");
+                            }
+                            if (quest.Item.ItemName == "Linen Rags") {
+                                Console.Write(" Offers no protection");
+                            }
+                            Console.WriteLine("");
+                        } else if (quest.Item.ItemSlot == Slot.Quest) {
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine($" Quest Item - {quest.Item.ItemName}");
+                            Console.ResetColor();
+                        }
+                    }
+                }
+            }
+            Print("\nPress to go back...", 1);
         }
     }
 }

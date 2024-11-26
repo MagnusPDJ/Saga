@@ -12,6 +12,11 @@ namespace Saga.Items.Loot
             int lower = (5 * Program.CurrentPlayer.Level);
             return Program.rand.Next(lower, upper + 1);
         }
+        public override void GetFixedGold(int g) {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            HUDTools.Print($"You loot {g} gold coins.", 15);
+            Program.CurrentPlayer.Gold += g;
+        }
         public override void GetCombatLoot(Enemy monster, string message) {                      
             HUDTools.Print(message, 15);
             int g = (int)Math.Floor(GetGold() * monster.GoldModifier);
@@ -184,6 +189,7 @@ namespace Saga.Items.Loot
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 HUDTools.Print($"You've gained {x} experience points!", 10);
+                Console.ResetColor();
                 Program.CurrentPlayer.Exp += x;
             }
             Program.CurrentPlayer.CheckForLevelUp();

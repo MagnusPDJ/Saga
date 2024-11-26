@@ -177,6 +177,9 @@ namespace Saga.Character
             else if (input == "l" || input == "log" || input == "combat log") {
                 Console.Clear();
                 HUDTools.GetLog();
+            } 
+            else if (input == "q" || input == "questlog") {
+                HUDTools.QuestLogHUD();
             }
             Console.ReadKey(true);
         }

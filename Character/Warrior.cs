@@ -175,6 +175,9 @@ namespace Saga.Character
                 Console.Clear();
                 HUDTools.GetLog();
             }
+            else if (input == "q" || input == "questlog") {
+                HUDTools.QuestLogHUD();
+            }
             Console.ReadKey(true);
         }
         public override void Heal() {

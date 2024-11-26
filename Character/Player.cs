@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-using Saga.assets;
+﻿using Saga.assets;
 using Saga.Dungeon;
 using Saga.Items;
+using Saga.Items.Loot;
+using System;
+using System.Collections.Generic;
 
 namespace Saga.Character
 {
-    public enum Act {
+    public enum Act
+    {
         Act1,
         Act2,
         Act3,
@@ -34,7 +35,9 @@ namespace Saga.Character
         public SecondaryAttributes TotalSecondaryAttributes { get; set; }
         public Dictionary<Slot, Item> Equipment { get; set; }
         public Item[] Inventory { get; set; }
-        public List <Quest> QuestLog { get; set; }
+        public List<Quest> QuestLog { get; set; }
+        public List<Quest> FailedQuests { get; set; }
+        public List<Quest> CompletedQuests { get; set; }
         public (int, int) DPT { get; set; }
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;
@@ -43,6 +46,9 @@ namespace Saga.Character
             CurrentAct = Act.Act1;
             Equipment = new Dictionary<Slot, Item>();
             Inventory = new Item[10];
+            QuestLog = new List<Quest>();
+            FailedQuests = new List<Quest>();
+            CompletedQuests = new List<Quest>();
             Exp = 0;
             Gold = 0;
             FreeAttributePoints = 0;
@@ -315,7 +321,41 @@ namespace Saga.Character
             if (input == "i" || input == "inventory") {
                 HUDTools.InventoryScreen();
             }
+            if (input == "l" || input == "questlog") {
+                HUDTools.QuestLogHUD();
+                HUDTools.PlayerPrompt();
+            }
+        }
 
+        //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
+        public void UpdateQuestLog() {
+            foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
+                quest.Completed = quest.QuestType.CheckRequirements();
+            }
+        }
+
+        //Metode til at få alle quest rewards og opdatere questlogs.
+        public void CompleteAndTurnInQuest(Quest quest) {
+            int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
+            if (a != -1) {
+                Program.CurrentPlayer.Inventory.SetValue(null, a);
+            }
+            Program.CurrentPlayer.QuestLog.Remove(quest);
+            Program.CurrentPlayer.CompletedQuests.Add(quest);
+
+            AudioManager.soundWin.Play();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            HUDTools.Print($"You've completed the quest: {quest.Name}!", 15);
+            Console.ResetColor();
+            Program.CurrentLoot.GetFixedGold(quest.Gold);
+            Program.CurrentLoot.GetExp(0, quest.Exp);
+            if (quest.Item != null) {
+                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                Program.CurrentPlayer.Inventory.SetValue(quest.Item, index);
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                HUDTools.Print($"You've gained {quest.Item.ItemName}");
+                Console.ResetColor();
+            }
         }
     }
 }
