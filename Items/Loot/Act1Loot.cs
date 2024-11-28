@@ -1,57 +1,61 @@
 ﻿using Saga.assets;
 using Saga.Dungeon;
 using System;
-using System.Reflection;
 
 namespace Saga.Items.Loot
 {
     public class Act1Loot : Loot
     {
-        public override int GetGold() {
+        //Metode til at få en tilfældig mængde guld:
+        public override void GetGold(float modifier = 1) {
             int upper = (26 * Program.CurrentPlayer.Level + 61);
             int lower = (5 * Program.CurrentPlayer.Level);
-            return Program.rand.Next(lower, upper + 1);
+            int g = (int)Math.Floor(Program.rand.Next(lower, upper + 1) * modifier);
+            if (g > 0) {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                HUDTools.Print($"You loot {g} gold coins.", 15);
+                Console.ResetColor();
+                Program.CurrentPlayer.Gold += g;
+            }
         }
+        //Metode til at få en bestemt mængde guld:
         public override void GetFixedGold(int g) {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             HUDTools.Print($"You loot {g} gold coins.", 15);
+            Console.ResetColor();
             Program.CurrentPlayer.Gold += g;
         }
+        //Metode til at få healing potions, default random 0-2:
+        public override void GetPotions(int amount = 0) {
+            int p = 0;
+            if (amount == 0) {
+                int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+                var picked = Program.rand.Next(0, numbers.Length);
+                p = numbers[picked];
+            } else { 
+                p = amount;
+            }
+            if (p != 0) {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                HUDTools.Print($"You loot {p} healing potions", 20);
+                Console.ResetColor();
+                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += p;
+            }
+        }
+        //Metode til at få loot efter successfuld kamp:
         public override void GetCombatLoot(Enemy monster, string message) {                      
             HUDTools.Print(message, 15);
-            int g = (int)Math.Floor(GetGold() * monster.GoldModifier);
-            if (g > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                HUDTools.Print($"You loot {g} gold coins.", 15);
-                Program.CurrentPlayer.Gold += g;
-            }
-            int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-            var pot = Program.rand.Next(0, numbers.Length);
-            if (numbers[pot] != 0 && monster.EnemyTribe != Tribe.Undead && monster.EnemyTribe != Tribe.Beast) {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
-                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
-            }
+            GetGold(monster.GoldModifier);
+            GetPotions();
             GetQuestLoot(0,0,"",monster);
             monster.GetExp();
-            Console.ResetColor();
             HUDTools.PlayerPrompt();
         }
+        //Metode til at få loot fra en skattekiste:
         public override void GetTreasureChestLoot() {
             HUDTools.Print("You find Treasure!",10);
-            int g = GetGold() * 3;
-            if (g > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                HUDTools.Print($"You loot {g} gold coins.", 15);
-                Program.CurrentPlayer.Gold += g;
-            }
-            int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-            var pot = Program.rand.Next(0, numbers.Length);
-            if (numbers[pot] != 0) {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
-                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
-            }
+            GetGold(3);
+            GetPotions();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             int getTreasure = Program.rand.Next(1, 100 + 1);
             if (getTreasure <= 20) {
@@ -182,6 +186,7 @@ namespace Saga.Items.Loot
             Console.ResetColor();
             HUDTools.PlayerPrompt();
         }
+        //Metode til at få en tilfældig mængde exp eller en bestemt mængde:
         public override void GetExp(int expModifier, int flatExp = 0) {
             int upper = (20 * Program.CurrentPlayer.Level + 21);
             int lower = (2 * Program.CurrentPlayer.Level);
@@ -194,20 +199,12 @@ namespace Saga.Items.Loot
             }
             Program.CurrentPlayer.CheckForLevelUp();
         }
+        //Metode til at få specifikke quest items i encounters:
         public override void GetQuestLoot(int findgold, int findpotions, string questname, Enemy enemy=null) {
-            int g = GetGold() * findgold;
-            if (g > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                HUDTools.Print($"You loot {g} gold coins.", 15);
-                Program.CurrentPlayer.Gold += g;
-            }
-            int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-            var pot = Program.rand.Next(0, numbers.Length);
-            if (numbers[pot] != 0 && findpotions !=0) {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                HUDTools.Print($"You loot {numbers[pot]} healing potions", 20);
-                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += numbers[pot];
-            }
+            GetGold(findgold);
+            if (findpotions != 0) {
+                GetPotions(findpotions);
+            }            
             int getLoot = Program.rand.Next(0, 100+1);
             if (questname == "MeetFlemsha") {
                 int index1 = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
@@ -215,7 +212,6 @@ namespace Saga.Items.Loot
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 HUDTools.Print($"You gain {QuestLootTable.OldKey.ItemName}", 15);
             }
-
         }
     }
 }

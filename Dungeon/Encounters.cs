@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Saga.assets;
 using Saga.Items;
-using Saga.Character;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 using Saga.Items.Loot;
 
 namespace Saga.Dungeon
@@ -16,7 +13,9 @@ namespace Saga.Dungeon
 
       //Encounters:
 
-        //De Encounters som køres når en ny karakter startes for at introducere kamp.
+        //Tutorial encounters:
+
+        //To Encounters som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
@@ -54,7 +53,7 @@ namespace Saga.Dungeon
             HUDTools.PlayerPrompt();
             AdvancedCombat(SecondEncounter);
         }
-        //Encounter som køres der introducere shopkeeperen
+        //Encounter som køres for at introducere shopkeeperen Gheed.
         public static void FirstShopEncounter() {
             Console.Clear();
             AudioManager.soundShop.Play();
@@ -79,7 +78,7 @@ namespace Saga.Dungeon
             AudioManager.soundTypeWriter.Stop();
             AudioManager.soundShop.Stop();
         }
-        //Encounter som køres der introducere Camp
+        //Encounter som køres for at introducere Camp
         public static void FirstCamp() {
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
@@ -95,7 +94,7 @@ namespace Saga.Dungeon
         }
 
 
-        //Story or NPC Encounters
+        //Story or NPC Encounters:
 
         //Alchemist trader/Quest giver
         public static void MeetFlemsha() {
@@ -176,7 +175,7 @@ namespace Saga.Dungeon
         }
 
 
-        //Random Encounters
+        //Random Encounters:
 
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void RandomBasicCombatEncounter() {
@@ -411,9 +410,19 @@ namespace Saga.Dungeon
             }
         }
 
-        //Metode til at vælge imellem story/NPC encounters
+        //Metode til at lave en pool af random encounters af tilfældig dybde/længde/antal op til 5 (default, bestemt antal gives som parametre).
+        public static void RandomEncounterPool(int dybde = 0) {
+            if (dybde == 0) {
+                dybde = Program.rand.Next(0, 4 +1);
+            }
+            for (int i=0; i <= dybde; i++) {
+                RandomEncounter();
+            }
+        }
+
+        //Metode til at vælge imellem story/NPC encounters, den bruges efter et sæt af randomencounters under Camp().
         public static void ProgressTheStory() {
-            if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") || !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
+            if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                 MeetFlemsha();
             }
         }
@@ -422,47 +431,26 @@ namespace Saga.Dungeon
         public static void Camp() {
             AudioManager.soundCampFire.Play();
             AudioManager.soundCampMusic.Play();
+            //Hver gang spilleren returnere til Camp refresher shoppen:
             Shop shop = Shop.SetForsale();
             HUDTools.TopCampHUD();
             while (true) {
-                HUDTools.InstantCampHUD();
+                HUDTools.FullCampHUD();
                 string input = HUDTools.PlayerPrompt();
-                if (input == "e" || input == "explore") {
-                    //Explore
+                //Explore, måden man progresser sin karakter:
+                if (input == "e" || input == "explore") {                    
                     HUDTools.Print("You venture deeper...", 5);
                     Console.ReadKey(true);
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
-                    bool stay = true;
-                    while (stay) {
-                        int dybde = Program.rand.Next(0, 4);
-                        switch (dybde) {
-                            case 0:
-                                for (int i = 0; i < 2; i++) {
-                                    RandomEncounter();
-                                }
-                                break;
-                            case 1:
-                                for (int i = 0; i < 3; i++) {
-                                    RandomEncounter();
-                                }
-                                break;
-                            case 2:
-                                for (int i = 0; i < 4; i++) {
-                                    RandomEncounter();
-                                }
-                                break;
-                            case 3:
-                                for (int i = 0; i < 5; i++) {
-                                    RandomEncounter();
-                                }
-                                break;
-                        }
+                    bool explore = true;
+                    while (explore) {
+                        RandomEncounterPool();
                         ProgressTheStory();
                         Console.Clear();
                         HUDTools.Print("You gain a moment of respite and a choice...", 30);
                         HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
-                        while (stay) {
+                        while (explore) {
                             HUDTools.RespiteHUD();
                             input = HUDTools.PlayerPrompt();
                             if (input == "e" || input == "explore") {
@@ -470,7 +458,7 @@ namespace Saga.Dungeon
                                 HUDTools.PlayerPrompt();
                                 break;
                             } else if (input == "r" || input == "return") {
-                                stay = false;
+                                explore = false;
                                 HUDTools.Print("You retrace your steps in the darkness...", 20);
                                 HUDTools.PlayerPrompt();
                             } else {
@@ -479,21 +467,27 @@ namespace Saga.Dungeon
                         }
                     }
                     break;
-                } else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
-                    //Sleep/save Game
+                }
+                //Gemmer spillet:
+                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     Program.Save();
                     HUDTools.Print("Game saved!");
-                    HUDTools.PlayerPrompt();
-                } else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
-                    //Gheed's shop
+                    HUDTools.PlayerPrompt();                    
+                }
+                //Gheed's shop:
+                else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {             
                     AudioManager.soundCampFire.Stop();
                     AudioManager.soundCampMusic.Stop();
                     Shop.Loadshop(Program.CurrentPlayer, shop);
                     AudioManager.soundCampFire.Play();
                     AudioManager.soundCampMusic.Play();
-                } else if (input == "q" || input == "quit") {
+                }
+                //Quit and/or save the game:
+                else if (input == "q" || input == "quit") {
                     Program.Quit();
-                } else {
+                }
+                //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
+                else {
                     Program.CurrentPlayer.BasicActions(input);
                 }
             }
@@ -502,8 +496,10 @@ namespace Saga.Dungeon
         //Metode til at køre kamp
         public static void AdvancedCombat(Enemy Monster) {
             HUDTools.ClearLog();
+            //Starter en tur tæller:
             Encounters TurnTimer = new Encounters();
             HUDTools.TopCombatHUD(Monster, TurnTimer);
+            //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
@@ -533,6 +529,7 @@ namespace Saga.Dungeon
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
                 }
             }
+            //Tjekker om monstret er besejret:
             if (Monster.Health <= 0) {
                 AudioManager.soundKamp.Stop();
                 AudioManager.soundBossKamp.Stop();
