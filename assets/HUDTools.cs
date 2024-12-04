@@ -616,23 +616,7 @@ namespace Saga.assets
             Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 5);
             Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]", 10);
         }
-        public static void SlowCampHUD() {
-            Console.Clear();
-            Print("[][][][][][]  Camp   [][][][][][]",5);
-            Print($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:",10);
-            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}",10);
-            Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 10);
-            Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]",10);
-            Print("==============Actions=================",5);
-            Print("0 (E)xplore          (S)leep (Save)  0", 10);
-            Print("0 (G)heed's shop     (H)eal          0", 10);
-            Print("0 (C)haracter screen (I)nventory     0", 10);
-            Print("0 Quest(L)og                         0", 10);
-            Print("======================================", 5);
-            Print("  (Q)uit to Main Menu                 ", 10);
-            Print("Choose an action...", 1);
-        }
-        public static void InstantCampHUD() {
+        public static void FullCampHUD() {
             Console.Clear();
             Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
             Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
