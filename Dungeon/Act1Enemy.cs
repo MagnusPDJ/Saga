@@ -43,6 +43,7 @@ namespace Saga.Dungeon
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 HUDTools.Print($"You've gained {x} experience points!", 10);
+                Console.ResetColor();
                 Program.CurrentPlayer.Exp += x;
             }
             Program.CurrentPlayer.CheckForLevelUp();

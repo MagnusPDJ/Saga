@@ -1,6 +1,4 @@
-﻿using System;
-using Saga.assets;
-
+﻿
 namespace Saga.Dungeon
 {
     public enum Tribe 

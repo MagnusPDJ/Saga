@@ -179,43 +179,6 @@ namespace Saga.assets
             portal1.Close();
         }
 
-        //Metode til at skrive en logfil til puzzles
-        public static void SpareWriteToLog(List<int> positions, List<char> chars, char c) {
-            if (!File.Exists("combatlog.txt")) {
-                File.Create("combatlog.txt");
-            }
-            //Læser logfilen og gemmer det i memory
-            string text = File.ReadAllText("combatlog.txt");
-
-            // Åbner en text file navngivet "combatlog"  
-            // at the location of your program 
-            FileStream CombatLog = new FileStream("combatlog.txt", FileMode.Open);
-
-            //Laver et objekt som kan skrive til Logfilen
-            StreamWriter portal1 = new StreamWriter(CombatLog);
-
-            // Standard Output stream is  
-            // being saved to a Textwriter 
-            TextWriter combatlogsave = Console.Out;
-
-            //Klar gør objektet til at skrive til memory.
-            Console.SetOut(portal1);
-
-            //Skriver den gemte tekst.
-            Console.Write($"{text}\n");
-
-            //Skriver og tilføjer den nye tekst.
-
-            //
-
-
-            //Skriver teksten i memory til filen.
-            Console.SetOut(combatlogsave);
-
-            //Lukker objektet og filen igen.
-            portal1.Close();
-        }
-
         //Skriver Loggen i consolen.
         public static void GetLog() {
             string text = File.ReadAllText("combatlog.txt");
@@ -244,17 +207,6 @@ namespace Saga.assets
             Console.WriteLine("\t\t1.         Play\n");
             Console.WriteLine("\t\t2.       Settings\n");
             Console.WriteLine("\t\t3.       Quit Game\n");
-        }
-        public static void SlowSettings() {
-            Console.Clear();
-            var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var settings = configFile.AppSettings.Settings;
-            Print("            Settings", 10);
-            Print("==================================\n",5);
-            Print($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}", 10);
-            Print($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}", 10);
-            Print($"3. Game Volume:                   {settings["volume"].Value}\n", 10);
-            Print("=======Press Esc to go back=======",5);
         }
         public static void InstantSettings() {
             Console.Clear();
@@ -675,7 +627,7 @@ namespace Saga.assets
             Print("0 (E)xplore          (S)leep (Save)  0", 10);
             Print("0 (G)heed's shop     (H)eal          0", 10);
             Print("0 (C)haracter screen (I)nventory     0", 10);
-            Print("0 Quest(L)og         (T)alk to NPC's 0", 10);
+            Print("0 Quest(L)og                         0", 10);
             Print("======================================", 5);
             Print("  (Q)uit to Main Menu                 ", 10);
             Print("Choose an action...", 1);
@@ -724,46 +676,22 @@ namespace Saga.assets
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            //Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
-            //Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
-            //Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
-            //foreach (Item item in Program.CurrentPlayer.Inventory) {
-            //    if (item == null) {
-            //        Console.ForegroundColor = ConsoleColor.DarkGray;
-            //        Console.WriteLine(" Empty slot");
-            //        Console.ResetColor();
-            //    } else if (item.ItemSlot == Slot.Weapon) {
-            //        Console.WriteLine($" {item.ItemSlot} - {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
-            //    } else if (item.ItemSlot != Slot.Quest) {
-            //        Console.Write($" {item.ItemSlot} - {item.ItemName}:");
-            //        if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
-            //            Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
-            //        }
-            //        if (((Armor)item).Attributes.Strength > 0) {
-            //            Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
-            //        }
-            //        if (((Armor)item).Attributes.Dexterity > 0) {
-            //            Console.Write($" +{((Armor)item).Attributes.Dexterity} Dexterity");
-            //        }
-            //        if (((Armor)item).Attributes.Intellect > 0) {
-            //            Console.Write($" +{((Armor)item).Attributes.Intellect} Intellect");
-            //        }
-            //        if (((Armor)item).Attributes.Constitution > 0) {
-            //            Console.Write($" +{((Armor)item).Attributes.Constitution} Constitution");
-            //        }
-            //        if (((Armor)item).Attributes.WillPower > 0) {
-            //            Console.Write($" +{((Armor)item).Attributes.WillPower} Willpower");
-            //        }
-            //        if (item.ItemName == "Linen Rags") {
-            //            Console.Write(" Offers no protection");
-            //        }
-            //        Console.WriteLine("");
-            //    } else if (item.ItemSlot == Slot.Quest) {
-            //        Console.ForegroundColor = ConsoleColor.Cyan;
-            //        Console.WriteLine($" Quest Item - {item.ItemName}");
-            //        Console.ResetColor();
-            //    }
-            //}
+            Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Quest Items @@@@@@@@@@@@@@@@@@@");
+            int i = 0;
+            foreach (Item item in Program.CurrentPlayer.Inventory) {
+                if (item == null) {
+                    i++;
+                    if (i == 10) {
+                        Console.WriteLine("You don't have any quest items...\n");
+                    }
+                    continue;
+                }
+                if (item.ItemSlot == Slot.Quest) {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($" Quest Item - {item.ItemName}");
+                    Console.ResetColor();
+                }
+            }
             Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
             if (Program.CurrentPlayer.QuestLog.Count() == 0) {
                 Console.WriteLine("You don't have any active quests...");
