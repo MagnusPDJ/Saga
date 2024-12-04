@@ -675,7 +675,7 @@ namespace Saga.assets
             Print("0 (E)xplore          (S)leep (Save)  0", 10);
             Print("0 (G)heed's shop     (H)eal          0", 10);
             Print("0 (C)haracter screen (I)nventory     0", 10);
-            Print("0 Quest(L)og                         0", 10);
+            Print("0 Quest(L)og         (T)alk to NPC's 0", 10);
             Print("======================================", 5);
             Print("  (Q)uit to Main Menu                 ", 10);
             Print("Choose an action...", 1);
@@ -694,7 +694,7 @@ namespace Saga.assets
             Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
             Console.WriteLine("0 (G)heed's shop     (H)eal          0");
             Console.WriteLine("0 (C)haracter screen (I)nventory     0");
-            Console.WriteLine("0 Quest(L)og                         0");
+            Console.WriteLine("0 Quest(L)og         (T)alk to NPC's 0");
             Console.WriteLine("======================================");
             Console.WriteLine("  (Q)uit to Main Menu                 ");
             Console.WriteLine("Choose an action...");

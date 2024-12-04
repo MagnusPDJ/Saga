@@ -413,7 +413,7 @@ namespace Saga.Dungeon
 
         //Metode til at vælge imellem story/NPC encounters
         public static void ProgressTheStory() {
-            if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") || !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
+            if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                 MeetFlemsha();
             }
         }
@@ -491,6 +491,8 @@ namespace Saga.Dungeon
                     Shop.Loadshop(Program.CurrentPlayer, shop);
                     AudioManager.soundCampFire.Play();
                     AudioManager.soundCampMusic.Play();
+                } else if (input == "t" || input == "talk") { 
+                
                 } else if (input == "q" || input == "quit") {
                     Program.Quit();
                 } else {
