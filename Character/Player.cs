@@ -38,6 +38,7 @@ namespace Saga.Character
         public List<Quest> QuestLog { get; set; }
         public List<Quest> FailedQuests { get; set; }
         public List<Quest> CompletedQuests { get; set; }
+        public List<NonPlayableCharacters> NpcsInCamp { get; set; }
         public (int, int) DPT { get; set; }
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;
@@ -49,6 +50,7 @@ namespace Saga.Character
             QuestLog = new List<Quest>();
             FailedQuests = new List<Quest>();
             CompletedQuests = new List<Quest>();
+            NpcsInCamp = new List<NonPlayableCharacters>();
             Exp = 0;
             Gold = 0;
             FreeAttributePoints = 0;

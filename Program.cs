@@ -9,6 +9,7 @@ using Saga.Character;
 using Saga.Dungeon;
 using Saga.assets;
 using Saga.Items.Loot;
+using NAudio.Wave;
 
 namespace Saga
 {
@@ -30,7 +31,7 @@ namespace Saga
         public static AudioManager soundVolumeController = new AudioManager(Properties.Resources.mainmenu);
 
         //Spillets udførelse ved opstart
-        static void Main(string[] args) {
+        static void Main() {
             //Gør unicode karaktere "runer" læselige i consolen
             Console.OutputEncoding = Encoding.UTF8;
 
@@ -77,7 +78,7 @@ namespace Saga
                 if (CurrentPlayer.CurrentAct == Act.Act1) {
                     if (CurrentLoot == null) {
                         CurrentLoot = new Act1Loot();
-                    }                   
+                    }
                     while (CurrentPlayer.CurrentAct == Act.Act1) {
                         AudioManager.soundMainMenu.Stop();
                         AudioManager.soundShop.Stop();

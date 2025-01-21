@@ -27,7 +27,7 @@ namespace Saga.Items.Loot
         }
         //Metode til at få healing potions, default random 0-2:
         public override void GetPotions(int amount = 0) {
-            int p = 0;
+            int p;
             if (amount == 0) {
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
                 var picked = Program.rand.Next(0, numbers.Length);

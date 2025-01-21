@@ -9,6 +9,7 @@ using Saga.Character;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Saga.assets
 {
@@ -189,6 +190,23 @@ namespace Saga.assets
         public static void ClearLog() {
             File.WriteAllText("combatlog.txt", String.Empty);
         }
+
+        //Read all lines fra embedded resource
+        public static List<string> ReadAllResourceLines(string resourceName) {
+            using (Stream stream = Assembly.GetEntryAssembly()
+                .GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream)) {
+                return EnumerateLines(reader).ToList();
+            }
+        }
+        static IEnumerable<string> EnumerateLines(TextReader reader) {
+            string line;
+
+            while ((line = reader.ReadLine()) != null) {
+                yield return line;
+            }
+        }
+
 
         //HUDS
         public static void MainMenu() {
@@ -727,6 +745,19 @@ namespace Saga.assets
                 }
             }
             Print("\nPress to go back...", 1);
+        }
+        public static void TalkToNpcHUD() {
+            Console.Clear();
+            Print("Who would you like to talk to?", 20);
+            if (Program.CurrentPlayer.NpcsInCamp.Count > 0) {
+                foreach (NonPlayableCharacters npc in Program.CurrentPlayer.NpcsInCamp) {
+                    Print($"({Program.CurrentPlayer.NpcsInCamp.IndexOf(npc)}) - {npc.Name}");
+                }
+            } 
+            else {
+                Print("There are no one in your camp :(");
+            }
+            Print("\nPress the number to talk to that NPC else write (b)ack", 10);
         }
     }
 }

@@ -134,6 +134,7 @@
     <Compile Include="Dungeon\Act1Quest.cs" />
     <Compile Include="Dungeon\Enemy.cs" />
     <Compile Include="assets\HUDTools.cs" />
+    <Compile Include="Dungeon\NonPlayableCharacters.cs" />
     <Compile Include="Dungeon\Quest.cs" />
     <Compile Include="Items\Armor.cs" />
     <Compile Include="Items\Loot\Act1Loot.cs" />
@@ -218,6 +219,8 @@
   <ItemGroup>
     <None Include="assets\sounds\footsteps.wav" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Dungeon\Dialogue.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

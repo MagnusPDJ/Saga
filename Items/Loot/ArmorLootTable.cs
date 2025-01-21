@@ -52,6 +52,7 @@ namespace Saga.Items.Loot
             };
             return item;
         }
+
         public static Armor LinenRags = new Armor() {
             ItemName = "Linen Rags",
             ItemLevel = 1,

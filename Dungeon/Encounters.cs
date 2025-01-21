@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using Saga.assets;
 using Saga.Items;
@@ -74,6 +75,7 @@ namespace Saga.Dungeon
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
+            AddNpcToCamp(NonPlayableCharacters.Gheed);
             HUDTools.PlayerPrompt();
             AudioManager.soundTypeWriter.Stop();
             AudioManager.soundShop.Stop();
@@ -146,6 +148,7 @@ namespace Saga.Dungeon
                                 Program.CurrentPlayer.Inventory.SetValue(null, a);
                             }
                             Program.CurrentPlayer.FailedQuests.Add(new Act1Quest("Free Flemsha", Type.Find, "Failed", "Failed"));
+                            NonPlayableCharacters.UpdateDialogueOptions("DeadFlemsha");
                             leftForDead = true;
                         }
                         searched = true;
@@ -168,6 +171,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and the door slides open", 20);
                     HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
+                    AddNpcToCamp(NonPlayableCharacters.Flemsha);
                     HUDTools.PlayerPrompt();
                     break;
                 }
@@ -486,11 +490,40 @@ namespace Saga.Dungeon
                 else if (input == "q" || input == "quit") {
                     Program.Quit();
                 }
+                //Tale med NPC'er mens man er tilbage i campen.
+                else if (input == "t" || input == "talk") {
+                    TalkToNpc();
+                }
                 //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
                 else {
                     Program.CurrentPlayer.BasicActions(input);
                 }
             }
+        }
+
+        //Funktion som kaldes under campen når spilleren skal snakke med de tilstedeværende personer.
+        public static void TalkToNpc() {
+            while (true) {
+                HUDTools.TalkToNpcHUD();
+                string input = HUDTools.PlayerPrompt();
+                if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count-1 && n >= 0) {
+                    NonPlayableCharacters.LoadDialogueOptions(int.Parse(input));
+                } else if (input == "b" || input == "back") {
+                    break;
+                } else {
+                    HUDTools.Print("Not a valid input...");
+                    HUDTools.PlayerPrompt();
+                }
+            }
+        }
+
+        //Funktion til at tilføje en NPC til campen som kan snakkes med.
+        public static void AddNpcToCamp(NonPlayableCharacters npc) {
+            Program.CurrentPlayer.NpcsInCamp.Add(npc);
+            NonPlayableCharacters.UpdateDialogueOptions(npc.Name);
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            HUDTools.Print($"{npc.Name} has joined your cause!",20);
+            Console.ResetColor();
         }
 
         //Metode til at køre kamp
