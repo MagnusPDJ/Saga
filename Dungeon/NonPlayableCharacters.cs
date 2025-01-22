@@ -1,9 +1,6 @@
 ﻿using Saga.assets;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 
 namespace Saga.Dungeon {
     [Serializable]
@@ -11,7 +8,7 @@ namespace Saga.Dungeon {
         public string Name { get; set; }
         public List<Quest> AvailableQuests { get; set; }
         public Dictionary<string, string> Dialogue { get; set; }
-
+        //Metode til at opdatere dialog mulighederne baseret på valg taget igennem spillet.
         public static void UpdateDialogueOptions(string instance) {
             List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.Dialogue.txt");
             lines.RemoveAt(0);
@@ -25,7 +22,7 @@ namespace Saga.Dungeon {
                 }
             }
         }
-
+        //Metode til at vise alle dialog valg mulighederne.
         public static void LoadDialogueOptions(int index) {
             Console.Clear();
             NonPlayableCharacters talkto = Program.CurrentPlayer.NpcsInCamp[index];

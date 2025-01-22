@@ -269,6 +269,5 @@ namespace Saga.Items
                 HUDTools.Print("Item sold!", 3);
             }
         }
-
     }
 }

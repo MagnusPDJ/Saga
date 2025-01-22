@@ -12,7 +12,6 @@ namespace Saga.Character
         public Warrior(string name) : base(name, 0, 1, 1, 1, 1, 0) {
             CurrentClass = "Warrior";
         }
-
         public override void LevelUp() {
             int levels = 0;
             AudioManager.soundLvlUp.Play();

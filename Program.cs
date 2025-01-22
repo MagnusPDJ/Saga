@@ -9,7 +9,6 @@ using Saga.Character;
 using Saga.Dungeon;
 using Saga.assets;
 using Saga.Items.Loot;
-using NAudio.Wave;
 
 namespace Saga
 {
@@ -260,9 +259,13 @@ namespace Saga
                 } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length >= 30);
                 Console.Clear();
                 HUDTools.Print($"This is your name?\n{input}.\n(Y/N)",10);
-                input1 = HUDTools.PlayerPrompt();
-                if (input1 != "y" && input1 != "n") {
-                    HUDTools.Print("Invalid input.", 3);
+                while (true) {
+                    input1 = HUDTools.PlayerPrompt();
+                    if (input1 != "y" && input1 != "n") {
+                        HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                    } else {
+                        break;
+                    }
                 }
             } while (input1 != "y");
             return input;
@@ -275,32 +278,44 @@ namespace Saga
                 string input1 = HUDTools.PlayerPrompt();
                 if (input1 == "1") {
                     HUDTools.Print($"You want to become a Warrior?\n(Y/N)", 5);
-                    string input2 = HUDTools.PlayerPrompt();
-                    if (input2 == "y") {
-                        return 1;
-                    }
-                    else {
-                        HUDTools.Print("Enter a # 1-3:",5);
+                    while (true) {
+                        string input2 = HUDTools.PlayerPrompt();
+                        if (input2 == "y") {
+                            return 1;
+                        } else if (input2 == "n") {
+                            HUDTools.Print("Enter a # 1-3:", 5);
+                            break;
+                        } else {
+                            HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                        }
                     }
                 }
                 else if (input1 == "2") {
                     HUDTools.Print($"You want to become a Archer?\n(Y/N)",5);
-                    string input2 = HUDTools.PlayerPrompt();
-                    if (input2 == "y") {
-                        return 2;
-                    }
-                    else {
-                        HUDTools.Print("Enter a # 1-3:",5);
+                    while (true) {
+                        string input2 = HUDTools.PlayerPrompt();
+                        if (input2 == "y") {
+                            return 2;
+                        } else if (input2 == "n") {
+                            HUDTools.Print("Enter a # 1-3:", 5);
+                            break;
+                        } else {
+                            HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                        }
                     }
                 }
                 else if (input1 == "3") {
                     HUDTools.Print($"You want to become a Mage?\n(Y/N)",5);
-                    string input2 = HUDTools.PlayerPrompt();
-                    if (input2 == "y") {
-                        return 3;
-                    }
-                    else {
-                        HUDTools.Print("Enter a # 1-3:", 5);
+                    while (true) {
+                        string input2 = HUDTools.PlayerPrompt();
+                        if (input2 == "y") {
+                            return 3;
+                        } else if (input2 == "n") {
+                            HUDTools.Print("Enter a # 1-3:", 5);
+                            break;
+                        } else {
+                            HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                        }
                     }
                 }
                 else {

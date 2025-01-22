@@ -12,7 +12,6 @@ namespace Saga.Character
         public Archer(string name) : base(name, 0, 1, 1, 1, 1, 0) {
             CurrentClass = "Archer";
         }
-
         public override void LevelUp() {
             int levels = 0;
             AudioManager.soundLvlUp.Play();
@@ -33,7 +32,6 @@ namespace Saga.Character
             HUDTools.Print($"Congratulations! You are now level {Level}! You've gained 1 attribute point.", 20);
             Console.ResetColor();
         }
-
         public override (int, int) CalculateDPT() {
             TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
             (int, int) weaponDPT = CalculateWeaponDPT();
@@ -45,7 +43,6 @@ namespace Saga.Character
 
             return (weaponDPT.Item1 + dmgfromattribute, weaponDPT.Item2 + dmgfromattribute);
         }
-
         public override string Equip(Weapon weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
@@ -81,7 +78,6 @@ namespace Saga.Character
                 return "New weapon equipped!";
             }
         }
-
         public override string Equip(Armor armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
@@ -202,7 +198,6 @@ namespace Saga.Character
                 }
             }
         }
-
         public static int Attack(Enemy Monster) {
             HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);

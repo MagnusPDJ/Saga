@@ -24,7 +24,6 @@ namespace Saga.Character
                 Constitution == attributes.Constitution &&
                 WillPower == attributes.WillPower;
         }
-
         public override int GetHashCode() {
             int hashCode = -1364746490;
             hashCode = hashCode * -1521134295 + Strength.GetHashCode();
@@ -34,7 +33,6 @@ namespace Saga.Character
             hashCode = hashCode * -1521134295 + WillPower.GetHashCode();
             return hashCode;
         }
-
         // <summary>
         // Adds two PrimaryAttributes together.
         // </summary>

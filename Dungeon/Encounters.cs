@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
 using Saga.assets;
 using Saga.Items;
@@ -413,7 +412,6 @@ namespace Saga.Dungeon
                     break;
             }
         }
-
         //Metode til at lave en pool af random encounters af tilfældig dybde/længde/antal op til 5 (default, bestemt antal gives som parametre).
         public static void RandomEncounterPool(int dybde = 0) {
             if (dybde == 0) {
@@ -423,14 +421,12 @@ namespace Saga.Dungeon
                 RandomEncounter();
             }
         }
-
         //Metode til at vælge imellem story/NPC encounters, den bruges efter et sæt af randomencounters under Camp().
         public static void ProgressTheStory() {
             if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                 MeetFlemsha();
             }
         }
-
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
         public static void Camp() {
             AudioManager.soundCampFire.Play();
@@ -500,7 +496,6 @@ namespace Saga.Dungeon
                 }
             }
         }
-
         //Funktion som kaldes under campen når spilleren skal snakke med de tilstedeværende personer.
         public static void TalkToNpc() {
             while (true) {
@@ -516,7 +511,6 @@ namespace Saga.Dungeon
                 }
             }
         }
-
         //Funktion til at tilføje en NPC til campen som kan snakkes med.
         public static void AddNpcToCamp(NonPlayableCharacters npc) {
             Program.CurrentPlayer.NpcsInCamp.Add(npc);
@@ -525,7 +519,6 @@ namespace Saga.Dungeon
             HUDTools.Print($"{npc.Name} has joined your cause!",20);
             Console.ResetColor();
         }
-
         //Metode til at køre kamp
         public static void AdvancedCombat(Enemy Monster) {
             HUDTools.ClearLog();

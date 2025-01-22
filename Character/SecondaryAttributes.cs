@@ -22,7 +22,6 @@ namespace Saga.Character
                    MaxMana == attributes.MaxMana &&
                    Awareness == attributes.Awareness;
         }
-
         public override int GetHashCode() {
             int hashCode = 1903012575;
             hashCode = hashCode * -1521134295 + MaxHealth.GetHashCode();

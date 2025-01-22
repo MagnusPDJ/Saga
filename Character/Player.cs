@@ -66,8 +66,7 @@ namespace Saga.Character
         public int GetLevelUpValue() {
             return Convert.ToInt32(5000000 / (1 + 10000 * Math.Pow(1.2, 1 - Level)));
         }
-
-        //Metode til at tjekke om lvl op er muligt
+        //Metode til at tjekke om lvl op er muligt.
         public bool CanLevelUp() {
             if (Exp >= GetLevelUpValue()) {
                 return true;
@@ -75,6 +74,7 @@ namespace Saga.Character
                 return false;
             }
         }
+        //Metode til at level up hver gang man får exp.
         public void CheckForLevelUp() {
             if (CanLevelUp()) {
                 LevelUp();
@@ -90,20 +90,17 @@ namespace Saga.Character
         public abstract string Equip(Potion potion);
         //Unequips an item and places it into the inventory.
         public abstract string UnEquip(Slot slot, Item item);
-        //Metode til at sætte start udstyr
+        //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();
-
-        //Metode til at vælge mellem character actions/skills/items
+        //Metode til at vælge mellem character actions/skills/items.
         public abstract void CombatActions(Enemy Monster, Encounters TurnTimer);
-
+        //Metode til at drikke potions.
         public abstract void Heal();
-
         // Calculates and outputs hero stats.
         public void DisplayStats() {
             CalculateTotalStats();
             HUDTools.WriteStatsToConsole(Name, Level, TotalPrimaryAttributes, TotalSecondaryAttributes, DPT);
         }
-
         // Calculates total stats based on base stats and equipped items.
         public void CalculateTotalStats() {
             TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
@@ -111,8 +108,7 @@ namespace Saga.Character
             TotalSecondaryAttributes = CalculateSecondaryArmorBonus();
             DPT = CalculateDPT();
         }
-
-        // Calculates armor bonus
+        // Calculates armor bonus.
         public PrimaryAttributes CalculatePrimaryArmorBonus() {
             PrimaryAttributes armorBonusValues = new PrimaryAttributes() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 };
 
@@ -275,8 +271,7 @@ namespace Saga.Character
             }
             return BaseSecondaryAttributes + armorBonusValues;
         }
-
-        //Calculates secondaryAttributes
+        //Calculates secondaryAttributes.
         public SecondaryAttributes CalculateBaseSecondaryStats() {
             return new SecondaryAttributes() {
                 MaxHealth = 5 + TotalPrimaryAttributes.Constitution * 5,
@@ -286,7 +281,6 @@ namespace Saga.Character
                 ElementalResistence = TotalPrimaryAttributes.Intellect
             };
         }
-
         // Calculates a weapons damage per turn.
         public (int, int) CalculateWeaponDPT() {
             bool hasWeapon = Equipment.TryGetValue(Slot.Weapon, out Item equippedWeapon);
@@ -297,7 +291,6 @@ namespace Saga.Character
                 return (1, 1);
             }
         }
-
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void DeathCode(string message) {
             AudioManager.soundGameOver.Play();
@@ -308,8 +301,7 @@ namespace Saga.Character
             HUDTools.PlayerPrompt();
             Program.MainMenu();
         }
-
-        //Metode til at kalde basic actions (heal, inventory og character)
+        //Metode til at kalde basic actions (heal, inventory og character).
         public void BasicActions(string input) {
             if (input == "h" || input == "heal") {
                 //Heal
@@ -328,14 +320,12 @@ namespace Saga.Character
                 HUDTools.PlayerPrompt();
             }
         }
-
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
         public void UpdateQuestLog() {
             foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
                 quest.Completed = quest.QuestType.CheckRequirements();
             }
         }
-
         //Metode til at få alle quest rewards og opdatere questlogs.
         public void CompleteAndTurnInQuest(Quest quest) {
             int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);

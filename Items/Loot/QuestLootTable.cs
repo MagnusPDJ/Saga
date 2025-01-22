@@ -7,8 +7,6 @@ namespace Saga.Items.Loot
     [Serializable]
     public class QuestLootTable : QuestItem
     {
-
-
         public static QuestItem OldKey = new QuestItem() {
             ItemName = "Old Key",
             ItemSlot = Slot.Quest,

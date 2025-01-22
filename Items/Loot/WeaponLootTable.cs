@@ -18,6 +18,7 @@ namespace Saga.Items.Loot
 
             return item;
         }
+
         public static Weapon RustySword = new Weapon() {
             ItemName = "Rusty Sword",
             ItemLevel = 1,

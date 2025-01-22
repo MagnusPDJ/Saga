@@ -1,5 +1,4 @@
-﻿using Saga.Character;
-using System;
+﻿using System;
 
 namespace Saga.Items
 {
