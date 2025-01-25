@@ -32,15 +32,7 @@ namespace Saga.Items
                 HUDTools.BuyShopHUD(shop);
                 //Wait for input
                 string input = HUDTools.PlayerPrompt();
-                if (input == "p" || input == "potion") {
-                    TryBuyPotion("potion", ShopPrice("potion"), p);
-                } else if (input == "w" || input == "weapon") {
-                    TryBuyPotion("weapon", ShopPrice("weaponupgrade"), p);
-                } else if (input == "a" || input == "armor") {
-                    TryBuyPotion("armor", ShopPrice("armorupgrade"), p);
-                } else if (input == "g" || input == "upgrade potion") {
-                    TryBuyPotion("upgradepotion", ShopPrice("potionupgrade"), p);
-                } else if (input == "u" || input == "use" || input == "heal") {
+                if (input == "u" || input == "use" || input == "heal") {
                     Program.CurrentPlayer.Heal();
                     HUDTools.PlayerPrompt();
                 } else if (input == "c" || input == "character" || input == "character screen") {
@@ -104,11 +96,6 @@ namespace Saga.Items
             switch (item) {
                 default:
                     return 0;
-                case "potion":                    
-                    return potionP;
-                case "potionupgrade":
-                    int potionupgradeP = 200 * Program.CurrentPlayer.CurrentHealingPotion.PotionPotency;
-                    return potionupgradeP;
                 case "sellpotion":
                     return sellPotionP;
                 case "sellpotion5":
@@ -197,29 +184,6 @@ namespace Saga.Items
             }
         }
         //Metode til at købe fra shoppen.
-        static void TryBuyPotion(string item, int cost, Player p) {
-            if (p.Gold >= cost) {
-                switch (item) {
-                    case "potion":
-                        p.CurrentHealingPotion.PotionQuantity++;
-                        break;
-                    //case "weapon":
-                    //    p.weaponValue++; 
-                    //    break;
-                    //case "armor":
-                    //    p.armorValue++; 
-                    //    break;
-                    case "upgradepotion":
-                        p.CurrentHealingPotion.PotionPotency += 5;
-                        break;
-                }
-                p.Gold -= cost;
-
-            } else {
-                Console.WriteLine("You don't have enough gold!");
-                HUDTools.PlayerPrompt();
-            }
-        }
         static void TryBuyItem(int index, int cost, Shop s, Player p) {
             if (p.Gold >= cost) {
                 int index1 = Array.FindIndex(p.Inventory, i => i == null || p.Inventory.Length == 0);

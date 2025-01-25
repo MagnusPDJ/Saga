@@ -38,7 +38,7 @@ namespace Saga.Dungeon {
                 Console.Clear();
                 HUDTools.Print($"{talkto.Greeting}\t(b)ack", 20);
                 foreach (string question in questions) {
-                    HUDTools.Print($"{questions.IndexOf(question)}:\t{question}", 20);
+                    HUDTools.Print($"{questions.IndexOf(question)}:\t{question}", 15);
                 }
                 if (talkto.Name == "Flemsha" && Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
                     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -50,6 +50,8 @@ namespace Saga.Dungeon {
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     HUDTools.Print($"{questions.Count}:\tDo you have any work?", 20);
                     Console.ResetColor();
+                } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests.Count == 0 && Program.CurrentPlayer.Level >= 15) { 
+                //No quests made
                 } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests[0].Accepted == false) {
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     HUDTools.Print($"{questions.Count}:\tDo you have any work?", 20);

@@ -224,7 +224,7 @@ namespace Saga.Dungeon
         }
 
         public override void MonsterActions(Encounters TurnTimer) {
-            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > this.Awareness) {
                 if (EnemyTurn < TurnTimer.TurnTimer && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
@@ -248,7 +248,6 @@ namespace Saga.Dungeon
                 }
             } else {
                 if (EnemyTurn == TurnTimer.TurnTimer && Health > 0) {
-                    Console.ReadKey(true);
                     int attack = Power;
                     if (AttackDebuff > 0) {
                         attack /= Math.Max(2, Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating);

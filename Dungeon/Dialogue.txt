@@ -5,7 +5,7 @@ Gheed;Gheed;Do you remember how you got here?;Unfortunately, I do not. I used to
 Gheed;Gheed;How do I escape?;Find the wizard. I expect he is the only one that knows the way out of his dark creation.;
 Flemsha;Flemsha;Do you know where we are?;Judging from the flora here, we are in a place that has not seen sunlight for a long time, probably\nunderground. At the same time, it all seems so unnatural, quite strong magic is at play.;
 Flemsha;Flemsha;How did you get here?;I... I don't remember and I cannot tell you have many days have passed in that cell you freed me\nfrom. I used to live as a hermit far from settlements. Alchemy is frowned upon by the common folk.\nIt is often mistaken for witchcraft or dark magic.;
-Flemsha;Flemsha;Where did you learn alchemy?;Mostly self-taught. Alchemy is a meticulous science, shunned by people who do not understand, it is\nall natural inherit properties of the ingredients. But to them an elixir that cures the common cold is\nwitchcraft and to be feared, like all the other things they don't understand.;
+Flemsha;Flemsha;Where did you learn alchemy?;Mostly self-taught. Alchemy is a meticulous science, shunned by people who do not understand, it is\nall natural inherit properties of the ingredients. But to them an elixir that cures the common cold\nis witchcraft and to be feared, like all the other things they don't understand.;
 FreeFlemsha;0;0;0;
 Gheed;Flemsha;Have you talked to Flemsha yet?;Yes, he is a strange man indeed. I saw him scraping the walls for mold\nand grinding bones. But I am sure his potions will become quite handy in a pinch.;
 Flemsha;Gheed;Test (Should be Hidden);Test (Should be Hidden);

@@ -240,9 +240,7 @@ namespace Saga.assets
             Console.Clear();
             Console.WriteLine("         Gheed's Shop        ");
             Console.WriteLine("=======================================================");
-            Console.WriteLine($"| (P)otions:              $ {Shop.ShopPrice("potion")}");
-            Console.WriteLine($"| Up(g)rade potion        $ {Shop.ShopPrice("potionupgrade")}");
-            Console.WriteLine($"|\n| Items for sale:");
+            Console.WriteLine($"| Items for sale:");
             foreach (Item item in shop.Forsale) {
                 if (item == null) {
                 }
@@ -678,6 +676,7 @@ namespace Saga.assets
             Console.WriteLine("V (C)haracter screen   (H)eal     V");
             Console.WriteLine("V (I)nventory          Quest(L)og V");
             Console.WriteLine("===================================");
+            Console.WriteLine("Choose an action...");
         }
         public static void QuestLogHUD() {
             Console.Clear();

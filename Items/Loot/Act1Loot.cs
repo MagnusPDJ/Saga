@@ -50,7 +50,9 @@ namespace Saga.Items.Loot
         public override void GetCombatLoot(Enemy monster, string message) {                      
             HUDTools.Print(message, 15);
             GetGold(monster.GoldModifier);
-            GetPotions();
+            if (monster.EnemyTribe != Tribe.Beast) {
+                GetPotions();
+            }
             GetQuestLoot(0,0,"",monster);
             monster.GetExp();
             HUDTools.PlayerPrompt();
@@ -208,8 +210,7 @@ namespace Saga.Items.Loot
             GetGold(findgold);
             if (findpotions != 0) {
                 GetPotions(findpotions);
-            }            
-            int getLoot = Program.rand.Next(0, 100+1);
+            }
             if (questname == "MeetFlemsha") {
                 int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                 Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.OldKey, index);
@@ -218,10 +219,7 @@ namespace Saga.Items.Loot
             }
             if (enemy != null) {
                 if (enemy.Name == "Giant Rat" && Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed != true) != null) {
-                    int index =-1;
-                    if (Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null) != -1) {
-                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i.ItemName == "Rat tail");
-                    }
+                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null && i.ItemName == "Rat tail");
                     if (index != -1) {
                         ((QuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -233,10 +231,7 @@ namespace Saga.Items.Loot
                         HUDTools.Print($"You gain {QuestLootTable.RatTail.ItemName}", 15);
                     }                   
                 } else if (enemy.Name == "Giant Bat" && Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed != true) != null) {
-                    int index = -1;
-                    if (Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null) != -1) {
-                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x.ItemName == "Bat wings");
-                    }
+                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x != null && x.ItemName == "Bat wings");
                     if (index != -1) {
                         ((QuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
                         Console.ForegroundColor = ConsoleColor.Cyan;

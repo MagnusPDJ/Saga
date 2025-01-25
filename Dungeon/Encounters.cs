@@ -102,7 +102,7 @@ namespace Saga.Dungeon
             Console.Clear();
             AudioManager.soundTypeWriter.Play();
             HUDTools.SmallCharacterInfo();
-            HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room,\nthere is also a desk which probably belonged to the long gone warden.",30);
+            HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side\nof the room, there is also a desk which probably belonged to the long gone warden.",30);
             bool examined = false;
             bool searched = false;
             bool leftForDead = false;
@@ -110,19 +110,21 @@ namespace Saga.Dungeon
                 while (!examined || !searched) {
                     Console.Clear();
                     HUDTools.SmallCharacterInfo();
-                    HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side of the room,\nthere is also a desk which probably belonged to the long gone warden.", 0);
+                    HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either\nside of the room, there is also a desk which probably belonged to the long gone warden.", 0);
                     HUDTools.Print($"\nDo you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
                     string input = HUDTools.PlayerPrompt();
                     if (input == "1" && !examined) {
-                        HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
-                        Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");
                         examined = true;
+                        HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
+                        Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");                          
                         HUDTools.PlayerPrompt();
                         break;
                     } else if (input == "2" && !searched) {
-                        HUDTools.Print("You search the prison cells and in one of them, you find a man laying on the stone floor rambling to himself.", 20);
-                        HUDTools.Print("As you approach the iron grate he comes to his senses 'You must help me get out!' he exclaims", 20);
-                        HUDTools.Print("'My name is Flemsha, I'm an alchemist, I can be of help'", 20);
+                        HUDTools.Print(
+                            "You search the prison cells and in one of them, you find a man laying on the stone floor rambling to\n" +
+                            "himself. As you approach the iron grate he comes to his senses,\n" +
+                            "'You must help me get out!' he exclaims, 'My name is Flemsha, I'm an alchemist, I can be of help'",
+                            20);
                         HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);
                         input = HUDTools.PlayerPrompt();
                         if (input == "y") {
@@ -157,7 +159,7 @@ namespace Saga.Dungeon
                 if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == "Free Flemsha" && quest.Completed == true)) {
                     Console.Clear();
                     HUDTools.SmallCharacterInfo();
-                    HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and the door slides open", 20);
+                    HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and\nthe door slides open.", 20);
                     HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
                     AddNpcToCamp(NonPlayableCharacters.Flemsha);
@@ -192,12 +194,13 @@ namespace Saga.Dungeon
             AudioManager.soundLaugh.Play();
             HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",20);
             AudioManager.soundBossKamp.Play();
-            HUDTools.Print("long beard and pointy hat, looking at a large tome.");
+            HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
             HUDTools.PlayerPrompt();
             Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
                 Health = 3 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
                 Power = 6 + 2 * Program.CurrentPlayer.Level,
                 ExpModifier = 3,
+                Awareness = 5,
             };
             AdvancedCombat(WizardEncounter);
         }
@@ -405,7 +408,7 @@ namespace Saga.Dungeon
         //Metode til at lave en pool af random encounters af tilfældig dybde/længde/antal op til 5 (default, bestemt antal gives som parametre).
         public static void RandomEncounterPool(int dybde = 0) {
             if (dybde == 0) {
-                dybde = Program.rand.Next(0, 4 +1);
+                dybde = Program.rand.Next(1, 5 +1);
             }
             for (int i=0; i <= dybde; i++) {
                 RandomEncounter();
@@ -451,6 +454,9 @@ namespace Saga.Dungeon
                                 explore = false;
                                 HUDTools.Print("You retrace your steps in the darkness...", 20);
                                 HUDTools.PlayerPrompt();
+                                if (Program.rand.Next(100) > 49) {
+                                    RandomBasicCombatEncounter();
+                                }                              
                             } else {
                                 Program.CurrentPlayer.BasicActions(input);
                             }
@@ -516,7 +522,7 @@ namespace Saga.Dungeon
             Encounters TurnTimer = new Encounters();
             HUDTools.TopCombatHUD(Monster, TurnTimer);
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
-            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > 0) {
+            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
