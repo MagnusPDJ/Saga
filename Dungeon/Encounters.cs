@@ -120,27 +120,25 @@ namespace Saga.Dungeon
                         HUDTools.PlayerPrompt();
                         break;
                     } else if (input == "2" && !searched) {
-
                         HUDTools.Print("You search the prison cells and in one of them, you find a man laying on the stone floor rambling to himself.", 20);
                         HUDTools.Print("As you approach the iron grate he comes to his senses 'You must help me get out!' he exclaims", 20);
                         HUDTools.Print("'My name is Flemsha, I'm an alchemist, I can be of help'", 20);
                         HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);
                         input = HUDTools.PlayerPrompt();
                         if (input == "y") {
-
                             Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
                             Console.ForegroundColor = ConsoleColor.Cyan;
                             HUDTools.Print($"You've gained a quest: {Act1Quest.FreeFlemsha.Name}!");
                             Console.ResetColor();
                             Program.CurrentPlayer.UpdateQuestLog();
                         } else if (input == "n") {
-                            HUDTools.Print("A locked up prisoner doesn't seem that useful to you so you decide to leave him behind");
+                            HUDTools.Print("A locked up prisoner doesn't seem that useful to you. So you decide to leave him behind");
                             int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
                             if (a != -1) {
                                 Program.CurrentPlayer.Inventory.SetValue(null, a);
                             }
                             Program.CurrentPlayer.FailedQuests.Add(Act1Quest.FreeFlemsha);
-                            NonPlayableCharacters.UpdateDialogueOptions("DeadFlemsha");
+                            NonPlayableCharacters.UpdateDialogueOptions("Deadflemsha");
                             leftForDead = true;
                         }
                         searched = true;
@@ -151,7 +149,7 @@ namespace Saga.Dungeon
                     }
                 }
                 if (leftForDead) {
-                    HUDTools.Print("You close the door to the prison ward and continue on never to see the prisoner again.");
+                    HUDTools.Print("You close the door to the prison ward and continue on, never to see the prisoner again.");
                     HUDTools.PlayerPrompt();
                     break;
                 }
