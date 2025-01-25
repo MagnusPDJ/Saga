@@ -332,6 +332,14 @@ namespace Saga.Character
             if (a != -1) {
                 Program.CurrentPlayer.Inventory.SetValue(null, a);
             }
+            int b = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.RatTail);
+            if (b != -1) {
+                Program.CurrentPlayer.Inventory.SetValue(null, b);
+            }
+            int c = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.BatWings);
+            if (c != -1) {
+                Program.CurrentPlayer.Inventory.SetValue(null, c);
+            }
             Program.CurrentPlayer.QuestLog.Remove(quest);
             Program.CurrentPlayer.CompletedQuests.Add(quest);
 
@@ -340,6 +348,7 @@ namespace Saga.Character
             HUDTools.Print($"You've completed the quest: {quest.Name}!", 15);
             Console.ResetColor();
             Program.CurrentLoot.GetFixedGold(quest.Gold);
+            Program.CurrentLoot.GetPotions(quest.Potions);
             Program.CurrentLoot.GetExp(0, quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);

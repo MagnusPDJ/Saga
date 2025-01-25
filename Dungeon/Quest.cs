@@ -39,7 +39,7 @@ namespace Saga.Dungeon
                 }
                 foreach (string target in Requirements.Keys) {
                     if (item.ItemSlot == Slot.Quest && item.ItemName == target) {
-                        if (((QuestItem)item).Amount.Item1 == Requirements[target]) {
+                        if (((QuestItem)item).Amount == Requirements[target]) {
                             return true;
                         }
                     }
@@ -57,7 +57,9 @@ namespace Saga.Dungeon
         public string Giver { get; set; }
         public int Gold { get; set; }
         public int Exp { get; set; }
+        public int Potions { get; set; } = -1;
         public Item Item { get; set; }
+        public bool Accepted { get; set; } = false;
         public bool Completed { get; set; } = false;
     }
 }

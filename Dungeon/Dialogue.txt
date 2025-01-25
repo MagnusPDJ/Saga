@@ -1,9 +1,8 @@
 ﻿Target;instance;question;answer;
-
 NPCDialogue;0;0;0;
-Gheed;Gheed;Question 1;Answer 1;
-Gheed;Gheed;Question 2;Answer 2;
-Gheed;Gheed;Question 3;Answer 3;
+Gheed;Gheed;What is this place?;I do not know. I heard an old legend when I was a child about a powerful dark wizard.\nHe built a large labyrinth to hide away from prosecution for crimes he committed. Ever\nsince then no one has ever found or heard from him again.\nBut I suddenly have a bad feeling that the labyrinth is in fact real.;
+Gheed;Gheed;Do you remember how you got here?;Unfortunately, I do not. I used to run a small caravan trading company and the last\nthing I do remember is travelling with one of my caravans. I guess we must have been attacked\nand captured.;
+Gheed;Gheed;How do I escape?;Find the wizard. I expect he is the only one that knows the way out of his dark creation.;
 Flemsha;Flemsha;Question 1;Answer 1;
 Flemsha;Flemsha;Question 2;Answer 2;
 Flemsha;Flemsha;Question 3;Answer 3;

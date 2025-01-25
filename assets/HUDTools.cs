@@ -201,7 +201,6 @@ namespace Saga.assets
         }
         static IEnumerable<string> EnumerateLines(TextReader reader) {
             string line;
-
             while ((line = reader.ReadLine()) != null) {
                 yield return line;
             }
@@ -292,7 +291,7 @@ namespace Saga.assets
                 else if (item.ItemSlot == Slot.Weapon) {
                     Console.WriteLine($"| {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
                 }
-                else {
+                else if (item.ItemSlot != Slot.Quest){
                     Console.Write($"| {item.ItemName}:");
                     if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
@@ -317,6 +316,11 @@ namespace Saga.assets
                     }
                     Console.WriteLine("");
                 }
+                else if (item.ItemSlot == Slot.Quest) {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"| Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
+                    Console.ResetColor();
+                }
             }
             Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
@@ -333,7 +337,7 @@ namespace Saga.assets
                 else if (item.ItemSlot == Slot.Weapon) {
                     Console.WriteLine($"| ({Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg,\t $ {Shop.ShopPrice(Array.IndexOf(Program.CurrentPlayer.Inventory, item).ToString())}");
                 }
-                else {
+                else if (item.ItemSlot != Slot.Quest) {
                     Console.Write($"| ({Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: ");
                     if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
@@ -357,6 +361,11 @@ namespace Saga.assets
                         Console.Write(" Offers no protection");
                     }
                     Console.WriteLine($"\t $ {Shop.ShopPrice(Array.IndexOf(Program.CurrentPlayer.Inventory, item).ToString())}");
+                } 
+                else if (item.ItemSlot == Slot.Quest) {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"| Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
+                    Console.ResetColor();
                 }
             }
             Console.WriteLine($"|  Sell    (P)otion     $ {Shop.ShopPrice("sellpotion")}");
@@ -517,7 +526,7 @@ namespace Saga.assets
                     }
                     else if ( item.ItemSlot == Slot.Quest) {
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine($" Quest Item - {item.ItemName}");
+                        Console.WriteLine($" Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
                         Console.ResetColor();
                     }
                 }
@@ -690,7 +699,7 @@ namespace Saga.assets
                 }
                 if (item.ItemSlot == Slot.Quest) {
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($" Quest Item - {item.ItemName}");
+                    Console.WriteLine($" Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
                     Console.ResetColor();
                 }
             }
@@ -708,7 +717,13 @@ namespace Saga.assets
                         Console.WriteLine(quest.TurnIn);
                     }
                     Console.WriteLine("Rewards:");
-                    Console.WriteLine($"{quest.Gold} gold pieces and {quest.Exp} experience points.");
+                    if (quest.Gold > 0 && quest.Potions > 0) {
+                        Console.WriteLine($"{quest.Potions} healing potions, {quest.Gold} gold pieces and {quest.Exp} experience points.");
+                    } else if (quest.Gold == 0 && quest.Potions > 0) {
+                        Console.WriteLine($"{quest.Potions} healing potions and {quest.Exp} experience points.");
+                    } else if (quest.Gold > 0 && quest.Potions == -1) {
+                        Console.WriteLine($"{quest.Gold} gold pieces and {quest.Exp} experience points.");
+                    }                 
                     if (quest.Item != null) {
                         if (quest.Item.ItemSlot == Slot.Weapon) {
                             Console.WriteLine($" {quest.Item.ItemSlot} - {quest.Item.ItemName}: +{((Weapon)quest.Item).WeaponAttributes.MinDamage}-{((Weapon)quest.Item).WeaponAttributes.MaxDamage} dmg");
@@ -751,7 +766,7 @@ namespace Saga.assets
             Print("Who would you like to talk to?", 20);
             if (Program.CurrentPlayer.NpcsInCamp.Count > 0) {
                 foreach (NonPlayableCharacters npc in Program.CurrentPlayer.NpcsInCamp) {
-                    Print($"({Program.CurrentPlayer.NpcsInCamp.IndexOf(npc)}) - {npc.Name}");
+                    Print($"({Program.CurrentPlayer.NpcsInCamp.IndexOf(npc)}) - {npc.Name}", 20);
                 }
             } 
             else {

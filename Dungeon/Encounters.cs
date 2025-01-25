@@ -116,8 +116,6 @@ namespace Saga.Dungeon
                     if (input == "1" && !examined) {
                         HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
                         Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");
-                        Program.CurrentPlayer.UpdateQuestLog();
-                        Console.ResetColor();
                         examined = true;
                         HUDTools.PlayerPrompt();
                         break;
@@ -129,15 +127,10 @@ namespace Saga.Dungeon
                         HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);
                         input = HUDTools.PlayerPrompt();
                         if (input == "y") {
-                            Act1Quest FreeFlemsha = new Act1Quest("Free Flemsha", Type.Find, "Flemsha", "Old Key") { 
-                                Objective = "You've met a prisoner who calls himself Flemsha. He claims if you free him,\nhe will offer his alchemical expertise to your cause.",
-                                TurnIn = "You have found an old key, it is likely a prison key.\nYou should return to Flemsha's cell.",
-                                Gold = 100,
-                                Exp = 100,
-                            };
-                            Program.CurrentPlayer.QuestLog.Add(FreeFlemsha);
+
+                            Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
                             Console.ForegroundColor = ConsoleColor.Cyan;
-                            HUDTools.Print($"You've gained a quest: {FreeFlemsha.Name}!");
+                            HUDTools.Print($"You've gained a quest: {Act1Quest.FreeFlemsha.Name}!");
                             Console.ResetColor();
                             Program.CurrentPlayer.UpdateQuestLog();
                         } else if (input == "n") {
@@ -146,7 +139,7 @@ namespace Saga.Dungeon
                             if (a != -1) {
                                 Program.CurrentPlayer.Inventory.SetValue(null, a);
                             }
-                            Program.CurrentPlayer.FailedQuests.Add(new Act1Quest("Free Flemsha", Type.Find, "Failed", "Failed"));
+                            Program.CurrentPlayer.FailedQuests.Add(Act1Quest.FreeFlemsha);
                             NonPlayableCharacters.UpdateDialogueOptions("DeadFlemsha");
                             leftForDead = true;
                         }
@@ -157,7 +150,6 @@ namespace Saga.Dungeon
                         Program.CurrentPlayer.BasicActions(input);
                     }
                 }
-
                 if (leftForDead) {
                     HUDTools.Print("You close the door to the prison ward and continue on never to see the prisoner again.");
                     HUDTools.PlayerPrompt();
