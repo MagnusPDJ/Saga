@@ -55,7 +55,7 @@ namespace Saga.Items
                 } else if (input == "q" || input == "questlog") {
                     HUDTools.QuestLogHUD();
                     HUDTools.PlayerPrompt();
-                } else if (input.Any(c => char.IsNumber(c))) {
+                } else if (input.Any(c => char.IsNumber(c)) && int.Parse(input) < shop.Forsale.Count) {
                     HUDTools.Print($"You sure you want to buy item # {input}? (Y/N)", 4);
                     string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
