@@ -123,23 +123,23 @@ namespace Saga.Dungeon
             int baseModLower = 4 + Program.CurrentPlayer.Level;
             switch (name) {
                 case "Vampire":
-                    int upper6 = (45 + baseModUp + Program.CurrentPlayer.Level / 2);
-                    int lower6 = (29 + baseModLower + Program.CurrentPlayer.Level);
+                    int upper6 = (49 + baseModUp + Program.CurrentPlayer.Level);
+                    int lower6 = (34 + baseModLower + Program.CurrentPlayer.Level/2);
                     return Program.rand.Next(lower6, upper6 + 1);
                 case "Werewolf":
-                    int upper7 = (23 + baseModUp + Program.CurrentPlayer.Level / 2);
-                    int lower7 = (27 + baseModLower + Program.CurrentPlayer.Level / 3);
+                    int upper7 = (28 + baseModUp + Program.CurrentPlayer.Level / 2);
+                    int lower7 = (32 + baseModLower + Program.CurrentPlayer.Level / 3);
                     return Program.rand.Next(lower7, upper7 + 1);
                 case "Dire Wolf":
-                    int upper8 = (22 + baseModUp);
-                    int lower8 = (21 + baseModLower);
+                    int upper8 = (27 + baseModUp);
+                    int lower8 = (26 + baseModLower);
                     return Program.rand.Next(lower8, upper8 + 1);
                 case "Human Cultist":
-                    int upper2 = (12 + baseModUp);
-                    int lower2 = (11 + baseModLower);
+                    int upper2 = (17 + baseModUp);
+                    int lower2 = (16 + baseModLower);
                     return Program.rand.Next(lower2, upper2 + 1);
                 case "Human Rogue":
-                    int upper5 = (2 + baseModUp);
+                    int upper5 = (10 + baseModUp);
                     int lower5 = (1 + baseModLower);
                     return Program.rand.Next(lower5, upper5 + 1);
                 case "Bandit":
@@ -236,8 +236,8 @@ namespace Saga.Dungeon
                         }
                     } else {
                         attack -= Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating;
-                        if (attack < 0) {
-                            attack = 0;
+                        if (attack <= 0) {
+                            attack = 1;
                         }
                         Program.CurrentPlayer.Health -= attack;
                     }
@@ -255,15 +255,14 @@ namespace Saga.Dungeon
                         AttackDebuff--;
                     } else {
                         attack -= Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating;
-                        if (attack < 0) {
-                            attack = 0;
+                        if (attack <= 0) {
+                            attack = 1;
                         }
                         Program.CurrentPlayer.Health -= attack;
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
                     HUDTools.WriteCombatLog("enemyfirst", TurnTimer, attack, 0, this);
-
                 }
             }
         }

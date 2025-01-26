@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Saga.assets;
 using Saga.Items;
 using Saga.Items.Loot;
@@ -203,8 +204,8 @@ namespace Saga.Dungeon
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
             HUDTools.PlayerPrompt();
             Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
-                Health = 3 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                Power = 6 + 2 * Program.CurrentPlayer.Level,
+                Health = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
+                Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
                 ExpModifier = 3,
                 Awareness = 5,
             };
@@ -236,8 +237,8 @@ namespace Saga.Dungeon
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     HUDTools.PlayerPrompt();
                     Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
-                        Health = 10 + 2 * Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
-                        Power = 5 + Program.CurrentPlayer.Level + Program.CurrentPlayer.Level / 3,
+                        Health = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),
+                        Power = 5 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 1 : 3),
                         GoldModifier = 3,
                     };
                     AdvancedCombat(MimicEncounter); 
