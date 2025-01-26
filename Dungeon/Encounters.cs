@@ -125,23 +125,29 @@ namespace Saga.Dungeon
                             "himself. As you approach the iron grate he comes to his senses,\n" +
                             "'You must help me get out!' he exclaims, 'My name is Flemsha, I'm an alchemist, I can be of help'",
                             20);
-                        HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);
-                        input = HUDTools.PlayerPrompt();
-                        if (input == "y") {
-                            Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            HUDTools.Print($"You've gained a quest: {Act1Quest.FreeFlemsha.Name}!");
-                            Console.ResetColor();
-                            Program.CurrentPlayer.UpdateQuestLog();
-                        } else if (input == "n") {
-                            HUDTools.Print("A locked up prisoner doesn't seem that useful to you. So you decide to leave him behind");
-                            int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
-                            if (a != -1) {
-                                Program.CurrentPlayer.Inventory.SetValue(null, a);
+                        HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);                        
+                        while(true) {
+                            input = HUDTools.PlayerPrompt();
+                            if (input == "y") {
+                                Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                HUDTools.Print($"You've gained a quest: {Act1Quest.FreeFlemsha.Name}!");
+                                Console.ResetColor();
+                                Program.CurrentPlayer.UpdateQuestLog();
+                                break;
+                            } else if (input == "n") {
+                                HUDTools.Print("A locked up prisoner doesn't seem that useful to you. So you decide to leave him behind");
+                                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
+                                if (a != -1) {
+                                    Program.CurrentPlayer.Inventory.SetValue(null, a);
+                                }
+                                Program.CurrentPlayer.FailedQuests.Add(Act1Quest.FreeFlemsha);
+                                NonPlayableCharacters.UpdateDialogueOptions("Deadflemsha");
+                                leftForDead = true;
+                                break;
+                            } else {
+                                HUDTools.Print("Invalid input.\t(Y/N)", 5);
                             }
-                            Program.CurrentPlayer.FailedQuests.Add(Act1Quest.FreeFlemsha);
-                            NonPlayableCharacters.UpdateDialogueOptions("Deadflemsha");
-                            leftForDead = true;
                         }
                         searched = true;
                         HUDTools.PlayerPrompt();
