@@ -1,9 +1,8 @@
-﻿using Saga.Character;
-using System;
+﻿using System;
+using Saga.Character;
 
 namespace Saga.Items.Loot
 {
-    [Serializable]
     public class ArmorLootTable : Armor
     {
         public static Item CreateRandomArmor(int level) {

@@ -1,8 +1,6 @@
-﻿using System;
-
+﻿
 namespace Saga.Character
 {
-    [Serializable]
     public class SecondaryAttributes
     {
         public int MaxHealth { get; set; }

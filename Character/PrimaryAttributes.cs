@@ -1,8 +1,6 @@
-﻿using System;
-
+﻿
 namespace Saga.Character
 {
-    [Serializable]
     public class PrimaryAttributes
     {
         public int Strength { get; set; }

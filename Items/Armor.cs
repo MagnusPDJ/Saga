@@ -1,5 +1,5 @@
-﻿using Saga.Character;
-using System;
+﻿using System;
+using Saga.Character;
 
 namespace Saga.Items
 {
@@ -11,7 +11,7 @@ namespace Saga.Items
         Mail,
         Plate
     }
-    [Serializable]
+ 
     public class Armor : Item
     {
         public ArmorType ArmorType { get; set; }

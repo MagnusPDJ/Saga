@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 using System.Configuration;
 using Saga.Character;
 using Saga.Dungeon;
@@ -41,7 +41,6 @@ namespace Saga
             if (!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
             }
-            
             //Kalder MainMenu metoden.
             MainMenu();
         }
@@ -101,7 +100,7 @@ namespace Saga
                 CurrentLoot = new Act1Loot();
                 CurrentPlayer.SetStartingGear();
                 Encounters.FirstEncounter();
-                Encounters.FirstShopEncounter();
+                Encounters.MeetGheed();
                 Encounters.SecondEncounter();
                 Encounters.FirstCamp();
             }
@@ -109,10 +108,12 @@ namespace Saga
 
         //Metode til at gemme spillet ved først at tjekke for om der er en eksisterende save med det korrekte navn, som så overskrives, eller så dannes en helt ny en.
         public static void Save() {
-            BinaryFormatter binForm = new BinaryFormatter();
             string path = $"saves/{CurrentPlayer.Id}.player";
             FileStream file = File.Open(path, FileMode.OpenOrCreate);
-            binForm.Serialize(file, CurrentPlayer);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string toSave = JsonSerializer.Serialize(CurrentPlayer, options);
+            byte[] saveFile = new UTF8Encoding(true).GetBytes(toSave);
+            file.Write(saveFile, 0, saveFile.Length);
             file.Close();
         }
 
@@ -122,11 +123,8 @@ namespace Saga
             Console.Clear();
             string[] paths = Directory.GetFiles("saves");
             List<Player> players = new List<Player>();
-            BinaryFormatter binForm = new BinaryFormatter();
-            foreach (string p in paths) {
-                FileStream file = File.Open(p, FileMode.Open);
-                Player player = (Player)binForm.Deserialize(file);
-                file.Close();
+            foreach (string path in paths) {
+                Player player = JsonSerializer.Deserialize<Player>(File.ReadAllText(path));                          
                 players.Add(player);
             }
             int idCount = players.Count;

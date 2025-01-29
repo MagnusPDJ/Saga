@@ -6,7 +6,6 @@ using Saga.Items.Loot;
 
 namespace Saga.Character
 {
-    [Serializable]
     public class Warrior : Player
     {
         public Warrior(string name) : base(name, 0, 1, 1, 1, 1, 0) {
@@ -47,7 +46,7 @@ namespace Saga.Character
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
                 return "Item not equipped";
-            } else if (weapon.WeaponType != WeaponType.Axe && weapon.WeaponType != WeaponType.Sword && weapon.WeaponType != WeaponType.Hammer) {
+            } else if (weapon.WeaponType != WeaponTypes.Axe && weapon.WeaponType != WeaponTypes.Sword && weapon.WeaponType != WeaponTypes.Hammer) {
                 Console.WriteLine($"Character can't equip a weapon {weapon.WeaponType}");
                 return "Item not equipped";
             }

@@ -1,8 +1,6 @@
-﻿using System;
-
+﻿
 namespace Saga.Character
 {
-    [Serializable]
     public class WeaponAttributes
     {
         public int MinDamage { get; set; }

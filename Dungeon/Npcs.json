@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Gheed",
+    "Greeting": "Ahh you are back again... What\u0027s that, you want to ask something?",
+    "AvailableQuests": [],
+    "Dialogue": {}
+  },
+  {
+    "Name": "Flemsha",
+    "Greeting": "Thanks again playername, how can I be of assistance?",
+    "AvailableQuests": [],
+    "Dialogue": {}
+  }
+]

@@ -1,5 +1,5 @@
-﻿using Saga.assets;
-using System;
+﻿using System;
+using Saga.assets;
 
 namespace Saga.Dungeon
 {

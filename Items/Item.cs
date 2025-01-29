@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text.Json.Serialization;
 
 namespace Saga.Items
 {
@@ -22,7 +22,11 @@ namespace Saga.Items
         SLOT_TRINKET,
         SLOT_OFFHAND,
     }
-    [Serializable]
+
+    [JsonDerivedType(typeof(Weapon), typeDiscriminator: "weapon")]
+    [JsonDerivedType(typeof(Armor), typeDiscriminator: "armor")]
+    [JsonDerivedType(typeof(Potion), typeDiscriminator: "potion")]
+    [JsonDerivedType(typeof(QuestItem), typeDiscriminator: "questItem")]
     public abstract class Item 
     {
         public string ItemName { get; set; }

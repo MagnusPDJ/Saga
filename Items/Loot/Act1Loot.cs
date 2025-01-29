@@ -1,8 +1,6 @@
-﻿using Saga.assets;
+﻿using System;
+using Saga.assets;
 using Saga.Dungeon;
-using System;
-using System.Linq;
-using System.Reflection;
 
 namespace Saga.Items.Loot
 {

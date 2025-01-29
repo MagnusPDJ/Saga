@@ -3,13 +3,13 @@ using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Saga.Dungeon;
-using Saga.Items;
-using Saga.Character;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Saga.Dungeon;
+using Saga.Items;
+using Saga.Character;
 
 namespace Saga.assets
 {
@@ -191,7 +191,7 @@ namespace Saga.assets
             File.WriteAllText("combatlog.txt", String.Empty);
         }
 
-        //Read all lines fra embedded resource
+        //Read all lines fra embedded resource til en lise.
         public static List<string> ReadAllResourceLines(string resourceName) {
             using (Stream stream = Assembly.GetEntryAssembly()
                 .GetManifestResourceStream(resourceName))
@@ -206,6 +206,14 @@ namespace Saga.assets
             }
         }
 
+        //Read all text fra embedded reource til en string.
+        public static string ReadAllResourceText(string resourceName) {
+            using (Stream stream = Assembly.GetEntryAssembly()
+                .GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream)) {
+                return reader.ReadToEnd();
+            }
+        }
 
         //HUDS
         public static void MainMenu() {

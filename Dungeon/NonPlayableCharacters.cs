@@ -1,9 +1,9 @@
-﻿using Saga.assets;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Saga.assets;
 
-namespace Saga.Dungeon {
-    [Serializable]
+namespace Saga.Dungeon 
+{
     public class NonPlayableCharacters {
         public string Name { get; set; }
         public string Greeting { get; set; }
@@ -107,18 +107,17 @@ namespace Saga.Dungeon {
                 }
             }
         }
-
-        //Characters:
-        public static NonPlayableCharacters Flemsha = new NonPlayableCharacters() {
-            Name = "Flemsha",
-            Greeting = $"Thanks again {Program.CurrentPlayer.Name}, how can I be of assistance?",
-            Dialogue = new Dictionary<string, string>(),
-            AvailableQuests = new List<Quest>(),
-        };
-        public static NonPlayableCharacters Gheed = new NonPlayableCharacters() {
-            Name = "Gheed",
-            Greeting = "Ahh you are back again... What's that, you want to ask something?",
-            Dialogue = new Dictionary<string, string>(),
-        };
+        ////Characters:
+        //public static NonPlayableCharacters Flemsha = new NonPlayableCharacters() {
+        //    Name = "Flemsha",
+        //    Greeting = $"Thanks again {(Program.CurrentPlayer.Name ?? "")}, how can I be of assistance?",
+        //    Dialogue = new Dictionary<string, string>(),
+        //    AvailableQuests = new List<Quest>(),
+        //};
+        //public static NonPlayableCharacters Gheed = new NonPlayableCharacters() {
+        //    Name = "Gheed",
+        //    Greeting = "Ahh you are back again... What's that, you want to ask something?",
+        //    Dialogue = new Dictionary<string, string>(),
+        //};
     }
 }

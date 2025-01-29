@@ -4,6 +4,7 @@ using Saga.Items;
 using Saga.Items.Loot;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Saga.Character
 {
@@ -15,7 +16,10 @@ namespace Saga.Character
         Act4,
         Act5
     }
-    [Serializable]
+
+    [JsonDerivedType(typeof(Warrior), typeDiscriminator: "warrior")]
+    [JsonDerivedType(typeof(Archer), typeDiscriminator: "archer")]
+    [JsonDerivedType(typeof(Mage), typeDiscriminator: "age")]
     public abstract class Player
     {
         public string CurrentClass { get; set; }
@@ -323,7 +327,7 @@ namespace Saga.Character
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
         public void UpdateQuestLog() {
             foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
-                quest.Completed = quest.QuestType.CheckRequirements();
+                quest.Completed = quest.CheckRequirements();
             }
         }
         //Metode til at få alle quest rewards og opdatere questlogs.

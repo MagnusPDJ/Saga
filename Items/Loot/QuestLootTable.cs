@@ -1,10 +1,6 @@
-﻿using Saga.Character;
-using System;
-
-
+﻿
 namespace Saga.Items.Loot
 {
-    [Serializable]
     public class QuestLootTable : QuestItem
     {
         public static QuestItem OldKey = new QuestItem() {

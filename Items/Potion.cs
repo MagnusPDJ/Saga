@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Saga.Items
 {
     public enum PotionType
@@ -7,7 +6,7 @@ namespace Saga.Items
         POTION_HEALING,
         POTION_MANA
     }
-    [Serializable]
+
     public class Potion : Item
     {
         public int PotionPotency { get; set; }

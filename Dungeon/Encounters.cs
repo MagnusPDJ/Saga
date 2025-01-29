@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text.Json;
 using Saga.assets;
 using Saga.Items;
 using Saga.Items.Loot;
@@ -55,7 +56,7 @@ namespace Saga.Dungeon
             AdvancedCombat(SecondEncounter);
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
-        public static void FirstShopEncounter() {
+        public static void MeetGheed() {
             Console.Clear();
             AudioManager.soundShop.Play();
             AudioManager.soundTypeWriter.Play();
@@ -75,7 +76,7 @@ namespace Saga.Dungeon
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
-            AddNpcToCamp(NonPlayableCharacters.Gheed);
+            AddNpcToCamp("Gheed");
             HUDTools.PlayerPrompt();
             AudioManager.soundTypeWriter.Stop();
             AudioManager.soundShop.Stop();
@@ -169,7 +170,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and\nthe door slides open.", 20);
                     HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
-                    AddNpcToCamp(NonPlayableCharacters.Flemsha);
+                    AddNpcToCamp("Flemsha");
                     HUDTools.PlayerPrompt();
                     break;
                 }
@@ -387,8 +388,6 @@ namespace Saga.Dungeon
         }
 
 
-
-
       //Encounter Tools:
 
         //Metode til at vælge tilfældigt mellem encounters.
@@ -515,11 +514,14 @@ namespace Saga.Dungeon
             }
         }
         //Funktion til at tilføje en NPC til campen som kan snakkes med.
-        public static void AddNpcToCamp(NonPlayableCharacters npc) {
-            Program.CurrentPlayer.NpcsInCamp.Add(npc);
-            NonPlayableCharacters.UpdateDialogueOptions(npc.Name);
+        public static void AddNpcToCamp(string name) {
+            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"));
+            var npcToAdd = allNpcs.Where(x => x.Name.Equals(name)).FirstOrDefault();
+            npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
+            Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);          
+            NonPlayableCharacters.UpdateDialogueOptions(name);
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            HUDTools.Print($"{npc.Name} has joined your cause!",20);
+            HUDTools.Print($"{name} has joined your cause!",20);
             Console.ResetColor();
         }
         //Metode til at køre kamp
