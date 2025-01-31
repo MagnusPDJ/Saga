@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using NAudio.Wave;
 
-namespace Saga.assets
+namespace Saga.Assets
 {
     public class AudioManager {
 

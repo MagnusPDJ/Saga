@@ -157,15 +157,6 @@
   <data name="runetrap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\runetrap.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="SAGA" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SAGA.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SAGA_removedbg" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SAGA-removedbg.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SAGA_removedbg1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SAGA-removedbg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="shop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\sounds\shop.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Configuration;
 using Saga.Character;
 using Saga.Dungeon;
-using Saga.assets;
+using Saga.Assets;
 using Saga.Items.Loot;
 
 namespace Saga
@@ -73,12 +73,14 @@ namespace Saga
         public static void Play() {
             CurrentPlayer = Load(out bool newP);
             NewStart(newP);
-            if (CurrentPlayer.CurrentAct == Act.Act1) {
-                CurrentLoot ??= new Act1Loot();
-                while (CurrentPlayer.CurrentAct == Act.Act1) {
-                    AudioManager.soundMainMenu.Stop();
-                    AudioManager.soundShop.Stop();
-                    Encounters.Camp();
+            if (CurrentPlayer != null) {
+                if (CurrentPlayer.CurrentAct == Act.Act1) {
+                    CurrentLoot ??= new Act1Loot();
+                    while (CurrentPlayer.CurrentAct == Act.Act1) {
+                        AudioManager.soundMainMenu.Stop();
+                        AudioManager.soundShop.Stop();
+                        Encounters.Camp();
+                    }
                 }
             }
             {//else if (CurrentPlayer.CurrentAct == Act.Act2) {
@@ -119,25 +121,17 @@ namespace Saga
         //Metode til at loade gemte karakterer, vise dem og vælge hvilken til at spille videre på eller lave en helt ny karakter.
         public static Player Load(out bool newP) {
             newP = false;
-            Console.Clear();
             string[] paths = Directory.GetFiles("saves");
             List<Player> players = new List<Player>();
             foreach (string path in paths) {
                 Player player = JsonSerializer.Deserialize<Player>(File.ReadAllText(path));                          
                 players.Add(player);
             }
-            int idCount = players.Count;
+            int idCount = players.Count+1;
+            Console.Clear();
+            AudioManager.soundTypeWriter.Play();
+            HUDTools.LoadSaves(players);
             while (true) {
-                Console.Clear();
-                AudioManager.soundTypeWriter.Play();
-                HUDTools.Print("Choose a save! ('back' for main menu) ", 15);
-                HUDTools.Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 5);
-                HUDTools.Print("#: playername");
-                foreach (Player p in players) {
-                    HUDTools.Print($"{p.Id}: {p.Name} - Class: {p.CurrentClass} - Level: {p.Level}", 10);
-                }
-                HUDTools.Print("<><><><><><><><><><><><><><><><>", 5);
-                HUDTools.Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.", 1);
                 string[] data = Console.ReadLine().Split(':');
                 try {
                     if (data[0] == "id") {
@@ -149,35 +143,54 @@ namespace Saga
                             }
                             Console.WriteLine("There is no player with that id!");
                             Console.ReadKey(true);
+                            HUDTools.ClearLastLine(2);
+
                         } else {
                             Console.WriteLine("Your id needs to be a number! Press to continue!");
                             Console.ReadKey(true);
+                            HUDTools.ClearLastLine(2);
                         }
                     } else if (data[0] == "delete") {
                         if (int.TryParse(data[1], out int id)) {
-                            foreach (Player player in players) {
-                                if (player.Id == id) {
-                                    File.Delete($"saves/{player.Id}.player");
-                                    players.Remove(player);
-                                    Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
-                                    Console.ReadKey(true);
-                                    break;
-                                } else {
-                                    Console.WriteLine("There is no player with that id!");
-                                    Console.ReadKey(true);
+                            if (players.Count == 0) {
+                                Console.WriteLine("There is no player with that id!");
+                                Console.ReadKey(true);
+                                HUDTools.ClearLastLine(2);
+                            } else {
+                                foreach (Player player in players) {
+                                    if (player.Id == id) {
+                                        File.Delete($"saves/{player.Id}.player");
+                                        players.Remove(player);
+                                        Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
+                                        Console.ReadKey(true);
+                                        HUDTools.LoadSaves(players);
+                                        break;
+                                    } else {
+                                        Console.WriteLine("There is no player with that id!");
+                                        Console.ReadKey(true);
+                                        HUDTools.ClearLastLine(2);
+                                    }
                                 }
                             }
                         } else {
-                            foreach (Player player in players) {
-                                if (data[1] == player.Name) {
-                                    File.Delete($"saves/{player.Id}.player");
-                                    players.Remove(player);
-                                    Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
-                                    Console.ReadKey(true);
-                                    break;
-                                } else {
-                                    Console.WriteLine("There is no player with that name!");
-                                    Console.ReadKey(true);
+                            if (players.Count == 0) {
+                                Console.WriteLine("There is no player with that id!");
+                                Console.ReadKey(true);
+                                HUDTools.ClearLastLine(2);
+                            } else {
+                                foreach (Player player in players) {
+                                    if (data[1] == player.Name) {
+                                        File.Delete($"saves/{player.Id}.player");
+                                        players.Remove(player);
+                                        Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
+                                        Console.ReadKey(true);
+                                        HUDTools.LoadSaves(players);
+                                        break;
+                                    } else {
+                                        Console.WriteLine("There is no player with that name!");
+                                        Console.ReadKey(true);
+                                        HUDTools.ClearLastLine(2);
+                                    }
                                 }
                             }
                         }
@@ -186,7 +199,8 @@ namespace Saga
                         newP = true;
                         return newPlayer;
                     }
-                    else if (data[0] == "back") {
+                    else if (data[0] == "back" || data[0] == "b") {
+                        HUDTools.MainMenu();
                         return null;
                     }
                     else {
@@ -197,10 +211,12 @@ namespace Saga
                         }
                         Console.WriteLine("There is no player with that name!");
                         Console.ReadKey(true);
+                        HUDTools.ClearLastLine(2);
                     }
                 } catch (IndexOutOfRangeException) {
                     Console.WriteLine("Your id needs to be a number! Press to continue!");
                     Console.ReadKey(true);
+                    HUDTools.ClearLastLine(2);
                 }
             }
         }
@@ -259,7 +275,9 @@ namespace Saga
                 while (true) {
                     input1 = HUDTools.PlayerPrompt();
                     if (input1 != "y" && input1 != "n") {
-                        HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                        HUDTools.Print("Invalid input.", 3);
+                        Console.ReadKey(true);
+                        HUDTools.ClearLastLine(2);
                     } else {
                         break;
                     }
@@ -280,10 +298,12 @@ namespace Saga
                         if (input2 == "y") {
                             return 1;
                         } else if (input2 == "n") {
-                            HUDTools.Print("Enter a # 1-3:", 5);
+                            HUDTools.ClearLastLine(4);
                             break;
                         } else {
-                            HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                            HUDTools.Print("Invalid input.", 3);
+                            Console.ReadKey(true);
+                            HUDTools.ClearLastLine(2);
                         }
                     }
                 }
@@ -294,10 +314,12 @@ namespace Saga
                         if (input2 == "y") {
                             return 2;
                         } else if (input2 == "n") {
-                            HUDTools.Print("Enter a # 1-3:", 5);
+                            HUDTools.ClearLastLine(4);
                             break;
                         } else {
-                            HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                            HUDTools.Print("Invalid input.", 3);
+                            Console.ReadKey(true);
+                            HUDTools.ClearLastLine(2);
                         }
                     }
                 }
@@ -308,15 +330,19 @@ namespace Saga
                         if (input2 == "y") {
                             return 3;
                         } else if (input2 == "n") {
-                            HUDTools.Print("Enter a # 1-3:", 5);
+                            HUDTools.ClearLastLine(4);
                             break;
                         } else {
-                            HUDTools.Print("Invalid input.\t(Y/N)", 3);
+                            HUDTools.Print("Invalid input.", 3);
+                            Console.ReadKey(true);
+                            HUDTools.ClearLastLine(2);
                         }
                     }
                 }
                 else {
                     HUDTools.Print("Please choose a listed class!",3);
+                    Console.ReadKey(true);
+                    HUDTools.ClearLastLine(2);
                 }
             }
         }
@@ -342,7 +368,9 @@ namespace Saga
                         break;
                     }
                     else {
-                        Console.WriteLine("Wrong Input");
+                        Console.WriteLine("Invalid input");
+                        Console.ReadKey(true);
+                        HUDTools.ClearLastLine(2);
                     }
                 }
                 MainMenu();

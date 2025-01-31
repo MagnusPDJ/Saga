@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using Saga.assets;
+using Saga.Assets;
 using Saga.Items;
 using Saga.Items.Loot;
 
@@ -148,7 +148,9 @@ namespace Saga.Dungeon
                                 leftForDead = true;
                                 break;
                             } else {
-                                HUDTools.Print("Invalid input.\t(Y/N)", 5);
+                                HUDTools.Print("Invalid input.", 5);
+                                Console.ReadKey(true);
+                                HUDTools.ClearLastLine(2);
                             }
                         }
                         searched = true;

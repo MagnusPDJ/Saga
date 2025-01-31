@@ -37,7 +37,7 @@ namespace Saga.Items.Loot
                     willpower = Program.rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
                 if (i == 5 && roll <= 10) {
-                    armorRating = Program.rand.Next(Program.CurrentPlayer.Level/2, 2 + Math.Max(3, Program.CurrentPlayer.Level + level));
+                    armorRating = Program.rand.Next(Math.Max(1,Program.CurrentPlayer.Level/2), 2 + Math.Max(3, Program.CurrentPlayer.Level + level));
                 }
             }
 

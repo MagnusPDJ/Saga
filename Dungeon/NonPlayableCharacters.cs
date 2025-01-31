@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Saga.assets;
+using Saga.Assets;
 
 namespace Saga.Dungeon 
 {

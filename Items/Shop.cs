@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Saga.assets;
+using Saga.Assets;
 using Saga.Character;
 using Saga.Items.Loot;
 

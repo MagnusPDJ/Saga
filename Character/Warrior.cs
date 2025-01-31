@@ -1,5 +1,5 @@
 ﻿using System;
-using Saga.assets;
+using Saga.Assets;
 using Saga.Items;
 using Saga.Dungeon;
 using Saga.Items.Loot;

@@ -11,7 +11,7 @@ using Saga.Dungeon;
 using Saga.Items;
 using Saga.Character;
 
-namespace Saga.assets
+namespace Saga.Assets
 {
     public class HUDTools
     {
@@ -224,23 +224,28 @@ namespace Saga.assets
             Console.SetCursorPosition(0, Console.CursorTop - x);
         }
 
+        //Centerer teksten.
+        public static void WriteCenterLine(string input) {
+            Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (input.Length / 2)) + "}", input));
+        }
+
         //HUDS
         public static void MainMenu() {
             Console.Clear();
-            Console.WriteLine("########         ##         ##########         ##       ");
-            Console.WriteLine("########        ####        ##########        ####      ");
-            Console.WriteLine("##             ##  ##       ##               ##  ##     ");
-            Console.WriteLine("##            ##    ##      ##              ##    ##    ");
-            Console.WriteLine("########     ##      ##     ##   #####     ##      ##   ");
-            Console.WriteLine("########    ############    ##   #####    ############  ");
-            Console.WriteLine("      ##   ##############   ##      ##   ############## ");
-            Console.WriteLine("      ##   ##          ##   ##      ##   ##          ## ");
-            Console.WriteLine("########  ##            ##  ##########  ##            ##");
-            Console.WriteLine("########  ##            ##  ##########  ##            ##");
-            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-            Console.WriteLine("\t\t1.         Play\n");
-            Console.WriteLine("\t\t2.       Settings\n");
-            Console.WriteLine("\t\t3.       Quit Game\n");
+            WriteCenterLine("########         ##         ##########         ##       ");
+            WriteCenterLine("########        ####        ##########        ####      ");
+            WriteCenterLine("##             ##  ##       ##               ##  ##     ");
+            WriteCenterLine("##            ##    ##      ##              ##    ##    ");
+            WriteCenterLine("########     ##      ##     ##   #####     ##      ##   ");
+            WriteCenterLine("########    ############    ##   #####    ############  ");
+            WriteCenterLine("      ##   ##############   ##      ##   ############## ");
+            WriteCenterLine("      ##   ##          ##   ##      ##   ##          ## ");
+            WriteCenterLine("########  ##            ##  ##########  ##            ##");
+            WriteCenterLine("########  ##            ##  ##########  ##            ##");
+            WriteCenterLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            WriteCenterLine("1.          Play  \n");
+            WriteCenterLine("2.        Settings\n");
+            WriteCenterLine("3.       Quit Game\n");
         }
         public static void InstantSettings() {
             Console.Clear();
@@ -252,6 +257,16 @@ namespace Saga.assets
             Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
             Console.WriteLine($"3. Game Volume:                   {settings["volume"].Value}\n");
             Console.WriteLine($"=======Press Esc to go back=======");
+        }
+        public static void LoadSaves(List<Player> players) {
+            Print("Choose a save! ('back' for main menu) ", 10);
+            Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 3);
+            Print("#: playername");
+            foreach (Player p in players) {
+                Print($"{p.Id}: {p.Name} - Class: {p.CurrentClass} - Level: {p.Level}", 5);
+            }
+            Print("<><><><><><><><><><><><><><><><>", 3);
+            Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.\n", 1);
         }
         public static void BuyShopHUD(Shop shop) {
             Console.Clear();
@@ -270,19 +285,19 @@ namespace Saga.assets
                         Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
                     }
                     if (((Armor)item).Attributes.Strength > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Strength} Strength");
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Str");
                     }
                     if (((Armor)item).Attributes.Dexterity > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dexterity");
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dex");
                     }
                     if (((Armor)item).Attributes.Intellect > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Intellect} Intellect");
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Int");
                     }
                     if (((Armor)item).Attributes.Constitution > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Constitution} Constitution");
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Const");
                     }
                     if (((Armor)item).Attributes.WillPower > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.WillPower} Willpower");
+                        Console.Write($", +{((Armor)item).Attributes.WillPower} Wp");
                     }
                     Console.WriteLine($"");
                 }
@@ -312,19 +327,19 @@ namespace Saga.assets
                         Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
                     }
                     if (((Armor)item).Attributes.Strength > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Strength} Strength");
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Str");
                     }
                     if (((Armor)item).Attributes.Dexterity > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dexterity");
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dex");
                     }
                     if (((Armor)item).Attributes.Intellect > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Intellect} Intellect");
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Int");
                     }
                     if (((Armor)item).Attributes.Constitution > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Constitution} Constitution");
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Const");
                     }
                     if (((Armor)item).Attributes.WillPower > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.WillPower} Willpower");
+                        Console.Write($", +{((Armor)item).Attributes.WillPower} Wp");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -482,19 +497,19 @@ namespace Saga.assets
                             Console.Write($" +{((Armor)entry.Value).SecondaryAttributes.ArmorRating} Armor Rating");
                         }
                         if (((Armor)entry.Value).Attributes.Strength > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Strength} Strength");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Strength} Str");
                         }
                         if (((Armor)entry.Value).Attributes.Dexterity > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Dexterity} Dexterity");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Dexterity} Dex");
                         }
                         if (((Armor)entry.Value).Attributes.Intellect > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Intellect} Intellect");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Intellect} Int");
                         }
                         if (((Armor)entry.Value).Attributes.Constitution > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Constitution} Constitution");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.Constitution} Const");
                         }
                         if (((Armor)entry.Value).Attributes.WillPower > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.WillPower} Willpower");
+                            Console.Write($", +{((Armor)entry.Value).Attributes.WillPower} Wp");
                         }
                         if (entry.Value.ItemName == "Linen Rags") {
                             Console.Write(" Offers no protection");
@@ -520,19 +535,19 @@ namespace Saga.assets
                             Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
                         }
                         if (((Armor)item).Attributes.Strength > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Strength} Strength");
+                            Console.Write($" +{((Armor)item).Attributes.Strength} Str");
                         }
                         if (((Armor)item).Attributes.Dexterity > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Dexterity} Dexterity");
+                            Console.Write($" +{((Armor)item).Attributes.Dexterity} Dex");
                         }
                         if (((Armor)item).Attributes.Intellect > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Intellect} Intellect");
+                            Console.Write($" +{((Armor)item).Attributes.Intellect} Int");
                         }
                         if (((Armor)item).Attributes.Constitution > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Constitution} Constitution");
+                            Console.Write($" +{((Armor)item).Attributes.Constitution} Const");
                         }
                         if (((Armor)item).Attributes.WillPower > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.WillPower} Willpower");
+                            Console.Write($" +{((Armor)item).Attributes.WillPower} Wp");
                         }
                         if (item.ItemName == "Linen Rags") {
                             Console.Write(" Offers no protection");
@@ -749,19 +764,19 @@ namespace Saga.assets
                                 Console.Write($" +{((Armor)quest.Item).SecondaryAttributes.ArmorRating} Armor Rating");
                             }
                             if (((Armor)quest.Item).Attributes.Strength > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Strength} Strength");
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Strength} Str");
                             }
                             if (((Armor)quest.Item).Attributes.Dexterity > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Dexterity} Dexterity");
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Dexterity} Dex");
                             }
                             if (((Armor)quest.Item).Attributes.Intellect > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Intellect} Intellect");
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Intellect} Int");
                             }
                             if (((Armor)quest.Item).Attributes.Constitution > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Constitution} Constitution");
+                                Console.Write($" +{((Armor)quest.Item).Attributes.Constitution} Const");
                             }
                             if (((Armor)quest.Item).Attributes.WillPower > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.WillPower} Willpower");
+                                Console.Write($" +{((Armor)quest.Item).Attributes.WillPower} Wp");
                             }
                             if (quest.Item.ItemName == "Linen Rags") {
                                 Console.Write(" Offers no protection");
