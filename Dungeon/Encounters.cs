@@ -290,8 +290,8 @@ namespace Saga.Dungeon
             AudioManager.soundRuneTrap.Play();
 
             //runer
-            List<char> chars = new char[] { '\u0925', '\u0931', '\u09fa', '\u1bd1', '\u1bfe', '\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
-            List<char> endchars = new char[] { '\u00fe', '\u00f5', '\u00d0', '\u0141', '\u014a', '\u1c07', '\u1c1c', '\u1c59', '\u1c6c', '\u1cbe' }.ToList();
+            List<char> chars = new char[] { '\u0925', '\u0931', '\u09fa', '\u1805', '\u1873', '\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
+            List<char> endchars = new char[] { '\u00fe', '\u00f5', '\u00d0', '\u0141', '\u014a', '\u047b', '\u046b', '\u1c59', '\u1c6c', '\u1cbe' }.ToList();
             List<int> positions = new List<int>();
             char c = chars[Program.rand.Next(0, 10)];
             chars.Remove(c);

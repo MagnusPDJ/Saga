@@ -215,6 +215,15 @@ namespace Saga.assets
             }
         }
 
+        //Clears the last x lines of the console screen.
+        public static void ClearLastLine(int x) {
+            Console.SetCursorPosition(0, Console.CursorTop - x);
+            for (int i = 0; i < x; i++) {
+                Console.WriteLine(new string(' ', Console.BufferWidth));
+            }
+            Console.SetCursorPosition(0, Console.CursorTop - x);
+        }
+
         //HUDS
         public static void MainMenu() {
             Console.Clear();
@@ -242,7 +251,7 @@ namespace Saga.assets
             Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
             Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
             Console.WriteLine($"3. Game Volume:                   {settings["volume"].Value}\n");
-            Console.WriteLine("=======Press Esc to go back=======");
+            Console.WriteLine($"=======Press Esc to go back=======");
         }
         public static void BuyShopHUD(Shop shop) {
             Console.Clear();

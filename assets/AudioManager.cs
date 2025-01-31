@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NAudio.Wave;
 
@@ -16,7 +17,7 @@ namespace Saga.assets
             get { return outputDevice.Volume; }
             set { outputDevice.Volume = value; }
         }
-
+  
         //Konstruktor til ny lydkontroller.
         public AudioManager(UnmanagedMemoryStream soundFile) {
             MemoryStream ms = new MemoryStream(StreamToBytes(soundFile));
@@ -34,11 +35,10 @@ namespace Saga.assets
         //Metode til at stoppe lydfil
         public void Stop() {
             if (outputDevice != null) {
-
+                outputDevice.Stop();
+                ws.Position = 0;
+                outputDevice.Init(ws);
             }
-            outputDevice.Stop();
-            ws.Position = 0;
-            outputDevice.Init(ws);
         }
 
         //Instantierer et objekt som kan spille en lyd.

@@ -17,9 +17,6 @@ namespace Saga
         public static Player CurrentPlayer { get; set; }
         public static Loot CurrentLoot { get; set; }
 
-        //Sætter Game Loopet til true så man kan spille indefinitely.
-        public static bool mainLoop = true;
-
         //Genere et objekt som kan returnere tilfældige tal mm.
         public static Random rand = new Random();
 
@@ -31,8 +28,11 @@ namespace Saga
 
         //Spillets udførelse ved opstart
         static void Main() {
-            //Gør unicode karaktere "runer" læselige i consolen
+            //Gør unicode karaktere "runer" læselige i consolen og indstiller vindue størrelse.
             Console.OutputEncoding = Encoding.UTF8;
+            Console.SetWindowSize(100, 50);
+            Console.SetBufferSize(100, 50);
+            Console.Title = "Saga";
 
             //Sætter lydniveauet til variablen sat fra configfilen.
             soundVolumeController.Volume = volumeLevel;
@@ -48,14 +48,15 @@ namespace Saga
         //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
         public static void MainMenu() {
             AudioManager.soundMainMenu.Play();
+            HUDTools.MainMenu();
             while (true) {
-                HUDTools.MainMenu();
                 string input = HUDTools.PlayerPrompt();
                 if (input == "1") {
                     Play();
                 }
                 else if (input == "2") {
                     EditSettings();
+                    HUDTools.MainMenu();
                 }
                 else if (input == "3") {
                     Console.WriteLine("Come back soon!");
@@ -64,33 +65,31 @@ namespace Saga
                 else {
                     Console.WriteLine("Wrong Input");
                     HUDTools.PlayerPrompt();
+                    HUDTools.ClearLastLine(3);
                 }
             }
         }
 
         public static void Play() {
             CurrentPlayer = Load(out bool newP);
-            if (CurrentPlayer == null) {
-            } else {
-                NewStart(newP);
-                if (CurrentPlayer.CurrentAct == Act.Act1) {
-                    if (CurrentLoot == null) {
-                        CurrentLoot = new Act1Loot();
-                    }
-                    while (CurrentPlayer.CurrentAct == Act.Act1) {
-                        AudioManager.soundMainMenu.Stop();
-                        AudioManager.soundShop.Stop();
-                        Encounters.Camp();
-                    }
-                } else if (CurrentPlayer.CurrentAct == Act.Act2) {
-
-                } else if (CurrentPlayer.CurrentAct == Act.Act3) {
-
-                } else if (CurrentPlayer.CurrentAct == Act.Act4) {
-
-                } else if (CurrentPlayer.CurrentAct == Act.Act5) {
-
+            NewStart(newP);
+            if (CurrentPlayer.CurrentAct == Act.Act1) {
+                CurrentLoot ??= new Act1Loot();
+                while (CurrentPlayer.CurrentAct == Act.Act1) {
+                    AudioManager.soundMainMenu.Stop();
+                    AudioManager.soundShop.Stop();
+                    Encounters.Camp();
                 }
+            }
+            {//else if (CurrentPlayer.CurrentAct == Act.Act2) {
+
+                //} else if (CurrentPlayer.CurrentAct == Act.Act3) {
+
+                //} else if (CurrentPlayer.CurrentAct == Act.Act4) {
+
+                //} else if (CurrentPlayer.CurrentAct == Act.Act5) {
+
+                //}
             }
         }
 
@@ -353,7 +352,7 @@ namespace Saga
         //Metode til at ændre og gemme settings i en tilhørende configfil.
         private static void EditSettings() {
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var settings = configFile.AppSettings.Settings;
+            var settings = configFile.AppSettings.Settings;        
             while (true) {
                 HUDTools.InstantSettings();
                 string input = Console.ReadKey(true).KeyChar.ToString();
@@ -370,9 +369,9 @@ namespace Saga
                         settings["toggleSlowPrint"].Value = "true";
                     }
                 } else if (input == "3") {
+                    HUDTools.ClearLastLine(1);
                     while (true) {
                         try {
-                            Console.Clear();
                             Console.WriteLine($"Adjusting Volume (Between 0,0-1,0) - Volume {settings["volume"].Value}");
                             Console.WriteLine("Write (b)ack to return");
                             string input1 = Console.ReadLine();
@@ -385,11 +384,13 @@ namespace Saga
                             else {
                                 Console.WriteLine("Invalid. Please write a number between 1 and 0");
                                 Console.ReadKey(true);
+                                HUDTools.ClearLastLine(3);
                             }
                         }
                         catch (FormatException) {
                             Console.WriteLine("Invalid. Please write a number between 1 and 0");
                             Console.ReadKey(true);
+                            HUDTools.ClearLastLine(3);
                         }
                     }
                 } else if (input == "\u001b") {
