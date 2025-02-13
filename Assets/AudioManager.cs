@@ -1,14 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using NAudio.Wave;
+using System.Threading;
 
 namespace Saga.Assets
 {
     public class AudioManager {
 
         //Aflæser pc'ens lydenhed.
-        public WaveOutEvent outputDevice;
-        public WaveStream ws;
+        private WaveOutEvent outputDevice;
+        private WaveFileReader waveFile;
 
         //Metode til set/get lydniveau.
         public float Volume
@@ -16,52 +18,57 @@ namespace Saga.Assets
             get { return outputDevice.Volume; }
             set { outputDevice.Volume = value; }
         }
-  
+
+        //Lydbibliotek
+        public Dictionary<string, byte[]> SoundLibrary { get; set; } =
+            new Dictionary<string, byte[]> { 
+                {"taunt", StreamToBytes(Properties.Resources.taunt)},
+                {"troldmandskamp", StreamToBytes(Properties.Resources.troldmandskamp)},
+                {"laugh", StreamToBytes(Properties.Resources.laugh)},
+                {"typewriter", StreamToBytes(Properties.Resources.typewriter)},
+                {"mainmenu", StreamToBytes(Properties.Resources.mainmenu)},
+                {"kamp", StreamToBytes(Properties.Resources.kamp)},
+                {"win", StreamToBytes(Properties.Resources.win)},
+                {"gameover", StreamToBytes(Properties.Resources.gameover)},
+                {"shop", StreamToBytes(Properties.Resources.shop)},
+                {"levelup", StreamToBytes(Properties.Resources.levelup)},
+                {"campfire", StreamToBytes(Properties.Resources.campfire)},
+                {"campmusic", StreamToBytes(Properties.Resources.campmusic)},
+                {"mimic", StreamToBytes(Properties.Resources.mimic)},
+                {"dooropen", StreamToBytes(Properties.Resources.dooropen)},
+                {"doorclose", StreamToBytes(Properties.Resources.doorclose)},
+                {"treasure", StreamToBytes(Properties.Resources.treasure)},
+                {"runetrap", StreamToBytes(Properties.Resources.runetrap)},
+                {"darts", StreamToBytes(Properties.Resources.darts)},
+                {"footsteps", StreamToBytes(Properties.Resources.footsteps)},
+            };        
+
         //Konstruktor til ny lydkontroller.
-        public AudioManager(UnmanagedMemoryStream soundFile) {
-            MemoryStream ms = new MemoryStream(StreamToBytes(soundFile));
-            ws = new WaveFileReader(ms);
+        public AudioManager() {
             outputDevice = new WaveOutEvent();
-            outputDevice.Init(ws);
         }
 
         //Metode til at afspille lydfil.
-        public void Play() {
-            ws.Position = 0;
+        public void Play(string sound) {
+            outputDevice ??= new WaveOutEvent();
+            if (waveFile == null) {
+                MemoryStream ms = new(SoundLibrary[sound]);
+                waveFile = new WaveFileReader(ms);
+                outputDevice.Init(waveFile);
+            }
             outputDevice.Play();
         }
 
         //Metode til at stoppe lydfil
         public void Stop() {
-            if (outputDevice != null) {
-                outputDevice.Stop();
-                ws.Position = 0;
-                outputDevice.Init(ws);
-            }
+            outputDevice?.Stop();
+            outputDevice?.Dispose();
+            outputDevice = null;
+            waveFile?.Dispose();
+            waveFile = null;
         }
 
-        //Instantierer et objekt som kan spille en lyd.
-        public static AudioManager soundTaunt = new AudioManager(Properties.Resources.taunt);
-        public static AudioManager soundBossKamp = new AudioManager(Properties.Resources.troldmandskamp);
-        public static AudioManager soundLaugh = new AudioManager(Properties.Resources.laugh);
-        public static AudioManager soundTypeWriter = new AudioManager(Properties.Resources.typewriter);
-        public static AudioManager soundMainMenu = new AudioManager(Properties.Resources.mainmenu);
-        public static AudioManager soundKamp = new AudioManager(Properties.Resources.kamp);
-        public static AudioManager soundWin = new AudioManager(Properties.Resources.win);
-        public static AudioManager soundGameOver = new AudioManager(Properties.Resources.gameover);
-        public static AudioManager soundShop = new AudioManager(Properties.Resources.shop);
-        public static AudioManager soundLvlUp = new AudioManager(Properties.Resources.levelup);
-        public static AudioManager soundCampFire = new AudioManager(Properties.Resources.campfire);
-        public static AudioManager soundCampMusic = new AudioManager(Properties.Resources.campmusic);
-        public static AudioManager soundMimic = new AudioManager(Properties.Resources.mimic);
-        public static AudioManager soundDoorOpen = new AudioManager(Properties.Resources.dooropen);
-        public static AudioManager soundDoorClose = new AudioManager(Properties.Resources.doorclose);
-        public static AudioManager soundTreasure = new AudioManager(Properties.Resources.treasure);
-        public static AudioManager soundRuneTrap = new AudioManager(Properties.Resources.runetrap);
-        public static AudioManager soundDarts = new AudioManager(Properties.Resources.darts);
-        public static AudioManager soundFootsteps = new AudioManager(Properties.Resources.footsteps);
-
-        public static byte[] StreamToBytes(System.IO.Stream stream) {
+        public static byte[] StreamToBytes(Stream stream) {
             long originalPosition = 0;
 
             if (stream.CanSeek) {

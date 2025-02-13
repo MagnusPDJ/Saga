@@ -20,15 +20,14 @@ namespace Saga.Dungeon
         //To Encounters som køres når en ny karakter startes for at introducere kamp.
         public static void FirstEncounter() {
             Console.Clear();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("typewriter");
             HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
             HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.");
-            AudioManager.soundTypeWriter.Stop();
-            AudioManager.soundMainMenu.Stop();
-            AudioManager.soundTaunt.Play();
-            AudioManager.soundKamp.Play();
+            Program.SoundController.Stop();
+            Program.SoundController.Play("taunt");
+            Program.SoundController.Play("kamp");
             HUDTools.Print("He turns...");
             HUDTools.PlayerPrompt();
             Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
@@ -39,8 +38,8 @@ namespace Saga.Dungeon
         }
         public static void SecondEncounter() {
             Console.Clear();
-            AudioManager.soundKamp.Play();
-            switch (Program.rand.Next(0, 2)) {
+            Program.SoundController.Play("kamp");
+            switch (Program.Rand.Next(0, 2)) {
                 case int x when (x == 0):
                     HUDTools.Print($"You turn a corner and there you see a Feral Dog...", 10);
                     break;
@@ -58,8 +57,8 @@ namespace Saga.Dungeon
         //Encounter som køres for at introducere shopkeeperen Gheed.
         public static void MeetGheed() {
             Console.Clear();
-            AudioManager.soundShop.Play();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("shop");
+            Program.SoundController.Play("typewriter");
             if (Program.CurrentPlayer.CurrentClass == "Mage") {
                 HUDTools.Print($"After dusting off your {Program.CurrentPlayer.Equipment[Slot.Torso].ItemName} and tucking in your new wand, you find someone else captured.");
             } else if (Program.CurrentPlayer.CurrentClass == "Archer") {
@@ -71,25 +70,24 @@ namespace Saga.Dungeon
             HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
             HUDTools.PlayerPrompt();
             Console.Clear();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("typewriter");
             HUDTools.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
             AddNpcToCamp("Gheed");
             HUDTools.PlayerPrompt();
-            AudioManager.soundTypeWriter.Stop();
-            AudioManager.soundShop.Stop();
+            Program.SoundController.Stop();
         }
         //Encounter som køres for at introducere Camp
         public static void FirstCamp() {
             Console.Clear();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("typewriter");
             HUDTools.Print("After taking what few scraps you could find, you explore your surroundings.");
             HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
             Console.ReadKey(true);
-            AudioManager.soundTypeWriter.Stop();
-            AudioManager.soundCampFire.Play();
+            Program.SoundController.Stop();
+            Program.SoundController.Play("campfire");
             HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The");
             HUDTools.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
             HUDTools.Print("you can stay for a while and rest.");
@@ -102,7 +100,7 @@ namespace Saga.Dungeon
         //Alchemist trader/Quest giver
         public static void MeetFlemsha() {
             Console.Clear();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("typewriter");
             HUDTools.SmallCharacterInfo();
             HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side\nof the room, there is also a desk which probably belonged to the long gone warden.",30);
             bool examined = false;
@@ -185,9 +183,9 @@ namespace Saga.Dungeon
         //Encounter der "spawner" en random fjende som skal dræbes.
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
-            AudioManager.soundKamp.Play();
+            Program.SoundController.Play("kamp");
             Act1Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
-            switch (Program.rand.Next(0,2)) {
+            switch (Program.Rand.Next(0,2)) {
                 case int x when (x == 0):
                     HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.Name}...", 10);
                     break;
@@ -201,9 +199,9 @@ namespace Saga.Dungeon
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
             Console.Clear();
-            AudioManager.soundLaugh.Play();
+            Program.SoundController.Play("laugh");
             HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",20);
-            AudioManager.soundBossKamp.Play();
+            Program.SoundController.Play("troldmandskamp");
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
             HUDTools.PlayerPrompt();
             Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
@@ -218,7 +216,7 @@ namespace Saga.Dungeon
         public static void MimicEncounter() {
             string input;
             Console.Clear();
-            AudioManager.soundDoorOpen.Play();
+            Program.SoundController.Play("dooropen");
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
             Console.Clear();
@@ -227,15 +225,15 @@ namespace Saga.Dungeon
                 Console.WriteLine("Do you want to try and open it?\n(Y/N)");
                 input = HUDTools.PlayerPrompt().ToLower();
                 if (input == "n") {
-                    AudioManager.soundDoorClose.Play();
+                    Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...", 20);
                     Console.ReadKey(true);
                     RandomBasicCombatEncounter();
                     break;
                 } else if (input == "y") {
-                    AudioManager.soundMimic.Play();
+                    Program.SoundController.Play("mimic");
                     HUDTools.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
-                    AudioManager.soundBossKamp.Play();
+                    Program.SoundController.Play("troldmandskamp");
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     HUDTools.PlayerPrompt();
@@ -257,7 +255,7 @@ namespace Saga.Dungeon
         public static void TreasureEncounter() {
             string input;
             Console.Clear();
-            AudioManager.soundDoorOpen.Play();            
+            Program.SoundController.Play("dooropen");            
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
             Console.Clear();
@@ -266,16 +264,16 @@ namespace Saga.Dungeon
                 Console.WriteLine("Do you want to try and open it?\n(Y/N)");
                 input = HUDTools.PlayerPrompt().ToLower();
                 if (input == "n") {
-                    AudioManager.soundDoorClose.Play();
+                    Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...",20);
                     Console.ReadKey(true);
                     RandomBasicCombatEncounter();
                     break;
                 } else if (input == "y") {
-                    AudioManager.soundTreasure.Play();
+                    Program.SoundController.Play("treasure");
                     HUDTools.Print("You release the metal latch and grab both sides of the chest and peer inside.");
                     HUDTools.PlayerPrompt();
-                    AudioManager.soundWin.Play();
+                    Program.SoundController.Play("win");
                     Program.CurrentLoot.GetTreasureChestLoot();
                     break;
                 } else {
@@ -288,30 +286,30 @@ namespace Saga.Dungeon
         //Encounter der starter en trap med runer hvor den rigtige rune skal vælges for at kunne exit
         public static void PuzzleOneEncounter() {
             Console.Clear();
-            AudioManager.soundFootsteps.Play();
-            AudioManager.soundRuneTrap.Play();
+            Program.SoundController.Play("footsteps");
+            Program.SoundController.Play("runetrap");
 
             //runer
             List<char> chars = new char[] { '\u0925', '\u0931', '\u09fa', '\u1805', '\u1873', '\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
             List<char> endchars = new char[] { '\u00fe', '\u00f5', '\u00d0', '\u0141', '\u014a', '\u047b', '\u046b', '\u1c59', '\u1c6c', '\u1cbe' }.ToList();
             List<int> positions = new List<int>();
-            char c = chars[Program.rand.Next(0, 10)];
+            char c = chars[Program.Rand.Next(0, 10)];
             chars.Remove(c);
             
             //Rune template
             List<string> puzzle = new List<string>();
 
             for (int a = 0; a < 4; a++) {
-                int pos = Program.rand.Next(0, 4);
+                int pos = Program.Rand.Next(0, 4);
                 positions.Add(pos);
                 string row = "";
                 for (int b = 0; b < 4; b++) {
                     if (b == pos) {
                         row += c + " ";
                     } else if (0<a && a<3){
-                        row += chars[Program.rand.Next(0, 9)] + " ";
+                        row += chars[Program.Rand.Next(0, 9)] + " ";
                     } else {
-                        row += endchars[Program.rand.Next(0, 9)] + " ";
+                        row += endchars[Program.Rand.Next(0, 9)] + " ";
                     }             
                 }
                 puzzle.Add(row);
@@ -353,7 +351,7 @@ namespace Saga.Dungeon
                 string input = HUDTools.PlayerPrompt();
                 if (int.TryParse(input, out int number) && number < 5 && number > 0) {
                     if (positions[i] == number - 1) {
-                        AudioManager.soundFootsteps.Play();
+                        Program.SoundController.Play("footsteps");
                         HUDTools.Print($"You stepped on the {c} rune, nothing happens...", 10);
                         location = "";
                         i++;
@@ -366,7 +364,7 @@ namespace Saga.Dungeon
                         }
                         Console.ReadKey(true);
                     } else {
-                        AudioManager.soundDarts.Play();
+                        Program.SoundController.Play("darts");
                         HUDTools.Print($"Darts fly out of the walls! You take 2 damage.)", 10);
                         Program.CurrentPlayer.Health -= 2;
                         Console.ReadKey(true);
@@ -381,8 +379,8 @@ namespace Saga.Dungeon
                     Program.CurrentPlayer.BasicActions(input);
                 }               
             }
-            AudioManager.soundRuneTrap.Stop();
-            AudioManager.soundWin.Play();
+            Program.SoundController.Stop();
+            Program.SoundController.Play("win");
             Program.CurrentLoot.GetExp(2, 50*Program.CurrentPlayer.Level);
             Console.ResetColor();
             HUDTools.PlayerPrompt();
@@ -395,7 +393,7 @@ namespace Saga.Dungeon
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
             //0, 125+1
-            switch (Program.rand.Next(0, 125 + 1)) {
+            switch (Program.Rand.Next(0, 125 + 1)) {
                 default:
                     RandomBasicCombatEncounter();
                     break;
@@ -416,7 +414,7 @@ namespace Saga.Dungeon
         //Metode til at lave en pool af random encounters af tilfældig dybde/længde/antal op til 5 (default, bestemt antal gives som parametre).
         public static void RandomEncounterPool(int dybde = 0) {
             if (dybde == 0) {
-                dybde = Program.rand.Next(1, 5 +1);
+                dybde = Program.Rand.Next(1, 5 +1);
             }
             for (int i=0; i <= dybde; i++) {
                 RandomEncounter();
@@ -430,8 +428,8 @@ namespace Saga.Dungeon
         }
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
         public static void Camp() {
-            AudioManager.soundCampFire.Play();
-            AudioManager.soundCampMusic.Play();
+            Program.SoundController.Play("campfire");
+            Program.SoundController.Play("campmusic");
             //Hver gang spilleren returnere til Camp refresher shoppen:
             Shop shop = Shop.SetForsale();
             HUDTools.TopCampHUD();
@@ -442,8 +440,7 @@ namespace Saga.Dungeon
                 if (input == "e" || input == "explore") {                    
                     HUDTools.Print("You venture deeper...", 5);
                     Console.ReadKey(true);
-                    AudioManager.soundCampFire.Stop();
-                    AudioManager.soundCampMusic.Stop();
+                    Program.SoundController.Stop();
                     bool explore = true;
                     while (explore) {
                         RandomEncounterPool();
@@ -462,7 +459,7 @@ namespace Saga.Dungeon
                                 explore = false;
                                 HUDTools.Print("You retrace your steps in the darkness...", 20);
                                 HUDTools.PlayerPrompt();
-                                if (Program.rand.Next(100) > 49) {
+                                if (Program.Rand.Next(100) > 49) {
                                     RandomBasicCombatEncounter();
                                 }                              
                             } else {
@@ -480,11 +477,10 @@ namespace Saga.Dungeon
                 }
                 //Gheed's shop:
                 else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {             
-                    AudioManager.soundCampFire.Stop();
-                    AudioManager.soundCampMusic.Stop();
+                    Program.SoundController.Stop();
                     Shop.Loadshop(Program.CurrentPlayer, shop);
-                    AudioManager.soundCampFire.Play();
-                    AudioManager.soundCampMusic.Play();
+                    Program.SoundController.Play("campfire");
+                    Program.SoundController.Play("campmusic");
                 }
                 //Quit and/or save the game:
                 else if (input == "q" || input == "quit") {
@@ -542,8 +538,7 @@ namespace Saga.Dungeon
                     }                   
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearLog();
-                        AudioManager.soundKamp.Stop();
-                        AudioManager.soundBossKamp.Stop();
+                        Program.SoundController.Stop();
                         Program.CurrentPlayer.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                         break;
                     }
@@ -554,8 +549,7 @@ namespace Saga.Dungeon
                     Monster.MonsterActions(TurnTimer);
                     if (Program.CurrentPlayer.Health <= 0) {
                         HUDTools.ClearLog();
-                        AudioManager.soundKamp.Stop();
-                        AudioManager.soundBossKamp.Stop();
+                        Program.SoundController.Stop();
                         Program.CurrentPlayer.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                         break;
                     }
@@ -564,10 +558,9 @@ namespace Saga.Dungeon
             }
             //Tjekker om monstret er besejret:
             if (Monster.Health <= 0) {
-                AudioManager.soundKamp.Stop();
-                AudioManager.soundBossKamp.Stop();
+                Program.SoundController.Stop();
                 HUDTools.ClearLog();
-                AudioManager.soundWin.Play();
+                Program.SoundController.Play("win");
                 Program.CurrentLoot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
             }
         }

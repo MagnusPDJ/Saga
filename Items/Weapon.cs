@@ -28,7 +28,7 @@ namespace Saga.Items
         public static string RandomWeaponName(WeaponTypes type) {
             string name1 = "Sturdy";
             string name2 = "Stick";
-            int rand = Program.rand.Next(10);
+            int rand = Program.Rand.Next(10);
             switch(type) {
                 case WeaponTypes.Axe:
                     name2 = "axe";

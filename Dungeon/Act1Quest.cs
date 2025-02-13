@@ -6,7 +6,7 @@ namespace Saga.Dungeon
     {
         //Funktion til at lave random collect quests.
         public static Quest CreateRandomQuest() {
-            int roll = Program.rand.Next(2);
+            int roll = Program.Rand.Next(2);
             string target = "";
             string name = "";
             (int,int,int) reward = (0,0,-1);

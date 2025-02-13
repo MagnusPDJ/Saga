@@ -39,7 +39,7 @@ namespace Saga.Dungeon
         public override void GetExp() {
             int upper = (20 * Program.CurrentPlayer.Level + 31);
             int lower = (10 * Program.CurrentPlayer.Level);
-            int x = (int)Math.Floor(Program.rand.Next(lower, upper + 1) * ExpModifier);
+            int x = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * ExpModifier);
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 HUDTools.Print($"You've gained {x} experience points!", 10);
@@ -51,7 +51,7 @@ namespace Saga.Dungeon
         //Monster type låst efter level
         public static (string, Tribe) GetName() {
             if (Program.CurrentPlayer.Level < 3) {
-                switch (Program.rand.Next(1, 100 + 1)) {
+                switch (Program.Rand.Next(1, 100 + 1)) {
                     default:
                     case int n when n < 40:
                         return ("Giant Rat", Tribe.Beast);
@@ -61,7 +61,7 @@ namespace Saga.Dungeon
                         return ("Grave Robber", Tribe.Human);
                 }
             } else if (Program.CurrentPlayer.Level <= 5) {
-                switch (Program.rand.Next(1, 100 + 1)) {
+                switch (Program.Rand.Next(1, 100 + 1)) {
                     default:
                     case int n when 90 <= n:
                         return ("Skeleton", Tribe.Undead);
@@ -75,7 +75,7 @@ namespace Saga.Dungeon
                         return ("Giant Rat", Tribe.Beast);
                 }
             } else if (5 < Program.CurrentPlayer.Level && Program.CurrentPlayer.Level <= 15) {
-                switch (Program.rand.Next(1, 100 + 1)) {
+                switch (Program.Rand.Next(1, 100 + 1)) {
                     default:
                     case int n when 1 <= n && n < 20:
                         return ("Giant Rat", Tribe.Beast);                        
@@ -97,7 +97,7 @@ namespace Saga.Dungeon
                         return ("Dire Wolf", Tribe.Beast);
                 }
             } else {
-                switch (Program.rand.Next(1, 100 + 1)) {
+                switch (Program.Rand.Next(1, 100 + 1)) {
                     default:
                     case int n when 1 <= n && n < 30:
                         return ("Skeleton", Tribe.Undead);
@@ -125,47 +125,47 @@ namespace Saga.Dungeon
                 case "Vampire":
                     int upper6 = (49 + baseModUp + Program.CurrentPlayer.Level);
                     int lower6 = (34 + baseModLower + Program.CurrentPlayer.Level/2);
-                    return Program.rand.Next(lower6, upper6 + 1);
+                    return Program.Rand.Next(lower6, upper6 + 1);
                 case "Werewolf":
                     int upper7 = (28 + baseModUp + Program.CurrentPlayer.Level / 2);
                     int lower7 = (32 + baseModLower + Program.CurrentPlayer.Level / 3);
-                    return Program.rand.Next(lower7, upper7 + 1);
+                    return Program.Rand.Next(lower7, upper7 + 1);
                 case "Dire Wolf":
                     int upper8 = (27 + baseModUp);
                     int lower8 = (26 + baseModLower);
-                    return Program.rand.Next(lower8, upper8 + 1);
+                    return Program.Rand.Next(lower8, upper8 + 1);
                 case "Human Cultist":
                     int upper2 = (17 + baseModUp);
                     int lower2 = (16 + baseModLower);
-                    return Program.rand.Next(lower2, upper2 + 1);
+                    return Program.Rand.Next(lower2, upper2 + 1);
                 case "Human Rogue":
                     int upper5 = (10 + baseModUp);
                     int lower5 = (1 + baseModLower);
-                    return Program.rand.Next(lower5, upper5 + 1);
+                    return Program.Rand.Next(lower5, upper5 + 1);
                 case "Bandit":
                     int upper9 = (6 + baseModUp);
                     int lower9 = (6 + baseModLower);
-                    return Program.rand.Next(lower9, upper9 + 1);
+                    return Program.Rand.Next(lower9, upper9 + 1);
                 case "Skeleton":
                     int upper = (2 + baseModUp);
                     int lower = (2 + baseModLower);
-                    return Program.rand.Next(lower, upper + 1);
+                    return Program.Rand.Next(lower, upper + 1);
                 case "Zombie":
                     int upper1 = (2 + baseModUp + 2);
                     int lower1 = (2 + baseModLower + 1);
-                    return Program.rand.Next(lower1, upper1 + 1);
+                    return Program.Rand.Next(lower1, upper1 + 1);
                 case "Grave Robber":
                     int upper3 = (1 + baseModUp);
                     int lower3 = (1 + baseModLower);
-                    return Program.rand.Next(lower3, upper3 + 1);
+                    return Program.Rand.Next(lower3, upper3 + 1);
                 case "Giant Bat":
                     int upper4 = (baseModUp - 1);
                     int lower4 = (baseModLower - 2);
-                    return Program.rand.Next(lower4, upper4 + 1);
+                    return Program.Rand.Next(lower4, upper4 + 1);
                 case "Giant Rat":
                     int upper0 = (baseModUp);
                     int lower0 = (baseModLower);
-                    return Program.rand.Next(lower0, upper0 + 1);
+                    return Program.Rand.Next(lower0, upper0 + 1);
             }
             return 0;
         }
@@ -178,47 +178,47 @@ namespace Saga.Dungeon
                 case "Vampire":
                     int upper6 = (7 + baseModUp);
                     int lower6 = (4 + baseModLower);
-                    return Program.rand.Next(lower6, upper6 + 1);
+                    return Program.Rand.Next(lower6, upper6 + 1);
                 case "Werewolf":
                     int upper7 = (6 + baseModUp);
                     int lower7 = (4 + baseModLower);
-                    return Program.rand.Next(lower7, upper7 + 1);
+                    return Program.Rand.Next(lower7, upper7 + 1);
                 case "Dire Wolf":
                     int upper8 = (5 + baseModUp);
                     int lower8 = (4 + baseModLower);
-                    return Program.rand.Next(lower8, upper8 + 1);
+                    return Program.Rand.Next(lower8, upper8 + 1);
                 case "Human Cultist":
                     int upper2 = (4 + baseModUp);
                     int lower2 = (3 + baseModLower);
-                    return Program.rand.Next(lower2, upper2 + 1);
+                    return Program.Rand.Next(lower2, upper2 + 1);
                 case "Human Rogue":
                     int upper5 = (2 + baseModUp + 3);
                     int lower5 = (2 + baseModLower + 1);
-                    return Program.rand.Next(lower5, upper5 + 1);
+                    return Program.Rand.Next(lower5, upper5 + 1);
                 case "Bandit":
                     int upper9 = (2 + baseModUp);
                     int lower9 = (2 + baseModLower);
-                    return Program.rand.Next(lower9, upper9 + 1);
+                    return Program.Rand.Next(lower9, upper9 + 1);
                 case "Skeleton":
                     int upper = (baseModUp + 2);
                     int lower = (baseModLower + Program.CurrentPlayer.Level - Program.CurrentPlayer.Level / 3);
-                    return Program.rand.Next(lower, upper + 1);
+                    return Program.Rand.Next(lower, upper + 1);
                 case "Zombie":
                     int upper1 = (baseModUp);
                     int lower1 = (baseModLower);
-                    return Program.rand.Next(lower1, upper1 + 1);
+                    return Program.Rand.Next(lower1, upper1 + 1);
                 case "Grave Robber":
                     int upper3 = (baseModUp - Program.CurrentPlayer.Level / 4);
                     int lower3 = (baseModLower - Program.CurrentPlayer.Level / 4);
-                    return Program.rand.Next(lower3 - 1, upper3 + 1);
+                    return Program.Rand.Next(lower3 - 1, upper3 + 1);
                 case "Giant Bat":
                     int upper4 = (baseModUp - 1 - Program.CurrentPlayer.Level / 2 - Program.CurrentPlayer.Level / 5);
                     int lower4 = (baseModLower - 1 - Program.CurrentPlayer.Level / 2);
-                    return Program.rand.Next(lower4 - 1, upper4 + 1);
+                    return Program.Rand.Next(lower4 - 1, upper4 + 1);
                 case "Giant Rat":
                     int upper0 = (baseModUp - 3 - Program.CurrentPlayer.Level / 2 - Program.CurrentPlayer.Level / 5);
                     int lower0 = (baseModLower - 3 - Program.CurrentPlayer.Level / 2);
-                    return Program.rand.Next(lower0, upper0 + 2);
+                    return Program.Rand.Next(lower0, upper0 + 2);
             }
             return 0;
         }

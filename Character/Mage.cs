@@ -13,7 +13,7 @@ namespace Saga.Character
         }
         public override void LevelUp() {
             int levels = 0;
-            AudioManager.soundLvlUp.Play();
+            Program.SoundController.Play("levelup");
             while (CanLevelUp()) {
                 Program.CurrentPlayer.Exp -= GetLevelUpValue();
                 Program.CurrentPlayer.Level++;
@@ -152,8 +152,7 @@ namespace Saga.Character
             else if (input.ToLower() == "r" || input == "run") {
                 //Run                   
                 if (RunAway(Monster)) {
-                    AudioManager.soundKamp.Stop();
-                    AudioManager.soundBossKamp.Stop();
+                    Program.SoundController.Stop();
                     HUDTools.ClearLog();
                     TurnTimer.Ran = true;
                 }
@@ -201,7 +200,7 @@ namespace Saga.Character
         }
         public static int Attack(Enemy Monster) {
             HUDTools.Print($"You shoot an arcane missile from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
-            int attack = Program.rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
+            int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
             HUDTools.Print($"You deal {attack} damage to {Monster.Name}", 10);
             return attack;
         }
@@ -211,7 +210,7 @@ namespace Saga.Character
         }
         public static bool RunAway(Enemy Monster) {
             bool escaped = false;
-            if (Program.rand.Next(0, 3) == 0 || Monster.Name == "Human captor") {
+            if (Program.Rand.Next(0, 3) == 0 || Monster.Name == "Human captor") {
                 HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
             } else {
                 HUDTools.Print($"You barely manage to shake off the {Monster.Name} and you successfully escape.", 15);

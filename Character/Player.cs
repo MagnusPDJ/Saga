@@ -297,7 +297,7 @@ namespace Saga.Character
         }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void DeathCode(string message) {
-            AudioManager.soundGameOver.Play();
+            Program.SoundController.Play("gameover");
             Console.ForegroundColor = ConsoleColor.DarkRed;
             HUDTools.Print(message, 20);
             HUDTools.Print("Press to go back to main menu...", 5);
@@ -347,7 +347,7 @@ namespace Saga.Character
             Program.CurrentPlayer.QuestLog.Remove(quest);
             Program.CurrentPlayer.CompletedQuests.Add(quest);
 
-            AudioManager.soundWin.Play();
+            Program.SoundController.Play("win");
             Console.ForegroundColor = ConsoleColor.Cyan;
             HUDTools.Print($"You've completed the quest: {quest.Name}!", 15);
             Console.ResetColor();

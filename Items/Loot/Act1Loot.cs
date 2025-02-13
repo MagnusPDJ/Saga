@@ -10,7 +10,7 @@ namespace Saga.Items.Loot
         public override void GetGold(float modifier = 1) {
             int upper = (26 * Program.CurrentPlayer.Level + 61);
             int lower = (5 * Program.CurrentPlayer.Level);
-            int g = (int)Math.Floor(Program.rand.Next(lower, upper + 1) * modifier);
+            int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
             if (g > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 HUDTools.Print($"You loot {g} gold coins.", 15);
@@ -32,7 +32,7 @@ namespace Saga.Items.Loot
             int p;
             if (amount == 0) {
                 int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-                var picked = Program.rand.Next(0, numbers.Length);
+                var picked = Program.Rand.Next(0, numbers.Length);
                 p = numbers[picked];
             } else { 
                 p = amount;
@@ -61,7 +61,7 @@ namespace Saga.Items.Loot
             GetGold(3);
             GetPotions();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            int getTreasure = Program.rand.Next(1, 100 + 1);
+            int getTreasure = Program.Rand.Next(1, 100 + 1);
             if (getTreasure <= 20) {
                 if (Program.CurrentPlayer.CurrentClass == "Mage") {
                     switch (Program.CurrentPlayer.Level) {
@@ -194,7 +194,7 @@ namespace Saga.Items.Loot
         public override void GetExp(int expModifier, int flatExp = 0) {
             int upper = (20 * Program.CurrentPlayer.Level + 21);
             int lower = (2 * Program.CurrentPlayer.Level);
-            int x = Program.rand.Next(lower, upper + 1)*expModifier + flatExp;
+            int x = Program.Rand.Next(lower, upper + 1)*expModifier + flatExp;
             if (x > 0) {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 HUDTools.Print($"You've gained {x} experience points!", 10);

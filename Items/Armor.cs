@@ -24,7 +24,7 @@ namespace Saga.Items
         }
         public static string RandomArmorName(ArmorType type, Slot slot) {
             string name = "Fine Hat";
-            int rand = Program.rand.Next(5);
+            int rand = Program.Rand.Next(5);
             switch (type) {
                 case ArmorType.Cloth:
                     name = ArmorNameList(type, slot, rand);

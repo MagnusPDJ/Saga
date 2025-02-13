@@ -6,12 +6,12 @@ namespace Saga.Items.Loot
     public class WeaponLootTable : Weapon
     {
         public static Item CreateRandomWeapon(int level) {
-            int weaponType = Program.rand.Next(9);
+            int weaponType = Program.Rand.Next(9);
             Item item = new Weapon() {
                 ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                 ItemSlot = Slot.Weapon,
                 WeaponType = (WeaponTypes)weaponType,
-                WeaponAttributes = new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level + level), MaxDamage = Math.Max(1, Program.CurrentPlayer.Level + level) + Program.rand.Next(2, 6), AttackSpeed = 1 },
+                WeaponAttributes = new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level + level), MaxDamage = Math.Max(1, Program.CurrentPlayer.Level + level) + Program.Rand.Next(2, 6), AttackSpeed = 1 },
                 ItemName = RandomWeaponName((WeaponTypes)weaponType)
             };
 

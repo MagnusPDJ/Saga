@@ -20,9 +20,9 @@ namespace Saga.Items
         }
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p, Shop shop) {
-            AudioManager.soundShop.Play();
+            Program.SoundController.Play("shop");
             Runshop(p, shop);
-            AudioManager.soundShop.Stop();
+            Program.SoundController.Stop();
         }
         //Metode til at køre shoppen.
         public static void Runshop(Player p, Shop shop) {

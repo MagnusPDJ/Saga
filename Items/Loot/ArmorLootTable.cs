@@ -6,8 +6,8 @@ namespace Saga.Items.Loot
     public class ArmorLootTable : Armor
     {
         public static Item CreateRandomArmor(int level) {
-            int slot = Program.rand.Next(7);
-            int armorType = Program.rand.Next(4);
+            int slot = Program.Rand.Next(7);
+            int armorType = Program.Rand.Next(4);
 
             int constitution = 0;
             int strength = 0;
@@ -19,25 +19,25 @@ namespace Saga.Items.Loot
             //Roll for stats:
             for (int i = 0; i<6; i++) {
 
-                int roll = Program.rand.Next(1, 100 + 1);
+                int roll = Program.Rand.Next(1, 100 + 1);
 
                 if (i == 0 && roll <= 10) {
-                    constitution = Program.rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
+                    constitution = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
                 if (i == 1 && roll <= 10) {
-                    strength = Program.rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
+                    strength = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
                 if (i == 2 && roll <= 10) {
-                    dexterity = Program.rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
+                    dexterity = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
                 if (i == 3 && roll <= 10) {
-                    intellect = Program.rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
+                    intellect = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
                 if (i == 4 && roll <= 10) {
-                    willpower = Program.rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
+                    willpower = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
                 if (i == 5 && roll <= 10) {
-                    armorRating = Program.rand.Next(Math.Max(1,Program.CurrentPlayer.Level/2), 2 + Math.Max(3, Program.CurrentPlayer.Level + level));
+                    armorRating = Program.Rand.Next(Program.CurrentPlayer.Level/2, 2 + Math.Max(3, Program.CurrentPlayer.Level + level));
                 }
             }
 

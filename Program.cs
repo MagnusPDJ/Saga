@@ -16,15 +16,13 @@ namespace Saga
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player CurrentPlayer { get; set; }
         public static Loot CurrentLoot { get; set; }
-
-        //Genere et objekt som kan returnere tilfældige tal mm.
-        public static Random rand = new Random();
-
+        public static AudioManager SoundController { get; set; }
         //Sætter variablen til Lydniveauet fra configfilen.
-        public static float volumeLevel = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
-
-        //Laver et objekt til at sætte lyden når spillet åbnes.
-        public static AudioManager soundVolumeController = new AudioManager(Properties.Resources.mainmenu);
+        public static float VolumeLevel { get; set; } = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
+        //Genere et objekt som kan returnere tilfældige tal mm.
+        public static Random Rand { get; set; } = new();
+        //Gør savefilen nemmere at læse.
+        public static JsonSerializerOptions Options { get; set; } = new() { WriteIndented = true };
 
         //Spillets udførelse ved opstart
         static void Main() {
@@ -35,7 +33,9 @@ namespace Saga
             Console.Title = "Saga";
 
             //Sætter lydniveauet til variablen sat fra configfilen.
-            soundVolumeController.Volume = volumeLevel;
+            SoundController = new() {
+                Volume = VolumeLevel
+            };
 
             //Danner en saves mappe hvis den ikke eksistere.
             if (!Directory.Exists("saves")) {
@@ -47,7 +47,7 @@ namespace Saga
 
         //Metode til at lave en MainMenu hvor man kan ændre settings eller starte spillet etc.
         public static void MainMenu() {
-            AudioManager.soundMainMenu.Play();
+            SoundController.Play("mainmenu");
             HUDTools.MainMenu();
             while (true) {
                 string input = HUDTools.PlayerPrompt();
@@ -77,8 +77,7 @@ namespace Saga
                 if (CurrentPlayer.CurrentAct == Act.Act1) {
                     CurrentLoot ??= new Act1Loot();
                     while (CurrentPlayer.CurrentAct == Act.Act1) {
-                        AudioManager.soundMainMenu.Stop();
-                        AudioManager.soundShop.Stop();
+                        SoundController.Stop();                       
                         Encounters.Camp();
                     }
                 }
@@ -111,8 +110,7 @@ namespace Saga
         public static void Save() {
             string path = $"saves/{CurrentPlayer.Id}.player";
             FileStream file = File.Open(path, FileMode.OpenOrCreate);
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string toSave = JsonSerializer.Serialize(CurrentPlayer, options);
+            string toSave = JsonSerializer.Serialize(CurrentPlayer, Options);                    
             byte[] saveFile = new UTF8Encoding(true).GetBytes(toSave);
             file.Write(saveFile, 0, saveFile.Length);
             file.Close();
@@ -122,14 +120,14 @@ namespace Saga
         public static Player Load(out bool newP) {
             newP = false;
             string[] paths = Directory.GetFiles("saves");
-            List<Player> players = new List<Player>();
+            List<Player> players = [];
             foreach (string path in paths) {
                 Player player = JsonSerializer.Deserialize<Player>(File.ReadAllText(path));                          
                 players.Add(player);
             }
             int idCount = players.Count+1;
             Console.Clear();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("typewriter");
             HUDTools.LoadSaves(players);
             while (true) {
                 string[] data = Console.ReadLine().Split(':');
@@ -226,7 +224,7 @@ namespace Saga
             Player p = CreateCharacter(PickName(), PickClass());
             p.Id = i;
             Console.Clear();
-            AudioManager.soundTypeWriter.Play();
+            Program.SoundController.Play("typewriter");
             HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
             HUDTools.Print("anything about your past.");
             if (string.IsNullOrWhiteSpace(p.Name) == true) {
@@ -239,16 +237,12 @@ namespace Saga
             return p;
         }
 
-        public static Player CreateCharacter(string name = "Adventurer", int classes = 1) { 
-            switch (classes) {
-                default:
-                case 1:
-                    return new Warrior(name);
-                case 2:
-                    return new Archer(name);
-                case 3:
-                    return new Mage(name);
-            }
+        public static Player CreateCharacter(string name = "Adventurer", int classes = 1) {
+            return classes switch {
+                3 => new Mage(name),
+                2 => new Archer(name),
+                _ => new Warrior(name),
+            };
         }
    
         //Metode til at vælge navn.
@@ -352,9 +346,8 @@ namespace Saga
             HUDTools.Print("Want to Quit? (Y)",10);
             string input = HUDTools.PlayerPrompt().ToLower();
             if (input == "y") {
-                AudioManager.soundCampFire.Stop();
-                AudioManager.soundCampMusic.Stop();
-                AudioManager.soundLaugh.Play();
+                SoundController.Stop();
+                SoundController.Play("laugh");
                 Console.WriteLine("Want to save? (Y/N)");
                 while (true) {
                     string input1 = HUDTools.PlayerPrompt().ToLower();
