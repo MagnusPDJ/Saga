@@ -9,7 +9,12 @@ namespace Saga.Assets
     public class AudioManager {
 
         //Aflæser pc'ens lydenhed.
-        private WaveOutEvent outputDevice;
+        private readonly WaveOutEvent outputDevice;
+        private WaveOutEvent outputDevice1;
+        private WaveOutEvent outputDevice2;
+        private WaveOutEvent outputDevice3;
+        private WaveOutEvent outputDevice4;
+        private WaveOutEvent outputDevice5;
         private WaveFileReader waveFile;
 
         //Metode til set/get lydniveau.
@@ -50,20 +55,65 @@ namespace Saga.Assets
 
         //Metode til at afspille lydfil.
         public void Play(string sound) {
-            outputDevice ??= new WaveOutEvent();
-            if (waveFile == null) {
+            if (outputDevice1 == null) {
+                outputDevice1 = new WaveOutEvent();
                 MemoryStream ms = new(SoundLibrary[sound]);
                 waveFile = new WaveFileReader(ms);
-                outputDevice.Init(waveFile);
+                outputDevice1.Init(waveFile);            
+                outputDevice1.Play();
+            } else if (outputDevice2 == null) {
+                outputDevice2 = new WaveOutEvent();
+                MemoryStream ms = new(SoundLibrary[sound]);
+                waveFile = new WaveFileReader(ms);
+                outputDevice2.Init(waveFile);             
+                outputDevice2.Play();
+            } else if (outputDevice3 == null) {
+                outputDevice3 = new WaveOutEvent();
+                MemoryStream ms = new(SoundLibrary[sound]);
+                waveFile = new WaveFileReader(ms);
+                outputDevice3.Init(waveFile);               
+                outputDevice3.Play();
+            } else if (outputDevice4 == null) {
+                outputDevice4 = new WaveOutEvent();
+                MemoryStream ms = new(SoundLibrary[sound]);
+                waveFile = new WaveFileReader(ms);
+                outputDevice4.Init(waveFile);
+                outputDevice4.Play();
+            } else {
+                outputDevice5 ??= new WaveOutEvent();
+                MemoryStream ms = new(SoundLibrary[sound]);
+                waveFile = new WaveFileReader(ms);
+                outputDevice5.Init(waveFile);               
+                outputDevice5.Play();
             }
-            outputDevice.Play();
         }
 
         //Metode til at stoppe lydfil
         public void Stop() {
-            outputDevice?.Stop();
-            outputDevice?.Dispose();
-            outputDevice = null;
+            if (outputDevice1 != null) {
+                outputDevice1?.Stop();
+                outputDevice1?.Dispose();
+                outputDevice1 = null;
+            } 
+            if (outputDevice2 != null) {
+                outputDevice2?.Stop();
+                outputDevice2?.Dispose();
+                outputDevice2 = null;
+            } 
+            if (outputDevice3 != null) {
+                outputDevice3?.Stop();
+                outputDevice3?.Dispose();
+                outputDevice3 = null;
+            } 
+            if (outputDevice4 != null) {
+                outputDevice4?.Stop();
+                outputDevice4?.Dispose();
+                outputDevice4 = null;
+            } if (outputDevice5 != null) {
+                outputDevice5?.Stop();
+                outputDevice5?.Dispose();
+                outputDevice5 = null;
+            }          
             waveFile?.Dispose();
             waveFile = null;
         }

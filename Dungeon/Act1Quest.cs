@@ -31,7 +31,7 @@ namespace Saga.Dungeon
         }
 
         //Quests:
-        public static Act1Quest FreeFlemsha = new Act1Quest() {
+        public static Act1Quest FreeFlemsha = new() {
             Name = "Free Flemsha",
             QuestType = Type.Find,
             Target = "Old key",

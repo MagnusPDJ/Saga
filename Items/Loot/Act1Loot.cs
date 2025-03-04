@@ -12,18 +12,14 @@ namespace Saga.Items.Loot
             int lower = (5 * Program.CurrentPlayer.Level);
             int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
             if (g > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                HUDTools.Print($"You loot {g} gold coins.", 15);
-                Console.ResetColor();
+                HUDTools.Print($"\u001b[33mYou loot {g} gold coins.\u001b[0m", 15);
                 Program.CurrentPlayer.Gold += g;
             }
         }
         //Metode til at få en bestemt mængde guld:
         public override void GetFixedGold(int g) {
             if (g > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                HUDTools.Print($"You loot {g} gold coins.", 15);
-                Console.ResetColor();
+                HUDTools.Print($"\u001b[33mYou loot {g} gold coins.\u001b[0m", 15);
                 Program.CurrentPlayer.Gold += g;
             }
         }
@@ -31,16 +27,14 @@ namespace Saga.Items.Loot
         public override void GetPotions(int amount = 0) {
             int p;
             if (amount == 0) {
-                int[] numbers = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+                int[] numbers = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2];
                 var picked = Program.Rand.Next(0, numbers.Length);
                 p = numbers[picked];
             } else { 
                 p = amount;
             }
             if (p > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                HUDTools.Print($"You loot {p} healing potions", 20);
-                Console.ResetColor();
+                HUDTools.Print($"\u001b[90mYou loot {p} healing potions\u001b[0m", 20);
                 Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity += p;
             }
         }
@@ -196,9 +190,7 @@ namespace Saga.Items.Loot
             int lower = (2 * Program.CurrentPlayer.Level);
             int x = Program.Rand.Next(lower, upper + 1)*expModifier + flatExp;
             if (x > 0) {
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                HUDTools.Print($"You've gained {x} experience points!", 10);
-                Console.ResetColor();
+                HUDTools.Print($"\u001b[32mYou've gained {x} experience points!\u001b[0m", 10);
                 Program.CurrentPlayer.Exp += x;
             }
             Program.CurrentPlayer.CheckForLevelUp();
@@ -209,10 +201,10 @@ namespace Saga.Items.Loot
             if (findpotions != 0) {
                 GetPotions(findpotions);
             }
+            Console.ForegroundColor = ConsoleColor.Cyan;
             if (questname == "MeetFlemsha") {
                 int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                 Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.OldKey, index);
-                Console.ForegroundColor = ConsoleColor.Cyan;
                 HUDTools.Print($"You gain {QuestLootTable.OldKey.ItemName}", 15);
             }
             if (enemy != null) {
@@ -220,24 +212,20 @@ namespace Saga.Items.Loot
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null && i.ItemName == "Rat tail");
                     if (index != -1) {
                         ((QuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        Console.ForegroundColor = ConsoleColor.Cyan;
                         HUDTools.Print($"You gain {QuestLootTable.RatTail.ItemName}", 15);
                     }else {
                         index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                         Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.RatTail, index);
-                        Console.ForegroundColor = ConsoleColor.Cyan;
                         HUDTools.Print($"You gain {QuestLootTable.RatTail.ItemName}", 15);
                     }                   
                 } else if (enemy.Name == "Giant Bat" && Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed != true) != null) {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x != null && x.ItemName == "Bat wings");
                     if (index != -1) {
                         ((QuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        Console.ForegroundColor = ConsoleColor.Cyan;
                         HUDTools.Print($"You gain {QuestLootTable.BatWings.ItemName}", 15);
                     } else {
                         index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                         Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.BatWings, index);
-                        Console.ForegroundColor = ConsoleColor.Cyan;
                         HUDTools.Print($"You gain {QuestLootTable.BatWings.ItemName}", 15);
                     }
                 }

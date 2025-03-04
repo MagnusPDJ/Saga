@@ -96,10 +96,10 @@ namespace Saga.Assets
 
             // Åbner en text file navngivet "combatlog"  
             // at the location of your program 
-            FileStream CombatLog = new FileStream("combatlog.txt", FileMode.Open);
+            FileStream CombatLog = new("combatlog.txt", FileMode.Open);
 
             //Laver et objekt som kan skrive til Logfilen
-            StreamWriter portal1 = new StreamWriter(CombatLog);
+            StreamWriter portal1 = new(CombatLog);
 
             // Standard Output stream is  
             // being saved to a Textwriter 
@@ -193,13 +193,12 @@ namespace Saga.Assets
 
         //Read all lines fra embedded resource til en lise.
         public static List<string> ReadAllResourceLines(string resourceName) {
-            using (Stream stream = Assembly.GetEntryAssembly()
-                .GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream)) {
-                return EnumerateLines(reader).ToList();
-            }
+            using Stream stream = Assembly.GetEntryAssembly()
+                .GetManifestResourceStream(resourceName);
+            using StreamReader reader = new(stream);
+            return [.. EnumerateLines(reader)];
         }
-        static IEnumerable<string> EnumerateLines(TextReader reader) {
+        static IEnumerable<string> EnumerateLines(StreamReader reader) {
             string line;
             while ((line = reader.ReadLine()) != null) {
                 yield return line;
@@ -208,11 +207,10 @@ namespace Saga.Assets
 
         //Read all text fra embedded reource til en string.
         public static string ReadAllResourceText(string resourceName) {
-            using (Stream stream = Assembly.GetEntryAssembly()
-                .GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream)) {
-                return reader.ReadToEnd();
-            }
+            using Stream stream = Assembly.GetEntryAssembly()
+                .GetManifestResourceStream(resourceName);
+            using StreamReader reader = new(stream);
+            return reader.ReadToEnd();
         }
 
         //Clears the last x lines of the console screen.
@@ -347,9 +345,7 @@ namespace Saga.Assets
                     Console.WriteLine("");
                 }
                 else if (item.ItemSlot == Slot.Quest) {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"| Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
-                    Console.ResetColor();
+                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
                 }
             }
             Console.WriteLine("==============================");
@@ -393,9 +389,7 @@ namespace Saga.Assets
                     Console.WriteLine($"\t $ {Shop.ShopPrice(Array.IndexOf(Program.CurrentPlayer.Inventory, item).ToString())}");
                 } 
                 else if (item.ItemSlot == Slot.Quest) {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"| Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
-                    Console.ResetColor();
+                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
                 }
             }
             Console.WriteLine($"|  Sell    (P)otion     $ {Shop.ShopPrice("sellpotion")}");
@@ -419,7 +413,7 @@ namespace Saga.Assets
             Console.WriteLine("Choose what to sell");
         }
         public static void WriteStatsToConsole(string name, int level, PrimaryAttributes totalPrimaryAttributes, SecondaryAttributes baseSecondaryAttributes, (int, int) dpt) {
-            StringBuilder stats = new StringBuilder("~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~\n");
+            StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~\n");
 
             stats.AppendFormat($" Name: {name}\t\t\tClass: {Program.CurrentPlayer.CurrentClass}\n");
             stats.AppendFormat($" Level: {level}\n");
@@ -522,9 +516,7 @@ namespace Saga.Assets
                 Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
                 foreach (Item item in Program.CurrentPlayer.Inventory) {
                     if (item == null) {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine(" Empty slot");
-                        Console.ResetColor();
+                        Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
                     }
                     else if (item.ItemSlot == Slot.Weapon) {
                         Console.WriteLine($" {item.ItemSlot} - {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
@@ -555,9 +547,7 @@ namespace Saga.Assets
                         Console.WriteLine("");
                     }
                     else if ( item.ItemSlot == Slot.Quest) {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine($" Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
-                        Console.ResetColor();
+                        Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
                     }
                 }
                 Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname'\nTo examine item write examine_Itemname else (b)ack", 1);
@@ -581,7 +571,7 @@ namespace Saga.Assets
                     }
                     PlayerPrompt();
                 } else if (input[0] == "unequip") {
-                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.ToLower() == input[1]);
+                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     if (wat.Value == null) {
                         Console.WriteLine("No such item equipped...");                       
                     } else {
@@ -589,7 +579,7 @@ namespace Saga.Assets
                     }
                     PlayerPrompt();
                 } else if (input[0] == "examine") {
-                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.ToLower() == input[1]);
+                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
                     if (wat.Value == null && item == null) {
                         Console.WriteLine("No such item exists...");
@@ -729,19 +719,15 @@ namespace Saga.Assets
                     continue;
                 }
                 if (item.ItemSlot == Slot.Quest) {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($" Quest Item - {item.ItemName} #{((QuestItem)item).Amount}");
-                    Console.ResetColor();
+                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
                 }
             }
             Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
-            if (Program.CurrentPlayer.QuestLog.Count() == 0) {
+            if (Program.CurrentPlayer.QuestLog.Count == 0) {
                 Console.WriteLine("You don't have any active quests...");
             } else {
                 foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"{quest.Name}:");
-                    Console.ResetColor();
+                    Console.WriteLine($"\u001b[96m{quest.Name}:\u001b[0m");
                     if (!quest.Completed) {
                         Console.WriteLine(quest.Objective);
                     } else if (quest.Completed) {
@@ -783,9 +769,7 @@ namespace Saga.Assets
                             }
                             Console.WriteLine("");
                         } else if (quest.Item.ItemSlot == Slot.Quest) {
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.WriteLine($" Quest Item - {quest.Item.ItemName}");
-                            Console.ResetColor();
+                            Console.WriteLine($"\u001b[96m Quest Item - {quest.Item.ItemName}\u001b[0m");
                         }
                     }
                 }

@@ -28,96 +28,114 @@ namespace Saga.Dungeon
         //Metode til at vise alle dialog valg mulighederne.
         public static void LoadDialogueOptions(int index) {
             NonPlayableCharacters talkto = Program.CurrentPlayer.NpcsInCamp[index];
-            List<string> questions = new List<string>();
-            List<string> answers = new List<string>();
+            List<string> questions = [];
+            List<string> answers = [];
             foreach (KeyValuePair<string, string> option in talkto.Dialogue) {
                 questions.Add($"{option.Key}");
                 answers.Add($"{option.Value}");
-            }           
-            while (true) {
+            }
+            bool donetalking = false;
+            while (donetalking == false) {
                 Console.Clear();
                 HUDTools.Print($"{talkto.Greeting}\t(b)ack", 20);
                 foreach (string question in questions) {
                     HUDTools.Print($"{questions.IndexOf(question)}:\t{question}", 15);
                 }
                 if (talkto.Name == "Flemsha" && Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    HUDTools.Print($"{questions.Count}:\tI have your items.", 20);
-                    Console.ResetColor();
+                    HUDTools.Print($"{questions.Count}:\t\u001b[96mI have your items.\u001b[0m", 15);
                 }
                 if (talkto.Name == "Flemsha" && talkto.AvailableQuests.Count == 0 && Program.CurrentPlayer.Level < 15) {
                     talkto.AvailableQuests.Add(Act1Quest.CreateRandomQuest());
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    HUDTools.Print($"{questions.Count}:\tDo you have any work?", 20);
-                    Console.ResetColor();
+                    HUDTools.Print($"{questions.Count}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
                 } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests.Count == 0 && Program.CurrentPlayer.Level >= 15) { 
-                //No quests made
+                    //No quests made
                 } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests[0].Accepted == false) {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    HUDTools.Print($"{questions.Count}:\tDo you have any work?", 20);
-                    Console.ResetColor();
+                    HUDTools.Print($"{questions.Count}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
                 }
-                string input = HUDTools.PlayerPrompt();
-                if (input == "b" || input == "back") {
-                    break;
-                } else if (int.TryParse(input, out int n) && n >= 0 && n <= questions.Count - 1) {
-                    HUDTools.Print($"{questions[n]}", 0);
-                    HUDTools.Print($"{answers[n]}\n", 20);
-                    HUDTools.Print("Press to continue...", 5);
-                    HUDTools.PlayerPrompt();
-                    questions.RemoveAt(n);
-                    answers.RemoveAt(n);
-                    if (questions.Count == 0) {
+                
+                while (true) {
+                    (int, int) startCursor = Console.GetCursorPosition();
+                    string input = HUDTools.PlayerPrompt();
+                    if (input == "b" || input == "back") {
+                        donetalking = true;
                         break;
-                    }
-                } else if (int.TryParse(input, out int n1) && n1 >= 0 && n1 <= questions.Count) {
-                    if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
-                        HUDTools.Print($"I have your items.", 0);
-                        HUDTools.Print($"Thanks alot {Program.CurrentPlayer.Name}", 20);
-                        Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == talkto.AvailableQuests[0].Name));
-                        talkto.AvailableQuests.RemoveAt(0);
+                    } else if (int.TryParse(input, out int n) && n >= 0 && n <= questions.Count - 1) {
+                        Console.SetCursorPosition(0, 1 + n);
+                        HUDTools.Print($"\u001b[90m{n}:\t{questions[n]}\u001b[0m", 0);
+                        Console.SetCursorPosition(0, startCursor.Item2+1);
+                        HUDTools.Print($"{questions[n]}", 0);
+                        HUDTools.Print($"{answers[n]}\n", 20);
+                        HUDTools.Print("Press to continue...", 5);
                         HUDTools.PlayerPrompt();
-                    } else if (talkto.AvailableQuests[0].Accepted == false){
-                        HUDTools.Print($"Do you have any work?", 0);
-                        HUDTools.Print($"Yes, if you could go and {talkto.AvailableQuests[0].Name}, I will make it worth your while.\n(Y)es to accept (n)o to decline.", 15);
-                        while (true) {
-                            string input1 = HUDTools.PlayerPrompt();
-                            if (input1 == "y") {
-                                Program.CurrentPlayer.QuestLog.Add(talkto.AvailableQuests[0]);
-                                talkto.AvailableQuests[0].Accepted = true;
-                                Console.ForegroundColor = ConsoleColor.Cyan;
-                                HUDTools.Print($"You've gained a quest: {talkto.AvailableQuests[0].Name}!");
-                                Console.ResetColor();
-                                HUDTools.PlayerPrompt();
-                                break;
-                            } else if (input1 == "n") {
-                                talkto.AvailableQuests.RemoveAt(0);
-                                break;
-                            } else {
-                                Console.Clear();
-                                HUDTools.Print($"Do you have any work?", 0);
-                                HUDTools.Print($"Yes, if you could go and {talkto.AvailableQuests[0].Name}, I will make it worth your while.\n(Y)es to accept (n)o to decline.", 15);
-                            }
+                        (int,int) endCursor = Console.GetCursorPosition();
+                        Console.SetCursorPosition(0, startCursor.Item2);
+                        int x = endCursor.Item2 - startCursor.Item2;
+                        for (int i = 0; i < x; i++) {
+                            Console.WriteLine(new string(' ', Console.BufferWidth));
                         }
-                    }
+                        Console.SetCursorPosition(0, startCursor.Item2);
 
-                } else {
-                    HUDTools.Print("Please select a number from the list or (b)ack", 15);
-                    HUDTools.PlayerPrompt();
+                    } else if (int.TryParse(input, out int n1) && n1 >= 0 && n1 <= questions.Count) {
+                        if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
+                            HUDTools.Print($"I have your items.", 0);
+                            HUDTools.Print($"Thanks alot {Program.CurrentPlayer.Name}", 20);
+                            Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == talkto.AvailableQuests[0].Name));
+                            talkto.AvailableQuests.RemoveAt(0);
+                            HUDTools.PlayerPrompt();
+                        } else if (talkto.AvailableQuests[0].Accepted == false) {
+                            HUDTools.Print($"Do you have any work?", 0);
+                            HUDTools.Print($"Yes, if you could go and {talkto.AvailableQuests[0].Name}, I will make it worth your while.\n(Y)es to accept (n)o to decline.", 15);
+                            while (true) {
+                                string input1 = HUDTools.PlayerPrompt();
+                                if (input1 == "y") {
+                                    Program.CurrentPlayer.QuestLog.Add(talkto.AvailableQuests[0]);
+                                    talkto.AvailableQuests[0].Accepted = true;
+                                    HUDTools.Print($"\u001b[96mYou've gained a quest: {talkto.AvailableQuests[0].Name}\u001b[0m!", 20);
+                                    HUDTools.PlayerPrompt();
+                                    (int, int) endCursor = Console.GetCursorPosition();
+                                    Console.SetCursorPosition(0, startCursor.Item2-1);
+                                    int x = endCursor.Item2 + 1 - startCursor.Item2;
+                                    for (int i = 0; i < x; i++) {
+                                        Console.WriteLine(new string(' ', Console.BufferWidth));
+                                    }
+                                    Console.SetCursorPosition(0, startCursor.Item2-1);
+                                    break;
+                                } else if (input1 == "n") {
+                                    talkto.AvailableQuests.RemoveAt(0);
+                                    if (Program.CurrentPlayer.Level < 15) {
+                                        talkto.AvailableQuests.Add(Act1Quest.CreateRandomQuest());
+                                    } else if (Program.CurrentPlayer.Level >= 15) {
+                                        //No quests made
+                                    }
+                                    (int, int) endCursor = Console.GetCursorPosition();
+                                    Console.SetCursorPosition(0, startCursor.Item2);
+                                    int x = endCursor.Item2 - startCursor.Item2;
+                                    for (int i = 0; i < x; i++) {
+                                        Console.WriteLine(new string(' ', Console.BufferWidth));
+                                    }
+                                    Console.SetCursorPosition(0, startCursor.Item2);
+                                    break;
+                                } else {
+                                    HUDTools.Print("Please select (Y)es or (N)o.", 15);
+                                    HUDTools.PlayerPrompt();
+                                    HUDTools.ClearLastLine(3);
+                                }
+                            }
+                        } else {
+                            HUDTools.Print("Please select a number from the list or (b)ack.", 15);
+                            HUDTools.PlayerPrompt();
+                            HUDTools.ClearLastLine(3);
+                        }
+                    } else {
+                        HUDTools.Print("Please select a number from the list or (b)ack.", 15);
+                        HUDTools.PlayerPrompt();
+                        HUDTools.ClearLastLine(3);
+                    }
                 }
             }
         }
-        ////Characters:
-        //public static NonPlayableCharacters Flemsha = new NonPlayableCharacters() {
-        //    Name = "Flemsha",
-        //    Greeting = $"Thanks again {(Program.CurrentPlayer.Name ?? "")}, how can I be of assistance?",
-        //    Dialogue = new Dictionary<string, string>(),
-        //    AvailableQuests = new List<Quest>(),
-        //};
-        //public static NonPlayableCharacters Gheed = new NonPlayableCharacters() {
-        //    Name = "Gheed",
-        //    Greeting = "Ahh you are back again... What's that, you want to ask something?",
-        //    Dialogue = new Dictionary<string, string>(),
-        //};
+        private static void GiveFlemshaRandomQuest() {
+
+        }
     }
 }

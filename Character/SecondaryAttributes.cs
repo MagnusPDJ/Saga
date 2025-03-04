@@ -21,13 +21,7 @@ namespace Saga.Character
                    Awareness == attributes.Awareness;
         }
         public override int GetHashCode() {
-            int hashCode = 1903012575;
-            hashCode = hashCode * -1521134295 + MaxHealth.GetHashCode();
-            hashCode = hashCode * -1521134295 + MaxMana.GetHashCode();
-            hashCode = hashCode * -1521134295 + Awareness.GetHashCode();
-            hashCode = hashCode * -1521134295 + ArmorRating.GetHashCode();
-            hashCode = hashCode * -1521134295 + ElementalResistence.GetHashCode();
-            return hashCode;
+            return System.HashCode.Combine(MaxHealth, MaxMana, Awareness, ArmorRating, ElementalResistence);
         }
         // <summary>
         // Adds two PrimaryAttributes together.
@@ -35,7 +29,7 @@ namespace Saga.Character
         // <param name="a">Object one</param>
         // <param name="b">Object two</param>
         // <returns>New PrimaryAttributes object of sum of the inputs</returns>
-        public static SecondaryAttributes operator +(SecondaryAttributes a, SecondaryAttributes b) => new SecondaryAttributes() {
+        public static SecondaryAttributes operator +(SecondaryAttributes a, SecondaryAttributes b) => new() {
             MaxHealth = a.MaxHealth + b.MaxHealth,
             ArmorRating = a.ArmorRating + b.ArmorRating,
             ElementalResistence = a.ElementalResistence + b.ElementalResistence,

@@ -20,16 +20,14 @@ namespace Saga.Character
                 Program.CurrentPlayer.FreeAttributePoints++;
                 levels++;
             }
-            PrimaryAttributes levelUpValues = new PrimaryAttributes() { Constitution = 1 * levels, Strength = 0 * levels, Dexterity = 0 * levels, Intellect = 1 * levels, WillPower = 1 * levels };
+            PrimaryAttributes levelUpValues = new() { Constitution = 1 * levels, Strength = 0 * levels, Dexterity = 0 * levels, Intellect = 1 * levels, WillPower = 1 * levels };
 
             BasePrimaryAttributes += levelUpValues;
 
             CalculateTotalStats();
             Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
 
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            HUDTools.Print($"Congratulations! You are now level {Level}! You've gained 1 attribute point.", 20);
-            Console.ResetColor();
+            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point.\u001b[0m", 20);
         }
         public override (int, int) CalculateDPT() {
             TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
@@ -50,8 +48,8 @@ namespace Saga.Character
                 Console.WriteLine($"Character can't equip a weapon {weapon.WeaponType}");
                 return "Item not equipped";
             }
-            if (Equipment.ContainsKey(Slot.Weapon)) {
-                Console.WriteLine($"Do you want to switch '{Equipment[Slot.Weapon].ItemName}' for '{weapon.ItemName}'? (Y/N)");
+            if (Equipment.TryGetValue(Slot.Weapon, out Item value)) {
+                Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
                 while (true) {
                     string input = Console.ReadLine().ToLower();
                     if (input == "y") {
@@ -85,8 +83,8 @@ namespace Saga.Character
                 Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
                 return "Item not equipped";
             }
-            if (Equipment.ContainsKey(armor.ItemSlot)) {
-                Console.WriteLine($"Do you want to switch '{Equipment[armor.ItemSlot].ItemName}' for '{armor.ItemName}'? (Y/N)");
+            if (Equipment.TryGetValue(armor.ItemSlot, out Item value)) {
+                Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{armor.ItemName}'? (Y/N)");
                 while (true) {
                     string input = Console.ReadLine().ToLower();
                     if (input == "y") {
@@ -135,21 +133,21 @@ namespace Saga.Character
         }
         public override void CombatActions(Enemy Monster, Encounters TurnTimer) {
             Console.WriteLine("Choose an action...");
-            string input = HUDTools.PlayerPrompt().ToLower();
-            if (input.ToLower() == "a" || input == "attack") {
+            string input = HUDTools.PlayerPrompt();
+            if (input == "a" || input == "attack") {
                 //Attack
                 int damage = Attack(Monster);
                 Monster.Health -= damage;
                 HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
                 TurnTimer.TurnTimer++;
             }
-            else if (input.ToLower() == "d" || input == "defend") {
+            else if (input == "d" || input == "defend") {
                 //Defend 
                 Defend(Monster);
                 HUDTools.WriteCombatLog("defend", TurnTimer, 0, 0, Monster);
                 TurnTimer.TurnTimer++;
             }
-            else if (input.ToLower() == "r" || input == "run") {
+            else if (input == "r" || input == "run") {
                 //Run                   
                 if (RunAway(Monster)) {
                     Program.SoundController.Stop();
@@ -161,13 +159,13 @@ namespace Saga.Character
                     TurnTimer.TurnTimer++;
                 }
             }
-            else if (input.ToLower() == "h" || input == "heal") {
+            else if (input == "h" || input == "heal") {
                 //Heal
                 Heal();
                 HUDTools.WriteCombatLog(action: "heal", TurnTimer: TurnTimer, Monster: Monster);
                 TurnTimer.TurnTimer++;
             }
-            else if (input.ToLower() == "c" || input == "character" || input == "character screen") {
+            else if (input == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
             }
             else if (input == "l" || input == "log" || input == "combat log") {

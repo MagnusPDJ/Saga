@@ -18,84 +18,84 @@ namespace Saga.Items.Loot
             return item;
         }
 
-        public static Weapon RustySword = new Weapon() {
+        public readonly static Weapon RustySword = new() {
             ItemName = "Rusty Sword",
             ItemLevel = 1,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
         };
-        public static Weapon CrackedWand = new Weapon() {
+        public readonly static Weapon CrackedWand = new() {
             ItemName = "Cracked Wand",
             ItemLevel = 1,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Wand,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
         };
-        public static Weapon FlimsyBow = new Weapon() {
+        public readonly static Weapon FlimsyBow = new() {
             ItemName = "Flimsy Bow",
             ItemLevel = 1,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
         };
-        public static Weapon EnchantedWand = new Weapon() {
+        public readonly static Weapon EnchantedWand = new() {
             ItemName = "Enchanted Wand",
             ItemLevel = 2,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Wand,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
-        public static Weapon GnarledStaff = new Weapon() {
+        public readonly static Weapon GnarledStaff = new() {
             ItemName = "Gnarled Staff",
             ItemLevel = 4,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Staff,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 4, MaxDamage = 8, AttackSpeed = 1 },
         };
-        public static Weapon ArcanistsStaff = new Weapon() {
+        public readonly static Weapon ArcanistsStaff = new() {
             ItemName = "Arcanist's Staff",
             ItemLevel = 7,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Staff,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 6, MaxDamage = 16, AttackSpeed = 1 },
         };
-        public static Weapon QuickShortBow = new Weapon() {
+        public readonly static Weapon QuickShortBow = new() {
             ItemName = "Quick Shortbow",
             ItemLevel = 2,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
-        public static Weapon SturdyLongBow = new Weapon() {
+        public readonly static Weapon SturdyLongBow = new() {
             ItemName = "Sturdy Longbow",
             ItemLevel = 4,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 4, MaxDamage = 8, AttackSpeed = 1 },
         };
-        public static Weapon MarksmansRecurve = new Weapon() {
+        public readonly static Weapon MarksmansRecurve = new() {
             ItemName = "Marksman's Recurve",
             ItemLevel = 7,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 6, MaxDamage = 16, AttackSpeed = 1 },
         };
-        public static Weapon SteelSword = new Weapon() {
+        public readonly static Weapon SteelSword = new() {
             ItemName = "Steel Sword",
             ItemLevel = 2,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 2, MaxDamage = 4, AttackSpeed = 1 },
         };
-        public static Weapon FineLongSword = new Weapon() {
+        public readonly static Weapon FineLongSword = new() {
             ItemName = "Fine Longsword",
             ItemLevel = 4,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 4, MaxDamage = 8, AttackSpeed = 1 },
         };
-        public static Weapon KnightsGreatsword = new Weapon() {
+        public readonly static Weapon KnightsGreatsword = new() {
             ItemName = "Knight's Greatsword",
             ItemLevel = 7,
             ItemSlot = Slot.Weapon,

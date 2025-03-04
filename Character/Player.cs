@@ -49,12 +49,12 @@ namespace Saga.Character
             Id = id;
             Level = 1;
             CurrentAct = Act.Act1;
-            Equipment = new Dictionary<Slot, Item>();
+            Equipment = [];
             Inventory = new Item[10];
-            QuestLog = new List<Quest>();
-            FailedQuests = new List<Quest>();
-            CompletedQuests = new List<Quest>();
-            NpcsInCamp = new List<NonPlayableCharacters>();
+            QuestLog = [];
+            FailedQuests = [];
+            CompletedQuests = [];
+            NpcsInCamp = [];
             Exp = 0;
             Gold = 0;
             FreeAttributePoints = 0;
@@ -114,7 +114,7 @@ namespace Saga.Character
         }
         // Calculates armor bonus.
         public PrimaryAttributes CalculatePrimaryArmorBonus() {
-            PrimaryAttributes armorBonusValues = new PrimaryAttributes() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 };
+            PrimaryAttributes armorBonusValues = new() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 };
 
             bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out Item headArmor);
             bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out Item bodyArmor);
@@ -195,7 +195,7 @@ namespace Saga.Character
             return BasePrimaryAttributes + armorBonusValues;
         }
         public SecondaryAttributes CalculateSecondaryArmorBonus() {
-            SecondaryAttributes armorBonusValues = new SecondaryAttributes() { ArmorRating = 0, MaxHealth = 0, MaxMana = 0, Awareness = 0, ElementalResistence = 0 };
+            SecondaryAttributes armorBonusValues = new() { ArmorRating = 0, MaxHealth = 0, MaxMana = 0, Awareness = 0, ElementalResistence = 0 };
 
             bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out Item headArmor);
             bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out Item bodyArmor);
@@ -296,20 +296,23 @@ namespace Saga.Character
             }
         }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
-        public void DeathCode(string message) {
-            Program.SoundController.Play("gameover");
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            HUDTools.Print(message, 20);
-            HUDTools.Print("Press to go back to main menu...", 5);
-            Console.ResetColor();
-            HUDTools.PlayerPrompt();
-            Program.MainMenu();
+        public void CheckForDeath(string message) {
+            if (this.Health <= 0) {
+                Program.SoundController.Stop();
+                HUDTools.ClearLog();
+                Program.SoundController.Play("gameover");
+                HUDTools.Print($"\u001b[31m{message}", 20);
+                HUDTools.Print("Press to go back to main menu...\u001b[0m", 5);
+                HUDTools.PlayerPrompt();
+                Program.CurrentPlayer = null;
+                Program.MainMenu();
+            }
         }
         //Metode til at kalde basic actions (heal, inventory og character).
         public void BasicActions(string input) {
             if (input == "h" || input == "heal") {
                 //Heal
-                Program.CurrentPlayer.Heal();
+                Heal();
                 HUDTools.PlayerPrompt();
             }
             if (input == "c" || input == "character" || input == "character screen") {
@@ -326,40 +329,35 @@ namespace Saga.Character
         }
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
         public void UpdateQuestLog() {
-            foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
+            foreach (Quest quest in QuestLog) {
                 quest.Completed = quest.CheckRequirements();
             }
         }
         //Metode til at få alle quest rewards og opdatere questlogs.
         public void CompleteAndTurnInQuest(Quest quest) {
-            int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
+            int a = Array.IndexOf(Inventory, QuestLootTable.OldKey);
             if (a != -1) {
-                Program.CurrentPlayer.Inventory.SetValue(null, a);
+                Inventory.SetValue(null, a);
             }
-            int b = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.RatTail);
+            int b = Array.IndexOf(Inventory, QuestLootTable.RatTail);
             if (b != -1) {
-                Program.CurrentPlayer.Inventory.SetValue(null, b);
+                Inventory.SetValue(null, b);
             }
-            int c = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.BatWings);
+            int c = Array.IndexOf(Inventory, QuestLootTable.BatWings);
             if (c != -1) {
-                Program.CurrentPlayer.Inventory.SetValue(null, c);
+                Inventory.SetValue(null, c);
             }
-            Program.CurrentPlayer.QuestLog.Remove(quest);
-            Program.CurrentPlayer.CompletedQuests.Add(quest);
-
+            QuestLog.Remove(quest);
+            CompletedQuests.Add(quest);
             Program.SoundController.Play("win");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            HUDTools.Print($"You've completed the quest: {quest.Name}!", 15);
-            Console.ResetColor();
+            HUDTools.Print($"\u001b[96mYou've completed the quest: {quest.Name}!\u001b[0m", 15);
             Program.CurrentLoot.GetFixedGold(quest.Gold);
             Program.CurrentLoot.GetPotions(quest.Potions);
             Program.CurrentLoot.GetExp(0, quest.Exp);
             if (quest.Item != null) {
-                int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                Program.CurrentPlayer.Inventory.SetValue(quest.Item, index);
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                HUDTools.Print($"You've gained {quest.Item.ItemName}");
-                Console.ResetColor();
+                int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
+                Inventory.SetValue(quest.Item, index);
+                HUDTools.Print($"\u001b[35mYou've gained {quest.Item.ItemName}\u001b[0m");
             }
         }
     }

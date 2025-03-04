@@ -13,8 +13,8 @@ namespace Saga.Items
 
         //Metode til at genere ny shop ved tilbagekomst til camp
         public static Shop SetForsale() {
-            Shop shop = new Shop {
-                Forsale = new List<Item> { ArmorLootTable.CreateRandomArmor(-3), ArmorLootTable.CreateRandomArmor(-2), ArmorLootTable.CreateRandomArmor(-1), WeaponLootTable.CreateRandomWeapon(-3), WeaponLootTable.CreateRandomWeapon(-2), WeaponLootTable.CreateRandomWeapon(-1) }
+            Shop shop = new() {
+                Forsale = [ArmorLootTable.CreateRandomArmor(-3), ArmorLootTable.CreateRandomArmor(-2), ArmorLootTable.CreateRandomArmor(-1), WeaponLootTable.CreateRandomWeapon(-3), WeaponLootTable.CreateRandomWeapon(-2), WeaponLootTable.CreateRandomWeapon(-1)]
             };
             return shop;
         }

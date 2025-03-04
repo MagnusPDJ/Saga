@@ -130,9 +130,7 @@ namespace Saga.Dungeon
                             input = HUDTools.PlayerPrompt();
                             if (input == "y") {
                                 Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
-                                Console.ForegroundColor = ConsoleColor.Cyan;
-                                HUDTools.Print($"You've gained a quest: {Act1Quest.FreeFlemsha.Name}!");
-                                Console.ResetColor();
+                                HUDTools.Print($"\u001b[96mYou've gained a quest: {Act1Quest.FreeFlemsha.Name}!\u001b[0m");
                                 Program.CurrentPlayer.UpdateQuestLog();
                                 break;
                             } else if (input == "n") {
@@ -290,14 +288,14 @@ namespace Saga.Dungeon
             Program.SoundController.Play("runetrap");
 
             //runer
-            List<char> chars = new char[] { '\u0925', '\u0931', '\u09fa', '\u1805', '\u1873', '\u0166','\u017f','\u018d','\u0195','\u01a7' }.ToList();
-            List<char> endchars = new char[] { '\u00fe', '\u00f5', '\u00d0', '\u0141', '\u014a', '\u047b', '\u046b', '\u1c59', '\u1c6c', '\u1cbe' }.ToList();
-            List<int> positions = new List<int>();
+            List<char> chars = ['\u0925', '\u0931', '\u09fa', '\u1805', '\u1873', '\u0166', '\u017f', '\u018d', '\u0195', '\u01a7'];
+            List<char> endchars = ['\u00fe', '\u00f5', '\u00d0', '\u0141', '\u014a', '\u047b', '\u046b', '\u1c59', '\u1c6c', '\u1cbe'];
+            List<int> positions = [];
             char c = chars[Program.Rand.Next(0, 10)];
             chars.Remove(c);
             
             //Rune template
-            List<string> puzzle = new List<string>();
+            List<string> puzzle = [];
 
             for (int a = 0; a < 4; a++) {
                 int pos = Program.Rand.Next(0, 4);
@@ -368,9 +366,7 @@ namespace Saga.Dungeon
                         HUDTools.Print($"Darts fly out of the walls! You take 2 damage.)", 10);
                         Program.CurrentPlayer.Health -= 2;
                         Console.ReadKey(true);
-                        if (Program.CurrentPlayer.Health <= 0) {
-                            Program.CurrentPlayer.DeathCode("You start to feel sick. The poison from the darts slowly kills you");
-                        }
+                        Program.CurrentPlayer.CheckForDeath("You start to feel sick. The poison from the darts slowly kills you");
                     }
                 } else if (int.TryParse(input, out _)) {
                     Console.WriteLine("Invalid Input: Whole numbers 1-4 only");
@@ -382,7 +378,6 @@ namespace Saga.Dungeon
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
             Program.CurrentLoot.GetExp(2, 50*Program.CurrentPlayer.Level);
-            Console.ResetColor();
             HUDTools.PlayerPrompt();
             RandomBasicCombatEncounter();
         }
@@ -498,16 +493,18 @@ namespace Saga.Dungeon
         }
         //Funktion som kaldes under campen når spilleren skal snakke med de tilstedeværende personer.
         public static void TalkToNpc() {
+            HUDTools.TalkToNpcHUD();
             while (true) {
-                HUDTools.TalkToNpcHUD();
                 string input = HUDTools.PlayerPrompt();
                 if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count-1 && n >= 0) {
                     NonPlayableCharacters.LoadDialogueOptions(int.Parse(input));
+                    HUDTools.TalkToNpcHUD();
                 } else if (input == "b" || input == "back") {
                     break;
                 } else {
                     HUDTools.Print("Not a valid input...");
                     HUDTools.PlayerPrompt();
+                    HUDTools.ClearLastLine(3);
                 }
             }
         }
@@ -518,15 +515,13 @@ namespace Saga.Dungeon
             npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
             Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);          
             NonPlayableCharacters.UpdateDialogueOptions(name);
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            HUDTools.Print($"{name} has joined your cause!",20);
-            Console.ResetColor();
+            HUDTools.Print($"\u001b[35m{name} has joined your cause!\u001b[0m",20);
         }
         //Metode til at køre kamp
         public static void AdvancedCombat(Enemy Monster) {
             HUDTools.ClearLog();
             //Starter en tur tæller:
-            Encounters TurnTimer = new Encounters();
+            Encounters TurnTimer = new();
             HUDTools.TopCombatHUD(Monster, TurnTimer);
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
@@ -536,23 +531,13 @@ namespace Saga.Dungeon
                     if (TurnTimer.Ran == false) {
                         Monster.MonsterActions(TurnTimer);
                     }                   
-                    if (Program.CurrentPlayer.Health <= 0) {
-                        HUDTools.ClearLog();
-                        Program.SoundController.Stop();
-                        Program.CurrentPlayer.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
-                        break;
-                    }
+                    Program.CurrentPlayer.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                 }
             }  else {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.FullCombatHUD(Monster, TurnTimer);
                     Monster.MonsterActions(TurnTimer);
-                    if (Program.CurrentPlayer.Health <= 0) {
-                        HUDTools.ClearLog();
-                        Program.SoundController.Stop();
-                        Program.CurrentPlayer.DeathCode($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
-                        break;
-                    }
+                    Program.CurrentPlayer.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
                 }
             }

@@ -23,13 +23,7 @@ namespace Saga.Character
                 WillPower == attributes.WillPower;
         }
         public override int GetHashCode() {
-            int hashCode = -1364746490;
-            hashCode = hashCode * -1521134295 + Strength.GetHashCode();
-            hashCode = hashCode * -1521134295 + Dexterity.GetHashCode();
-            hashCode = hashCode * -1521134295 + Intellect.GetHashCode();
-            hashCode = hashCode * -1521134295 + Constitution.GetHashCode();
-            hashCode = hashCode * -1521134295 + WillPower.GetHashCode();
-            return hashCode;
+            return System.HashCode.Combine(Strength, Dexterity, Intellect, Constitution, WillPower);
         }
         // <summary>
         // Adds two PrimaryAttributes together.
@@ -37,7 +31,7 @@ namespace Saga.Character
         // <param name="a">Object one</param>
         // <param name="b">Object two</param>
         // <returns>New PrimaryAttributes object of sum of the inputs</returns>
-        public static PrimaryAttributes operator +(PrimaryAttributes a, PrimaryAttributes b) => new PrimaryAttributes()
+        public static PrimaryAttributes operator +(PrimaryAttributes a, PrimaryAttributes b) => new()
         {
             Strength = a.Strength + b.Strength,
             Dexterity = a.Dexterity + b.Dexterity,
