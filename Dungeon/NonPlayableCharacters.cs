@@ -39,18 +39,18 @@ namespace Saga.Dungeon
                 Console.Clear();
                 HUDTools.Print($"{talkto.Greeting}\t(b)ack", 20);
                 foreach (string question in questions) {
-                    HUDTools.Print($"{questions.IndexOf(question)}:\t{question}", 15);
+                    HUDTools.Print($"{questions.IndexOf(question) + 1}:\t{question}", 15);
                 }
                 if (talkto.Name == "Flemsha" && Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
-                    HUDTools.Print($"{questions.Count}:\t\u001b[96mI have your items.\u001b[0m", 15);
+                    HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mI have your items.\u001b[0m", 15);
                 }
                 if (talkto.Name == "Flemsha" && talkto.AvailableQuests.Count == 0 && Program.CurrentPlayer.Level < 15) {
                     talkto.AvailableQuests.Add(Act1Quest.CreateRandomQuest());
-                    HUDTools.Print($"{questions.Count}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
+                    HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
                 } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests.Count == 0 && Program.CurrentPlayer.Level >= 15) { 
                     //No quests made
                 } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests[0].Accepted == false) {
-                    HUDTools.Print($"{questions.Count}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
+                    HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
                 }
                 
                 while (true) {
@@ -59,9 +59,10 @@ namespace Saga.Dungeon
                     if (input == "b" || input == "back") {
                         donetalking = true;
                         break;
-                    } else if (int.TryParse(input, out int n) && n >= 0 && n <= questions.Count - 1) {
+                    } else if (int.TryParse(input, out int n) && n >= 1 && n <= questions.Count) {
+                        n--;
                         Console.SetCursorPosition(0, 1 + n);
-                        HUDTools.Print($"\u001b[90m{n}:\t{questions[n]}\u001b[0m", 0);
+                        HUDTools.Print($"\u001b[90m{n + 1}:\t{questions[n]}\u001b[0m", 0);
                         Console.SetCursorPosition(0, startCursor.Item2+1);
                         HUDTools.Print($"{questions[n]}", 0);
                         HUDTools.Print($"{answers[n]}\n", 20);
@@ -75,7 +76,8 @@ namespace Saga.Dungeon
                         }
                         Console.SetCursorPosition(0, startCursor.Item2);
 
-                    } else if (int.TryParse(input, out int n1) && n1 >= 0 && n1 <= questions.Count) {
+                    } else if (int.TryParse(input, out int n1) && n1 <= questions.Count + 1) {
+                        n1--;
                         if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
                             HUDTools.Print($"I have your items.", 0);
                             HUDTools.Print($"Thanks alot {Program.CurrentPlayer.Name}", 20);
@@ -133,9 +135,6 @@ namespace Saga.Dungeon
                     }
                 }
             }
-        }
-        private static void GiveFlemshaRandomQuest() {
-
         }
     }
 }

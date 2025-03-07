@@ -47,11 +47,11 @@ namespace Saga.Items
                 } else if (input == "q" || input == "questlog") {
                     HUDTools.QuestLogHUD();
                     HUDTools.PlayerPrompt();
-                } else if (input.Any(c => char.IsNumber(c)) && int.Parse(input) < shop.Forsale.Count) {
+                } else if (input.Any(c => char.IsNumber(c)) && 0 < int.Parse(input) && int.Parse(input) <= shop.Forsale.Count) {
                     HUDTools.Print($"You sure you want to buy item # {input}? (Y/N)", 4);
                     string input2 = HUDTools.PlayerPrompt();
                     if (input2 == "y") {
-                        TryBuyItem(int.Parse(input), shop.Forsale[int.Parse(input)].CalculateItemPrice(), shop ,p);
+                        TryBuyItem(int.Parse(input) - 1, shop.Forsale[int.Parse(input) - 1].CalculateItemPrice(), shop ,p);
                         HUDTools.PlayerPrompt();
                     }
                 }
@@ -79,10 +79,14 @@ namespace Saga.Items
                         Program.CurrentPlayer.Heal();
                         HUDTools.PlayerPrompt();
                     } else if (input1.Any(c => char.IsNumber(c))) {
-                        HUDTools.Print($"You sure you want to sell item # {input1}? (Y/N)", 4);
+                        if (input1 == "0") {
+                            HUDTools.Print($"You sure you want to sell item # {10}? (Y/N)", 4);
+                        } else {
+                            HUDTools.Print($"You sure you want to sell item # {input1}? (Y/N)", 4);
+                        }
                         string input2 = HUDTools.PlayerPrompt();
                         if (input2 == "y") {
-                            TrySellItem(int.Parse(input1), ShopPrice(input1), p);
+                            TrySellItem(int.Parse(input1) - 1, ShopPrice(input1), p);
                             HUDTools.PlayerPrompt();
                         }
                     } 
@@ -101,7 +105,7 @@ namespace Saga.Items
                 case "sellpotion5":
                     int sellPotionP5 = sellPotionP * 5;
                     return sellPotionP5;
-                case "0":
+                case "1":
                     if (Program.CurrentPlayer.Inventory[0] == null) {
                         return -1;
                     }
@@ -109,7 +113,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[0];
                         return Convert.ToInt32(itemItem.CalculateItemPrice()*0.6);
                     }
-                case "1":
+                case "2":
                     if (Program.CurrentPlayer.Inventory[1] == null) {
                         return -1;
                     }
@@ -117,7 +121,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[1];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "2":
+                case "3":
                     if (Program.CurrentPlayer.Inventory[2] == null) {
                         return -1;
                     }
@@ -125,7 +129,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[2];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "3":
+                case "4":
                     if (Program.CurrentPlayer.Inventory[3] == null) {
                         return -1;
                     }
@@ -133,7 +137,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[3];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "4":
+                case "5":
                     if (Program.CurrentPlayer.Inventory[4] == null) {
                         return -1;
                     }
@@ -141,7 +145,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[4];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "5":
+                case "6":
                     if (Program.CurrentPlayer.Inventory[5] == null) {
                         return -1;
                     }
@@ -149,7 +153,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[5];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "6":
+                case "7":
                     if (Program.CurrentPlayer.Inventory[6] == null) {
                         return -1;
                     }
@@ -157,7 +161,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[6];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "7":
+                case "8":
                     if (Program.CurrentPlayer.Inventory[7] == null) {
                         return -1;
                     }
@@ -165,7 +169,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[7];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "8":
+                case "9":
                     if (Program.CurrentPlayer.Inventory[8] == null) {
                         return -1;
                     }
@@ -173,7 +177,7 @@ namespace Saga.Items
                         var itemItem = Program.CurrentPlayer.Inventory[8];
                         return Convert.ToInt32(itemItem.CalculateItemPrice() * 0.6);
                     }
-                case "9":
+                case "0": case "10":
                     if (Program.CurrentPlayer.Inventory[9] == null) {
                         return -1;
                     }
@@ -225,7 +229,11 @@ namespace Saga.Items
                 HUDTools.Print("The shopkeeper doesn't want that item...",3);
             }
             else if (price == -1) {
-                HUDTools.Print($"You don't have an item in slot #{index}");
+                if (index == -1) {
+                    HUDTools.Print($"You don't have an item in slot #{10}");
+                } else {
+                    HUDTools.Print($"You don't have an item in slot #{index + 1}");
+                }                   
             }
             else {
                 p.Inventory.SetValue(null, index);

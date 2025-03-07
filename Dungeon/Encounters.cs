@@ -496,8 +496,8 @@ namespace Saga.Dungeon
             HUDTools.TalkToNpcHUD();
             while (true) {
                 string input = HUDTools.PlayerPrompt();
-                if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count-1 && n >= 0) {
-                    NonPlayableCharacters.LoadDialogueOptions(int.Parse(input));
+                if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count && n >= 1) {
+                    NonPlayableCharacters.LoadDialogueOptions(int.Parse(input) - 1);
                     HUDTools.TalkToNpcHUD();
                 } else if (input == "b" || input == "back") {
                     break;
