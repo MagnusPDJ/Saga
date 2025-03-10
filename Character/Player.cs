@@ -4,6 +4,7 @@ using Saga.Items;
 using Saga.Items.Loot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Saga.Character
@@ -334,16 +335,16 @@ namespace Saga.Character
             }
         }
         //Metode til at få alle quest rewards og opdatere questlogs.
-        public void CompleteAndTurnInQuest(Quest quest) {
-            int a = Array.IndexOf(Inventory, QuestLootTable.OldKey);
+        public void CompleteAndTurnInQuest(Quest quest)  {
+            int a = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Old key");
             if (a != -1) {
                 Inventory.SetValue(null, a);
             }
-            int b = Array.IndexOf(Inventory, QuestLootTable.RatTail);
+            int b = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Rat tail");
             if (b != -1) {
                 Inventory.SetValue(null, b);
             }
-            int c = Array.IndexOf(Inventory, QuestLootTable.BatWings);
+            int c = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Bat wings");
             if (c != -1) {
                 Inventory.SetValue(null, c);
             }

@@ -70,7 +70,6 @@ namespace Saga.Dungeon
             HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
             HUDTools.PlayerPrompt();
             Console.Clear();
-            Program.SoundController.Play("typewriter");
             HUDTools.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");

@@ -12,9 +12,9 @@ namespace Saga.Items.Loot
                 ItemSlot = Slot.Weapon,
                 WeaponType = (WeaponTypes)weaponType,
                 WeaponAttributes = new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level + level), MaxDamage = Math.Max(1, Program.CurrentPlayer.Level + level) + Program.Rand.Next(2, 6), AttackSpeed = 1 },
-                ItemName = RandomWeaponName((WeaponTypes)weaponType)
+                ItemName = RandomWeaponName((WeaponTypes)weaponType),
+                ItemDescription = "There is a sticker on the handle. It reads 'Gheed's standard second combat guarantee'",
             };
-
             return item;
         }
 
@@ -24,6 +24,7 @@ namespace Saga.Items.Loot
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Sword,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
+            ItemDescription = "Old and fragile but it is yours... You looted it yourself!",
         };
         public readonly static Weapon CrackedWand = new() {
             ItemName = "Cracked Wand",
@@ -31,6 +32,7 @@ namespace Saga.Items.Loot
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Wand,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
+            ItemDescription = "It may be cracked but nothing some duct tape couldn't fix!",
         };
         public readonly static Weapon FlimsyBow = new() {
             ItemName = "Flimsy Bow",
@@ -38,6 +40,7 @@ namespace Saga.Items.Loot
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
+            ItemDescription = "If you pull it to hard it would probably snap. On the positive side you'd have a nunchuck.",
         };
         public readonly static Weapon EnchantedWand = new() {
             ItemName = "Enchanted Wand",

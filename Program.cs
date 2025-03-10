@@ -127,7 +127,7 @@ namespace Saga
             }
             int idCount = players.Count+1;
             Console.Clear();
-            Program.SoundController.Play("typewriter");
+            SoundController.Play("typewriter");
             HUDTools.LoadSaves(players);
             while (true) {
                 string[] data = Console.ReadLine().Split(':');
@@ -161,6 +161,7 @@ namespace Saga
                                         players.Remove(player);
                                         Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
                                         Console.ReadKey(true);
+                                        Console.Clear();
                                         HUDTools.LoadSaves(players);
                                         break;
                                     } else {
@@ -182,6 +183,7 @@ namespace Saga
                                         players.Remove(player);
                                         Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
                                         Console.ReadKey(true);
+                                        Console.Clear();
                                         HUDTools.LoadSaves(players);
                                         break;
                                     } else {

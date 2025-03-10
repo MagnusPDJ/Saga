@@ -33,6 +33,7 @@ namespace Saga.Items
         public int ItemLevel { get; set; }
         public Slot ItemSlot { get; set; }
         public int ItemPrice { get; set; }
+        public string ItemDescription { get; set; } = "";
         public abstract int CalculateItemPrice();      
     }
 }

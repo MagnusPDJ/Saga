@@ -47,7 +47,8 @@ namespace Saga.Items.Loot
                 ArmorType = (ArmorType)armorType,
                 Attributes = new PrimaryAttributes() { Constitution = constitution, Strength = strength, Dexterity = dexterity, Intellect = intellect, WillPower = willpower },
                 SecondaryAttributes = new SecondaryAttributes() { ArmorRating = armorRating },
-                ItemName = RandomArmorName((ArmorType)armorType, (Slot)slot)
+                ItemName = RandomArmorName((ArmorType)armorType, (Slot)slot),
+                ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
             };
             return item;
         }
@@ -58,7 +59,8 @@ namespace Saga.Items.Loot
             ItemSlot = Slot.Torso,
             ArmorType = ArmorType.Cloth,
             Attributes = new PrimaryAttributes() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 },
-            SecondaryAttributes =new SecondaryAttributes() { ArmorRating = 0 }
+            SecondaryAttributes =new SecondaryAttributes() { ArmorRating = 0 },
+            ItemDescription = "Clothes that mark you a prisoner but without them, you'd be naked.",
         };
         public readonly static Armor RunedSimpleRobe = new() {
             ItemName = "Runed Simple Robe",
