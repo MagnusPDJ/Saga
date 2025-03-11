@@ -379,19 +379,19 @@ namespace Saga.Assets
                         Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
                     }
                     if (((Armor)item).Attributes.Strength > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Strength} Strength");
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Str");
                     }
                     if (((Armor)item).Attributes.Dexterity > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dexterity");
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dex");
                     }
                     if (((Armor)item).Attributes.Intellect > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Intellect} Intellect");
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Int");
                     }
                     if (((Armor)item).Attributes.Constitution > 0) {
-                        Console.Write($", +{((Armor)item).Attributes.Constitution} Constitution");
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Cons");
                     }
                     if (((Armor)item).Attributes.WillPower > 0) {
-                        Console.WriteLine($", +{((Armor)item).Attributes.WillPower} Willpower");
+                        Console.WriteLine($", +{((Armor)item).Attributes.WillPower} Wp");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -402,9 +402,9 @@ namespace Saga.Assets
                     Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
                 }
             }
-            Console.WriteLine($"|  Sell    (P)otion     $ {Shop.ShopPrice("sellpotion")}");
+            Console.WriteLine($"|  Sell     (P)otion     $ {Shop.ShopPrice("sellpotion")}");
             if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity >= 5) {
-                Console.WriteLine($"|  Sell (5)xPotions     $ {Shop.ShopPrice("sellpotion5")}");
+                Console.WriteLine($"|  Sell (F)ive Potions   $ {Shop.ShopPrice("sellpotion5")}");
             }
             Console.WriteLine("=======================================================");
             Console.WriteLine(" (S)witch to Buy   (E)xit Shop\n\n");
