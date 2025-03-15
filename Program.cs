@@ -28,8 +28,8 @@ namespace Saga
         static void Main() {
             //Gør unicode karaktere "runer" læselige i consolen og indstiller vindue størrelse.
             Console.OutputEncoding = Encoding.UTF8;
-            Console.SetWindowSize(100, 50);
-            Console.SetBufferSize(100, 50);
+            Console.SetWindowSize(100, 45);
+            Console.SetBufferSize(100, 45);
             Console.Title = "Saga";
 
             //Sætter lydniveauet til variablen sat fra configfilen.

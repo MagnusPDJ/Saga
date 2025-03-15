@@ -65,7 +65,7 @@ namespace Saga.Items
                         break;
                     } else if (input1 == "p" || input1 == "potion" || input1 == "sell potion") {
                         TrySellPotion("potion", ShopPrice("sellpotion"), p);
-                    } else if (input1 == "5" || input1 == "5x" || input1 == "sell 5" || input1 == "sell 5x" || input1 == "sell 5xpotions") {
+                    } else if (input1 == "f" || input1 == "5x" || input1 == "sell 5" || input1 == "sell 5x" || input1 == "sell 5xpotions") {
                         TrySellPotion("5x potion", ShopPrice("sellpotion5"), p);
                     } else if (input1 == "i" || input1 == "inventory") {
                         HUDTools.InventoryScreen();
