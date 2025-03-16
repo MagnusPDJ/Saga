@@ -79,7 +79,7 @@ namespace Saga.Character
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
                 return "Item not equipped";
-            } else if (armor.ArmorType != ArmorType.Mail && armor.ArmorType != ArmorType.Leather) {
+            } else if (armor.ArmorType != ArmorType.Mail && armor.ArmorType != ArmorType.Leather && armor.ItemName != "Linen Rags") {
                 Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
                 return "Item not equipped";
             }

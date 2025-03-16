@@ -40,7 +40,7 @@ namespace Saga.Items.Loot
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
-            ItemDescription = "If you pull it to hard it would probably snap. On the positive side you'd have a nunchuck.",
+            ItemDescription = "If you pull it too hard it would probably snap. On the positive side you'd have a nunchuck.",
         };
         public readonly static Weapon EnchantedWand = new() {
             ItemName = "Enchanted Wand",
