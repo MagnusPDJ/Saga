@@ -9,8 +9,7 @@ using System.Text.Json.Serialization;
 
 namespace Saga.Character
 {
-    public enum Act
-    {
+    public enum Act {
         Act1,
         Act2,
         Act3,
@@ -21,8 +20,7 @@ namespace Saga.Character
     [JsonDerivedType(typeof(Warrior), typeDiscriminator: "warrior")]
     [JsonDerivedType(typeof(Archer), typeDiscriminator: "archer")]
     [JsonDerivedType(typeof(Mage), typeDiscriminator: "age")]
-    public abstract class Player
-    {
+    public abstract class Player {
         public string CurrentClass { get; set; }
         public Act CurrentAct { get; set; }
         public string Name { get; set; }
@@ -45,6 +43,7 @@ namespace Saga.Character
         public List<Quest> CompletedQuests { get; set; }
         public List<NonPlayableCharacters> NpcsInCamp { get; set; }
         public (int, int) DPT { get; set; }
+        public InputAction[] InputActions { get; set; } 
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;
             Id = id;
@@ -64,7 +63,10 @@ namespace Saga.Character
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
             CurrentHealingPotion = new Potion();
+            InputActions = [new Go("go"), new Go("fictive")];
         }
+        
+            
         // <param name="levels">Number of levels to level up</param>
         public abstract void LevelUp();
         //Metode til udregning af det exp det koster at level op.
