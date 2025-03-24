@@ -23,6 +23,7 @@ namespace Saga.Character
     public abstract class Player {
         public string CurrentClass { get; set; }
         public Act CurrentAct { get; set; }
+        public Loot Loot { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
         public int Level { get; set; }
@@ -49,6 +50,7 @@ namespace Saga.Character
             Id = id;
             Level = 1;
             CurrentAct = Act.Act1;
+            Loot = new Act1Loot();
             Equipment = [];
             Inventory = new Item[10];
             QuestLog = [];
@@ -63,11 +65,9 @@ namespace Saga.Character
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
             CurrentHealingPotion = new Potion();
-            InputActions = [new Go("go"),];
+            InputActions = [new Go("go"), new Examine("examine"), new Equip("equip"), new Use("use")];
         }
         
-            
-        // <param name="levels">Number of levels to level up</param>
         public abstract void LevelUp();
         //Metode til udregning af det exp det koster at level op.
         public int GetLevelUpValue() {
@@ -354,9 +354,9 @@ namespace Saga.Character
             CompletedQuests.Add(quest);
             Program.SoundController.Play("win");
             HUDTools.Print($"\u001b[96mYou've completed the quest: {quest.Name}!\u001b[0m", 15);
-            Program.CurrentLoot.GetFixedGold(quest.Gold);
-            Program.CurrentLoot.GetPotions(quest.Potions);
-            Program.CurrentLoot.GetExp(0, quest.Exp);
+            Program.CurrentPlayer.Loot.GetFixedGold(quest.Gold);
+            Program.CurrentPlayer.Loot.GetPotions(quest.Potions);
+            Program.CurrentPlayer.Loot.GetExp(0, quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
                 Inventory.SetValue(quest.Item, index);

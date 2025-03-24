@@ -15,8 +15,8 @@ namespace Saga
     public class Program {
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player CurrentPlayer { get; set; }
-        public static Loot CurrentLoot { get; set; }
         public static AudioManager SoundController { get; set; }
+        public static RoomController RoomController { get; set; }
         //Sætter variablen til Lydniveauet fra configfilen.
         public static float VolumeLevel { get; set; } = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
         //Genere et objekt som kan returnere tilfældige tal mm.
@@ -71,18 +71,19 @@ namespace Saga
         }
 
         public static void Play() {
+            RoomController = new RoomController();
             CurrentPlayer = Load(out bool newP);
             NewStart(newP);
             if (CurrentPlayer != null) {
                 if (CurrentPlayer.CurrentAct == Act.Act1) {
-                    CurrentLoot ??= new Act1Loot();
                     while (CurrentPlayer.CurrentAct == Act.Act1) {
                         SoundController.Stop();                       
                         Encounters.Camp();
                     }
                 }
             }
-            {//else if (CurrentPlayer.CurrentAct == Act.Act2) {
+            {
+                //else if (CurrentPlayer.CurrentAct == Act.Act2) {
 
                 //} else if (CurrentPlayer.CurrentAct == Act.Act3) {
 
@@ -97,7 +98,6 @@ namespace Saga
         //Metode til at køre start introduktionen
         public static void NewStart(bool newP) {
             if (newP) {
-                CurrentLoot = new Act1Loot();
                 CurrentPlayer.SetStartingGear();
                 Encounters.FirstEncounter();
                 Encounters.MeetGheed();

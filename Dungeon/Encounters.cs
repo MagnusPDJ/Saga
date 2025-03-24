@@ -115,7 +115,7 @@ namespace Saga.Dungeon
                     if (input == "1" && !examined) {
                         examined = true;
                         HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
-                        Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");                          
+                        Program.CurrentPlayer.Loot.GetQuestLoot(1,0,"MeetFlemsha");                          
                         TextInput.PlayerPrompt(true);
                         break;
                     } else if (input == "2" && !searched) {
@@ -271,7 +271,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("You release the metal latch and grab both sides of the chest and peer inside.");
                     TextInput.PlayerPrompt(true);
                     Program.SoundController.Play("win");
-                    Program.CurrentLoot.GetTreasureChestLoot();
+                    Program.CurrentPlayer.Loot.GetTreasureChestLoot();
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
@@ -376,7 +376,7 @@ namespace Saga.Dungeon
             }
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
-            Program.CurrentLoot.GetExp(2, 50*Program.CurrentPlayer.Level);
+            Program.CurrentPlayer.Loot.GetExp(2, 50*Program.CurrentPlayer.Level);
             TextInput.PlayerPrompt(true);
             RandomBasicCombatEncounter();
         }
@@ -545,7 +545,7 @@ namespace Saga.Dungeon
                 Program.SoundController.Stop();
                 HUDTools.ClearLog();
                 Program.SoundController.Play("win");
-                Program.CurrentLoot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
+                Program.CurrentPlayer.Loot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
             }
         }
     }

@@ -17,7 +17,25 @@ namespace Saga.Assets
     public class Go(string keyWord) : InputAction(keyWord)
     {
         public override void RespondToInput(Player player, string[] separatedInputWords) {
-            // controller.roomNavigation.AttemptToChangeRooms(separatedInputWords[1]);
+            //not implemented
+        }
+    }
+    public class Examine(string keyWord) : InputAction(keyWord)
+    {
+        public override void RespondToInput(Player player, string[] separatedInputWords) {
+            //not implemented
+        }
+    }
+    public class Equip(string keyWord) : InputAction(keyWord)
+    {
+        public override void RespondToInput(Player player, string[] separatedInputWords) {
+            //not implemented
+        }
+    }
+    public class Use(string keyWord) : InputAction(keyWord)
+    {
+        public override void RespondToInput(Player player, string[] separatedInputWords) {
+            //not implemented
         }
     }
 }

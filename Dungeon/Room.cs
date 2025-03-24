@@ -12,10 +12,24 @@ namespace Saga.Dungeon
         public string exitDescription;
         public Room valueRoom;
     }
+
     public class Room
     {
         public string description;
         public string roomName;
         public Exit[] exits;
+    }
+
+    public class RoomController 
+    {
+        public Room currentRoom;
+
+        public void ChangeRoom() {
+            //Not implemented
+        }
+
+        public void LoadRoom() {
+            //Not implemented
+        }
     }
 }
