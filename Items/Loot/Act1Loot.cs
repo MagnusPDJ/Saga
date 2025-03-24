@@ -47,7 +47,7 @@ namespace Saga.Items.Loot
             }
             GetQuestLoot(0,0,"",monster);
             monster.GetExp();
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
         }
         //Metode til at få loot fra en skattekiste:
         public override void GetTreasureChestLoot() {
@@ -182,7 +182,7 @@ namespace Saga.Items.Loot
                 }
             }
             Console.ResetColor();
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
         }
         //Metode til at få en tilfældig mængde exp eller en bestemt mængde:
         public override void GetExp(int expModifier, int flatExp = 0) {

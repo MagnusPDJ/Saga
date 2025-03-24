@@ -51,7 +51,7 @@ namespace Saga.Character
             if (Equipment.TryGetValue(Slot.Weapon, out Item value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
                 while (true) {
-                    string input = Console.ReadLine().ToLower();
+                    string input = TextInput.PlayerPrompt(true);
                     if (input == "y") {
                         UnEquip(Slot.Weapon, Equipment[Slot.Weapon]);
                         Equipment[weapon.ItemSlot] = weapon;
@@ -86,7 +86,7 @@ namespace Saga.Character
             if (Equipment.TryGetValue(armor.ItemSlot, out Item value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{armor.ItemName}'? (Y/N)");
                 while (true) {
-                    string input = Console.ReadLine().ToLower();
+                    string input = TextInput.PlayerPrompt(true);
                     if (input == "y") {
                         UnEquip(armor.ItemSlot, Equipment[armor.ItemSlot]);
                         Equipment[armor.ItemSlot] = armor;
@@ -131,7 +131,7 @@ namespace Saga.Character
         }
         public override void CombatActions(Enemy Monster, Encounters TurnTimer) {
             Console.WriteLine("Choose an action...");
-            string input = HUDTools.PlayerPrompt();
+            string input = TextInput.PlayerPrompt(true);
             if (input == "a" || input == "attack") {
                 //Attack
                 int damage = Attack(Monster);
@@ -173,7 +173,7 @@ namespace Saga.Character
             else if (input == "q" || input == "questlog") {
                 HUDTools.QuestLogHUD();
             }
-            Console.ReadKey(true);
+            TextInput.PlayerPrompt(true);
         }
         public override void Heal() {
             if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity == 0) {

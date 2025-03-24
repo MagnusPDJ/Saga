@@ -18,18 +18,6 @@ namespace Saga.Assets
         //Get metode til at få teksten fra memory til filen.
         public static TextWriter Out { get; }
 
-        //Metode til at toggle ReadLine/ReadKey baseret på spiller settings.
-        public static string PlayerPrompt() {
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleReadLine")) == true) {
-                return Console.ReadLine().ToLower();
-            }
-            else {
-                string x = Console.ReadKey().KeyChar.ToString().ToLower();
-                Console.WriteLine("");
-                return x;
-            }
-        }
-
         //Metode til at "Slow-print" tekst, med indbygget toggle setting.
         public static void Print(string text, int time = 40) {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
@@ -450,7 +438,7 @@ namespace Saga.Assets
                 if (Program.CurrentPlayer.FreeAttributePoints > 0 && i != 0) {
                     Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o",1);
                     while (true) {
-                        string input = PlayerPrompt();
+                        string input = TextInput.PlayerPrompt(true);
                         if (input == "s" || input == "strength") {
                             Program.CurrentPlayer.BasePrimaryAttributes.Strength++;
                             Program.CurrentPlayer.FreeAttributePoints--;
@@ -575,7 +563,7 @@ namespace Saga.Assets
                             Console.WriteLine("\nNo such item in inventory...");
                         }
                     }
-                    PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                 } else if (input[0] == "unequip") {
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     if (wat.Value == null) {
@@ -583,7 +571,7 @@ namespace Saga.Assets
                     } else {
                         Print($"\n{Program.CurrentPlayer.UnEquip(wat.Key, wat.Value)}", 3);
                     }
-                    PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                 } else if (input[0] == "examine") {
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
@@ -607,7 +595,7 @@ namespace Saga.Assets
                         }
                     }
                     Print($"\nPress to continue...", 3);
-                    PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
 
                 } else if (input[0] == "b" || input[0] == "back") {
                     break;

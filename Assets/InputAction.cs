@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Saga.Character
+namespace Saga.Assets
 {
     public abstract class InputAction(string keyWord)
     {
@@ -20,7 +20,5 @@ namespace Saga.Character
             // controller.roomNavigation.AttemptToChangeRooms(separatedInputWords[1]);
         }
     }
-
-
 }
 

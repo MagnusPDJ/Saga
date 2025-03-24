@@ -55,7 +55,7 @@ namespace Saga.Dungeon
                 
                 while (true) {
                     (int, int) startCursor = Console.GetCursorPosition();
-                    string input = HUDTools.PlayerPrompt();
+                    string input = TextInput.PlayerPrompt(true);
                     if (input == "b" || input == "back") {
                         donetalking = true;
                         break;
@@ -67,7 +67,7 @@ namespace Saga.Dungeon
                         HUDTools.Print($"{questions[n]}", 0);
                         HUDTools.Print($"{answers[n]}\n", 20);
                         HUDTools.Print("Press to continue...", 5);
-                        HUDTools.PlayerPrompt();
+                        TextInput.PlayerPrompt(true);
                         HUDTools.ClearLastText(startCursor);
 
                     } else if (int.TryParse(input, out int n1) && n1 <= questions.Count + 1) {
@@ -77,18 +77,18 @@ namespace Saga.Dungeon
                             HUDTools.Print($"Thanks alot {Program.CurrentPlayer.Name}", 20);
                             Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == talkto.AvailableQuests[0].Name));
                             talkto.AvailableQuests.RemoveAt(0);
-                            HUDTools.PlayerPrompt();
+                            TextInput.PlayerPrompt(true);
                             HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
                         } else if (talkto.AvailableQuests.Count != 0 && talkto.AvailableQuests[0].Accepted == false) {                        
                             HUDTools.Print($"Do you have any work?", 0);
                             HUDTools.Print($"Yes, if you could go and {talkto.AvailableQuests[0].Name}, I will make it worth your while.\n(Y)es to accept (n)o to decline.", 15);
                             while (true) {
-                                string input1 = HUDTools.PlayerPrompt();
+                                string input1 = TextInput.PlayerPrompt(true);
                                 if (input1 == "y") {
                                     Program.CurrentPlayer.QuestLog.Add(talkto.AvailableQuests[0]);
                                     talkto.AvailableQuests[0].Accepted = true;
                                     HUDTools.Print($"\u001b[96mYou've gained a quest: {talkto.AvailableQuests[0].Name}\u001b[0m!", 20);
-                                    HUDTools.PlayerPrompt();
+                                    TextInput.PlayerPrompt(true);
                                     HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
                                     break;
                                 } else if (input1 == "n") {
@@ -102,19 +102,19 @@ namespace Saga.Dungeon
                                     break;
                                 } else {
                                     HUDTools.Print("Please select (Y)es or (N)o.", 15);
-                                    HUDTools.PlayerPrompt();
+                                    TextInput.PlayerPrompt(true);
                                     HUDTools.ClearLastLine(3);
                                 }
                             }
                             
                         } else {
                             HUDTools.Print("Please select a number from the list or (b)ack.", 15);
-                            HUDTools.PlayerPrompt();
+                            TextInput.PlayerPrompt(true);
                             HUDTools.ClearLastLine(3);
                         }
                     } else {
                         HUDTools.Print("Please select a number from the list or (b)ack.", 15);
-                        HUDTools.PlayerPrompt();
+                        TextInput.PlayerPrompt(true);
                         HUDTools.ClearLastLine(3);
                     }
                 }

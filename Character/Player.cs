@@ -63,7 +63,7 @@ namespace Saga.Character
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
             CurrentHealingPotion = new Potion();
-            InputActions = [new Go("go"), new Go("fictive")];
+            InputActions = [new Go("go"),];
         }
         
             
@@ -306,7 +306,7 @@ namespace Saga.Character
                 Program.SoundController.Play("gameover");
                 HUDTools.Print($"\u001b[31m{message}", 20);
                 HUDTools.Print("Press to go back to main menu...\u001b[0m", 5);
-                HUDTools.PlayerPrompt();
+                TextInput.PlayerPrompt(true);
                 Program.CurrentPlayer = null;
                 Program.MainMenu();
             }
@@ -316,18 +316,18 @@ namespace Saga.Character
             if (input == "h" || input == "heal") {
                 //Heal
                 Heal();
-                HUDTools.PlayerPrompt();
+                TextInput.PlayerPrompt(true);
             }
             if (input == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
-                HUDTools.PlayerPrompt();
+                TextInput.PlayerPrompt(true);
             }
             if (input == "i" || input == "inventory") {
                 HUDTools.InventoryScreen();
             }
             if (input == "l" || input == "questlog") {
                 HUDTools.QuestLogHUD();
-                HUDTools.PlayerPrompt();
+                TextInput.PlayerPrompt(true);
             }
         }
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.

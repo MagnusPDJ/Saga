@@ -29,7 +29,7 @@ namespace Saga.Dungeon
             Program.SoundController.Play("taunt");
             Program.SoundController.Play("kamp");
             HUDTools.Print("He turns...");
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
                 Health = 5,
                 Power = 2,
@@ -51,7 +51,7 @@ namespace Saga.Dungeon
             Health=6,
             Power=3,
             };
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             AdvancedCombat(SecondEncounter);
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
@@ -68,14 +68,14 @@ namespace Saga.Dungeon
             }
             HUDTools.Print("Freeing him from his shackles, he thanks you and gets up.");
             HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             Console.Clear();
             HUDTools.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
             AddNpcToCamp("Gheed");
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             Program.SoundController.Stop();
         }
         //Encounter som køres for at introducere Camp
@@ -84,13 +84,13 @@ namespace Saga.Dungeon
             Program.SoundController.Play("typewriter");
             HUDTools.Print("After taking what few scraps you could find, you explore your surroundings.");
             HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
-            Console.ReadKey(true);
+            TextInput.PlayerPrompt(true);
             Program.SoundController.Stop();
             Program.SoundController.Play("campfire");
             HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The");
             HUDTools.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
             HUDTools.Print("you can stay for a while and rest.");
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
         }
 
 
@@ -111,12 +111,12 @@ namespace Saga.Dungeon
                     HUDTools.SmallCharacterInfo();
                     HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either\nside of the room, there is also a desk which probably belonged to the long gone warden.", 0);
                     HUDTools.Print($"\nDo you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
-                    string input = HUDTools.PlayerPrompt();
+                    string input = TextInput.PlayerPrompt(true);
                     if (input == "1" && !examined) {
                         examined = true;
                         HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
                         Program.CurrentLoot.GetQuestLoot(1,0,"MeetFlemsha");                          
-                        HUDTools.PlayerPrompt();
+                        TextInput.PlayerPrompt(true);
                         break;
                     } else if (input == "2" && !searched) {
                         HUDTools.Print(
@@ -126,7 +126,7 @@ namespace Saga.Dungeon
                             20);
                         HUDTools.Print("\nDo you want to help the man? (Y/N)", 10);                        
                         while(true) {
-                            input = HUDTools.PlayerPrompt();
+                            input = TextInput.PlayerPrompt(true);
                             if (input == "y") {
                                 Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
                                 HUDTools.Print($"\u001b[96mYou've gained a quest: {Act1Quest.FreeFlemsha.Name}!\u001b[0m");
@@ -144,12 +144,12 @@ namespace Saga.Dungeon
                                 break;
                             } else {
                                 HUDTools.Print("Invalid input.", 5);
-                                Console.ReadKey(true);
+                                TextInput.PlayerPrompt(true);
                                 HUDTools.ClearLastLine(2);
                             }
                         }
                         searched = true;
-                        HUDTools.PlayerPrompt();
+                        TextInput.PlayerPrompt(true);
                         break;
                     } else {
                         Program.CurrentPlayer.BasicActions(input);
@@ -157,7 +157,7 @@ namespace Saga.Dungeon
                 }
                 if (leftForDead) {
                     HUDTools.Print("You close the door to the prison ward and continue on, never to see the prisoner again.");
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     break;
                 }
 
@@ -168,7 +168,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
                     AddNpcToCamp("Flemsha");
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     break;
                 }
             }
@@ -190,7 +190,7 @@ namespace Saga.Dungeon
                     HUDTools.Print($"You break down a door and find a {RandomEnemy.Name} inside!", 10);
                     break;
             }
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             AdvancedCombat(RandomEnemy);
         }
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
@@ -200,7 +200,7 @@ namespace Saga.Dungeon
             HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",20);
             Program.SoundController.Play("troldmandskamp");
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
                 Health = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
                 Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
@@ -220,11 +220,11 @@ namespace Saga.Dungeon
             do {
                 Console.WriteLine("You open a door and find a treasure chest inside!");
                 Console.WriteLine("Do you want to try and open it?\n(Y/N)");
-                input = HUDTools.PlayerPrompt().ToLower();
+                input = TextInput.PlayerPrompt(true);
                 if (input == "n") {
                     Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...", 20);
-                    Console.ReadKey(true);
+                    TextInput.PlayerPrompt(true);
                     RandomBasicCombatEncounter();
                     break;
                 } else if (input == "y") {
@@ -233,7 +233,7 @@ namespace Saga.Dungeon
                     Program.SoundController.Play("troldmandskamp");
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
                         Health = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),
                         Power = 5 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 1 : 3),
@@ -243,7 +243,7 @@ namespace Saga.Dungeon
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     Console.Clear();
                 }
             } while (input != "42");
@@ -259,23 +259,23 @@ namespace Saga.Dungeon
             do {
                 Console.WriteLine("You open a door and find a treasure chest inside!");
                 Console.WriteLine("Do you want to try and open it?\n(Y/N)");
-                input = HUDTools.PlayerPrompt().ToLower();
+                input = TextInput.PlayerPrompt(true);
                 if (input == "n") {
                     Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...",20);
-                    Console.ReadKey(true);
+                    TextInput.PlayerPrompt(true);
                     RandomBasicCombatEncounter();
                     break;
                 } else if (input == "y") {
                     Program.SoundController.Play("treasure");
                     HUDTools.Print("You release the metal latch and grab both sides of the chest and peer inside.");
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     Program.SoundController.Play("win");
                     Program.CurrentLoot.GetTreasureChestLoot();
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     Console.Clear();
                 }
             } while (input != "42");
@@ -345,7 +345,7 @@ namespace Saga.Dungeon
                     }
                     Console.WriteLine();
                 }              
-                string input = HUDTools.PlayerPrompt();
+                string input = TextInput.PlayerPrompt(true);
                 if (int.TryParse(input, out int number) && number < 5 && number > 0) {
                     if (positions[i] == number - 1) {
                         Program.SoundController.Play("footsteps");
@@ -359,17 +359,17 @@ namespace Saga.Dungeon
                         for (int j = 4; j > number; j--) {
                             location += "  ";
                         }
-                        Console.ReadKey(true);
+                        TextInput.PlayerPrompt(true);
                     } else {
                         Program.SoundController.Play("darts");
                         HUDTools.Print($"Darts fly out of the walls! You take 2 damage.)", 10);
                         Program.CurrentPlayer.Health -= 2;
-                        Console.ReadKey(true);
+                        TextInput.PlayerPrompt(true);
                         Program.CurrentPlayer.CheckForDeath("You start to feel sick. The poison from the darts slowly kills you");
                     }
                 } else if (int.TryParse(input, out _)) {
                     Console.WriteLine("Invalid Input: Whole numbers 1-4 only");
-                    Console.ReadKey(true);
+                    TextInput.PlayerPrompt(true);
                 } else {
                     Program.CurrentPlayer.BasicActions(input);
                 }               
@@ -377,7 +377,7 @@ namespace Saga.Dungeon
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
             Program.CurrentLoot.GetExp(2, 50*Program.CurrentPlayer.Level);
-            HUDTools.PlayerPrompt();
+            TextInput.PlayerPrompt(true);
             RandomBasicCombatEncounter();
         }
 
@@ -429,11 +429,11 @@ namespace Saga.Dungeon
             HUDTools.TopCampHUD();
             while (true) {
                 HUDTools.FullCampHUD();
-                string input = HUDTools.PlayerPrompt();
+                string input = TextInput.PlayerPrompt(true);
                 //Explore, måden man progresser sin karakter:
                 if (input == "e" || input == "explore") {                    
                     HUDTools.Print("You venture deeper...", 5);
-                    Console.ReadKey(true);
+                    TextInput.PlayerPrompt(true);
                     Program.SoundController.Stop();
                     bool explore = true;
                     while (explore) {
@@ -444,15 +444,15 @@ namespace Saga.Dungeon
                         HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
                         while (explore) {
                             HUDTools.RespiteHUD();
-                            input = HUDTools.PlayerPrompt();
+                            input = TextInput.PlayerPrompt(true);
                             if (input == "e" || input == "explore") {
                                 HUDTools.Print("You venture deeper...", 5);
-                                HUDTools.PlayerPrompt();
+                                TextInput.PlayerPrompt(true);
                                 break;
                             } else if (input == "r" || input == "return") {
                                 explore = false;
                                 HUDTools.Print("You retrace your steps in the darkness...", 20);
-                                HUDTools.PlayerPrompt();
+                                TextInput.PlayerPrompt(true);
                                 if (Program.Rand.Next(100) > 49) {
                                     RandomBasicCombatEncounter();
                                 }                              
@@ -467,7 +467,7 @@ namespace Saga.Dungeon
                 else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     Program.Save();
                     HUDTools.Print("Game saved!");
-                    HUDTools.PlayerPrompt();                    
+                    TextInput.PlayerPrompt(true);                    
                 }
                 //Gheed's shop:
                 else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {             
@@ -494,7 +494,7 @@ namespace Saga.Dungeon
         public static void TalkToNpc() {
             HUDTools.TalkToNpcHUD();
             while (true) {
-                string input = HUDTools.PlayerPrompt();
+                string input = TextInput.PlayerPrompt(true);
                 if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count && n >= 1) {
                     NonPlayableCharacters.LoadDialogueOptions(int.Parse(input) - 1);
                     HUDTools.TalkToNpcHUD();
@@ -502,7 +502,7 @@ namespace Saga.Dungeon
                     break;
                 } else {
                     HUDTools.Print("Not a valid input...");
-                    HUDTools.PlayerPrompt();
+                    TextInput.PlayerPrompt(true);
                     HUDTools.ClearLastLine(3);
                 }
             }
