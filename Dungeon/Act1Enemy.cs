@@ -214,7 +214,7 @@ namespace Saga.Dungeon
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
                     HUDTools.WriteCombatLog("enemysecond", TurnTimer, attack, 0, this);
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                 }
             } else {
                 if (EnemyTurn == TurnTimer.TurnTimer && Health > 0) {

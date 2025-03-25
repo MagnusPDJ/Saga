@@ -1,7 +1,9 @@
 ﻿using Saga.Dungeon;
+using System.Text.Json.Serialization;
 
 namespace Saga.Items.Loot
 {
+    [JsonDerivedType(typeof(Act1Loot), typeDiscriminator: "act1loot")]
     public abstract class Loot
     {
         public abstract void GetGold(float modifier);

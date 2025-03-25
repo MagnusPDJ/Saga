@@ -563,7 +563,7 @@ namespace Saga.Assets
                             Console.WriteLine("\nNo such item in inventory...");
                         }
                     }
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                 } else if (input[0] == "unequip") {
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     if (wat.Value == null) {
@@ -571,7 +571,7 @@ namespace Saga.Assets
                     } else {
                         Print($"\n{Program.CurrentPlayer.UnEquip(wat.Key, wat.Value)}", 3);
                     }
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                 } else if (input[0] == "examine") {
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
@@ -594,8 +594,7 @@ namespace Saga.Assets
                             Print($"\nThis is an armor of type {((Armor)item).ArmorType}.\n{item.ItemDescription}", 3);
                         }
                     }
-                    Print($"\nPress to continue...", 3);
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
 
                 } else if (input[0] == "b" || input[0] == "back") {
                     break;

@@ -19,7 +19,7 @@ namespace Saga.Character
 
     [JsonDerivedType(typeof(Warrior), typeDiscriminator: "warrior")]
     [JsonDerivedType(typeof(Archer), typeDiscriminator: "archer")]
-    [JsonDerivedType(typeof(Mage), typeDiscriminator: "age")]
+    [JsonDerivedType(typeof(Mage), typeDiscriminator: "mage")]
     public abstract class Player {
         public string CurrentClass { get; set; }
         public Act CurrentAct { get; set; }
@@ -304,9 +304,8 @@ namespace Saga.Character
                 Program.SoundController.Stop();
                 HUDTools.ClearLog();
                 Program.SoundController.Play("gameover");
-                HUDTools.Print($"\u001b[31m{message}", 20);
-                HUDTools.Print("Press to go back to main menu...\u001b[0m", 5);
-                TextInput.PlayerPrompt(true);
+                HUDTools.Print($"\u001b[31m{message}\u001b[0m", 20);
+                TextInput.PressToContinue();
                 Program.CurrentPlayer = null;
                 Program.MainMenu();
             }
@@ -316,19 +315,19 @@ namespace Saga.Character
             if (input == "h" || input == "heal") {
                 //Heal
                 Heal();
-                TextInput.PlayerPrompt(true);
+                TextInput.PressToContinue();
             }
             if (input == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
-                TextInput.PlayerPrompt(true);
+                TextInput.PressToContinue();
             }
             if (input == "i" || input == "inventory") {
                 HUDTools.InventoryScreen();
             }
             if (input == "l" || input == "questlog") {
                 HUDTools.QuestLogHUD();
-                TextInput.PlayerPrompt(true);
-            }
+                TextInput.PressToContinue();
+            }           
         }
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
         public void UpdateQuestLog() {

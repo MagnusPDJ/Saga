@@ -34,10 +34,10 @@ namespace Saga.Items
                 string input = TextInput.PlayerPrompt(true);
                 if (input == "u" || input == "use" || input == "heal") {
                     Program.CurrentPlayer.Heal();
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                 } else if (input == "s" || input == "switch" || input == "sell") {
                     sell = true;
                 } else if (input == "i" || input == "inventory") {
@@ -46,13 +46,13 @@ namespace Saga.Items
                     break;
                 } else if (input == "q" || input == "questlog") {
                     HUDTools.QuestLogHUD();
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                 } else if (input.Any(c => char.IsNumber(c)) && 0 < int.Parse(input) && int.Parse(input) <= shop.Forsale.Count) {
                     HUDTools.Print($"You sure you want to buy item # {input}? (Y/N)", 4);
                     string input2 = TextInput.PlayerPrompt(true);
                     if (input2 == "y") {
                         TryBuyItem(int.Parse(input) - 1, shop.Forsale[int.Parse(input) - 1].CalculateItemPrice(), shop ,p);
-                        TextInput.PlayerPrompt(true);
+                        TextInput.PressToContinue();
                     }
                 }
                 while (sell) {
@@ -71,13 +71,13 @@ namespace Saga.Items
                         HUDTools.InventoryScreen();
                     } else if (input1 == "q" || input == "questlog") {
                         HUDTools.QuestLogHUD();
-                        TextInput.PlayerPrompt(true);
+                        TextInput.PressToContinue();
                     } else if (input1 == "c" || input == "character" || input == "character screen") {
                         HUDTools.CharacterScreen();
-                        TextInput.PlayerPrompt(true);
+                        TextInput.PressToContinue();
                     } else if (input1 == "u" || input == "use" || input == "heal") {
                         Program.CurrentPlayer.Heal();
-                        TextInput.PlayerPrompt(true);
+                        TextInput.PressToContinue();
                     } else if (input1.Any(c => char.IsNumber(c))) {
                         if (input1 == "0") {
                             HUDTools.Print($"You sure you want to sell item # {10}? (Y/N)", 4);
@@ -87,7 +87,7 @@ namespace Saga.Items
                         string input2 = TextInput.PlayerPrompt(true);
                         if (input2 == "y") {
                             TrySellItem(int.Parse(input1) - 1, ShopPrice(input1), p);
-                            TextInput.PlayerPrompt(true);
+                            TextInput.PressToContinue();
                         }
                     } 
                 }
@@ -209,7 +209,7 @@ namespace Saga.Items
                     break;
                 } else {
                     Console.WriteLine("You don't have any potions to sell!");
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                     break;
                 }
                 case "5x potion":
@@ -219,7 +219,7 @@ namespace Saga.Items
                     break;
                 } else {
                     Console.WriteLine("You don't that many potions to sell!");
-                    TextInput.PlayerPrompt(true);
+                    TextInput.PressToContinue();
                     break;
                 }
             }

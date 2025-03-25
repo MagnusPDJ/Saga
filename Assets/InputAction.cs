@@ -1,17 +1,18 @@
 ﻿using Saga.Character;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Saga.Assets
 {
-    public abstract class InputAction(string keyWord)
+    [JsonDerivedType(typeof(Go), typeDiscriminator: "go")]
+    [JsonDerivedType(typeof(Examine), typeDiscriminator: "examine")]
+    [JsonDerivedType(typeof(Equip), typeDiscriminator: "equip")]
+    [JsonDerivedType(typeof(Use), typeDiscriminator: "use")]
+    public abstract class InputAction(string keyWord, string abrKeyWord = null)
     {
-        public string keyWord = keyWord;
+        public string KeyWord { get; set; } = keyWord;
+        public string AbrKeyWord { get; set; } = abrKeyWord;
 
-        public abstract void RespondToInput(Player player, string[] separatedInputWords);
+        public abstract void RespondToInput(Player player, string[] separatedInputWords = null);
     }
 
     public class Go(string keyWord) : InputAction(keyWord)

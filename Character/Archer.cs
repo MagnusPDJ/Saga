@@ -173,7 +173,7 @@ namespace Saga.Character
             else if (input == "q" || input == "questlog") {
                 HUDTools.QuestLogHUD();
             }
-            TextInput.PlayerPrompt(true);
+            TextInput.PressToContinue();
         }
         public override void Heal() {
             if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity == 0) {
