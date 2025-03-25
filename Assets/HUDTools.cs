@@ -472,8 +472,7 @@ namespace Saga.Assets
                         }
                     }
                 }           
-            }
-            Print("\nPress to go back...", 1);        
+            }       
         }
         public static void InventoryScreen() {
             while (true) {
@@ -775,7 +774,6 @@ namespace Saga.Assets
                     }
                 }
             }
-            Print("\nPress to go back...", 1);
         }
         public static void TalkToNpcHUD() {
             Console.Clear();
