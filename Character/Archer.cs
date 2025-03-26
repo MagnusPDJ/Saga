@@ -11,6 +11,8 @@ namespace Saga.Character
         public Archer(string name) : base(name, 0, 1, 1, 1, 1, 0) {
             CurrentClass = "Archer";
         }
+
+        //      Stats
         public override void LevelUp() {
             int levels = 0;
             Program.SoundController.Play("levelup");
@@ -40,6 +42,8 @@ namespace Saga.Character
 
             return (weaponDPT.Item1 + dmgfromattribute, weaponDPT.Item2 + dmgfromattribute);
         }
+
+        //      Gear
         public override string Equip(Weapon weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
@@ -129,52 +133,8 @@ namespace Saga.Character
             Equip(WeaponLootTable.FlimsyBow);
             Equip(ArmorLootTable.LinenRags);
         }
-        public override void CombatActions(Enemy Monster, Encounters TurnTimer) {
-            Console.WriteLine("Choose an action...");
-            string input = TextInput.PlayerPrompt(true);
-            if (input == "a" || input == "attack") {
-                //Attack
-                int damage = Attack(Monster);
-                Monster.Health -= damage;
-                HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
-                TurnTimer.TurnTimer++;
-            }
-            else if (input == "d" || input == "defend") {
-                //Defend 
-                Defend(Monster);
-                HUDTools.WriteCombatLog("defend", TurnTimer, 0, 0, Monster);
-                TurnTimer.TurnTimer++;
-            }
-            else if (input == "r" || input == "run") {
-                //Run                   
-                if (RunAway(Monster)) {
-                    Program.SoundController.Stop();
-                    HUDTools.ClearLog();
-                    TurnTimer.Ran = true;
-                }
-                else {
-                    HUDTools.WriteCombatLog(action: "run", TurnTimer: TurnTimer, Monster: Monster);
-                    TurnTimer.TurnTimer++;
-                }
-            }
-            else if (input == "h" || input == "heal") {
-                //Heal
-                Heal();
-                HUDTools.WriteCombatLog(action: "heal", TurnTimer: TurnTimer, Monster: Monster);
-                TurnTimer.TurnTimer++;
-            }
-            else if (input  == "c" || input == "character" || input == "character screen") {
-                HUDTools.CharacterScreen();
-            }
-            else if (input == "l" || input == "log" || input == "combat log") {
-                Console.Clear();
-                HUDTools.GetLog();
-            } 
-            else if (input == "q" || input == "questlog") {
-                HUDTools.QuestLogHUD();
-            }
-            TextInput.PressToContinue();
-        }
+
+        //      Skills
         public override void Heal() {
             if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 20);
@@ -194,17 +154,17 @@ namespace Saga.Character
                 }
             }
         }
-        public static int Attack(Enemy Monster) {
+        public override int Attack(Enemy Monster) {
             HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
             int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
             HUDTools.Print($"You deal {attack} damage to {Monster.Name}", 10);
             return attack;
         }
-        public static void Defend(Enemy Monster) {
+        public override void Defend(Enemy Monster) {
             HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
             Monster.AttackDebuff += 3+1;
         }
-        public static bool RunAway(Enemy Monster) {
+        public override bool RunAway(Enemy Monster) {
             bool escaped = false;
             if (Monster.Name == "Human captor") {
                 HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);

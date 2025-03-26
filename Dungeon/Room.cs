@@ -18,6 +18,7 @@ namespace Saga.Dungeon
         public string description;
         public string roomName;
         public Exit[] exits;
+
     }
 
     public class RoomController 
@@ -31,5 +32,32 @@ namespace Saga.Dungeon
         public void LoadRoom() {
             //Not implemented
         }
+    }
+
+    public class Rooms : Room {
+
+        public static Room CreateRoom() {
+            Room room = new();
+            return room;
+            //Not Implemented
+        }
+
+        public readonly static Room IntroductionRoom = new() {
+            roomName = "Jail Cells",
+            description = "",
+            exits = [new Exit() { keyString = "door", exitDescription = "A big wooden _door_ with rusted hinges and reinforced with iron plating", valueRoom = Hallway}]            
+        };
+
+        public readonly static Room Hallway = new() { 
+            roomName = "Hallway",
+            description = "",
+            exits = [new Exit() { keyString = "deeper", exitDescription = "The hallway continues _deeper_ into the dark", valueRoom = Camp}]
+        };
+
+        public readonly static Room Camp = new() {
+            roomName = "Camp",
+            description = "",
+            exits = null
+        };
     }
 }

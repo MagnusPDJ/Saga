@@ -99,10 +99,12 @@ namespace Saga.Character
         public abstract string UnEquip(Slot slot, Item item);
         //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();
-        //Metode til at vælge mellem character actions/skills/items.
-        public abstract void CombatActions(Enemy Monster, Encounters TurnTimer);
         //Metode til at drikke potions.
         public abstract void Heal();
+        public abstract int Attack(Enemy monster);
+        public abstract bool RunAway(Enemy monster);
+        public abstract void Defend(Enemy monster);
+
         // Calculates and outputs hero stats.
         public void DisplayStats() {
             CalculateTotalStats();
@@ -361,6 +363,46 @@ namespace Saga.Character
                 Inventory.SetValue(quest.Item, index);
                 HUDTools.Print($"\u001b[35mYou've gained {quest.Item.ItemName}\u001b[0m");
             }
+        }
+        //Metode til at vælge mellem klasse skills i kamp.
+        public void CombatActions(Enemy Monster, Encounters TurnTimer) {
+            Console.WriteLine("Choose an action...");
+            string input = TextInput.PlayerPrompt(true);
+            if (input == "a" || input == "attack") {
+                //Attack
+                int damage = Attack(Monster);
+                Monster.Health -= damage;
+                HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
+                TurnTimer.TurnTimer++;
+            } else if (input == "d" || input == "defend") {
+                //Defend 
+                Defend(Monster);
+                HUDTools.WriteCombatLog("defend", TurnTimer, 0, 0, Monster);
+                TurnTimer.TurnTimer++;
+            } else if (input == "r" || input == "run") {
+                //Run                   
+                if (RunAway(Monster)) {
+                    Program.SoundController.Stop();
+                    HUDTools.ClearLog();
+                    TurnTimer.Ran = true;
+                } else {
+                    HUDTools.WriteCombatLog(action: "run", TurnTimer: TurnTimer, Monster: Monster);
+                    TurnTimer.TurnTimer++;
+                }
+            } else if (input == "h" || input == "heal") {
+                //Heal
+                Heal();
+                HUDTools.WriteCombatLog(action: "heal", TurnTimer: TurnTimer, Monster: Monster);
+                TurnTimer.TurnTimer++;
+            } else if (input == "c" || input == "character" || input == "character screen") {
+                HUDTools.CharacterScreen();
+            } else if (input == "l" || input == "log" || input == "combat log") {
+                Console.Clear();
+                HUDTools.GetLog();
+            } else if (input == "q" || input == "questlog") {
+                HUDTools.QuestLogHUD();
+            }
+            TextInput.PressToContinue();
         }
     }
 }

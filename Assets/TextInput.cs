@@ -21,7 +21,7 @@ namespace Saga.Assets
             return userInput;
         }
          ///<summary>
-         ///Waits for and reads the player input through the console and calls the correct function based on input.
+         ///Waits for and reads the player's input through the console and calls the correct function based on input.
          ///</summary>
          ///<param name = "readkey" >True if one letter input </param>
          ///<returns>Success if a function was found. Failed if no function was found.</returns>
