@@ -789,5 +789,21 @@ namespace Saga.Assets
             }
             Print("\nPress the number to talk to that NPC else write (b)ack", 10);
         }
+        public static void PickClassHUD() {
+            Print($"=== Pick a class ===", 3);
+            Print($"1. Warrior:\n" +
+                           $"   The warrior class has a bonus to damage (based on level) making them strong in the early game.\n" +
+                           $"   Their primary stat is strength. A warrior is trained to use swords, axes and hammers.\n" +
+                           $"   They can wear mail and plate armor.", 15);
+            Print($"2. Archer:\n" +
+                           $"   The archer class can always escape enemies and therefore can choose their battles more carefully.\n" +
+                           $"   Their primary stat is dexterity. An archer is trained to use daggers, bows and crossbows.\n" +
+                           $"   They can wear leather and mail.", 15);
+            Print($"3. Mage:\n" +
+                           $"   The mage class uses magic to amplify healing potion potency (based on level), but are usually\n" +
+                           $"   weaker in the early game. Their primary stat is intellect. A mage is trained to use tomes, wands\n" +
+                           $"   and staves. They can wear cloth and leather.\n", 15);
+            Print($"Enter a number from 1 to 3:", 3);
+        }
     }
 }

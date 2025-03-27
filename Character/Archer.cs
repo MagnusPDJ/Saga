@@ -155,7 +155,14 @@ namespace Saga.Character
             }
         }
         public override int Attack(Enemy Monster) {
-            HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
+            if (((Weapon)this.Equipment[Slot.Weapon]).WeaponType == WeaponTypes.Bow) {
+                HUDTools.Print($"You fire an arrow from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
+            } else if (((Weapon)this.Equipment[Slot.Weapon]).WeaponType == WeaponTypes.Crossbow) {
+                HUDTools.Print($"You fire a bolt from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
+            } else if (((Weapon)this.Equipment[Slot.Weapon]).WeaponType == WeaponTypes.Dagger) {
+                HUDTools.Print($"You slice and stab with your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
+            }
+
             int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
             HUDTools.Print($"You deal {attack} damage to {Monster.Name}", 10);
             return attack;

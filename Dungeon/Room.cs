@@ -21,14 +21,14 @@ namespace Saga.Dungeon
     public class RoomController 
     {
         public InputAction[] InputActions = [
-            new Go("go"), 
-            new Examine("examine"), 
-            new Equip("equip"), 
-            new Use("use"), 
-            new Look("look"), 
-            new DrinkPotion("heal", "h"), 
-            new SeeCharacterScreen("character", "c"), 
-            new SeeInventory("inventory", "i"), 
+            new Go("go"),
+            new Examine("examine"),
+            new Equip("equip"),
+            new Use("use"),
+            new Look("look"),
+            new DrinkPotion("heal", "h"),
+            new SeeCharacterScreen("character", "c"),
+            new SeeInventory("inventory", "i"),
             new SeeQuestLog("questlog", "l")
             ];
         public Room currentRoom;

@@ -263,7 +263,7 @@ namespace Saga
             do {
                 Console.Clear();
                 Console.WriteLine("//////////////");
-                HUDTools.Print("Enter a name: ",10);
+                Console.WriteLine("Enter a name: ");
                 do {
                     input = Console.ReadLine();
                     if (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027')) {
@@ -293,7 +293,7 @@ namespace Saga
 
         //Metode til at vælge Class.
         public static int PickClass() {
-            HUDTools.Print("Pick a class, enter a # 1-3:\n1. Warrior\n2. Archer\n3. Mage",20);
+            HUDTools.PickClassHUD();
             while (true) {
                 string input1 = TextInput.PlayerPrompt();
                 if (input1 == "1") {
