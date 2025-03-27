@@ -21,37 +21,29 @@ namespace Saga.Assets
             return userInput;
         }
          ///<summary>
-         ///Waits for and reads the player's input through the console and calls the correct function based on input.
+         ///Waits for and reads the player's input through the console and calls the correct method based on input.
          ///</summary>
-         ///<param name = "readkey" >True if one letter input </param>
-         ///<returns>Success if a function was found. Failed if no function was found.</returns>
-        public static string PlayerPrompt(bool readkey) {
-            if (readkey) {
-                string userInput = Console.ReadKey().KeyChar.ToString().ToLower();
-                Console.WriteLine("");
-                foreach(InputAction action in Program.CurrentPlayer.InputActions) {
-                    if (action.AbrKeyWord == userInput) {
-                        action.RespondToInput(Program.CurrentPlayer);
-                        return "Success";
+         ///<returns>Empty string or an exit from the currentRoom.</returns>
+        public static string PlayerPrompt(bool noReturn) {
+            if (noReturn) {
+                string userInput = Console.ReadLine().ToLower();
+                if (userInput.Length == 1) {
+                    foreach (InputAction action in Program.CurrentPlayer.InputActions) {
+                        if (action.AbrKeyWord == userInput) {
+                            return action.RespondToInput();
+                        }
                     }
                 }
-
-                //!!!Remove this when input actions are made!!!
-                return userInput;
-
-
-            } else {
-                string userInput = Console.ReadLine().ToLower();
                 char[] delimiterCharacters = [' '];
                 string[] separatedInputWords = userInput.Split(delimiterCharacters);
                 foreach(InputAction action in Program.CurrentPlayer.InputActions) {                  
                     if (action.KeyWord == separatedInputWords[0]) {
-                        action.RespondToInput(Program.CurrentPlayer, separatedInputWords);
-                        return "Success";
+                        return action.RespondToInput(separatedInputWords);
                     }
                 }
-                return "Failed";
+                return "";
             }
+            return "";
         }
     }
 }

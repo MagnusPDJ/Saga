@@ -643,17 +643,18 @@ namespace Saga.Assets
             Console.WriteLine("===========================");           
         }
         public static void SmallCharacterInfo() {
-            Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
-            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
-            Console.Write("EXP  ");
+            Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
+            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            Console.WriteLine("==============Actions==============");
-            Console.WriteLine("V (C)haracter screen   (H)eal     V");
-            Console.WriteLine("V (I)nventory          Quest(L)og V");
-            Console.WriteLine("===================================\n");
+            Console.WriteLine(" ==============Actions==============");
+            Console.WriteLine(" V (C)haracter screen   (H)eal     V");
+            Console.WriteLine(" V (I)nventory          Quest(L)og V");
+            Console.WriteLine(" ===================================\n");
+            Console.WriteLine(" Write an action:");
         }
         public static void TopCampHUD() {
             Console.Clear();

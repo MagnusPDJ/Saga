@@ -70,10 +70,10 @@ namespace Saga.Dungeon
             HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
             TextInput.PressToContinue();
             Console.Clear();
-            HUDTools.Print("'If you go and clear some of the other rooms, I will look for my wares in these crates.'");
+            HUDTools.Print("'If you \u001b[96mgo\u001b[0m and clear some of the other rooms, I will look for my wares in these crates.'");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
-            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}, then you start walking down a dark corridor...");
+            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");
             AddNpcToCamp("Gheed");
             TextInput.PressToContinue();
             Program.SoundController.Stop();

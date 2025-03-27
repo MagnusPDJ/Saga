@@ -65,7 +65,7 @@ namespace Saga.Character
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
             CurrentHealingPotion = new Potion();
-            InputActions = [new Go("go"), new Examine("examine"), new Equip("equip"), new Use("use")];
+            InputActions = [new Go("go"), new Examine("examine"), new Equip("equip"), new Use("use"), new Look("look"), new DrinkPotion("heal","h"), new SeeCharacterScreen("character", "c"), new SeeInventory("inventory", "i"), new SeeQuestLog("questlog", "l")];
         }
         
         public abstract void LevelUp();
@@ -367,7 +367,7 @@ namespace Saga.Character
         //Metode til at vælge mellem klasse skills i kamp.
         public void CombatActions(Enemy Monster, Encounters TurnTimer) {
             Console.WriteLine("Choose an action...");
-            string input = TextInput.PlayerPrompt(true);
+            string input = TextInput.PlayerPrompt();
             if (input == "a" || input == "attack") {
                 //Attack
                 int damage = Attack(Monster);

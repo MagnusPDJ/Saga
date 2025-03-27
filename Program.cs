@@ -70,16 +70,24 @@ namespace Saga
             }
         }
 
+
+        //  Gameloop
         public static void Play() {
             RoomController = new RoomController();
             CurrentPlayer = Load(out bool newP);
             NewStart(newP);
             if (CurrentPlayer != null) {
                 if (CurrentPlayer.CurrentAct == Act.Act1) {
-                    while (CurrentPlayer.CurrentAct == Act.Act1) {
-                        SoundController.Stop();                       
-                        Encounters.Camp();
-                    }
+                        
+                    // old
+                    SoundController.Stop();                       
+                    Encounters.Camp();
+                    // old
+
+                    // New
+                    RoomController.ChangeRoom("", Rooms.Camp);
+                    // New
+
                 }
             }
             {
@@ -99,8 +107,9 @@ namespace Saga
         public static void NewStart(bool newP) {
             if (newP) {
                 CurrentPlayer.SetStartingGear();
-                Encounters.FirstEncounter();
-                Encounters.MeetGheed();
+
+                RoomController.ChangeRoom("", Rooms.Start);
+
                 Encounters.SecondEncounter();
                 Encounters.FirstCamp();
             }
