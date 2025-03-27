@@ -1,19 +1,8 @@
-﻿using Saga.Character;
+﻿using System;
 using Saga.Dungeon;
-using System;
-using System.Text.Json.Serialization;
 
 namespace Saga.Assets
 {
-    [JsonDerivedType(typeof(Go), typeDiscriminator: "go")]
-    [JsonDerivedType(typeof(Examine), typeDiscriminator: "examine")]
-    [JsonDerivedType(typeof(Equip), typeDiscriminator: "equip")]
-    [JsonDerivedType(typeof(Use), typeDiscriminator: "use")]
-    [JsonDerivedType(typeof(Look), typeDiscriminator: "look")]
-    [JsonDerivedType(typeof(DrinkPotion), typeDiscriminator: "drinkpotion")]
-    [JsonDerivedType(typeof(SeeCharacterScreen), typeDiscriminator: "seecharacterscreen")]
-    [JsonDerivedType(typeof(SeeInventory), typeDiscriminator: "seeinventory")]
-    [JsonDerivedType(typeof(SeeQuestLog), typeDiscriminator: "seequestlog")]
     public abstract class InputAction(string keyWord, string abrKeyWord = null) {
         public string KeyWord { get; set; } = keyWord;
         public string AbrKeyWord { get; set; } = abrKeyWord;

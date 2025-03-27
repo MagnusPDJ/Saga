@@ -1,9 +1,5 @@
-﻿using Saga.Assets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Saga.Assets;
 
 namespace Saga.Dungeon
 {
@@ -24,6 +20,17 @@ namespace Saga.Dungeon
 
     public class RoomController 
     {
+        public InputAction[] InputActions = [
+            new Go("go"), 
+            new Examine("examine"), 
+            new Equip("equip"), 
+            new Use("use"), 
+            new Look("look"), 
+            new DrinkPotion("heal", "h"), 
+            new SeeCharacterScreen("character", "c"), 
+            new SeeInventory("inventory", "i"), 
+            new SeeQuestLog("questlog", "l")
+            ];
         public Room currentRoom;
 
         public void ChangeRoom(string keystring, Room room = null) {
@@ -62,9 +69,7 @@ namespace Saga.Dungeon
     public class Rooms : Room {
 
         public static Room CreateRoom() {
-            Room room = new();
-            return room;
-            //Not Implemented
+            throw new NotImplementedException();
         }
 
         public readonly static Room Start = new() {

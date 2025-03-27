@@ -44,7 +44,6 @@ namespace Saga.Character
         public List<Quest> CompletedQuests { get; set; }
         public List<NonPlayableCharacters> NpcsInCamp { get; set; }
         public (int, int) DPT { get; set; }
-        public InputAction[] InputActions { get; set; } 
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;
             Id = id;
@@ -64,8 +63,7 @@ namespace Saga.Character
             CalculateTotalStats();
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
-            CurrentHealingPotion = new Potion();
-            InputActions = [new Go("go"), new Examine("examine"), new Equip("equip"), new Use("use"), new Look("look"), new DrinkPotion("heal","h"), new SeeCharacterScreen("character", "c"), new SeeInventory("inventory", "i"), new SeeQuestLog("questlog", "l")];
+            CurrentHealingPotion = new Potion();       
         }
         
         public abstract void LevelUp();

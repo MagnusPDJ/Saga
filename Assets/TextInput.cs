@@ -28,7 +28,7 @@ namespace Saga.Assets
             if (noReturn) {
                 string userInput = Console.ReadLine().ToLower();
                 if (userInput.Length == 1) {
-                    foreach (InputAction action in Program.CurrentPlayer.InputActions) {
+                    foreach (InputAction action in Program.RoomController.InputActions) {
                         if (action.AbrKeyWord == userInput) {
                             return action.RespondToInput();
                         }
@@ -36,7 +36,7 @@ namespace Saga.Assets
                 }
                 char[] delimiterCharacters = [' '];
                 string[] separatedInputWords = userInput.Split(delimiterCharacters);
-                foreach(InputAction action in Program.CurrentPlayer.InputActions) {                  
+                foreach(InputAction action in Program.RoomController.InputActions) {                  
                     if (action.KeyWord == separatedInputWords[0]) {
                         return action.RespondToInput(separatedInputWords);
                     }
