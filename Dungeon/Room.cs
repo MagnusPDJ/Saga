@@ -1,5 +1,6 @@
 ﻿using System;
 using Saga.Assets;
+using Windows.Devices.Lights;
 
 namespace Saga.Dungeon
 {
@@ -10,12 +11,12 @@ namespace Saga.Dungeon
         public Room valueRoom;
     }
 
-    public class Room
+    public abstract class Room
     {
         public string description;
         public string roomName;
         public Exit[] exits;
-
+        public abstract void LoadRoom();
     }
 
     public class RoomController 
@@ -47,47 +48,68 @@ namespace Saga.Dungeon
                 }
             }
             if (foundRoom) {
-                LoadRoom();
+                currentRoom.LoadRoom();
             }
         }
 
-        public void LoadRoom() {
+    }
+    public class StartRoom : Room
+    {
+        public StartRoom() {
+            roomName = "Jail Cells";
+            description = "You look around and see Gheed rummage through big wooden crates. You hear him counting.";
+            exits = [new Exit() { keyString = "door", exitDescription = $"You see a big wooden \u001b[96mdoor\u001b[0m with rusted hinges and reinforced with iron plating", valueRoom = Rooms.Hallway }];
+        }
+        public override void LoadRoom() {
             string exit = "";
-            if (currentRoom == Rooms.Start) {
-                Encounters.FirstEncounter();
-                Encounters.MeetGheed();
-                Console.Clear();
-                HUDTools.SmallCharacterInfo();
-                while (exit == "") {
-                    exit = TextInput.PlayerPrompt(true);
-                }
-                Program.RoomController.ChangeRoom(exit);
+            Encounters.FirstEncounter();
+            Encounters.MeetGheed();
+            HUDTools.SmallCharacterInfo();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
             }
+            Program.RoomController.ChangeRoom(exit);
+
         }
     }
 
-    public class Rooms : Room {
-
-        public static Room CreateRoom() {
-            throw new NotImplementedException();
+    public class HallwayRoom : Room
+    {
+        public HallwayRoom() {
+            roomName = "Hallway";
+            description = "";
+            exits = [new Exit() { keyString = "deeper", exitDescription = $"The hallway continues \u001b[96mdeeper\u001b[0m into the dark", valueRoom = Rooms.Camp }];
         }
+        public override void LoadRoom() {
+            string exit = "";
+            Encounters.SecondEncounter();
+            HUDTools.SmallCharacterInfo();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
+            Program.RoomController.ChangeRoom(exit);
+        }
+    }
 
-        public readonly static Room Start = new() {
-            roomName = "Jail Cells",
-            description = "You look around and see Gheed rummage through big wooden crates. You hear him counting.",
-            exits = [new Exit() { keyString = "door", exitDescription = $"You see a big wooden \u001b[96mdoor\u001b[0m with rusted hinges and reinforced with iron plating", valueRoom = Hallway}]            
-        };
+    public class CampRoom : Room
+    {
+        public CampRoom() {
+            roomName = "Camp";
+            description = "";
+            exits = null;
+        }
+        public override void LoadRoom() {
+            Encounters.FirstCamp();
+            Encounters.Camp();
+        }
+    }
 
-        public readonly static Room Hallway = new() { 
-            roomName = "Hallway",
-            description = "",
-            exits = [new Exit() { keyString = "deeper", exitDescription = $"The hallway continues \u001b[96mdeeper\u001b[0m into the dark", valueRoom = Camp}]
-        };
+    public class Rooms {
 
-        public readonly static Room Camp = new() {
-            roomName = "Camp",
-            description = "",
-            exits = null
-        };
+        public readonly static CampRoom Camp = new();
+
+        public readonly static HallwayRoom Hallway = new();
+
+        public readonly static StartRoom StartRoom = new();
     }
 }

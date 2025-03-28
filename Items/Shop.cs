@@ -31,7 +31,7 @@ namespace Saga.Items
             while (buy) {
                 HUDTools.BuyShopHUD(shop);
                 //Wait for input
-                string input = TextInput.PlayerPrompt(true);
+                string input = TextInput.PlayerPrompt();
                 if (input == "u" || input == "use" || input == "heal") {
                     Program.CurrentPlayer.Heal();
                     TextInput.PressToContinue();
@@ -49,7 +49,7 @@ namespace Saga.Items
                     TextInput.PressToContinue();
                 } else if (input.Any(c => char.IsNumber(c)) && 0 < int.Parse(input) && int.Parse(input) <= shop.Forsale.Count) {
                     HUDTools.Print($"You sure you want to buy item # {input}? (Y/N)", 4);
-                    string input2 = TextInput.PlayerPrompt(true);
+                    string input2 = TextInput.PlayerPrompt();
                     if (input2 == "y") {
                         TryBuyItem(int.Parse(input) - 1, shop.Forsale[int.Parse(input) - 1].CalculateItemPrice(), shop ,p);
                         TextInput.PressToContinue();
@@ -57,7 +57,7 @@ namespace Saga.Items
                 }
                 while (sell) {
                     HUDTools.SellShopHUD();
-                    string input1 = TextInput.PlayerPrompt(true);
+                    string input1 = TextInput.PlayerPrompt();
                     if (input1 == "s" || input1 == "switch" || input1 == "buy") {
                         sell = false;
                     } else if (input1 == "e" || input1 == "exit") {
@@ -84,7 +84,7 @@ namespace Saga.Items
                         } else {
                             HUDTools.Print($"You sure you want to sell item # {input1}? (Y/N)", 4);
                         }
-                        string input2 = TextInput.PlayerPrompt(true);
+                        string input2 = TextInput.PlayerPrompt();
                         if (input2 == "y") {
                             TrySellItem(int.Parse(input1) - 1, ShopPrice(input1), p);
                             TextInput.PressToContinue();

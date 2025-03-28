@@ -438,7 +438,7 @@ namespace Saga.Assets
                 if (Program.CurrentPlayer.FreeAttributePoints > 0 && i != 0) {
                     Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o",1);
                     while (true) {
-                        string input = TextInput.PlayerPrompt(true);
+                        string input = TextInput.PlayerPrompt();
                         if (input == "s" || input == "strength") {
                             Program.CurrentPlayer.BasePrimaryAttributes.Strength++;
                             Program.CurrentPlayer.FreeAttributePoints--;
@@ -643,6 +643,8 @@ namespace Saga.Assets
             Console.WriteLine("===========================");           
         }
         public static void SmallCharacterInfo() {
+            Console.Clear();
+            Console.WriteLine($"Location:\t{Program.RoomController.currentRoom.roomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
             Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");

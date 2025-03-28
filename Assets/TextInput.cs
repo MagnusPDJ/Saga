@@ -41,6 +41,9 @@ namespace Saga.Assets
                         return action.RespondToInput(separatedInputWords);
                     }
                 }
+                HUDTools.Print($"There is no '{userInput}' action...", 15);
+                PressToContinue();
+                HUDTools.ClearLastLine(3);
                 return "";
             }
             return "";

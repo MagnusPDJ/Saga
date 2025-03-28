@@ -55,7 +55,7 @@ namespace Saga.Dungeon
                 
                 while (true) {
                     (int, int) startCursor = Console.GetCursorPosition();
-                    string input = TextInput.PlayerPrompt(true);
+                    string input = TextInput.PlayerPrompt();
                     if (input == "b" || input == "back") {
                         donetalking = true;
                         break;
@@ -82,7 +82,7 @@ namespace Saga.Dungeon
                             HUDTools.Print($"Do you have any work?", 0);
                             HUDTools.Print($"Yes, if you could go and {talkto.AvailableQuests[0].Name}, I will make it worth your while.\n(Y)es to accept (n)o to decline.", 15);
                             while (true) {
-                                string input1 = TextInput.PlayerPrompt(true);
+                                string input1 = TextInput.PlayerPrompt();
                                 if (input1 == "y") {
                                     Program.CurrentPlayer.QuestLog.Add(talkto.AvailableQuests[0]);
                                     talkto.AvailableQuests[0].Accepted = true;

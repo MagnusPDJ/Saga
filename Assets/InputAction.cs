@@ -12,6 +12,12 @@ namespace Saga.Assets
 
     public class Go(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
+            if (separatedInputWords.Length == 1) {
+                HUDTools.Print($"You go nowhere, not very productive...", 10);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            }
             bool foundRoom = false;
             foreach (Exit exit in Program.RoomController.currentRoom.exits) {
                 if (exit.keyString == separatedInputWords[1]) {
@@ -44,7 +50,6 @@ namespace Saga.Assets
             throw new NotImplementedException();
         }
     }
-
     public class Look(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             (int, int) startCursorPosition = Console.GetCursorPosition();
@@ -62,51 +67,37 @@ namespace Saga.Assets
             return "";
         }
     }
-
     public class DrinkPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords = null) {
-            throw new NotImplementedException();
+            Program.CurrentPlayer.Heal();
+            TextInput.PressToContinue();
+            HUDTools.SmallCharacterInfo();
+            return "";
         }
     }
-
     public class SeeCharacterScreen(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords = null) {
-            throw new NotImplementedException();
+            HUDTools.CharacterScreen();
+            TextInput.PressToContinue();
+            HUDTools.SmallCharacterInfo();
+            return "";
         }
     }
-
     public class SeeInventory(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords = null) {
-            throw new NotImplementedException();
+            HUDTools.InventoryScreen();
+            HUDTools.SmallCharacterInfo();
+            return "";
         }
     }
-
     public class SeeQuestLog(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) 
     {
         public override string RespondToInput(string[] separatedInputWords = null) {
-            throw new NotImplementedException();
+            HUDTools.QuestLogHUD();
+            TextInput.PressToContinue();
+            HUDTools.SmallCharacterInfo();
+            return "";
         }
     }
-
-    /*        public void BasicActions(string input) {
-            if (input == "h" || input == "heal") {
-                //Heal
-                Heal();
-                TextInput.PressToContinue();
-            }
-            if (input == "c" || input == "character" || input == "character screen") {
-                HUDTools.CharacterScreen();
-                TextInput.PressToContinue();
-            }
-            if (input == "i" || input == "inventory") {
-                HUDTools.InventoryScreen();
-            }
-            if (input == "l" || input == "questlog") {
-                HUDTools.QuestLogHUD();
-                TextInput.PressToContinue();
-            }           
-        }*/
-
-
 }
 

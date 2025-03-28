@@ -55,7 +55,7 @@ namespace Saga.Character
             if (Equipment.TryGetValue(Slot.Weapon, out Item value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
                 while (true) {
-                    string input = TextInput.PlayerPrompt(true);
+                    string input = TextInput.PlayerPrompt();
                     if (input == "y") {
                         UnEquip(Slot.Weapon, Equipment[Slot.Weapon]);
                         Equipment[weapon.ItemSlot] = weapon;
@@ -90,7 +90,7 @@ namespace Saga.Character
             if (Equipment.TryGetValue(armor.ItemSlot, out Item value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{armor.ItemName}'? (Y/N)");
                 while (true) {
-                    string input = TextInput.PlayerPrompt(true);
+                    string input = TextInput.PlayerPrompt();
                     if (input == "y") {
                         UnEquip(armor.ItemSlot, Equipment[armor.ItemSlot]);
                         Equipment[armor.ItemSlot] = armor;

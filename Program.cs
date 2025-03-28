@@ -8,7 +8,6 @@ using System.Configuration;
 using Saga.Character;
 using Saga.Dungeon;
 using Saga.Assets;
-using Saga.Items.Loot;
 
 namespace Saga
 {
@@ -77,17 +76,9 @@ namespace Saga
             CurrentPlayer = Load(out bool newP);
             NewStart(newP);
             if (CurrentPlayer != null) {
-                if (CurrentPlayer.CurrentAct == Act.Act1) {
-                        
-                    // old
+                if (CurrentPlayer.CurrentAct == Act.Act1) {                       
                     SoundController.Stop();                       
-                    Encounters.Camp();
-                    // old
-
-                    // New
                     RoomController.ChangeRoom("", Rooms.Camp);
-                    // New
-
                 }
             }
             {
@@ -107,11 +98,7 @@ namespace Saga
         public static void NewStart(bool newP) {
             if (newP) {
                 CurrentPlayer.SetStartingGear();
-
-                RoomController.ChangeRoom("", Rooms.Start);
-
-                Encounters.SecondEncounter();
-                Encounters.FirstCamp();
+                RoomController.ChangeRoom("", Rooms.StartRoom);
             }
         }
 
