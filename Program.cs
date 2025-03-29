@@ -366,6 +366,7 @@ namespace Saga
                 }
                 MainMenu();
             }
+            HUDTools.ClearLastLine(3);
         }
 
         //Metode til at ændre og gemme settings i en tilhørende configfil.

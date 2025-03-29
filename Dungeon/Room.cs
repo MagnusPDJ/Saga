@@ -96,10 +96,12 @@ namespace Saga.Dungeon
         public CampRoom() {
             roomName = "Camp";
             description = "";
-            exits = null;
+            exits = [new Exit() { keyString = "e", exitDescription = "", valueRoom = null }];
         }
         public override void LoadRoom() {
-            Encounters.FirstCamp();
+            if (Program.CurrentPlayer.CurrentAct == Character.Act.Start) {
+                Encounters.FirstCamp();
+            }     
             Encounters.Camp();
         }
     }

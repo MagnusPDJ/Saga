@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 namespace Saga.Character
 {
     public enum Act {
+        Start,
         Act1,
         Act2,
         Act3,
@@ -48,7 +49,7 @@ namespace Saga.Character
             Name = name;
             Id = id;
             Level = 1;
-            CurrentAct = Act.Act1;
+            CurrentAct = Act.Start;
             Loot = new Act1Loot();
             Equipment = [];
             Inventory = new Item[10];
@@ -316,18 +317,23 @@ namespace Saga.Character
                 //Heal
                 Heal();
                 TextInput.PressToContinue();
-            }
-            if (input == "c" || input == "character" || input == "character screen") {
+            } else if (input == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
                 TextInput.PressToContinue();
-            }
-            if (input == "i" || input == "inventory") {
+            } else if (input == "i" || input == "inventory") {
                 HUDTools.InventoryScreen();
-            }
-            if (input == "l" || input == "questlog") {
+            } else if (input == "l" || input == "questlog") {
                 HUDTools.QuestLogHUD();
                 TextInput.PressToContinue();
-            }           
+            } else {
+                HUDTools.Print($"There is no {input} action...", 15);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return;
+            }
+            if (Program.RoomController.currentRoom == Rooms.Camp) {
+                HUDTools.FullCampHUD();
+            }
         }
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
         public void UpdateQuestLog() {

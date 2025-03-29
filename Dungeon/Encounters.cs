@@ -75,15 +75,14 @@ namespace Saga.Dungeon
         public static void FirstCamp() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
-            HUDTools.Print("You venture deeper and deeper, but while you explore your surroundings.");
+            HUDTools.Print("You venture deeper and deeper, but while you explore your surroundings, you get queasy.");
             HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
             Program.SoundController.Stop();
             Program.SoundController.Play("campfire");
-            HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The");
-            HUDTools.Print("shadows retract and you feel at ease again. Although you are not out of danger,");
-            HUDTools.Print("you can stay for a while and rest.");
+            HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The shadows retract and\nyou feel at ease again. Although you are not out of danger, you can stay for a while and rest.");
+            Program.CurrentPlayer.CurrentAct = Character.Act.Act1;
             TextInput.PressToContinue();
         }
 
@@ -420,48 +419,57 @@ namespace Saga.Dungeon
             Program.SoundController.Play("campmusic");
             //Hver gang spilleren returnere til Camp refresher shoppen:
             Shop shop = Shop.SetForsale();
-            HUDTools.TopCampHUD();
-            while (true) {
-                HUDTools.FullCampHUD();
+            HUDTools.FullCampHUD();
+            while (true) {              
                 string input = TextInput.PlayerPrompt();
-                //Explore, måden man progresser sin karakter:
-                if (input == "e" || input == "explore") {                    
-                    HUDTools.Print("You venture deeper...", 5);
-                    TextInput.PressToContinue();
-                    Program.SoundController.Stop();
-                    bool explore = true;
-                    while (explore) {
-                        RandomEncounterPool();
-                        ProgressTheStory();
-                        Console.Clear();
-                        HUDTools.Print("You gain a moment of respite and a choice...", 30);
-                        HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
-                        while (explore) {
-                            HUDTools.RespiteHUD();
-                            input = TextInput.PlayerPrompt();
-                            if (input == "e" || input == "explore") {
-                                HUDTools.Print("You venture deeper...", 5);
-                                TextInput.PressToContinue();
-                                break;
-                            } else if (input == "r" || input == "return") {
-                                explore = false;
-                                HUDTools.Print("You retrace your steps in the darkness...", 20);
-                                TextInput.PressToContinue();
-                                if (Program.Rand.Next(100) > 49) {
-                                    RandomBasicCombatEncounter();
-                                }                              
-                            } else {
-                                Program.CurrentPlayer.BasicActions(input);
-                            }
-                        }
-                    }
-                    break;
-                }
+
+
+
+
+                ////Explore, måden man progresser sin karakter:
+                //if (input == "e" || input == "explore") {                    
+                //    HUDTools.Print("You venture deeper...", 5);
+                //    TextInput.PressToContinue();
+                //    Program.SoundController.Stop();
+                //    bool explore = true;
+                //    while (explore) {
+                //        RandomEncounterPool();
+                //        ProgressTheStory();
+                //        Console.Clear();
+                //        HUDTools.Print("You gain a moment of respite and a choice...", 30);
+                //        HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
+                //        while (explore) {
+                //            HUDTools.RespiteHUD();
+                //            input = TextInput.PlayerPrompt();
+                //            if (input == "e" || input == "explore") {
+                //                HUDTools.Print("You venture deeper...", 5);
+                //                TextInput.PressToContinue();
+                //                break;
+                //            } else if (input == "r" || input == "return") {
+                //                explore = false;
+                //                HUDTools.Print("You retrace your steps in the darkness...", 20);
+                //                TextInput.PressToContinue();
+                //                if (Program.Rand.Next(100) > 49) {
+                //                    RandomBasicCombatEncounter();
+                //                }                              
+                //            } else {
+                //                Program.CurrentPlayer.BasicActions(input);
+                //            }
+                //        }
+                //    }
+                //    break;
+                //}
+
+
+
+
+
                 //Gemmer spillet:
-                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
+                if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     Program.Save();
                     HUDTools.Print("Game saved!");
-                    TextInput.PressToContinue();                    
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                 }
                 //Gheed's shop:
                 else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {             
@@ -469,6 +477,7 @@ namespace Saga.Dungeon
                     Shop.Loadshop(Program.CurrentPlayer, shop);
                     Program.SoundController.Play("campfire");
                     Program.SoundController.Play("campmusic");
+                    HUDTools.FullCampHUD();
                 }
                 //Quit and/or save the game:
                 else if (input == "q" || input == "quit") {
@@ -477,6 +486,7 @@ namespace Saga.Dungeon
                 //Tale med NPC'er mens man er tilbage i campen.
                 else if (input == "t" || input == "talk") {
                     TalkToNpc();
+                    HUDTools.FullCampHUD();
                 }
                 //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
                 else {
