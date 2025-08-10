@@ -340,7 +340,7 @@ namespace Saga
         }
         
         //Metode til at 'Save and Quit' spillet.
-        public static void Quit() {
+        public static string Quit() {
             HUDTools.Print("Want to Quit? (Y)",10);
             string input = TextInput.PlayerPrompt();
             if (input == "y") {
@@ -364,9 +364,10 @@ namespace Saga
                         HUDTools.ClearLastLine(3);
                     }
                 }
-                MainMenu();
+                return "quit";
             }
             HUDTools.ClearLastLine(3);
+            return "";
         }
 
         //Metode til at ændre og gemme settings i en tilhørende configfil.

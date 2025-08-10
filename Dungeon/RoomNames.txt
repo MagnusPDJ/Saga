@@ -1,0 +1,6 @@
+﻿Name;Description
+room1;empty.
+room2;fancy.
+room3;ugly.
+room4;tight.
+room5;huge.

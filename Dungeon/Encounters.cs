@@ -6,6 +6,7 @@ using System.Text.Json;
 using Saga.Assets;
 using Saga.Items;
 using Saga.Items.Loot;
+using Windows.Devices.Sensors;
 
 namespace Saga.Dungeon
 {
@@ -83,6 +84,17 @@ namespace Saga.Dungeon
             Program.SoundController.Play("campfire");
             HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The shadows retract and\nyou feel at ease again. Although you are not out of danger, you can stay for a while and rest.");
             Program.CurrentPlayer.CurrentAct = Character.Act.Act1;
+            TextInput.PressToContinue();
+        }
+        //Encounter som køres første gang en spiller vender tilbage til Camp for at introducerer roguelike
+        public static void FirstReturn() {
+            Console.Clear();
+            Program.SoundController.Play("typewriter");
+            HUDTools.Print($"As you enter the camp and close the door behind you, everything shakes and there are loud\nsounds of stone grinding against each other. Sand and pebbles fall from the ceiling and you\ncollapse to the floor from the vibrations.");
+            HUDTools.Print($"After a few moments, you regain your composure and you check on Gheed.");
+            TextInput.PressToContinue();
+            HUDTools.ClearLastLine(1);
+            HUDTools.Print($"'What was that?', you ask, 'it sounded like an earthquake'.\n'Indeed', Gheed answers, 'Although, I suspect it wasn't destructive in nature. That is what makes\nthis labyrinth a prison for those who enter. When you open that door again you will find that\nall the rooms have changed.'");
             TextInput.PressToContinue();
         }
 
@@ -414,58 +426,23 @@ namespace Saga.Dungeon
             }
         }
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
-        public static void Camp() {
+        public static string Camp() {
+            bool leave = false;
+            string choice = "";
             Program.SoundController.Play("campfire");
             Program.SoundController.Play("campmusic");
             //Hver gang spilleren returnere til Camp refresher shoppen:
             Shop shop = Shop.SetForsale();
             HUDTools.FullCampHUD();
-            while (true) {              
+            while (leave == false) {              
                 string input = TextInput.PlayerPrompt();
-
-
-
-
-                ////Explore, måden man progresser sin karakter:
-                //if (input == "e" || input == "explore") {                    
-                //    HUDTools.Print("You venture deeper...", 5);
-                //    TextInput.PressToContinue();
-                //    Program.SoundController.Stop();
-                //    bool explore = true;
-                //    while (explore) {
-                //        RandomEncounterPool();
-                //        ProgressTheStory();
-                //        Console.Clear();
-                //        HUDTools.Print("You gain a moment of respite and a choice...", 30);
-                //        HUDTools.Print("Do you venture deeper or turn back to your camp?", 25);
-                //        while (explore) {
-                //            HUDTools.RespiteHUD();
-                //            input = TextInput.PlayerPrompt();
-                //            if (input == "e" || input == "explore") {
-                //                HUDTools.Print("You venture deeper...", 5);
-                //                TextInput.PressToContinue();
-                //                break;
-                //            } else if (input == "r" || input == "return") {
-                //                explore = false;
-                //                HUDTools.Print("You retrace your steps in the darkness...", 20);
-                //                TextInput.PressToContinue();
-                //                if (Program.Rand.Next(100) > 49) {
-                //                    RandomBasicCombatEncounter();
-                //                }                              
-                //            } else {
-                //                Program.CurrentPlayer.BasicActions(input);
-                //            }
-                //        }
-                //    }
-                //    break;
-                //}
-
-
-
-
-
+                //Explore, måden man progresser sin karakter:
+                if (input == "e" || input == "explore") {
+                    leave = true;
+                    choice = "explore";
+                }
                 //Gemmer spillet:
-                if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
+                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
                     Program.Save();
                     HUDTools.Print("Game saved!");
                     TextInput.PressToContinue();
@@ -481,7 +458,10 @@ namespace Saga.Dungeon
                 }
                 //Quit and/or save the game:
                 else if (input == "q" || input == "quit") {
-                    Program.Quit();
+                    if (Program.Quit() == "quit") {
+                        leave = true;
+                        choice = "quit";
+                    }       
                 }
                 //Tale med NPC'er mens man er tilbage i campen.
                 else if (input == "t" || input == "talk") {
@@ -493,6 +473,7 @@ namespace Saga.Dungeon
                     Program.CurrentPlayer.BasicActions(input);
                 }
             }
+            return choice;
         }
         //Funktion som kaldes under campen når spilleren skal snakke med de tilstedeværende personer.
         public static void TalkToNpc() {

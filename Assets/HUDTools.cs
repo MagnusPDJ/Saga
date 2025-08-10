@@ -179,7 +179,7 @@ namespace Saga.Assets
             File.WriteAllText("combatlog.txt", String.Empty);
         }
 
-        //Read all lines fra embedded resource til en lise.
+        //Read all lines fra embedded resource til en liste.
         public static List<string> ReadAllResourceLines(string resourceName) {
             using Stream stream = Assembly.GetEntryAssembly()
                 .GetManifestResourceStream(resourceName);
@@ -574,7 +574,9 @@ namespace Saga.Assets
                 } else if (input[0] == "examine") {
                     var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
                     var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
-                    if (wat.Value == null && item == null) {
+                    if (input[1] == "healing potion" || input[1] == "potion" || input[1] == "potions" || input[1] == "healing potions") {
+                        Print($"\n{Program.CurrentPlayer.CurrentHealingPotion.ItemDescription}", 3);
+                    } else if (wat.Value == null && item == null) {
                         Console.WriteLine("\nNo such item exists...");
                     } else if (wat.Value != null) {
                         if (wat.Value.ItemSlot == Slot.Quest) {

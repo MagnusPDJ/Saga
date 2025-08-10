@@ -80,7 +80,7 @@ namespace Saga.Assets
                 outputDevice4.Init(waveFile);
                 outputDevice4.Play();
             } else {
-                outputDevice5 ??= new WaveOutEvent();
+                outputDevice5 = new WaveOutEvent();
                 MemoryStream ms = new(SoundLibrary[sound]);
                 waveFile = new WaveFileReader(ms);
                 outputDevice5.Init(waveFile);               

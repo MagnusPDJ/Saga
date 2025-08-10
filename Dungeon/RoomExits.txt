@@ -1,0 +1,9 @@
+﻿Keystring;Description
+gate;You see a big wooden %gate¤ with rusted hinges.
+gate;You see a %gate¤ with dents and scratches.
+gate;There is a small %gate¤.
+gate;There is a %gate¤ with a rusted latch.
+door;There is a small cracked %door¤.
+door;There is a wooden %door¤.
+door;You see a big reinforced %door¤.
+door;You see a %door¤ with rusted hinges.

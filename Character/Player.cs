@@ -45,6 +45,7 @@ namespace Saga.Character
         public List<Quest> CompletedQuests { get; set; }
         public List<NonPlayableCharacters> NpcsInCamp { get; set; }
         public (int, int) DPT { get; set; }
+        public int TimesExplored { get; set; }
         public Player(string name, int id, int strength, int dexterity, int intellect, int constitution, int willpower) {
             Name = name;
             Id = id;
@@ -64,7 +65,8 @@ namespace Saga.Character
             CalculateTotalStats();
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
-            CurrentHealingPotion = new Potion();       
+            CurrentHealingPotion = new Potion();
+            TimesExplored = 0;
         }
         
         public abstract void LevelUp();

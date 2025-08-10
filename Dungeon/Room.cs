@@ -1,6 +1,10 @@
-﻿using System;
-using Saga.Assets;
-using Windows.Devices.Lights;
+﻿using Saga.Assets;
+using Saga.Items;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using static System.Windows.Forms.LinkLabel;
 
 namespace Saga.Dungeon
 {
@@ -19,6 +23,11 @@ namespace Saga.Dungeon
         public abstract void LoadRoom();
     }
 
+    public class DungeonTemplate
+    {
+        public List<Room> rooms = [];
+    }
+
     public class RoomController 
     {
         public InputAction[] InputActions = [
@@ -33,6 +42,7 @@ namespace Saga.Dungeon
             new SeeQuestLog("questlog", "l")
             ];
         public Room currentRoom;
+        public DungeonTemplate currentDungeonInstance;
 
         public void ChangeRoom(string keystring, Room room = null) {
             bool foundRoom = false;
@@ -50,6 +60,67 @@ namespace Saga.Dungeon
             if (foundRoom) {
                 currentRoom.LoadRoom();
             }
+        }
+
+        public void ExploreDungeon() {
+            Program.RoomController.currentDungeonInstance = GenerateDungeon();
+            Program.CurrentPlayer.TimesExplored++;
+            ChangeRoom("",currentDungeonInstance.rooms[^1]);
+        }
+
+        public static DungeonTemplate GenerateDungeon() {
+            var dungeon = new DungeonTemplate()
+            {
+                rooms = GenerateRooms()
+            };
+
+            return dungeon;
+        }
+        public static List<Room> GenerateRooms() {
+            
+            int dybde = Program.Rand.Next(1, 5 + 1);
+            Room[] rooms = new Room[dybde];
+            for (int i = 0; i < dybde; i++) {
+                rooms[i] = CreateRandomRoom(rooms, i);
+            }
+
+            return [.. rooms];
+
+        }
+
+        public static Room CreateRandomRoom(Room[] rooms, int i) {
+            (string, string) roomNameAndDescription = CreateRoomNameAndDescription();
+            if (i == 0) {
+                Room room = new RandomRoom()
+                {
+                    roomName = roomNameAndDescription.Item1,
+                    description = roomNameAndDescription.Item2,
+                    exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }],
+                };
+                return room;
+            } else {
+                (string, string) exit = CreateExit();
+                Room room = new RandomRoom()
+                {
+                    roomName = roomNameAndDescription.Item1,
+                    description = roomNameAndDescription.Item2,
+                    exits = [new Exit() { keyString = $"{exit.Item1}", exitDescription = $"{exit.Item2}", valueRoom = rooms[i - 1] }],
+                };
+                return room;
+            }       
+        }
+
+        public static (string, string) CreateRoomNameAndDescription() {
+            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomNames.txt");
+            lines.RemoveAt(0);
+            int picked = Program.Rand.Next(lines.Count);
+            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1]);
+        }
+        public static (string, string) CreateExit() {
+            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomExits.txt");
+            lines.RemoveAt(0);
+            int picked = Program.Rand.Next(lines.Count);
+            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1].Replace("%", "\u001b[96m").Replace("¤", "\u001b[0m"));
         }
 
     }
@@ -96,13 +167,36 @@ namespace Saga.Dungeon
         public CampRoom() {
             roomName = "Camp";
             description = "";
-            exits = [new Exit() { keyString = "e", exitDescription = "", valueRoom = null }];
+            exits = [new Exit() { keyString = "You will never leave", exitDescription = "here alive", valueRoom = null}];
         }
         public override void LoadRoom() {
             if (Program.CurrentPlayer.CurrentAct == Character.Act.Start) {
                 Encounters.FirstCamp();
-            }     
-            Encounters.Camp();
+            }
+            if (Program.CurrentPlayer.TimesExplored == 1) {
+                Encounters.FirstReturn();
+            }
+                string choice = Encounters.Camp();
+            Program.SoundController.Stop();
+            if (choice == "quit") {
+                Program.MainMenu();
+            } else if (choice == "explore") {
+                Program.RoomController.ExploreDungeon();
+            }
+        }
+    }
+
+    public class RandomRoom : Room 
+    {
+        public override void LoadRoom() {
+            string exit = "";
+            Encounters.RandomEncounter();
+            HUDTools.SmallCharacterInfo();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
+            Program.SoundController.Stop();
+            Program.RoomController.ChangeRoom(exit);
         }
     }
 
