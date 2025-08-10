@@ -1,17 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Text.Json;
-using System.Configuration;
+﻿using Saga.Assets;
 using Saga.Character;
 using Saga.Dungeon;
-using Saga.Assets;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.Json;
 
 namespace Saga
 {
-    public class Program {
+    public partial class Program {
+
+        const int STD_OUTPUT_HANDLE = -11;
+        const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        private static partial nint GetStdHandle(int nStdHandle); // nint = IntPtr
+
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool GetConsoleMode(nint hConsoleHandle, out uint lpMode);
+
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool SetConsoleMode(nint hConsoleHandle, uint dwMode);
+
+        static void EnableAnsiColors() {
+            var handle = GetStdHandle(STD_OUTPUT_HANDLE);
+            if (!GetConsoleMode(handle, out uint mode)) {
+                Console.WriteLine("Error getting console mode.");
+                return;
+            }
+
+            mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+
+            if (!SetConsoleMode(handle, mode)) {
+                Console.WriteLine("Error setting console mode.");
+            }
+        }
+
         //Genere spilleren som objekt så den kan sættes senere.
         public static Player CurrentPlayer { get; set; }
         public static AudioManager SoundController { get; set; }
@@ -25,6 +55,7 @@ namespace Saga
 
         //Spillets udførelse ved opstart
         static void Main() {
+            EnableAnsiColors();
             //Gør unicode karaktere "runer" læselige i consolen og indstiller vindue størrelse.
             Console.OutputEncoding = Encoding.UTF8;
             Console.SetWindowSize(100, 45);
