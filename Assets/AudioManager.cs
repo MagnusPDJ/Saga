@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using NAudio.Wave;
-using System.Threading;
 
 namespace Saga.Assets
 {

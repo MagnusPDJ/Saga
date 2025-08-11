@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Saga.Assets;
+using System.Text.Json;
+using System.Linq;
 
 namespace Saga.Dungeon 
 {
@@ -9,7 +11,34 @@ namespace Saga.Dungeon
         public string Greeting { get; set; }
         public List<Quest> AvailableQuests { get; set; }
         public Dictionary<string, string> Dialogue { get; set; }
-
+        //Funktion som kaldes under campen når spilleren skal snakke med de tilstedeværende personer.
+        public static void TalkToNpc() {
+            HUDTools.TalkToNpcHUD();
+            while (true) {
+                string input = TextInput.PlayerPrompt();
+                if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count && n >= 1) {
+                    NonPlayableCharacters.LoadDialogueOptions(int.Parse(input) - 1);
+                    HUDTools.TalkToNpcHUD();
+                }
+                else if (input == "b" || input == "back") {
+                    break;
+                }
+                else {
+                    HUDTools.Print("Not a valid input...");
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
+                }
+            }
+        }
+        //Funktion til at tilføje en NPC til campen som kan snakkes med.
+        public static void AddNpcToCamp(string name) {
+            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"));
+            var npcToAdd = allNpcs.Where(x => x.Name.Equals(name)).FirstOrDefault();
+            npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
+            Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);
+            NonPlayableCharacters.UpdateDialogueOptions(name);
+            HUDTools.Print($"\u001b[35m{name} has joined your cause!\u001b[0m", 20);
+        }
         //Metode til at opdatere dialog mulighederne baseret på valg taget igennem spillet.
         public static void UpdateDialogueOptions(string instance) {
             List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.Dialogue.txt");

@@ -1,10 +1,5 @@
 ﻿using Saga.Assets;
-using Saga.Items;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using static System.Windows.Forms.LinkLabel;
 
 namespace Saga.Dungeon
 {
@@ -21,6 +16,61 @@ namespace Saga.Dungeon
         public string roomName;
         public Exit[] exits;
         public abstract void LoadRoom();
+
+        public static Room CreateRandomBasicCombatRoom(Room[] rooms, int i) {
+            (string, string) roomNameAndDescription = CreateRoomNameAndDescription();
+            if (i == 0) {
+                Room room = new RandomBasicCombatRoom()
+                {
+                    roomName = roomNameAndDescription.Item1,
+                    description = roomNameAndDescription.Item2,
+                    exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }],
+                };
+                return room;
+            } else {
+                (string, string) exit = CreateExit();
+                Room room = new RandomBasicCombatRoom()
+                {
+                    roomName = roomNameAndDescription.Item1,
+                    description = roomNameAndDescription.Item2,
+                    exits = [new Exit() { keyString = $"{exit.Item1}", exitDescription = $"{exit.Item2}", valueRoom = rooms[i - 1]}],
+                };
+                return room;
+            }
+        }
+        public static Room CreateRandomEncounterRoom(Room[] rooms, int i) {
+            (string, string) roomNameAndDescription = CreateRoomNameAndDescription();
+            if (i == 0) {
+                Room room = new RandomEncounterRoom()
+                {
+                    roomName = roomNameAndDescription.Item1,
+                    description = roomNameAndDescription.Item2,
+                    exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }]
+                };
+                return room;
+            } else {
+                (string, string) exit = CreateExit();
+                Room room = new RandomEncounterRoom()
+                {
+                    roomName = roomNameAndDescription.Item1,
+                    description = roomNameAndDescription.Item2,
+                    exits = [new Exit() { keyString = $"{exit.Item1}", exitDescription = $"{exit.Item2}", valueRoom = rooms[i-1]}]
+                };
+                return room;
+            }
+        }
+        public static (string, string) CreateRoomNameAndDescription() {
+            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomNames.txt");
+            lines.RemoveAt(0);
+            int picked = Program.Rand.Next(lines.Count);
+            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1]);
+        }
+        public static (string, string) CreateExit() {
+            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomExits.txt");
+            lines.RemoveAt(0);
+            int picked = Program.Rand.Next(lines.Count);
+            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1].Replace("%", "\u001b[96m").Replace("¤", "\u001b[0m"));
+        }
     }
 
     public class DungeonTemplate
@@ -61,13 +111,11 @@ namespace Saga.Dungeon
                 currentRoom.LoadRoom();
             }
         }
-
         public void ExploreDungeon() {
             Program.RoomController.currentDungeonInstance = GenerateDungeon();
             Program.CurrentPlayer.TimesExplored++;
             ChangeRoom("",currentDungeonInstance.rooms[^1]);
         }
-
         public static DungeonTemplate GenerateDungeon() {
             var dungeon = new DungeonTemplate()
             {
@@ -81,55 +129,28 @@ namespace Saga.Dungeon
             int dybde = Program.Rand.Next(1, 5 + 1);
             Room[] rooms = new Room[dybde];
             for (int i = 0; i < dybde; i++) {
-                rooms[i] = CreateRandomRoom(rooms, i);
+                rooms[i] = Program.Rand.Next(0, 100) switch
+                {
+                    int x when 55 <= x && x < 80 && i == 0 =>                           Encounters.ProgressTheStory(rooms, i),
+                    int x when 80 <= x && x < 90 && i != 0 =>                           new HallwayRoom(rooms, i),
+                    int x when 90 <= x && x < 100 && Program.CurrentPlayer.Level > 1 => Room.CreateRandomEncounterRoom(rooms, i),
+                    _ =>                                                                Room.CreateRandomBasicCombatRoom(rooms, i),
+                };
             }
 
             return [.. rooms];
-
         }
-
-        public static Room CreateRandomRoom(Room[] rooms, int i) {
-            (string, string) roomNameAndDescription = CreateRoomNameAndDescription();
-            if (i == 0) {
-                Room room = new RandomRoom()
-                {
-                    roomName = roomNameAndDescription.Item1,
-                    description = roomNameAndDescription.Item2,
-                    exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }],
-                };
-                return room;
-            } else {
-                (string, string) exit = CreateExit();
-                Room room = new RandomRoom()
-                {
-                    roomName = roomNameAndDescription.Item1,
-                    description = roomNameAndDescription.Item2,
-                    exits = [new Exit() { keyString = $"{exit.Item1}", exitDescription = $"{exit.Item2}", valueRoom = rooms[i - 1] }],
-                };
-                return room;
-            }       
-        }
-
-        public static (string, string) CreateRoomNameAndDescription() {
-            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomNames.txt");
-            lines.RemoveAt(0);
-            int picked = Program.Rand.Next(lines.Count);
-            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1]);
-        }
-        public static (string, string) CreateExit() {
-            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomExits.txt");
-            lines.RemoveAt(0);
-            int picked = Program.Rand.Next(lines.Count);
-            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1].Replace("%", "\u001b[96m").Replace("¤", "\u001b[0m"));
-        }
-
     }
+
+    //Alle custom rum:
+
+    //Det allerførste rum, hvor spillet starter.
     public class StartRoom : Room
     {
         public StartRoom() {
-            roomName = "Jail Cells";
+            roomName = "Jail cells";
             description = "You look around and see Gheed rummage through big wooden crates. You hear him counting.";
-            exits = [new Exit() { keyString = "door", exitDescription = $"You see a big wooden \u001b[96mdoor\u001b[0m with rusted hinges and reinforced with iron plating", valueRoom = Rooms.Hallway }];
+            exits = [new Exit() { keyString = "door", exitDescription = $"You see a big wooden \u001b[96mdoor\u001b[0m with rusted hinges and reinforced with iron plating", valueRoom = Rooms.HallwayStart }];
         }
         public override void LoadRoom() {
             string exit = "";
@@ -143,10 +164,10 @@ namespace Saga.Dungeon
 
         }
     }
-
-    public class HallwayRoom : Room
+    //Andet rum efter starten.
+    public class HallwayRoomStart : Room
     {
-        public HallwayRoom() {
+        public HallwayRoomStart() {
             roomName = "Hallway";
             description = "";
             exits = [new Exit() { keyString = "deeper", exitDescription = $"The hallway continues \u001b[96mdeeper\u001b[0m into the dark", valueRoom = Rooms.Camp }];
@@ -161,7 +182,7 @@ namespace Saga.Dungeon
             Program.RoomController.ChangeRoom(exit);
         }
     }
-
+    //Her har spilleren sin lejr og retinue holder til.
     public class CampRoom : Room
     {
         public CampRoom() {
@@ -185,17 +206,64 @@ namespace Saga.Dungeon
             }
         }
     }
-
-    public class RandomRoom : Room 
+    //Rum til Puzzle One Encounter.
+    public class HallwayRoom : Room
     {
+        public HallwayRoom(Room[] rooms, int i) {
+            roomName = "Hallway";
+            description = "Behind you are the runes you crossed.";
+            exits = [new Exit() { keyString = "deeper", exitDescription = $"The hallway continues \u001b[96mdeeper\u001b[0m into the dark", valueRoom = rooms[i - 1] }];
+        }
         public override void LoadRoom() {
             string exit = "";
-            Encounters.RandomEncounter();
-            HUDTools.SmallCharacterInfo();
+            Encounters.PuzzleOneEncounter();
             while (exit == "") {
                 exit = TextInput.PlayerPrompt(true);
             }
             Program.SoundController.Stop();
+            Program.RoomController.ChangeRoom(exit);
+        }
+    }
+    //Rum med et tilfældigt monster.
+    public class RandomBasicCombatRoom : Room 
+    {
+        public override void LoadRoom() {
+            string exit = "";
+            Encounters.RandomBasicCombatEncounter();
+            HUDTools.SmallCharacterInfo();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
+            
+            Program.RoomController.ChangeRoom(exit);
+        }
+    }
+    //Rum til et tilfældigt encounter.
+    public class RandomEncounterRoom : Room 
+    {
+        public override void LoadRoom() {
+            string exit = "";
+            Encounters.RandomEncounter();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
+            Program.RoomController.ChangeRoom(exit);
+        }
+    }
+    //Rum hvor spilleren møder Flemsha
+    public class MeetFlemshaRoom : Room
+    {
+        public MeetFlemshaRoom() {
+            roomName = "Old jail cells";
+            description = "TextMissing";
+            exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }];
+        }
+        public override void LoadRoom() {
+            string exit = "";
+            Encounters.MeetFlemsha();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
             Program.RoomController.ChangeRoom(exit);
         }
     }
@@ -204,7 +272,7 @@ namespace Saga.Dungeon
 
         public readonly static CampRoom Camp = new();
 
-        public readonly static HallwayRoom Hallway = new();
+        public readonly static HallwayRoomStart HallwayStart = new();
 
         public readonly static StartRoom StartRoom = new();
     }

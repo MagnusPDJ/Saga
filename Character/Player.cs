@@ -4,7 +4,6 @@ using Saga.Items;
 using Saga.Items.Loot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Saga.Character
@@ -109,7 +108,7 @@ namespace Saga.Character
         // Calculates and outputs hero stats.
         public void DisplayStats() {
             CalculateTotalStats();
-            HUDTools.WriteStatsToConsole(Name, Level, TotalPrimaryAttributes, TotalSecondaryAttributes, DPT);
+            HUDTools.WriteStatsToConsole(Name, Level, TimesExplored, TotalPrimaryAttributes, TotalSecondaryAttributes, DPT);
         }
         // Calculates total stats based on base stats and equipped items.
         public void CalculateTotalStats() {

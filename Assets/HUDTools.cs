@@ -410,11 +410,11 @@ namespace Saga.Assets
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
             Console.WriteLine("Choose what to sell");
         }
-        public static void WriteStatsToConsole(string name, int level, PrimaryAttributes totalPrimaryAttributes, SecondaryAttributes baseSecondaryAttributes, (int, int) dpt) {
+        public static void WriteStatsToConsole(string name, int level, int timesExplored, PrimaryAttributes totalPrimaryAttributes, SecondaryAttributes baseSecondaryAttributes, (int, int) dpt) {
             StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~\n");
 
             stats.AppendFormat($" Name: {name}\t\t\tClass: {Program.CurrentPlayer.CurrentClass}\n");
-            stats.AppendFormat($" Level: {level}\n");
+            stats.AppendFormat($" Level: {level}\t\t\tTimes Explored: {timesExplored}\n");
             stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
             stats.AppendFormat($"\n----------------- Primary Attributes -----------------------\n");
             stats.AppendFormat($" (S)trength: {totalPrimaryAttributes.Strength}\n");
@@ -521,19 +521,19 @@ namespace Saga.Assets
                             Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
                         }
                         if (((Armor)item).Attributes.Strength > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Strength} Str");
+                            Console.Write($", +{((Armor)item).Attributes.Strength} Str");
                         }
                         if (((Armor)item).Attributes.Dexterity > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Dexterity} Dex");
+                            Console.Write($", +{((Armor)item).Attributes.Dexterity} Dex");
                         }
                         if (((Armor)item).Attributes.Intellect > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Intellect} Int");
+                            Console.Write($", +{((Armor)item).Attributes.Intellect} Int");
                         }
                         if (((Armor)item).Attributes.Constitution > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.Constitution} Const");
+                            Console.Write($", +{((Armor)item).Attributes.Constitution} Const");
                         }
                         if (((Armor)item).Attributes.WillPower > 0) {
-                            Console.Write($" +{((Armor)item).Attributes.WillPower} Wp");
+                            Console.Write($", +{((Armor)item).Attributes.WillPower} Wp");
                         }
                         if (item.ItemName == "Linen Rags") {
                             Console.Write(" Offers no protection");
@@ -543,7 +543,7 @@ namespace Saga.Assets
                         Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
                     }
                 }
-                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname'\nTo examine item write examine_Itemname else (b)ack\n", 1);
+                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname'\nTo examine item write examine_Itemname else (b)ack\n", 0);
                 string[] input = Console.ReadLine().ToLower().Split('_');
                 if (input[0] == "equip") {
                     if (Program.CurrentPlayer.Inventory.All(x => x == null)) {
@@ -755,19 +755,19 @@ namespace Saga.Assets
                                 Console.Write($" +{((Armor)quest.Item).SecondaryAttributes.ArmorRating} Armor Rating");
                             }
                             if (((Armor)quest.Item).Attributes.Strength > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Strength} Str");
+                                Console.Write($", +{((Armor)quest.Item).Attributes.Strength} Str");
                             }
                             if (((Armor)quest.Item).Attributes.Dexterity > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Dexterity} Dex");
+                                Console.Write($", +{((Armor)quest.Item).Attributes.Dexterity} Dex");
                             }
                             if (((Armor)quest.Item).Attributes.Intellect > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Intellect} Int");
+                                Console.Write($", +{((Armor)quest.Item).Attributes.Intellect} Int");
                             }
                             if (((Armor)quest.Item).Attributes.Constitution > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.Constitution} Const");
+                                Console.Write($", +{((Armor)quest.Item).Attributes.Constitution} Const");
                             }
                             if (((Armor)quest.Item).Attributes.WillPower > 0) {
-                                Console.Write($" +{((Armor)quest.Item).Attributes.WillPower} Wp");
+                                Console.Write($", +{((Armor)quest.Item).Attributes.WillPower} Wp");
                             }
                             if (quest.Item.ItemName == "Linen Rags") {
                                 Console.Write(" Offers no protection");

@@ -372,7 +372,7 @@ namespace Saga
         
         //Metode til at 'Save and Quit' spillet.
         public static string Quit() {
-            HUDTools.Print("Want to Quit? (Y)",10);
+            HUDTools.Print("Want to Quit? (Y/N)",10);
             string input = TextInput.PlayerPrompt();
             if (input == "y") {
                 SoundController.Stop();

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
 using Saga.Assets;
 using Saga.Items;
 using Saga.Items.Loot;
-using Windows.Devices.Sensors;
 
 namespace Saga.Dungeon
 {
@@ -67,7 +63,7 @@ namespace Saga.Dungeon
             HUDTools.Print("'If you \u001b[96mgo\u001b[0m and clear some of the other rooms, I will look for my wares in these crates.'");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
-            AddNpcToCamp("Gheed");
+            NonPlayableCharacters.AddNpcToCamp("Gheed");
             HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");     
             TextInput.PressToContinue();
             Program.SoundController.Stop();
@@ -106,6 +102,7 @@ namespace Saga.Dungeon
             Console.Clear();
             Program.SoundController.Play("typewriter");
             HUDTools.SmallCharacterInfo();
+            HUDTools.ClearLastLine(1);
             HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side\nof the room, there is also a desk which probably belonged to the long gone warden.",30);
             bool examined = false;
             bool searched = false;
@@ -114,6 +111,7 @@ namespace Saga.Dungeon
                 while (!examined || !searched) {
                     Console.Clear();
                     HUDTools.SmallCharacterInfo();
+                    HUDTools.ClearLastLine(1);
                     HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either\nside of the room, there is also a desk which probably belonged to the long gone warden.", 0);
                     HUDTools.Print($"\nDo you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
                     string input = TextInput.PlayerPrompt();
@@ -172,8 +170,9 @@ namespace Saga.Dungeon
                     HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and\nthe door slides open.", 20);
                     HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
-                    AddNpcToCamp("Flemsha");
+                    NonPlayableCharacters.AddNpcToCamp("Flemsha");
                     TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(8);
                     break;
                 }
             }
@@ -213,6 +212,8 @@ namespace Saga.Dungeon
                 Awareness = 5,
             };
             AdvancedCombat(WizardEncounter);
+            Console.Clear();
+            HUDTools.SmallCharacterInfo();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
@@ -221,10 +222,7 @@ namespace Saga.Dungeon
             Program.SoundController.Play("dooropen");
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
-            Console.Clear();
             do {
-                Console.WriteLine("You open a door and find a treasure chest inside!");
-                Console.WriteLine("Do you want to try and open it?\n(Y/N)");
                 input = TextInput.PlayerPrompt();
                 if (input == "n") {
                     Program.SoundController.Play("doorclose");
@@ -249,21 +247,20 @@ namespace Saga.Dungeon
                 } else {
                     HUDTools.Print("Invalid input");
                     TextInput.PressToContinue();
-                    Console.Clear();
+                    HUDTools.ClearLastLine(3);
                 }
             } while (input != "42");
+            Console.Clear();
+            HUDTools.SmallCharacterInfo();
         }
         //Encounter der "spawner" en treasure chest.
         public static void TreasureEncounter() {
             string input;
             Console.Clear();
-            Program.SoundController.Play("dooropen");            
+            Program.SoundController.Play("dooropen");
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
-            Console.Clear();
             do {
-                Console.WriteLine("You open a door and find a treasure chest inside!");
-                Console.WriteLine("Do you want to try and open it?\n(Y/N)");
                 input = TextInput.PlayerPrompt();
                 if (input == "n") {
                     Program.SoundController.Play("doorclose");
@@ -281,9 +278,11 @@ namespace Saga.Dungeon
                 } else {
                     HUDTools.Print("Invalid input");
                     TextInput.PressToContinue();
-                    Console.Clear();
+                    HUDTools.ClearLastLine(3);
                 }
             } while (input != "42");
+            Console.Clear();
+            HUDTools.SmallCharacterInfo();
         }
         //Encounter der starter en trap med runer hvor den rigtige rune skal vælges for at kunne exit
         public static void PuzzleOneEncounter() {
@@ -379,11 +378,12 @@ namespace Saga.Dungeon
                     Program.CurrentPlayer.BasicActions(input);
                 }               
             }
+            HUDTools.ClearLastLine(1);
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
             Program.CurrentPlayer.Loot.GetExp(2, 50*Program.CurrentPlayer.Level);
             TextInput.PressToContinue();
-            RandomBasicCombatEncounter();
+            HUDTools.ClearLastLine(16);
         }
 
 
@@ -391,11 +391,8 @@ namespace Saga.Dungeon
 
         //Metode til at vælge tilfældigt mellem encounters.
         public static void RandomEncounter() {
-            //0, 125+1
-            switch (Program.Rand.Next(0, 125 + 1)) {
-                default:
-                    RandomBasicCombatEncounter();
-                    break;
+            //1, 30+1
+            switch (Program.Rand.Next(1, 30+1)) {
                 case int n when n <= 10 && Program.CurrentPlayer.Level > 1:
                     WizardEncounter();
                     break;
@@ -405,24 +402,14 @@ namespace Saga.Dungeon
                 case int n when 20 < n && n <=30 && Program.CurrentPlayer.Level > 1:
                     TreasureEncounter();
                     break;
-                case int n when 30 < n && n <= 40:
-                    PuzzleOneEncounter();
-                    break;
-            }
-        }
-        //Metode til at lave en pool af random encounters af tilfældig dybde/længde/antal op til 5 (default, bestemt antal gives som parametre).
-        public static void RandomEncounterPool(int dybde = 0) {
-            if (dybde == 0) {
-                dybde = Program.Rand.Next(1, 5 +1);
-            }
-            for (int i=0; i <= dybde; i++) {
-                RandomEncounter();
             }
         }
         //Metode til at vælge imellem story/NPC encounters, den bruges efter et sæt af randomencounters under Camp().
-        public static void ProgressTheStory() {
+        public static Room ProgressTheStory(Room[] rooms, int i) {
             if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
-                MeetFlemsha();
+                return new MeetFlemshaRoom();
+            } else {
+                return Room.CreateRandomBasicCombatRoom(rooms, i);
             }
         }
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
@@ -465,7 +452,7 @@ namespace Saga.Dungeon
                 }
                 //Tale med NPC'er mens man er tilbage i campen.
                 else if (input == "t" || input == "talk") {
-                    TalkToNpc();
+                    NonPlayableCharacters.TalkToNpc();
                     HUDTools.FullCampHUD();
                 }
                 //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
@@ -474,32 +461,6 @@ namespace Saga.Dungeon
                 }
             }
             return choice;
-        }
-        //Funktion som kaldes under campen når spilleren skal snakke med de tilstedeværende personer.
-        public static void TalkToNpc() {
-            HUDTools.TalkToNpcHUD();
-            while (true) {
-                string input = TextInput.PlayerPrompt();
-                if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count && n >= 1) {
-                    NonPlayableCharacters.LoadDialogueOptions(int.Parse(input) - 1);
-                    HUDTools.TalkToNpcHUD();
-                } else if (input == "b" || input == "back") {
-                    break;
-                } else {
-                    HUDTools.Print("Not a valid input...");
-                    TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
-                }
-            }
-        }
-        //Funktion til at tilføje en NPC til campen som kan snakkes med.
-        public static void AddNpcToCamp(string name) {
-            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"));
-            var npcToAdd = allNpcs.Where(x => x.Name.Equals(name)).FirstOrDefault();
-            npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
-            Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);          
-            NonPlayableCharacters.UpdateDialogueOptions(name);
-            HUDTools.Print($"\u001b[35m{name} has joined your cause!\u001b[0m",20);
         }
         //Metode til at køre kamp
         public static void AdvancedCombat(Enemy Monster) {
