@@ -255,7 +255,7 @@ namespace Saga.Dungeon
     {
         public MeetFlemshaRoom() {
             roomName = "Old jail cells";
-            description = "TextMissing";
+            description = "You look around the old jail. There is nothing of value. Flemsha seems to want you to leave first.";
             exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }];
         }
         public override void LoadRoom() {

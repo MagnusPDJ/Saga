@@ -18,10 +18,21 @@ namespace Saga.Dungeon
         public static void FirstEncounter() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
+            HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
+            HUDTools.Print("anything about your past.");
+            if (string.IsNullOrWhiteSpace(Program.CurrentPlayer.Name) == true) {
+                HUDTools.Print("You can't even remember your own name...");
+                Program.CurrentPlayer.Name = "Adventurer";
+            }
+            else {
+                HUDTools.Print($"You know your name is {Program.CurrentPlayer.Name}.");
+            }
+            TextInput.PressToContinue();
+            HUDTools.ClearLastLine(1);
             HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.");
+            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
             Program.SoundController.Stop();
             Program.SoundController.Play("taunt");
             Program.SoundController.Play("kamp");
@@ -86,6 +97,7 @@ namespace Saga.Dungeon
         public static void FirstReturn() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
+            Program.SoundController.Play("labyrinthchange");
             HUDTools.Print($"As you enter the camp and close the door behind you, everything shakes and there are loud\nsounds of stone grinding against each other. Sand and pebbles fall from the ceiling and you\ncollapse to the floor from the vibrations.");
             HUDTools.Print($"After a few moments, you regain your composure and you check on Gheed.");
             TextInput.PressToContinue();
@@ -168,7 +180,7 @@ namespace Saga.Dungeon
                     Console.Clear();
                     HUDTools.SmallCharacterInfo();
                     HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and\nthe door slides open.", 20);
-                    HUDTools.Print("He thanks you very much and you tell him how he can find your camp, where Gheed is too.", 20);
+                    HUDTools.Print("He thanks you very much and you tell him about your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
                     NonPlayableCharacters.AddNpcToCamp("Flemsha");
                     TextInput.PressToContinue();
@@ -272,6 +284,7 @@ namespace Saga.Dungeon
                     Program.SoundController.Play("treasure");
                     HUDTools.Print("You release the metal latch and grab both sides of the chest and peer inside.");
                     TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(1);
                     Program.SoundController.Play("win");
                     Program.CurrentPlayer.Loot.GetTreasureChestLoot();
                     break;

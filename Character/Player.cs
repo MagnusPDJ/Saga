@@ -306,6 +306,7 @@ namespace Saga.Character
                 Program.SoundController.Stop();
                 HUDTools.ClearLog();
                 Program.SoundController.Play("gameover");
+                HUDTools.ClearLastLine(1);
                 HUDTools.Print($"\u001b[31m{message}\u001b[0m", 20);
                 TextInput.PressToContinue();
                 Program.CurrentPlayer = null;

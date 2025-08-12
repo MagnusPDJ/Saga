@@ -45,6 +45,7 @@ namespace Saga.Assets
                 {"runetrap", StreamToBytes(Properties.Resources.runetrap)},
                 {"darts", StreamToBytes(Properties.Resources.darts)},
                 {"footsteps", StreamToBytes(Properties.Resources.footsteps)},
+                {"labyrinthchange", StreamToBytes(Properties.Resources.labyrinthchange)},
             };        
 
         //Konstruktor til ny lydkontroller.

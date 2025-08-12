@@ -222,8 +222,9 @@ namespace Saga
                             }
                         }
                     } else if (data[0] == "new game") {
-                        Player newPlayer = NewCharacter(idCount);
                         newP = true;
+                        Player newPlayer = CreateCharacter(PickName(), PickClass());
+                        newPlayer.Id = idCount;
                         return newPlayer;
                     }
                     else if (data[0] == "back" || data[0] == "b") {
@@ -246,24 +247,6 @@ namespace Saga
                     HUDTools.ClearLastLine(3);
                 }
             }
-        }
-
-        //Metode til at genere ny karakter efter at have inputtet 'new game' i Load() metoden.
-        static Player NewCharacter(int i) {
-            Player p = CreateCharacter(PickName(), PickClass());
-            p.Id = i;
-            Console.Clear();
-            Program.SoundController.Play("typewriter");
-            HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
-            HUDTools.Print("anything about your past.");
-            if (string.IsNullOrWhiteSpace(p.Name) == true) {
-                HUDTools.Print("You can't even remember your own name...");
-                p.Name = "Adventurer";
-            } else {
-                HUDTools.Print($"You know your name is {p.Name}.");
-            }
-            TextInput.PressToContinue();
-            return p;
         }
 
         public static Player CreateCharacter(string name = "Adventurer", int classes = 1) {
