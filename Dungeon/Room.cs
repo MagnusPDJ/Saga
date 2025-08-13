@@ -63,7 +63,7 @@ namespace Saga.Dungeon
             List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomNames.txt");
             lines.RemoveAt(0);
             int picked = Program.Rand.Next(lines.Count);
-            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1]);
+            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1].Replace("\\n", "\n"));
         }
         public static (string, string) CreateExit() {
             List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomExits.txt");
