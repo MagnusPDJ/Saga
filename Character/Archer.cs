@@ -179,6 +179,7 @@ namespace Saga.Character
             else {
                 HUDTools.Print($"You use your crazy ninja moves to evade the {Monster.Name} and you successfully escape!", 20);
                 escaped = true;
+                Program.RoomController.ran = true;
             }
             return escaped;
         }

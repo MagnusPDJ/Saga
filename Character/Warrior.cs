@@ -172,6 +172,7 @@ namespace Saga.Character
             else {
                     HUDTools.Print($"You barely manage to shake off the {Monster.Name} and you successfully escape.", 20);
                 escaped = true;
+                Program.RoomController.ran = true;
             }
             return escaped;
         }

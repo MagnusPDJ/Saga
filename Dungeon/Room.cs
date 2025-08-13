@@ -93,6 +93,7 @@ namespace Saga.Dungeon
             ];
         public Room currentRoom;
         public DungeonTemplate currentDungeonInstance;
+        public bool ran = false;
 
         public void ChangeRoom(string keystring, Room room = null) {
             bool foundRoom = false;
@@ -175,11 +176,16 @@ namespace Saga.Dungeon
         public override void LoadRoom() {
             string exit = "";
             Encounters.SecondEncounter();
-            HUDTools.SmallCharacterInfo();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
+            if (Program.RoomController.ran == true) {
+                Program.RoomController.ran = false;
+                Program.RoomController.ChangeRoom(exits[0].keyString);
+            } else {
+                HUDTools.SmallCharacterInfo();
+                while (exit == "") {
+                    exit = TextInput.PlayerPrompt(true);
+                }
+                Program.RoomController.ChangeRoom(exit);
             }
-            Program.RoomController.ChangeRoom(exit);
         }
     }
     //Her har spilleren sin lejr og retinue holder til.
@@ -230,12 +236,16 @@ namespace Saga.Dungeon
         public override void LoadRoom() {
             string exit = "";
             Encounters.RandomBasicCombatEncounter();
-            HUDTools.SmallCharacterInfo();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
+            if (Program.RoomController.ran == true) {
+                Program.RoomController.ran = false;
+                Program.RoomController.ChangeRoom(exits[0].keyString);
+            } else {
+                HUDTools.SmallCharacterInfo();
+                while (exit == "") {
+                    exit = TextInput.PlayerPrompt(true);
+                }
+                Program.RoomController.ChangeRoom(exit);
             }
-            
-            Program.RoomController.ChangeRoom(exit);
         }
     }
     //Rum til et tilfældigt encounter.
@@ -244,10 +254,15 @@ namespace Saga.Dungeon
         public override void LoadRoom() {
             string exit = "";
             Encounters.RandomEncounter();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
+            if (Program.RoomController.ran == true) {
+                Program.RoomController.ran = false;
+                Program.RoomController.ChangeRoom(exits[0].keyString);
+            } else {
+                while (exit == "") {
+                    exit = TextInput.PlayerPrompt(true);
+                }
+                Program.RoomController.ChangeRoom(exit);
             }
-            Program.RoomController.ChangeRoom(exit);
         }
     }
     //Rum hvor spilleren møder Flemsha
@@ -261,10 +276,15 @@ namespace Saga.Dungeon
         public override void LoadRoom() {
             string exit = "";
             Encounters.MeetFlemsha();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
+            if (Program.RoomController.ran == true) {
+                Program.RoomController.ran = false;
+                Program.RoomController.ChangeRoom(exits[0].keyString);
+            } else {
+                while (exit == "") {
+                    exit = TextInput.PlayerPrompt(true);
+                }
+                Program.RoomController.ChangeRoom(exit);
             }
-            Program.RoomController.ChangeRoom(exit);
         }
     }
 
