@@ -32,15 +32,15 @@ namespace Saga.Items.Loot
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Wand,
             WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
-            ItemDescription = "It may be cracked but nothing some duct tape couldn't fix!",
+            ItemDescription = "It may be cracked, but nothing some duct tape couldn't fix!",
         };
         public readonly static Weapon FlimsyBow = new() {
             ItemName = "Flimsy Bow",
             ItemLevel = 1,
             ItemSlot = Slot.Weapon,
             WeaponType = WeaponTypes.Bow,
-            WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 2, AttackSpeed = 1 },
-            ItemDescription = "If you pull it too hard it would probably snap. On the positive side you'd have a nunchuck.",
+            WeaponAttributes = new WeaponAttributes() { MinDamage = 1, MaxDamage = 3, AttackSpeed = 1 },
+            ItemDescription = "If you pull it too hard, it would probably snap. On the positive side, you'd have a nunchuck.",
         };
         public readonly static Weapon EnchantedWand = new() {
             ItemName = "Enchanted Wand",
