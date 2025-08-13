@@ -47,6 +47,8 @@ namespace Saga.Dungeon
         public static void SecondEncounter() {
             Console.Clear();
             Program.SoundController.Play("kamp");
+            HUDTools.SmallCharacterInfo();
+            HUDTools.ClearLastLine(1);
             HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
             Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
@@ -200,6 +202,8 @@ namespace Saga.Dungeon
             Console.Clear();
             Program.SoundController.Play("kamp");
             Act1Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
+            HUDTools.SmallCharacterInfo();
+            HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0,2)) {
                 case int x when (x == 0):
                     HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.Name}...", 10);
@@ -234,6 +238,8 @@ namespace Saga.Dungeon
             string input;
             Console.Clear();
             Program.SoundController.Play("dooropen");
+            HUDTools.SmallCharacterInfo();
+            HUDTools.ClearLastLine(1);
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
             do {
@@ -242,7 +248,7 @@ namespace Saga.Dungeon
                     Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...", 20);
                     TextInput.PressToContinue();
-                    RandomBasicCombatEncounter();
+                    Program.RoomController.ran = true;
                     break;
                 } else if (input == "y") {
                     Program.SoundController.Play("mimic");
@@ -272,6 +278,8 @@ namespace Saga.Dungeon
             string input;
             Console.Clear();
             Program.SoundController.Play("dooropen");
+            HUDTools.SmallCharacterInfo();
+            HUDTools.ClearLastLine(1);
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
             do {
@@ -280,7 +288,7 @@ namespace Saga.Dungeon
                     Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...",20);
                     TextInput.PressToContinue();
-                    RandomBasicCombatEncounter();
+                    Program.RoomController.ran = true;
                     break;
                 } else if (input == "y") {
                     Program.SoundController.Play("treasure");

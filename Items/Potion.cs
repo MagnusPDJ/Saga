@@ -18,7 +18,7 @@ namespace Saga.Items
             ItemLevel = 1;
             PotionType = PotionType.POTION_HEALING;
             PotionPotency = 5;
-            PotionQuantity = 5;
+            PotionQuantity = 0;
             ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur";
         }
         public override int CalculateItemPrice() {

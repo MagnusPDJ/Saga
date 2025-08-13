@@ -42,7 +42,9 @@ namespace Saga.Items.Loot
         public override void GetCombatLoot(Enemy monster, string message) {                      
             HUDTools.Print(message, 15);
             GetGold(monster.GoldModifier);
-            if (monster.EnemyTribe != Tribe.Beast) {
+            if (monster.Name == "Human Captor") {
+                GetPotions(Program.Rand.Next(5, 8));
+            } else if (monster.EnemyTribe != Tribe.Beast) {
                 GetPotions();
             }
             GetQuestLoot(0,0,"",monster);
