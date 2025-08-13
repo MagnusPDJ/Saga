@@ -13,7 +13,8 @@ using System.Text.Json;
 namespace Saga
 {
     public partial class Program {
-
+        
+       //aktiver virtual terminal processing, som gør det muligt at bruge ANSI farvning af tekst.
         const int STD_OUTPUT_HANDLE = -11;
         const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
 

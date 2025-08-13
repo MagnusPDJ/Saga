@@ -171,6 +171,7 @@ namespace Saga.Dungeon
                     }
                 }
                 if (leftForDead) {
+                    HUDTools.ClearLastLine(1);
                     HUDTools.Print("You close the door to the prison ward and continue on, never to see the prisoner again.");
                     TextInput.PressToContinue();
                     Program.RoomController.ran = true;
