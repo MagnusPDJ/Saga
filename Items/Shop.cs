@@ -41,7 +41,13 @@ namespace Saga.Items
                 } else if (input == "s" || input == "switch" || input == "sell") {
                     sell = true;
                 } else if (input == "i" || input == "inventory") {
-                    HUDTools.InventoryScreen();
+                    while (true) {
+                        HUDTools.InventoryScreen();
+                        string input2 = TextInput.PlayerPrompt(false);
+                        if (input2 == "back") {
+                            break;
+                        }
+                    }
                 } else if (input == "e" || input == "exit") {
                     break;
                 } else if (input == "q" || input == "questlog") {
@@ -68,7 +74,13 @@ namespace Saga.Items
                     } else if (input1 == "f" || input1 == "5x" || input1 == "sell 5" || input1 == "sell 5x" || input1 == "sell 5xpotions") {
                         TrySellPotion("5x potion", ShopPrice("sellpotion5"), p);
                     } else if (input1 == "i" || input1 == "inventory") {
-                        HUDTools.InventoryScreen();
+                        while (true) {
+                            HUDTools.InventoryScreen();
+                            string input2 = TextInput.PlayerPrompt(false);
+                            if (input2 == "back") {
+                                break;
+                            }
+                        }
                     } else if (input1 == "q" || input == "questlog") {
                         HUDTools.QuestLogHUD();
                         TextInput.PressToContinue();

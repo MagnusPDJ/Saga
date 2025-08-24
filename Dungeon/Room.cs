@@ -80,16 +80,20 @@ namespace Saga.Dungeon
 
     public class RoomController 
     {
-        public InputAction[] InputActions = [
-            new Go("go"),
-            new Examine("examine"),
-            new Equip("equip"),
+        public InputAction[] InputRoomActions = [
+            new Go("go"),     
             new Use("use"),
             new Look("look"),
             new DrinkPotion("heal", "h"),
             new SeeCharacterScreen("character", "c"),
             new SeeInventory("inventory", "i"),
             new SeeQuestLog("questlog", "l")
+            ];
+        public InputAction[] InputInvActions = [
+            new Examine("examine"),
+            new Equip("equip"),
+            new UnEquip("unequip"),
+            new Back("back", "b"),
             ];
         public Room currentRoom;
         public DungeonTemplate currentDungeonInstance;

@@ -323,7 +323,13 @@ namespace Saga.Character
                 HUDTools.CharacterScreen();
                 TextInput.PressToContinue();
             } else if (input == "i" || input == "inventory") {
-                HUDTools.InventoryScreen();
+                while (true) {
+                    HUDTools.InventoryScreen();
+                    string input2 = TextInput.PlayerPrompt(false);
+                    if (input2 == "back") {
+                        break;
+                    }
+                }
             } else if (input == "l" || input == "questlog") {
                 HUDTools.QuestLogHUD();
                 TextInput.PressToContinue();
@@ -372,12 +378,12 @@ namespace Saga.Character
         }
         //Metode til at vælge mellem klasse skills i kamp.
         public void CombatActions(Enemy Monster, Encounters TurnTimer) {
-            Console.WriteLine("Choose an action...");
+            Console.WriteLine(" Choose an action...");
             string input = TextInput.PlayerPrompt();
             if (input == "a" || input == "attack") {
                 //Attack
                 int damage = Attack(Monster);
-                Monster.Health -= damage;
+                Monster.TakeDamage(damage);
                 HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
                 TurnTimer.TurnTimer++;
             } else if (input == "d" || input == "defend") {

@@ -255,13 +255,13 @@ namespace Saga.Assets
             Console.WriteLine($"=======Press Esc to go back=======");
         }
         public static void LoadSaves(List<Player> players) {
-            Print("Choose a save! ('back' for main menu) ", 10);
-            Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 3);
-            Print("#: playername");
+            Print("Choose a save! ('back' for main menu) ", 0);
+            Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 0);
+            Print("#: playername", 0);
             foreach (Player p in players) {
                 Print($"{p.Id}: {p.Name} - Class: {p.CurrentClass} - Level: {p.Level}", 5);
             }
-            Print("<><><><><><><><><><><><><><><><>", 3);
+            Print("<><><><><><><><><><><><><><><><>", 0);
             Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.\n", 1);
         }
         public static void BuyShopHUD(Shop shop) {
@@ -475,163 +475,91 @@ namespace Saga.Assets
             }       
         }
         public static void InventoryScreen() {
-            while (true) {
-                Console.Clear();
-                Console.WriteLine("******************** Equipment *****************************");
-                foreach (KeyValuePair<Slot, Item> entry in Program.CurrentPlayer.Equipment) {
-                    if (entry.Key == Slot.Weapon) {
-                        Console.WriteLine($" {entry.Value.ItemSlot} - {entry.Value.ItemName}: +{((Weapon)entry.Value).WeaponAttributes.MinDamage}-{((Weapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
-                    } else {
-                        Console.Write($" {entry.Value.ItemSlot} - {entry.Value.ItemName}:");
-                        if (((Armor)entry.Value).SecondaryAttributes.ArmorRating > 0) {
-                            Console.Write($" +{((Armor)entry.Value).SecondaryAttributes.ArmorRating} Armor Rating");
-                        }
-                        if (((Armor)entry.Value).Attributes.Strength > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Strength} Str");
-                        }
-                        if (((Armor)entry.Value).Attributes.Dexterity > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Dexterity} Dex");
-                        }
-                        if (((Armor)entry.Value).Attributes.Intellect > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Intellect} Int");
-                        }
-                        if (((Armor)entry.Value).Attributes.Constitution > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.Constitution} Const");
-                        }
-                        if (((Armor)entry.Value).Attributes.WillPower > 0) {
-                            Console.Write($", +{((Armor)entry.Value).Attributes.WillPower} Wp");
-                        }
-                        if (entry.Value.ItemName == "Linen Rags") {
-                            Console.Write(" Offers no protection");
-                        }
-                        Console.WriteLine("");
-                    }
-                }
-                Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
-                Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
-                Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
-                foreach (Item item in Program.CurrentPlayer.Inventory) {
-                    if (item == null) {
-                        Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
-                    } else if (item.ItemSlot == Slot.Weapon) {
-                        Console.WriteLine($" {item.ItemSlot} - {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
-                    } else if (item.ItemSlot != Slot.Quest) {
-                        Console.Write($" {item.ItemSlot} - {item.ItemName}:");
-                        if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
-                            Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
-                        }
-                        if (((Armor)item).Attributes.Strength > 0) {
-                            Console.Write($", +{((Armor)item).Attributes.Strength} Str");
-                        }
-                        if (((Armor)item).Attributes.Dexterity > 0) {
-                            Console.Write($", +{((Armor)item).Attributes.Dexterity} Dex");
-                        }
-                        if (((Armor)item).Attributes.Intellect > 0) {
-                            Console.Write($", +{((Armor)item).Attributes.Intellect} Int");
-                        }
-                        if (((Armor)item).Attributes.Constitution > 0) {
-                            Console.Write($", +{((Armor)item).Attributes.Constitution} Const");
-                        }
-                        if (((Armor)item).Attributes.WillPower > 0) {
-                            Console.Write($", +{((Armor)item).Attributes.WillPower} Wp");
-                        }
-                        if (item.ItemName == "Linen Rags") {
-                            Console.Write(" Offers no protection");
-                        }
-                        Console.WriteLine("");
-                    } else if (item.ItemSlot == Slot.Quest) {
-                        Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
-                    }
-                }
-                Print($"\nTo equip item write 'equip_Itemname', to unequip item write 'unequip_Itemname'\nTo examine item write examine_Itemname else (b)ack\n", 0);
-                string[] input = Console.ReadLine().ToLower().Split('_');
-                if (input[0] == "equip") {
-                    if (Program.CurrentPlayer.Inventory.All(x => x == null)) {
-                        Console.WriteLine("\nNo items in inventory...");
-                    } else {
-                        var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
-                        if (item != null) {
-                            if (item.ItemSlot == Slot.Quest) {
-                                Print("\nYou cannot equip this item...", 3);
-                            } else if (item.ItemSlot == Slot.Weapon) {
-                                Print($"\n{Program.CurrentPlayer.Equip((Weapon)item)}", 3);
-                            } else if (item.ItemSlot != Slot.Weapon) {
-                                Print($"\n{Program.CurrentPlayer.Equip((Armor)item)}", 3);
-                            }
-                        } else {
-                            Console.WriteLine("\nNo such item in inventory...");
-                        }
-                    }
-                    TextInput.PressToContinue();
-                } else if (input[0] == "unequip") {
-                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
-                    if (wat.Value == null) {
-                        Console.WriteLine("\nNo such item equipped...");
-                    } else {
-                        Print($"\n{Program.CurrentPlayer.UnEquip(wat.Key, wat.Value)}", 3);
-                    }
-                    TextInput.PressToContinue();
-                } else if (input[0] == "examine") {
-                    var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(input[1], StringComparison.CurrentCultureIgnoreCase));
-                    var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == input[1]);
-                    if (input[1] == "healing potion" || input[1] == "potion" || input[1] == "potions" || input[1] == "healing potions") {
-                        Print($"\n{Program.CurrentPlayer.CurrentHealingPotion.ItemDescription}", 3);
-                    } else if (wat.Value == null && item == null) {
-                        Console.WriteLine("\nNo such item exists...");
-                    } else if (wat.Value != null) {
-                        if (wat.Value.ItemSlot == Slot.Quest) {
-                            Print($"\n{wat.Value.ItemDescription}", 3);
-                        } else if (wat.Value.ItemSlot == Slot.Weapon) {
-                            Print($"\nThis is a weapon of type {((Weapon)wat.Value).WeaponType}.\n{wat.Value.ItemDescription}", 3);
-                        } else {
-                            Print($"\nThis is an armor of type {((Armor)wat.Value).ArmorType}.\n{wat.Value.ItemDescription}", 3);
-                        }
-                    } else {
-                        if (item.ItemSlot == Slot.Quest) {
-                            Print($"\n{item.ItemDescription}", 3);
-                        } else if (item.ItemSlot == Slot.Weapon) {
-                            Print($"\nThis is a weapon of type {((Weapon)item).WeaponType}.\n{item.ItemDescription}", 3);
-                        } else {
-                            Print($"\nThis is an armor of type {((Armor)item).ArmorType}.\n{item.ItemDescription}", 3);
-                        }
-                    }
-                    TextInput.PressToContinue();
-
-                } else if (input[0] == "b" || input[0] == "back") {
-                    break;
-                }
-            }
-        }
-        public static void TopCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
-            Print($"Turn: {TurnTimer.TurnTimer}",5);
-            Print($"Fighting: {Monster.Name}!", 10);
-            Print($"Strength: {Monster.Power} / HP: {Monster.Health}", 10);
-            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
-                Print("---------------------------",5);
-                Print("You go first!",10);
+            Console.WriteLine("******************** Equipment *****************************");
+            foreach (KeyValuePair<Slot, Item> entry in Program.CurrentPlayer.Equipment) {
+                if (entry.Key == Slot.Weapon) {
+                    Console.WriteLine($" {entry.Value.ItemSlot} - {entry.Value.ItemName}: +{((Weapon)entry.Value).WeaponAttributes.MinDamage}-{((Weapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                } else {
+                    Console.Write($" {entry.Value.ItemSlot} - {entry.Value.ItemName}:");
+                    if (((Armor)entry.Value).SecondaryAttributes.ArmorRating > 0) {
+                        Console.Write($" +{((Armor)entry.Value).SecondaryAttributes.ArmorRating} Armor Rating");
+                    }
+                    if (((Armor)entry.Value).Attributes.Strength > 0) {
+                        Console.Write($", +{((Armor)entry.Value).Attributes.Strength} Str");
+                    }
+                    if (((Armor)entry.Value).Attributes.Dexterity > 0) {
+                        Console.Write($", +{((Armor)entry.Value).Attributes.Dexterity} Dex");
+                    }
+                    if (((Armor)entry.Value).Attributes.Intellect > 0) {
+                        Console.Write($", +{((Armor)entry.Value).Attributes.Intellect} Int");
+                    }
+                    if (((Armor)entry.Value).Attributes.Constitution > 0) {
+                        Console.Write($", +{((Armor)entry.Value).Attributes.Constitution} Const");
+                    }
+                    if (((Armor)entry.Value).Attributes.WillPower > 0) {
+                        Console.Write($", +{((Armor)entry.Value).Attributes.WillPower} Wp");
+                    }
+                    if (entry.Value.ItemName == "Linen Rags") {
+                        Console.Write(" Offers no protection");
+                    }
+                    Console.WriteLine("");
+                }
             }
-            else {
-                Print("The enemy go first!",10);
-                Print("---------------------------",5);
+            Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
+            Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
+            foreach (Item item in Program.CurrentPlayer.Inventory) {
+                if (item == null) {
+                    Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
+                } else if (item.ItemSlot == Slot.Weapon) {
+                    Console.WriteLine($" {item.ItemSlot} - {item.ItemName}: +{((Weapon)item).WeaponAttributes.MinDamage}-{((Weapon)item).WeaponAttributes.MaxDamage} dmg");
+                } else if (item.ItemSlot != Slot.Quest) {
+                    Console.Write($" {item.ItemSlot} - {item.ItemName}:");
+                    if (((Armor)item).SecondaryAttributes.ArmorRating > 0) {
+                        Console.Write($" +{((Armor)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    }
+                    if (((Armor)item).Attributes.Strength > 0) {
+                        Console.Write($", +{((Armor)item).Attributes.Strength} Str");
+                    }
+                    if (((Armor)item).Attributes.Dexterity > 0) {
+                        Console.Write($", +{((Armor)item).Attributes.Dexterity} Dex");
+                    }
+                    if (((Armor)item).Attributes.Intellect > 0) {
+                        Console.Write($", +{((Armor)item).Attributes.Intellect} Int");
+                    }
+                    if (((Armor)item).Attributes.Constitution > 0) {
+                        Console.Write($", +{((Armor)item).Attributes.Constitution} Const");
+                    }
+                    if (((Armor)item).Attributes.WillPower > 0) {
+                        Console.Write($", +{((Armor)item).Attributes.WillPower} Wp");
+                    }
+                    if (item.ItemName == "Linen Rags") {
+                        Console.Write(" Offers no protection");
+                    }
+                    Console.WriteLine("");
+                } else if (item.ItemSlot == Slot.Quest) {
+                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{((QuestItem)item).Amount}\u001b[0m");
+                }
             }
+            Print($"\nTo equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\nTo examine item write examine Itemname else (b)ack\n", 0);
         }
         public static void FullCombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
-            Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
-            Console.WriteLine($"Fighting: {Monster.Name}!");
-            Console.WriteLine($"Strength: {Monster.Power} / HP: {Monster.Health}");
+            Console.WriteLine($" Turn: {TurnTimer.TurnTimer}\t\tLocation: {Program.RoomController.currentRoom.roomName}\n");
+            Console.WriteLine($" Fighting: {Monster.Name}!");
+            Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
-                Console.WriteLine("---------------------------");
-                Console.WriteLine("You go first!");
+                Console.WriteLine("\n------------------------------------");
+                Console.WriteLine(" You go first!\n");
             } else {
-                Console.WriteLine("The enemy goes first!");
-                Console.WriteLine("---------------------------");
+                Console.WriteLine("\n The enemy goes first!");
+                Console.WriteLine("------------------------------------\n");
             }           
-            Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
-            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
-            Console.Write("EXP  ");
+            Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($" Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}\t|| Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}");
+            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");

@@ -32,7 +32,7 @@ namespace Saga.Dungeon
         public static Act1Enemy CreateRandomAct1Enemy() {
             (string, Tribe)getName = GetName();
             Act1Enemy monster = new(getName.Item1, getName.Item2);
-            monster.Health = monster.GetHealth(getName.Item1);
+            monster.MaxHealth = monster.GetHealth(getName.Item1);
             monster.Power = monster.GetPower(getName.Item1);
             return monster;
         }

@@ -17,7 +17,17 @@ namespace Saga.Dungeon
     {
         public Tribe EnemyTribe { get; set; }
         public string Name { get; set; }
-        public int Health { get; set; }             
+        private int _maxHealth;
+        public int MaxHealth
+        {
+            get => _maxHealth;
+            set
+            {
+                _maxHealth = value;
+                Health = value;
+            }
+        }
+        public int Health { get; private set; }
         public int Power { get; set; }
         public float ExpModifier { get; set; }
         public float GoldModifier { get; set; }
@@ -31,5 +41,14 @@ namespace Saga.Dungeon
         public abstract int GetHealth(string name);
         public abstract int GetPower(string name);
         public abstract void MonsterActions(Encounters TurnTimer);
+
+        public void TakeDamage(int amount) {
+            Health -= amount;
+            if (Health < 0) Health = 0;
+        }
+        public void Heal(int amount) {
+            Health += amount;
+            if (Health > MaxHealth) Health = MaxHealth;
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
-using Saga.Dungeon;
+﻿using Saga.Dungeon;
+using Saga.Items;
+using System;
+using System.Linq;
 
 namespace Saga.Assets
 {
@@ -37,17 +39,97 @@ namespace Saga.Assets
     }
     public class Examine(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
-            throw new NotImplementedException();
+            string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
+            (int, int) startCursor = Console.GetCursorPosition();
+            var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
+            if (itemToSearchFor == "healing potion" || itemToSearchFor == "potion" || itemToSearchFor == "potions" || itemToSearchFor == "healing potions") {
+                HUDTools.Print($"\n{Program.CurrentPlayer.CurrentHealingPotion.ItemDescription}", 3);
+            }
+            else if (wat.Value == null && item == null) {
+                Console.WriteLine("\nNo such item exists...");
+            }
+            else if (wat.Value != null) {
+                if (wat.Value.ItemSlot == Slot.Quest) {
+                    HUDTools.Print($"\n{wat.Value.ItemDescription}", 3);
+                }
+                else if (wat.Value.ItemSlot == Slot.Weapon) {
+                    HUDTools.Print($"\nThis is a weapon of type {((Weapon)wat.Value).WeaponType}.\n{wat.Value.ItemDescription}", 3);
+                }
+                else {
+                    HUDTools.Print($"\nThis is an armor of type {((Armor)wat.Value).ArmorType}.\n{wat.Value.ItemDescription}", 3);
+                }
+            }
+            else {
+                if (item.ItemSlot == Slot.Quest) {
+                    HUDTools.Print($"\n{item.ItemDescription}", 3);
+                }
+                else if (item.ItemSlot == Slot.Weapon) {
+                    HUDTools.Print($"\nThis is a weapon of type {((Weapon)item).WeaponType}.\n{item.ItemDescription}", 3);
+                }
+                else {
+                    HUDTools.Print($"\nThis is an armor of type {((Armor)item).ArmorType}.\n{item.ItemDescription}", 3);
+                }
+            }
+            TextInput.PressToContinue();
+            HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
+            return "";
         }
     }
     public class Equip(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
-            throw new NotImplementedException();
+            string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
+            (int, int) startCursor = Console.GetCursorPosition();
+            if (Program.CurrentPlayer.Inventory.All(x => x == null)) {
+                Console.WriteLine("\nNo items in inventory...");
+            }
+            else {
+                var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
+                if (item != null) {
+                    if (item.ItemSlot == Slot.Quest) {
+                        HUDTools.Print("\nYou cannot equip this item...", 3);
+                    }
+                    else if (item.ItemSlot == Slot.Weapon) {
+                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((Weapon)item)}", 3);
+                    }
+                    else if (item.ItemSlot != Slot.Weapon) {
+                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((Armor)item)}", 3);
+                    }
+                }
+                else {
+                    Console.WriteLine("\nNo such item in inventory...");
+                }
+            }
+            TextInput.PressToContinue();
+            HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
+            return "";
+        }
+    }
+    public class UnEquip(string keyWord) : InputAction(keyWord) {
+        public override string RespondToInput(string[] separatedInputWords = null) {
+            string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
+            (int, int) startCursor = Console.GetCursorPosition();
+            var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            if (wat.Value == null) {
+                Console.WriteLine("\nNo such item equipped...");
+            }
+            else {
+                HUDTools.Print($"\n{Program.CurrentPlayer.UnEquip(wat.Key, wat.Value)}", 3);
+            }
+            TextInput.PressToContinue();
+            HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
+            return "";
         }
     }
     public class Use(string keyWord) : InputAction(keyWord) {
-        public override string RespondToInput(string[] separatedInputWords) {
+        public override string RespondToInput(string[] separatedInputWords = null) {
             throw new NotImplementedException();
+        }
+    }
+    public class Back(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord)
+    {
+        public override string RespondToInput(string[] separatedInputWords) {
+            return "back";
         }
     }
     public class Look(string keyWord) : InputAction(keyWord) {
@@ -84,8 +166,14 @@ namespace Saga.Assets
         }
     }
     public class SeeInventory(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
-        public override string RespondToInput(string[] separatedInputWords = null) {
-            HUDTools.InventoryScreen();
+        public override string RespondToInput(string[] separatedInputWords = null) {        
+            while (true) {
+                HUDTools.InventoryScreen();
+                string input = TextInput.PlayerPrompt(false);
+                if (input == "back") {
+                    break;
+                }
+            }
             HUDTools.SmallCharacterInfo();
             return "";
         }

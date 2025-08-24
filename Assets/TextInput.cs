@@ -24,11 +24,11 @@ namespace Saga.Assets
          ///Waits for and reads the player's input through the console and calls the correct method based on input.
          ///</summary>
          ///<returns>Empty string or an exit from the currentRoom.</returns>
-        public static string PlayerPrompt(bool noReturn) {
-            if (noReturn) {
+        public static string PlayerPrompt(bool inRoom) {
+            if (inRoom) {
                 string userInput = Console.ReadLine().ToLower();
                 if (userInput.Length == 1) {
-                    foreach (InputAction action in Program.RoomController.InputActions) {
+                    foreach (InputAction action in Program.RoomController.InputRoomActions) {
                         if (action.AbrKeyWord == userInput) {
                             return action.RespondToInput();
                         }
@@ -36,7 +36,7 @@ namespace Saga.Assets
                 }
                 char[] delimiterCharacters = [' '];
                 string[] separatedInputWords = userInput.Split(delimiterCharacters);
-                foreach(InputAction action in Program.RoomController.InputActions) {                  
+                foreach(InputAction action in Program.RoomController.InputRoomActions) {                  
                     if (action.KeyWord == separatedInputWords[0]) {
                         return action.RespondToInput(separatedInputWords);
                     }
@@ -46,7 +46,27 @@ namespace Saga.Assets
                 HUDTools.ClearLastLine(3);
                 return "";
             }
-            return "";
+            else {
+                string userInput = Console.ReadLine().ToLower();
+                if (userInput.Length == 1) {
+                    foreach (InputAction action in Program.RoomController.InputInvActions) {
+                        if (action.AbrKeyWord == userInput) {
+                            return action.RespondToInput();
+                        }
+                    }
+                }
+                char[] delimiterCharacters = [' '];
+                string[] separatedInputWords = userInput.Split(delimiterCharacters);
+                foreach (InputAction action in Program.RoomController.InputInvActions) {
+                    if (action.KeyWord == separatedInputWords[0]) {
+                        return action.RespondToInput(separatedInputWords);
+                    }
+                }
+                HUDTools.Print($"There is no '{userInput}' action...", 15);
+                PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            }               
         }
     }
 }

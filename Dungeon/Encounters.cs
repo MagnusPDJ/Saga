@@ -39,7 +39,7 @@ namespace Saga.Dungeon
             HUDTools.Print("He turns...");
             TextInput.PressToContinue();
             Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
-                Health = 5,
+                MaxHealth = 5,
                 Power = 2,
             };
             AdvancedCombat(FirstEncounter);
@@ -52,8 +52,8 @@ namespace Saga.Dungeon
             HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
             Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
-            Health=6,
-            Power=3,
+                MaxHealth = 6,
+                Power = 3,
             };
             AdvancedCombat(SecondEncounter);
         }
@@ -224,7 +224,7 @@ namespace Saga.Dungeon
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
             TextInput.PressToContinue();
             Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
-                Health = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
+                MaxHealth = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
                 Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
                 ExpModifier = 3,
                 Awareness = 5,
@@ -258,7 +258,7 @@ namespace Saga.Dungeon
                     HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
                     TextInput.PressToContinue();
                     Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
-                        Health = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),
+                        MaxHealth = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),                        
                         Power = 5 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 1 : 3),
                         GoldModifier = 3,
                     };
@@ -490,7 +490,6 @@ namespace Saga.Dungeon
             HUDTools.ClearLog();
             //Starter en tur tæller:
             Encounters TurnTimer = new();
-            HUDTools.TopCombatHUD(Monster, TurnTimer);
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
