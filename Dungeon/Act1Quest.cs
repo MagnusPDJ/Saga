@@ -1,9 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using Saga.Assets;
+using Saga.Items.Loot;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Linq;
 
 namespace Saga.Dungeon
 {
     internal class Act1Quest : Quest
     {
+        public static void AddQuest(string questName) {
+            var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Act1Quests.json"));
+            var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
+            if (questToAdd != null && questToAdd.Item.ItemName == "Random") {
+                questToAdd.Item = ArmorLootTable.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
+            }
+            Program.CurrentPlayer.QuestLog.Add(questToAdd);
+            HUDTools.Print($"\u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
+        }
+        public static void FailQuest(string questName) {
+            var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Act1Quests.json"));
+            var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
+            Program.CurrentPlayer.FailedQuests.Add(questToAdd);
+        }
         //Funktion til at lave random collect quests.
         public static Quest CreateRandomQuest() {
             int roll = Program.Rand.Next(2);
@@ -18,7 +36,6 @@ namespace Saga.Dungeon
                 Name = name,
                 QuestType = Type.Collect,
                 Target = target,
-                Amount = amount,
                 Giver = "Flemsha",
                 Objective = $"Flemsha wants you to collect {amount} {target}",
                 TurnIn = $"You have the {amount} {target}. Return to Flemsha for your reward",
@@ -29,18 +46,5 @@ namespace Saga.Dungeon
             };
             return quest;
         }
-
-        //Quests:
-        public static Act1Quest FreeFlemsha = new() {
-            Name = "Free Flemsha",
-            QuestType = Type.Find,
-            Target = "Old key",
-            Giver = "Flemsha",
-            Objective = "You've met a prisoner who calls himself Flemsha. He claims if you free him,\nhe will offer his alchemical expertise to your cause.",
-            TurnIn = "You have found an old key, it is likely a prison key.\nYou should return to Flemsha's cell.",
-            Gold = 100,
-            Exp = 100,
-            Requirements = new Dictionary<string, int> { {"Old key", 1} }
-        };
     }
 }

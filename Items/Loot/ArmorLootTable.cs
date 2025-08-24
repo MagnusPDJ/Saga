@@ -5,9 +5,9 @@ namespace Saga.Items.Loot
 {
     public class ArmorLootTable : Armor
     {
-        public static Item CreateRandomArmor(int level) {
-            int slot = Program.Rand.Next(7);
-            int armorType = Program.Rand.Next(4);
+        public static Item CreateRandomArmor(int level, int armorType = -1, int slot = -1) {
+            if (slot == -1) slot = Program.Rand.Next(7);
+            if (armorType == -1) armorType = Program.Rand.Next(4);
 
             int constitution = 0;
             int strength = 0;

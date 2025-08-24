@@ -210,7 +210,8 @@ namespace Saga.Items.Loot
                 HUDTools.Print($"You gain {QuestLootTable.OldKey.ItemName}", 15);
             }
             if (enemy != null) {
-                if (enemy.Name == "Giant Rat" && Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed != true) != null) {
+                Quest found;
+                if (enemy.Name == "Giant Rat" && (found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed != true)) != null) {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null && i.ItemName == "Rat tail");
                     if (index != -1) {
                         ((QuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
@@ -220,7 +221,7 @@ namespace Saga.Items.Loot
                         Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.RatTail, index);
                         HUDTools.Print($"You gain {QuestLootTable.RatTail.ItemName}", 15);
                     }                   
-                } else if (enemy.Name == "Giant Bat" && Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed != true) != null) {
+                } else if (enemy.Name == "Giant Bat" && (found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed != true)) != null) {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x != null && x.ItemName == "Bat wings");
                     if (index != -1) {
                         ((QuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
@@ -230,6 +231,9 @@ namespace Saga.Items.Loot
                         Program.CurrentPlayer.Inventory.SetValue(QuestLootTable.BatWings, index);
                         HUDTools.Print($"You gain {QuestLootTable.BatWings.ItemName}", 15);
                     }
+                }
+                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
+                    found.Amount++;
                 }
             }
             Console.ResetColor();

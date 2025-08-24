@@ -74,6 +74,7 @@ namespace Saga.Dungeon
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
             HUDTools.Print("'If you \u001b[96mgo\u001b[0m and clear some of the other rooms, I will look for my wares in these crates.'");
+            Act1Quest.AddQuest("Clear some rooms");
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             NonPlayableCharacters.AddNpcToCamp("Gheed");
@@ -104,8 +105,9 @@ namespace Saga.Dungeon
             HUDTools.Print($"After a few moments, you regain your composure and you check on Gheed.");
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
-            HUDTools.Print($"'What was that?', you ask, 'it sounded like an earthquake'.\n'Indeed', Gheed answers, 'Although, I suspect it wasn't destructive in nature. That is what makes\nthis labyrinth a prison for those who enter. When you open that door again you will find that\nall the rooms have changed.'");
+            HUDTools.Print($"'What was that?', you ask, 'it sounded like an earthquake'.\n'Indeed', Gheed answers, 'Although, I suspect it wasn't destructive in nature. That is what makes\nthis labyrinth a prison for those who enter. When you open that door again, you will find that\nall the rooms have changed.'");
             TextInput.PressToContinue();
+            Program.SoundController.Stop();
         }
 
 
@@ -145,8 +147,7 @@ namespace Saga.Dungeon
                         while(true) {
                             input = TextInput.PlayerPrompt();
                             if (input == "y") {
-                                Program.CurrentPlayer.QuestLog.Add(Act1Quest.FreeFlemsha);
-                                HUDTools.Print($"\u001b[96mYou've gained a quest: {Act1Quest.FreeFlemsha.Name}!\u001b[0m");
+                                Act1Quest.AddQuest("Free Flemsha");
                                 Program.CurrentPlayer.UpdateQuestLog();
                                 break;
                             } else if (input == "n") {
@@ -155,7 +156,7 @@ namespace Saga.Dungeon
                                 if (a != -1) {
                                     Program.CurrentPlayer.Inventory.SetValue(null, a);
                                 }
-                                Program.CurrentPlayer.FailedQuests.Add(Act1Quest.FreeFlemsha);
+                                Act1Quest.FailQuest("Free Flemsha");
                                 NonPlayableCharacters.UpdateDialogueOptions("Deadflemsha");
                                 leftForDead = true;
                                 break;

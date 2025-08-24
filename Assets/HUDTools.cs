@@ -660,7 +660,7 @@ namespace Saga.Assets
                 Console.WriteLine("You don't have any active quests...");
             } else {
                 foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
-                    Console.WriteLine($"\u001b[96m{quest.Name}:\u001b[0m");
+                    Console.WriteLine($"\u001b[96m{quest.Name}:\u001b[0m{(quest.QuestType == Dungeon.Type.Elimination ? $"\t{quest.Amount}/{quest.Requirements[quest.Target]} " : "")}");
                     if (!quest.Completed) {
                         Console.WriteLine(quest.Objective);
                     } else if (quest.Completed) {

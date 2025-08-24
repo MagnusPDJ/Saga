@@ -63,6 +63,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Dungeon\Act1Quests.json" />
     <EmbeddedResource Include="Dungeon\Npcs.json" />
   </ItemGroup>
   <ItemGroup>
