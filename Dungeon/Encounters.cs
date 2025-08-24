@@ -32,7 +32,7 @@ namespace Saga.Dungeon
             HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
+            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
             Program.SoundController.Stop();
             Program.SoundController.Play("taunt");
             Program.SoundController.Play("kamp");
@@ -42,12 +42,12 @@ namespace Saga.Dungeon
                 MaxHealth = 5,
                 Power = 2,
             };
-            AdvancedCombat(FirstEncounter);
+            Combat(FirstEncounter);
         }
         public static void SecondEncounter() {
             Console.Clear();
             Program.SoundController.Play("kamp");
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
@@ -55,7 +55,7 @@ namespace Saga.Dungeon
                 MaxHealth = 6,
                 Power = 3,
             };
-            AdvancedCombat(SecondEncounter);
+            Combat(SecondEncounter);
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
         public static void MeetGheed() {
@@ -78,7 +78,7 @@ namespace Saga.Dungeon
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             NonPlayableCharacters.AddNpcToCamp("Gheed");
-            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");     
+            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");     
             TextInput.PressToContinue();
             Program.SoundController.Stop();
         }
@@ -117,7 +117,7 @@ namespace Saga.Dungeon
         public static void MeetFlemsha() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either side\nof the room, there is also a desk which probably belonged to the long gone warden.",30);
             bool examined = false;
@@ -126,7 +126,7 @@ namespace Saga.Dungeon
             while (true) {
                 while (!examined || !searched) {
                     Console.Clear();
-                    HUDTools.SmallCharacterInfo();
+                    HUDTools.RoomHUD();
                     HUDTools.ClearLastLine(1);
                     HUDTools.Print("You enter a dimly lit room, stone slab walls and iron bar grates make up some cells on either\nside of the room, there is also a desk which probably belonged to the long gone warden.", 0);
                     HUDTools.Print($"\nDo you {(!examined? "(1)examine desk? " : "")}{(!examined && !searched? "Or " : "")}{(!searched?"(2) search the prison cells?":"")}", 20);
@@ -183,7 +183,7 @@ namespace Saga.Dungeon
 
                 if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == "Free Flemsha" && quest.Completed == true)) {
                     Console.Clear();
-                    HUDTools.SmallCharacterInfo();
+                    HUDTools.RoomHUD();
                     HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and\nthe door slides open.", 20);
                     HUDTools.Print("He thanks you very much and you tell him about your camp, where Gheed is too.", 20);
                     Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
@@ -203,7 +203,7 @@ namespace Saga.Dungeon
             Console.Clear();
             Program.SoundController.Play("kamp");
             Act1Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0,2)) {
                 case int x when (x == 0):
@@ -214,7 +214,7 @@ namespace Saga.Dungeon
                     break;
             }
             TextInput.PressToContinue();
-            AdvancedCombat(RandomEnemy);
+            Combat(RandomEnemy);
         }
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
@@ -230,16 +230,16 @@ namespace Saga.Dungeon
                 ExpModifier = 3,
                 Awareness = 5,
             };
-            AdvancedCombat(WizardEncounter);
+            Combat(WizardEncounter);
             Console.Clear();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
             string input;
             Console.Clear();
             Program.SoundController.Play("dooropen");
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
@@ -256,14 +256,14 @@ namespace Saga.Dungeon
                     HUDTools.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
                     Program.SoundController.Play("troldmandskamp");
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
-                    HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}!",15);
+                    HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName}!",15);
                     TextInput.PressToContinue();
                     Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
                         MaxHealth = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),                        
                         Power = 5 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 1 : 3),
                         GoldModifier = 3,
                     };
-                    AdvancedCombat(MimicEncounter); 
+                    Combat(MimicEncounter); 
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
@@ -272,14 +272,14 @@ namespace Saga.Dungeon
                 }
             } while (input != "42");
             Console.Clear();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
         }
         //Encounter der "spawner" en treasure chest.
         public static void TreasureEncounter() {
             string input;
             Console.Clear();
             Program.SoundController.Play("dooropen");
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
@@ -306,7 +306,7 @@ namespace Saga.Dungeon
                 }
             } while (input != "42");
             Console.Clear();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
         }
         //Encounter der starter en trap med runer hvor den rigtige rune skal vælges for at kunne exit
         public static void PuzzleOneEncounter() {
@@ -342,7 +342,7 @@ namespace Saga.Dungeon
 
             //slow print:
             Console.Clear();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 30);
             HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)", 10);
             HUDTools.Print("   o    <- starting position", 5);
@@ -354,7 +354,7 @@ namespace Saga.Dungeon
             string location = "";
             for (int i = 0; i < 4;) {
                 Console.Clear();               
-                HUDTools.SmallCharacterInfo();
+                HUDTools.RoomHUD();
                 if (i == 0) {
                     HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 0);
                     HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)", 0);
@@ -487,16 +487,15 @@ namespace Saga.Dungeon
             return choice;
         }
         //Metode til at køre kamp
-        public static void AdvancedCombat(Enemy Monster) {
+        public static void Combat(Enemy Monster) {
             HUDTools.ClearLog();
             //Starter en tur tæller:
             Encounters TurnTimer = new();
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
             if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
-                    HUDTools.FullCombatHUD(Monster, TurnTimer);
-                    Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
-                    HUDTools.ClearLastLine(1);
+                    HUDTools.CombatHUD(Monster, TurnTimer);
+                    Program.CurrentPlayer.CombatActions(Monster, TurnTimer);                   
                     if (TurnTimer.Ran == false) {
                         Monster.MonsterActions(TurnTimer);
                     }                   
@@ -504,7 +503,7 @@ namespace Saga.Dungeon
                 }
             }  else {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
-                    HUDTools.FullCombatHUD(Monster, TurnTimer);
+                    HUDTools.CombatHUD(Monster, TurnTimer);
                     Monster.MonsterActions(TurnTimer);
                     Program.CurrentPlayer.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);

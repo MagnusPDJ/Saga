@@ -44,20 +44,20 @@ namespace Saga.Character
         }
 
         //      Gear
-        public override string Equip(Weapon weapon) {
+        public override string Equip(WeaponBase weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
                 return "Item not equipped";
-            } else if (weapon.WeaponType != WeaponTypes.Tome && weapon.WeaponType != WeaponTypes.Staff && weapon.WeaponType != WeaponTypes.Wand) {
-                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponType}");
+            } else if (weapon.WeaponCategory != WeaponCategory.Tome && weapon.WeaponCategory != WeaponCategory.Staff && weapon.WeaponCategory != WeaponCategory.Wand) {
+                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponCategory}");
                 return "Item not equipped";
             }
-            if (Equipment.TryGetValue(Slot.Weapon, out Item value)) {
+            if (Equipment.TryGetValue(Slot.Right_Hand, out ItemBase value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
-                        UnEquip(Slot.Weapon, Equipment[Slot.Weapon]);
+                        UnEquip(Slot.Right_Hand, Equipment[Slot.Right_Hand]);
                         Equipment[weapon.ItemSlot] = weapon;
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);
@@ -79,7 +79,7 @@ namespace Saga.Character
                 return "New weapon equipped!";
             }            
         }
-        public override string Equip(Armor armor) {
+        public override string Equip(ArmorBase armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
                 return "Item not equipped";
@@ -87,7 +87,7 @@ namespace Saga.Character
                 Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
                 return "Item not equipped";
             }
-            if (Equipment.TryGetValue(armor.ItemSlot, out Item value)) {
+            if (Equipment.TryGetValue(armor.ItemSlot, out ItemBase value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{armor.ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
@@ -121,7 +121,7 @@ namespace Saga.Character
             Program.CurrentPlayer.CalculateTotalStats();
             return "New potion equipped!";
         }
-        public override string UnEquip(Slot slot, Item item) {
+        public override string UnEquip(Slot slot, ItemBase item) {
             int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(item, index);
             Program.CurrentPlayer.Equipment.Remove(slot);
@@ -157,7 +157,7 @@ namespace Saga.Character
             }
         }
         public override int Attack(Enemy Monster) {
-            HUDTools.Print($"You shoot an arcane missile from your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
+            HUDTools.Print($"You shoot an arcane missile from your {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName}", 15);
             int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
             HUDTools.Print($"You deal {attack} damage to {Monster.Name}", 10);
             return attack;

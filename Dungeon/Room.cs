@@ -161,7 +161,7 @@ namespace Saga.Dungeon
             string exit = "";
             Encounters.FirstEncounter();
             Encounters.MeetGheed();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             while (exit == "") {
                 exit = TextInput.PlayerPrompt(true);
             }
@@ -184,7 +184,7 @@ namespace Saga.Dungeon
                 Program.RoomController.ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
-                HUDTools.SmallCharacterInfo();
+                HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
                 }
@@ -244,7 +244,7 @@ namespace Saga.Dungeon
                 Program.RoomController.ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
-                HUDTools.SmallCharacterInfo();
+                HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
                 }

@@ -3,6 +3,7 @@ using Saga.Assets;
 using Saga.Items;
 using Saga.Dungeon;
 using Saga.Items.Loot;
+using Saga.Items.Loot.WeaponLootTable;
 
 namespace Saga.Character
 {
@@ -44,20 +45,20 @@ namespace Saga.Character
         }
 
         //      Gear
-        public override string Equip(Weapon weapon) {
+        public override string Equip(WeaponBase weapon) {
             if (weapon.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
                 return "Item not equipped";
-            } else if (weapon.WeaponType != WeaponTypes.Axe && weapon.WeaponType != WeaponTypes.Sword && weapon.WeaponType != WeaponTypes.Hammer) {
-                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponType}");
+            } else if (weapon is Axe && weapon is Sword && weapon is Hammer) {
+                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponCategory}");
                 return "Item not equipped";
             }
-            if (Equipment.TryGetValue(Slot.Weapon, out Item value)) {
+            if (Equipment.TryGetValue(Slot.Right_Hand, out ItemBase value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
-                        UnEquip(Slot.Weapon, Equipment[Slot.Weapon]);
+                        UnEquip(Slot.Right_Hand, Equipment[Slot.Right_Hand]);
                         Equipment[weapon.ItemSlot] = weapon;
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);
@@ -79,7 +80,7 @@ namespace Saga.Character
                 return "New weapon equipped!";
             }
         }
-        public override string Equip(Armor armor) {
+        public override string Equip(ArmorBase armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
                 return "Item not equipped";
@@ -87,7 +88,7 @@ namespace Saga.Character
                 Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
                 return "Item not equipped";
             }
-            if (Equipment.TryGetValue(armor.ItemSlot, out Item value)) {
+            if (Equipment.TryGetValue(armor.ItemSlot, out ItemBase value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{armor.ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
@@ -119,7 +120,7 @@ namespace Saga.Character
             Program.CurrentPlayer.CalculateTotalStats();
             return "New potion equipped!";
         }
-        public override string UnEquip(Slot slot, Item item) {
+        public override string UnEquip(Slot slot, ItemBase item) {
             int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(item, index);
             Program.CurrentPlayer.Equipment.Remove(slot);
@@ -130,7 +131,7 @@ namespace Saga.Character
             return "Item unequipped!";
         }
         public override void SetStartingGear() {
-            Equip(WeaponLootTable.RustySword);
+            Equip(RustySword);
             Equip(ArmorLootTable.LinenRags);
         }
 
@@ -153,12 +154,6 @@ namespace Saga.Character
                     HUDTools.Print($"You gain {Program.CurrentPlayer.CurrentHealingPotion.PotionPotency} health", 20);
                 }
             }
-        }
-        public override int Attack(Enemy Monster) {
-            HUDTools.Print($"You swing your {Program.CurrentPlayer.Equipment[Slot.Weapon].ItemName}", 15);
-            int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
-            HUDTools.Print($"You deal {attack} damage to {Monster.Name}", 10);
-            return attack;
         }
         public override void Defend(Enemy Monster) {
             HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
