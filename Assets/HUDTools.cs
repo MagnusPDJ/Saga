@@ -508,6 +508,8 @@ namespace Saga.Assets
             }
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
             Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}  {(Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
+
             Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
             foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
