@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Saga.Assets;
 using Saga.Character;
-using Saga.Items.Loot;
 
-namespace Saga.Items
+namespace Saga.Items.Loot
 {
     public class Shop
     {

@@ -52,6 +52,26 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="ArmorBase.cs" />
+    <Compile Remove="Items\ArmorBase.cs" />
+    <Compile Remove="Items\ArmorBaseOBSOLETE.cs" />
+    <Compile Remove="Items\ArmorLootTableOBSOLETE.cs" />
+    <Compile Remove="Items\Loot\ArmorLootTable.cs" />
+    <Compile Remove="Items\Loot\ArmorLootTableOBSOLETE.cs" />
+    <Compile Remove="Items\Loot\QuestLootTable.cs" />
+    <Compile Remove="Items\Loot\QuestLootTableOBSOLETE.cs" />
+    <Compile Remove="Items\Loot\WeaponLootTable.cs" />
+    <Compile Remove="Items\Loot\WeaponLootTableOBSOLETE.cs" />
+    <Compile Remove="Items\Potion.cs" />
+    <Compile Remove="Items\PotionOBSOLETE.cs" />
+    <Compile Remove="Items\QuestItem.cs" />
+    <Compile Remove="Items\QuestItemOBSOLETE.cs" />
+    <Compile Remove="Items\QuestLootTableOBSOLETE.cs" />
+    <Compile Remove="Items\WeaponBase.cs" />
+    <Compile Remove="Items\WeaponBaseOBSOLETE.cs" />
+    <Compile Remove="Items\WeaponLootTableOBSOLETE.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Dungeon\RoomExits.txt" />
     <None Remove="Dungeon\RoomNames.txt" />
   </ItemGroup>

@@ -10,6 +10,7 @@ using System.Reflection;
 using Saga.Dungeon;
 using Saga.Items;
 using Saga.Character;
+using Saga.Items.Loot;
 
 namespace Saga.Assets
 {
