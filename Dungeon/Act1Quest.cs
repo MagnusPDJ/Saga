@@ -11,7 +11,7 @@ namespace Saga.Dungeon
         public static void AddQuest(string questName) {
             var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Act1Quests.json"));
             var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
-            if (questToAdd != null && questToAdd.Item.ItemName == "Random") {
+            if (questToAdd != null && questToAdd.Item?.ItemName == "Random") {
                 questToAdd.Item = ArmorLootTable.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
             }
             Program.CurrentPlayer.QuestLog.Add(questToAdd);
