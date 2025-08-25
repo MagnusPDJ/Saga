@@ -508,7 +508,7 @@ namespace Saga.Assets
             }
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
             Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}");
+            Console.WriteLine($" Healing Potions: {Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity}\t\tPotion Strength: +{Program.CurrentPlayer.CurrentHealingPotion.PotionPotency}  {(Program.CurrentPlayer.CurrentClass == "Mage"? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
             foreach (Item item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
