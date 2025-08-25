@@ -9,7 +9,7 @@ namespace Saga.Items
 {
     public class Shop
     {
-        public List<Item> Forsale { get; set; }
+        public List<ItemBase> Forsale { get; set; }
 
         //Metode til at genere ny shop ved tilbagekomst til camp
         public static Shop SetForsale() {

@@ -12,7 +12,7 @@ namespace Saga.Items
         Plate
     }
  
-    public class Armor : Item
+    public class ArmorBase : ItemBase
     {
         public ArmorType ArmorType { get; set; }
         public PrimaryAttributes Attributes { get; set; }

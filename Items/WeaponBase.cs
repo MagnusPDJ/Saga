@@ -1,79 +1,69 @@
-﻿using System;
-using Saga.Character;
+﻿using Saga.Character;
+using Saga.Dungeon;
+using System;
+using Saga.Items.Loot.WeaponLootTable;
 
 namespace Saga.Items
 {
-    public enum WeaponTypes
+    public abstract class WeaponBase : ItemBase, IWeapon
     {
-        Axe,
-        Sword,
-        Hammer,
-        Bow,
-        Dagger,
-        Crossbow,
-        Staff,
-        Wand,
-        Tome
-    }
-
-    public class Weapon : Item
-    {
-        public WeaponTypes WeaponType { get; set; }
-        public WeaponAttributes WeaponAttributes { get; set; }
-       
+        public abstract WeaponCategory WeaponCategory { get; }
+        public abstract WeaponAttributes WeaponAttributes { get; }
+        public abstract WeaponAttributes GetWeaponAttributes(int level);
+        public abstract int Attack(Enemy Monster);
         public override int CalculateItemPrice() {
             ItemPrice = Convert.ToInt32(ItemLevel * 100 + (WeaponAttributes.MaxDamage * 100 + WeaponAttributes.MinDamage*50)*(1 + 1 /(WeaponAttributes.MaxDamage-WeaponAttributes.MinDamage)) );
             return ItemPrice;
         }
-        public static string RandomWeaponName(WeaponTypes type) {
+        public static string RandomWeaponName(WeaponBase weapon) {
             string name1 = "Sturdy";
             string name2 = "Stick";
             int rand = Program.Rand.Next(10);
-            switch(type) {
-                case WeaponTypes.Axe:
+            switch(weapon) {
+                case Axe:
                     name2 = "axe";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Sword:
+                case Sword:
                     name2 = "sword";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Hammer:
+                case Hammer:
                     name2 = "hammer";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Bow:
+                case Bow:
                     name2 = "bow";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Dagger:
+                case Dagger:
                     name2 = "dagger";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Crossbow:
+                case Crossbow:
                     name2 = "crossbow";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Staff:
+                case Staff:
                     name2 = "staff";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Wand:
+                case Wand:
                     name2 = "wand";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
-                case WeaponTypes.Tome:
+                case Tome:
                     name2 = "tome";
-                    name1 = WeaponNameList(type, rand);
+                    name1 = WeaponNameList(weapon, rand);
                     break;
             }
             return $"{name1}{name2}";
         }
-        public static string WeaponNameList(WeaponTypes type, int rand) {
+        public static string WeaponNameList(WeaponBase weapon, int rand) {
             string name = "";
-            switch (type) {
+            switch (weapon) {
                 default:
-                case WeaponTypes.Axe:
+                case Axe:
                     switch (rand) {
                         case 0:
                             name = "Hand ";
@@ -107,7 +97,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Sword:
+                case Sword:
                     switch (rand) {
                         case 0:
                             name = "Short ";
@@ -141,7 +131,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Hammer:
+                case Hammer:
                     switch (rand) {
                         case 0:
                             name = "War";
@@ -175,7 +165,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Bow:
+                case Bow:
                     switch (rand) {
                         case 0:
                             name = "Short";
@@ -209,7 +199,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Dagger:
+                case Dagger:
                     switch (rand) {
                         case 0:
                             name = "Sharp ";
@@ -243,7 +233,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Crossbow:
+                case Crossbow:
                     switch (rand) {
                         case 0:
                             name = "Recurve ";
@@ -277,7 +267,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Staff:
+                case Staff:
                     switch (rand) {
                         case 0:
                             name = "Quarter";
@@ -311,7 +301,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Wand:
+                case Wand:
                     switch (rand) {
                         case 0:
                             name = "Ashwood ";
@@ -345,7 +335,7 @@ namespace Saga.Items
                             break;
                     }
                     return name;
-                case WeaponTypes.Tome:
+                case Tome:
                     switch (rand) {
                         case 0:
                             name = "Big ";

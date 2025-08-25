@@ -7,7 +7,7 @@ namespace Saga.Items
         POTION_MANA
     }
 
-    public class Potion : Item
+    public class Potion : ItemBase
     {
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }

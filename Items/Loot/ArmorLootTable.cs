@@ -3,9 +3,9 @@ using Saga.Character;
 
 namespace Saga.Items.Loot
 {
-    public class ArmorLootTable : Armor
+    public class ArmorLootTable : ArmorBase
     {
-        public static Item CreateRandomArmor(int level, int armorType = -1, int slot = -1) {
+        public static ItemBase CreateRandomArmor(int level, int armorType = -1, int slot = -1) {
             if (slot == -1) slot = Program.Rand.Next(7);
             if (armorType == -1) armorType = Program.Rand.Next(4);
 
@@ -41,7 +41,7 @@ namespace Saga.Items.Loot
                 }
             }
 
-            Item item = new Armor() {
+            ItemBase item = new ArmorBase() {
                 ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                 ItemSlot = (Slot)slot,
                 ArmorType = (ArmorType)armorType,
@@ -53,7 +53,7 @@ namespace Saga.Items.Loot
             return item;
         }
 
-        public readonly static Armor LinenRags = new() {
+        public readonly static ArmorBase LinenRags = new() {
             ItemName = "Linen Rags",
             ItemLevel = 1,
             ItemSlot = Slot.Torso,
@@ -62,7 +62,7 @@ namespace Saga.Items.Loot
             SecondaryAttributes =new SecondaryAttributes() { ArmorRating = 0 },
             ItemDescription = "Clothes that mark you a prisoner but without them, you'd be naked.",
         };
-        public readonly static Armor RunedSimpleRobe = new() {
+        public readonly static ArmorBase RunedSimpleRobe = new() {
             ItemName = "Runed Simple Robe",
             ItemLevel = 2,
             ItemSlot = Slot.Torso,
@@ -70,7 +70,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 1, Dexterity = 1, Intellect = 3, Constitution = 1, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 4 }
         };
-        public readonly static Armor EnchantedElegantRobe = new() {
+        public readonly static ArmorBase EnchantedElegantRobe = new() {
             ItemName = "Enchanted Elegant Robe",
             ItemLevel = 5,
             ItemSlot = Slot.Torso,
@@ -78,7 +78,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 1, Dexterity = 1, Intellect = 5, Constitution = 2, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 8 }
         };
-        public readonly static Armor ArcanistsRobe = new() {
+        public readonly static ArmorBase ArcanistsRobe = new() {
             ItemName = "Arcanist's Robe",
             ItemLevel = 8,
             ItemSlot = Slot.Torso,
@@ -86,7 +86,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 1, Dexterity = 1, Intellect = 7, Constitution = 3, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 12 }
         };
-        public readonly static Armor HideArmor = new() {
+        public readonly static ArmorBase HideArmor = new() {
             ItemName = "Hide Armor",
             ItemLevel = 2,
             ItemSlot = Slot.Torso,
@@ -94,7 +94,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 1, Dexterity = 3, Intellect = 1, Constitution = 1, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 4 }
         };
-        public readonly static Armor HuntersCuirass = new() {
+        public readonly static ArmorBase HuntersCuirass = new() {
             ItemName = "Hunter's Cuirass",
             ItemLevel = 5,
             ItemSlot = Slot.Torso,
@@ -102,7 +102,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 1, Dexterity = 5, Intellect = 1, Constitution = 2, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 8 }
         };
-        public readonly static Armor MarksmansBrigadine = new() {
+        public readonly static ArmorBase MarksmansBrigadine = new() {
             ItemName = "Marksman's Brigadine",
             ItemLevel = 8,
             ItemSlot = Slot.Torso,
@@ -110,7 +110,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 1, Dexterity = 7, Intellect = 1, Constitution = 3, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 12 }
         };
-        public readonly static Armor SteelMailShirt = new() {
+        public readonly static ArmorBase SteelMailShirt = new() {
             ItemName = "Steel Mail Shirt",
             ItemLevel = 2,
             ItemSlot = Slot.Torso,
@@ -118,7 +118,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 3, Dexterity = 1, Intellect = 1, Constitution = 1, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 4 }
         };
-        public readonly static Armor SteelBreastplate = new() {
+        public readonly static ArmorBase SteelBreastplate = new() {
             ItemName = "Steel Breastplate",
             ItemLevel = 5,
             ItemSlot = Slot.Torso,
@@ -126,7 +126,7 @@ namespace Saga.Items.Loot
             Attributes = new PrimaryAttributes() { Strength = 5, Dexterity = 1, Intellect = 1, Constitution = 2, WillPower = 0 },
             SecondaryAttributes = new SecondaryAttributes() { ArmorRating = 8 }
         };
-        public readonly static Armor KnightsPlateArmor = new() {
+        public readonly static ArmorBase KnightsPlateArmor = new() {
             ItemName = "Knight's Plate Armor",
             ItemLevel = 8,
             ItemSlot = Slot.Torso,

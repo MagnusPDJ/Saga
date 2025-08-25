@@ -53,22 +53,22 @@ namespace Saga.Assets
                 if (wat.Value.ItemSlot == Slot.Quest) {
                     HUDTools.Print($"\n{wat.Value.ItemDescription}", 3);
                 }
-                else if (wat.Value.ItemSlot == Slot.Weapon) {
-                    HUDTools.Print($"\nThis is a weapon of type {((Weapon)wat.Value).WeaponType}.\n{wat.Value.ItemDescription}", 3);
+                else if (wat.Value.ItemSlot == Slot.Right_Hand) {
+                    HUDTools.Print($"\nThis is a weapon of type {((WeaponBase)wat.Value).WeaponCategory}.\n{wat.Value.ItemDescription}", 3);
                 }
                 else {
-                    HUDTools.Print($"\nThis is an armor of type {((Armor)wat.Value).ArmorType}.\n{wat.Value.ItemDescription}", 3);
+                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)wat.Value).ArmorType}.\n{wat.Value.ItemDescription}", 3);
                 }
             }
             else {
                 if (item.ItemSlot == Slot.Quest) {
                     HUDTools.Print($"\n{item.ItemDescription}", 3);
                 }
-                else if (item.ItemSlot == Slot.Weapon) {
-                    HUDTools.Print($"\nThis is a weapon of type {((Weapon)item).WeaponType}.\n{item.ItemDescription}", 3);
+                else if (item.ItemSlot == Slot.Right_Hand) {
+                    HUDTools.Print($"\nThis is a weapon of type {((WeaponBase)item).WeaponCategory}.\n{item.ItemDescription}", 3);
                 }
                 else {
-                    HUDTools.Print($"\nThis is an armor of type {((Armor)item).ArmorType}.\n{item.ItemDescription}", 3);
+                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)item).ArmorType}.\n{item.ItemDescription}", 3);
                 }
             }
             TextInput.PressToContinue();
@@ -89,11 +89,11 @@ namespace Saga.Assets
                     if (item.ItemSlot == Slot.Quest) {
                         HUDTools.Print("\nYou cannot equip this item...", 3);
                     }
-                    else if (item.ItemSlot == Slot.Weapon) {
-                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((Weapon)item)}", 3);
+                    else if (item.ItemSlot == Slot.Right_Hand) {
+                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((WeaponBase)item)}", 3);
                     }
-                    else if (item.ItemSlot != Slot.Weapon) {
-                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((Armor)item)}", 3);
+                    else if (item.ItemSlot != Slot.Right_Hand) {
+                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((ArmorBase)item)}", 3);
                     }
                 }
                 else {
@@ -153,7 +153,7 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords = null) {
             Program.CurrentPlayer.Heal();
             TextInput.PressToContinue();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             return "";
         }
     }
@@ -161,7 +161,7 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords = null) {
             HUDTools.CharacterScreen();
             TextInput.PressToContinue();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             return "";
         }
     }
@@ -174,7 +174,7 @@ namespace Saga.Assets
                     break;
                 }
             }
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             return "";
         }
     }
@@ -183,7 +183,7 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords = null) {
             HUDTools.QuestLogHUD();
             TextInput.PressToContinue();
-            HUDTools.SmallCharacterInfo();
+            HUDTools.RoomHUD();
             return "";
         }
     }
