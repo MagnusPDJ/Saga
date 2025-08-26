@@ -3,6 +3,7 @@ using Saga.Items.Loot;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Linq;
+using Saga.Items;
 
 namespace Saga.Dungeon
 {
@@ -12,7 +13,7 @@ namespace Saga.Dungeon
             var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Act1Quests.json"));
             var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
             if (questToAdd != null && questToAdd.Item?.ItemName == "Random") {
-                questToAdd.Item = ArmorLootTable.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
+                questToAdd.Item = (ItemBase)Shop.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
             }
             Program.CurrentPlayer.QuestLog.Add(questToAdd);
             HUDTools.Print($"\u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");

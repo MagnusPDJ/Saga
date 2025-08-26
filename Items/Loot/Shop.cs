@@ -256,10 +256,10 @@ namespace Saga.Items.Loot
                 HUDTools.Print("Item sold!", 3);
             }
         }
-        static IEquipable CreateRandomArmor(int level) {
+        public static IEquipable CreateRandomArmor(int level, int armorType = 0) {
             throw new NotImplementedException();
         }
-        static IEquipable CreateRandomWeapon(int level) {
+        public static IEquipable CreateRandomWeapon(int level) {
             throw new NotImplementedException();
         }
     }
