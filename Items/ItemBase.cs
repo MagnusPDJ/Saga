@@ -3,12 +3,13 @@ namespace Saga.Items
 {
     public abstract class ItemBase : IItem
     {
-        public abstract string ItemName { get; set; }
+        public string ItemName { get; set; }
         public int ItemLevel { get; set; }
-        public Slot ItemSlot { get; set; }
-        public int ItemPrice { get; set; }
+        private int _itemPrice;
+        public int ItemPrice => _itemPrice;
         public string ItemDescription { get; set; }
         
+        public void SetItemPrice() => _itemPrice = CalculateItemPrice();
         public abstract int CalculateItemPrice();
     }
 }

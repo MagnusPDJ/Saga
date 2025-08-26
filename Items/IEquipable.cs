@@ -22,8 +22,8 @@ namespace Saga.Items
     }
     internal interface IEquipable
     {
-        Slot ItemSlot { get; set; }
-        void Equip();
-        void UnEquip();
+        Slot ItemSlot { get; }
+        string Equip();
+        string UnEquip();
     }
 }

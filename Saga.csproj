@@ -53,7 +53,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="ArmorBase.cs" />
-    <Compile Remove="Items\ArmorBase.cs" />
     <Compile Remove="Items\ArmorBaseOBSOLETE.cs" />
     <Compile Remove="Items\ArmorLootTableOBSOLETE.cs" />
     <Compile Remove="Items\Loot\ArmorLootTable.cs" />
@@ -74,6 +73,7 @@
   <ItemGroup>
     <None Remove="Dungeon\RoomExits.txt" />
     <None Remove="Dungeon\RoomNames.txt" />
+    <None Remove="Items\Loot\WeaponLootTable.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -111,6 +111,8 @@
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
     <EmbeddedResource Include="Dungeon\RoomExits.txt" />
     <EmbeddedResource Include="Dungeon\RoomNames.txt" />
+    <EmbeddedResource Include="Items\Loot\ArmorLootTable.json" />
+    <EmbeddedResource Include="Items\Loot\WeaponLootTable.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.1" />

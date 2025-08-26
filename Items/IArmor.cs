@@ -12,7 +12,7 @@ namespace Saga.Items
     internal interface IArmor
     {
         public ArmorType ArmorType { get; set; }
-        public PrimaryAttributes Attributes { get; set; }
+        public PrimaryAttributes PrimaryAttributes { get; set; }
         public SecondaryAttributes SecondaryAttributes { get; set; }
     }
 }

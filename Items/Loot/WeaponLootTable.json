@@ -1,0 +1,13 @@
+﻿[
+  {
+    "ItemName": "Rusty Sword",
+    "ItemLevel": 1,
+    "WeaponAttributes": {
+      "MinDamage": 1,
+      "MaxDamage": 2,
+      "AttackSpeed": 1
+    },
+    "AttackDescription":  "You swing your rusty sword",
+    "ItemDescription": "Old and fragile but it is yours... You looted it yourself!"
+  }
+]

@@ -2,8 +2,8 @@
 using Saga.Assets;
 using Saga.Items;
 using Saga.Dungeon;
-using Saga.Items.Loot;
-using Saga.Items.Loot.WeaponLootTable;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Saga.Character
 {
@@ -45,41 +45,6 @@ namespace Saga.Character
         }
 
         //      Gear
-        public override string Equip(WeaponBase weapon) {
-            if (weapon.ItemLevel > Level) {
-                Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
-                return "Item not equipped";
-            } else if (weapon is Axe && weapon is Sword && weapon is Hammer) {
-                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponCategory}");
-                return "Item not equipped";
-            }
-            if (Equipment.TryGetValue(Slot.Right_Hand, out ItemBase value)) {
-                Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
-                while (true) {
-                    string input = TextInput.PlayerPrompt();
-                    if (input == "y") {
-                        UnEquip(Slot.Right_Hand, Equipment[Slot.Right_Hand]);
-                        Equipment[weapon.ItemSlot] = weapon;
-                        int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
-                        Program.CurrentPlayer.Inventory.SetValue(null, a);
-                        return "New weapon equipped!";
-                    } else if (input == "n") {
-                        return "Item not equipped";
-                    } else {
-                        Console.WriteLine("Invalid input");
-                    }
-                }
-            } else {
-                Equipment[weapon.ItemSlot] = weapon;
-                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
-                if (a == -1) {
-                } else {
-                    Program.CurrentPlayer.Inventory.SetValue(null, a);
-                }
-                Program.CurrentPlayer.CalculateTotalStats();
-                return "New weapon equipped!";
-            }
-        }
         public override string Equip(ArmorBase armor) {
             if (armor.ItemLevel > Level) {
                 Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
@@ -120,19 +85,12 @@ namespace Saga.Character
             Program.CurrentPlayer.CalculateTotalStats();
             return "New potion equipped!";
         }
-        public override string UnEquip(Slot slot, ItemBase item) {
-            int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
-            Program.CurrentPlayer.Inventory.SetValue(item, index);
-            Program.CurrentPlayer.Equipment.Remove(slot);
-            Program.CurrentPlayer.CalculateTotalStats();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
-            }
-            return "Item unequipped!";
-        }
+
         public override void SetStartingGear() {
-            Equip(RustySword);
-            Equip(ArmorLootTable.LinenRags);
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"));
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"));
+            ((IEquipable)weapons.Find(w => ((ItemBase)w).ItemName == "Rusty Sword")).Equip();
+            ((IEquipable)armors.Find(w => ((ItemBase)w).ItemName == "Linen Rags")).Equip();
         }
 
         //      Skills
