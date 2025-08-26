@@ -1,6 +1,6 @@
 ﻿[
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Linen Rags",
     "ItemLevel": 1,
     "ItemSlot": 1,
@@ -22,7 +22,7 @@
     "ItemDescription": "Clothes that mark you a prisoner but without them, you'd be naked."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Runed Simple Robe",
     "ItemLevel": 2,
     "ItemSlot": 1,
@@ -44,7 +44,7 @@
     "ItemDescription": "Soft to the touch and embroidered with golden runes all along the edges."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Enchanted Elegant Robe",
     "ItemLevel": 5,
     "ItemSlot": 1,
@@ -66,7 +66,7 @@
     "ItemDescription": "Purple and white robe, it has void black runes that seem to change the more you stare at it."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Arcanist's Robe",
     "ItemLevel": 8,
     "ItemSlot": 1,
@@ -88,7 +88,7 @@
     "ItemDescription": "White robe that has a faint glow that constantly shift in the colours of the rainbow."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Hide Armor",
     "ItemLevel": 2,
     "ItemSlot": 1,
@@ -110,7 +110,7 @@
     "ItemDescription": "Various hides and pelts have been sewn together to form a protective shirt."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Hunter's Cuirass",
     "ItemLevel": 5,
     "ItemSlot": 1,
@@ -132,7 +132,7 @@
     "ItemDescription": "Hard leather that has been riveted into a cuirass and decorated with engravings."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Marksman's Brigandine",
     "ItemLevel": 8,
     "ItemSlot": 1,
@@ -154,7 +154,7 @@
     "ItemDescription": "A nice velvet jacket riveted with metal plates on the inside giving the best protection while\nbeing lightweight."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Steel Mail Shirt",
     "ItemLevel": 2,
     "ItemSlot": 1,
@@ -176,7 +176,7 @@
     "ItemDescription": "A plain mail shirt, but the steel is unusually black and it feels light."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Steel Breastplate",
     "ItemLevel": 5,
     "ItemSlot": 1,
@@ -198,7 +198,7 @@
     "ItemDescription": "Black and lightweight steel has been rolled into the shape of a person's torso, fortunately\nit fits you quite well."
   },
   {
-    "$type": "Saga.Items.ArmorBase, Saga",
+    "$type": "armorBase",
     "ItemName": "Knight's Plate Armor",
     "ItemLevel": 8,
     "ItemSlot": 1,

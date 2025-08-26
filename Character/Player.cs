@@ -236,7 +236,7 @@ namespace Saga.Character
                 ArmorBase a = (ArmorBase)GlovesArmor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistance = a.SecondaryAttributes.ElementalResistance };
             }
-            if (hasShield) {
+            if (hasShield && !((ITwoHanded)ShieldArmor).IsTwohanded) {
                 ArmorBase a = (ArmorBase)ShieldArmor;
                 armorBonusValues += new SecondaryAttributes() { ArmorRating = a.SecondaryAttributes.ArmorRating, MaxHealth = a.SecondaryAttributes.MaxHealth, MaxMana = a.SecondaryAttributes.MaxMana, Awareness = a.SecondaryAttributes.Awareness, ElementalResistance = a.SecondaryAttributes.ElementalResistance };
             }

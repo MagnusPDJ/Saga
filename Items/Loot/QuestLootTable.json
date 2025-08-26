@@ -1,16 +1,16 @@
 ﻿[
   {
-    "$type": "Saga.Items.QuestItemBase, Saga",
+    "$type": "questItemBase",
     "ItemName": "Old Key",
     "ItemDescription": "An old key, with two sturdy bits, akin to those used for prison cells."
   },
   {
-    "$type": "Saga.Items.QuestItemBase, Saga",
+    "$type": "questItemBase",
     "ItemName": "Rat Tail",
     "ItemDescription": "This tail was cut from a large rat, gross."
   },
   {
-    "$type": "Saga.Items.QuestItemBase, Saga",
+    "$type": "questItemBase",
     "ItemName": "Bat Wings",
     "ItemDescription": "Wings from a huge bat, they smell quite fragrant."
   }
