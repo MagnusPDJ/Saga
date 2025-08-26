@@ -44,8 +44,8 @@ namespace Saga.Character
         }
 
         public override void SetStartingGear() {
-            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"));
-            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"));
+            List<ItemBase> weapons = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"));
+            List<ItemBase> armors = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"));
             ((IEquipable)weapons.Find(w => ((ItemBase)w).ItemName == "Rusty Sword")).Equip();
             ((IEquipable)armors.Find(w => ((ItemBase)w).ItemName == "Linen Rags")).Equip();
             HealingPotion healingPotion = new();
