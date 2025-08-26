@@ -111,6 +111,7 @@
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
     <EmbeddedResource Include="Dungeon\RoomExits.txt" />
     <EmbeddedResource Include="Dungeon\RoomNames.txt" />
+    <EmbeddedResource Include="Items\Loot\QuestLootTable.json" />
     <EmbeddedResource Include="Items\Loot\ArmorLootTable.json" />
     <EmbeddedResource Include="Items\Loot\WeaponLootTable.json" />
   </ItemGroup>

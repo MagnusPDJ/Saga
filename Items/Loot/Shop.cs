@@ -8,15 +8,19 @@ namespace Saga.Items.Loot
 {
     public class Shop
     {
-        public List<ItemBase> Forsale { get; set; }
+        public List<IEquipable> Forsale { get; set; }
 
         //Metode til at genere ny shop ved tilbagekomst til camp
         public static Shop SetForsale() {
             Shop shop = new() {
-                Forsale = [ArmorLootTable.CreateRandomArmor(-3), ArmorLootTable.CreateRandomArmor(-2), ArmorLootTable.CreateRandomArmor(-1), WeaponLootTable.CreateRandomWeapon(-3), WeaponLootTable.CreateRandomWeapon(-2), WeaponLootTable.CreateRandomWeapon(-1)]
+                Forsale = [CreateRandomArmor(-3), CreateRandomArmor(-2), CreateRandomArmor(-1), CreateRandomWeapon(-3), CreateRandomWeapon(-2), CreateRandomWeapon(-1)]
             };
             return shop;
         }
+        public List<IEquipable> GetForsale() {
+            return Forsale;
+        }
+
         //Metode til at kalde og Loade shoppen.
         public static void Loadshop(Player p, Shop shop) {
             Program.SoundController.Play("shop");
@@ -32,7 +36,7 @@ namespace Saga.Items.Loot
                 //Wait for input
                 string input = TextInput.PlayerPrompt();
                 if (input == "u" || input == "use" || input == "heal") {
-                    Program.CurrentPlayer.Heal();
+                    ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).Consume();
                     TextInput.PressToContinue();
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
@@ -56,7 +60,7 @@ namespace Saga.Items.Loot
                     HUDTools.Print($"You sure you want to buy item # {input}? (Y/N)", 4);
                     string input2 = TextInput.PlayerPrompt();
                     if (input2 == "y") {
-                        TryBuyItem(int.Parse(input) - 1, shop.Forsale[int.Parse(input) - 1].CalculateItemPrice(), shop ,p);
+                        TryBuyItem(int.Parse(input) - 1, ((ItemBase)shop.Forsale[int.Parse(input) - 1]).CalculateItemPrice(), shop ,p);
                         TextInput.PressToContinue();
                     }
                 }
@@ -87,7 +91,7 @@ namespace Saga.Items.Loot
                         HUDTools.CharacterScreen();
                         TextInput.PressToContinue();
                     } else if (input1 == "u" || input == "use" || input == "heal") {
-                        Program.CurrentPlayer.Heal();
+                        ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).Consume();
                         TextInput.PressToContinue();
                     } else if (input1.Any(c => char.IsNumber(c))) {
                         if (input1 == "0") {
@@ -106,7 +110,7 @@ namespace Saga.Items.Loot
         }
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
-            int potionP = Program.CurrentPlayer.CurrentHealingPotion.CalculateItemPrice();
+            int potionP = Program.CurrentPlayer.Equipment[Slot.Potion].CalculateItemPrice();
             int sellPotionP = potionP / 2;
             switch (item) {
                 default:
@@ -214,8 +218,8 @@ namespace Saga.Items.Loot
         static void TrySellPotion(string item, int price, Player p) {
             switch (item) {
                 case "potion":
-                if (p.CurrentHealingPotion.PotionQuantity > 0) {
-                    p.CurrentHealingPotion.PotionQuantity--;
+                if (((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity > 0) {
+                    ((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity--;
                     p.Gold += price;
                     break;
                 } else {
@@ -224,8 +228,8 @@ namespace Saga.Items.Loot
                     break;
                 }
                 case "5x potion":
-                if (p.CurrentHealingPotion.PotionQuantity >= 5) {
-                    p.CurrentHealingPotion.PotionQuantity -= 5;
+                if (((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity >= 5) {
+                    ((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity -= 5;
                     p.Gold += price;
                     break;
                 } else {
@@ -251,6 +255,12 @@ namespace Saga.Items.Loot
                 p.Gold += price;
                 HUDTools.Print("Item sold!", 3);
             }
+        }
+        static IEquipable CreateRandomArmor(int level) {
+            throw new NotImplementedException();
+        }
+        static IEquipable CreateRandomWeapon(int level) {
+            throw new NotImplementedException();
         }
     }
 }

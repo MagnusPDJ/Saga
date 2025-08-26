@@ -3,14 +3,14 @@ namespace Saga.Items
 {
     public enum PotionType
     {
-        POTION_HEALING,
-        POTION_MANA
+        Healing,
+        Mana
     }
     internal interface IConsumable
     {
         int PotionPotency { get; set; }
         int PotionQuantity { get; set; }
-        PotionType PotionType { get; set; }
+        PotionType PotionType { get; }
         void Consume();
     }
 }

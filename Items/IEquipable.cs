@@ -19,8 +19,9 @@ namespace Saga.Items
         Finger_2,
         Crest,
         Trinket,
+        Potion
     }
-    internal interface IEquipable
+    public interface IEquipable
     {
         Slot ItemSlot { get; }
         string Equip();

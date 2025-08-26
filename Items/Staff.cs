@@ -1,43 +1,43 @@
-﻿using Saga.Assets;
+﻿
+using Saga.Assets;
 using Saga.Character;
 using Saga.Dungeon;
 using System;
 
 namespace Saga.Items
 {
-    public class TwoHandedSword : ItemBase, IWeapon, IEquipable, ITwoHanded
+    public class Staff : ItemBase, IWeapon, IEquipable, ITwoHanded
     {
-        public WeaponCategory WeaponCategory => WeaponCategory.Melee;
+        public WeaponCategory WeaponCategory => WeaponCategory.Magic;
         public Slot ItemSlot => Slot.Right_Hand;
         public bool IsTwohanded => true;
         public WeaponAttributes WeaponAttributes { get; set; }
         public string AttackDescription { get; set; }
 
-        public TwoHandedSword() {
+        public Staff() {
             SetWeaponAttributes();
             SetItemPrice();
         }
 
         public void SetWeaponAttributes() => WeaponAttributes = CalculateWeaponAttributes(ItemLevel);
         public WeaponAttributes CalculateWeaponAttributes(int level) {
-            return new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level / 2 + level), MaxDamage = Math.Max(5, Program.CurrentPlayer.Level + level * 2) + Program.Rand.Next(3, 8), AttackSpeed = 1 };
+            return new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level + level), MaxDamage = Math.Max(1, Program.CurrentPlayer.Level + level) + Program.Rand.Next(2, 6), AttackSpeed = 1 };
         }
         public override int CalculateItemPrice() {
             return Convert.ToInt32(ItemLevel * 100 + (WeaponAttributes.MaxDamage * 100 + WeaponAttributes.MinDamage * 50) * (1 + 1 / (WeaponAttributes.MaxDamage - WeaponAttributes.MinDamage)));
         }
-
         public string Equip() {
             if (ItemLevel > Program.CurrentPlayer.Level) {
                 Console.WriteLine($"Character needs to be level {ItemLevel} to equip this weapon.");
                 return "Weapon not equipped.";
-            } else if (Program.CurrentPlayer.CurrentClass != "Warrior") {
-                Console.WriteLine($"Character can't equip a weapon of type two-handed sword, {ItemName}.");
+            } else if (Program.CurrentPlayer.CurrentClass != "Mage") {
+                Console.WriteLine($"Character can't equip a weapon of type staff, {ItemName}.");
                 return "Weapon not equipped.";
             }
             bool hasRight = Program.CurrentPlayer.Equipment.TryGetValue(Slot.Right_Hand, out ItemBase valueRight);
             bool hasLeft = Program.CurrentPlayer.Equipment.TryGetValue(Slot.Left_Hand, out ItemBase valueLeft);
             if (hasRight || hasLeft) {
-                Console.WriteLine($"Do you want to switch {(valueRight != null ? valueRight.ItemName : "")}{(valueRight!=null &&valueLeft!=null ? " and ": "")}{(valueLeft != null ? valueLeft.ItemName : "")} for '{ItemName}'? (Y/N)");
+                Console.WriteLine($"Do you want to switch {(valueRight != null ? valueRight.ItemName : "")}{(valueRight != null && valueLeft != null ? " and " : "")}{(valueLeft != null ? valueLeft.ItemName : "")} for '{ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
@@ -77,7 +77,7 @@ namespace Saga.Items
                 Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
             }
             return "Weapon unequipped!";
-        }
+        }        
         public int Attack(Enemy monster) {
             HUDTools.Print($"{AttackDescription}", 15);
             int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);

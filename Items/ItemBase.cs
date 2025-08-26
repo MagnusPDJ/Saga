@@ -7,7 +7,7 @@ namespace Saga.Items
         public int ItemLevel { get; set; }
         private int _itemPrice;
         public int ItemPrice => _itemPrice;
-        public string ItemDescription { get; set; }
+        public string ItemDescription { get; init; }
         
         public void SetItemPrice() => _itemPrice = CalculateItemPrice();
         public abstract int CalculateItemPrice();

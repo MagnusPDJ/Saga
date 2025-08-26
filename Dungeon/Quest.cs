@@ -37,8 +37,8 @@ namespace Saga.Dungeon
                         continue;
                     }
                     foreach (string target in Requirements.Keys) {
-                        if (item.ItemSlot == Slot.Quest && item.ItemName == target) {
-                            if (((QuestItem)item).Amount == Requirements[target]) {
+                        if (item is IQuestItem item1 && item.ItemName == target) {
+                            if (item1.Amount == Requirements[target]) {
                                 return true;
                             }
                         }

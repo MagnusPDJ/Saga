@@ -152,7 +152,7 @@ namespace Saga.Dungeon
                                 break;
                             } else if (input == "n") {
                                 HUDTools.Print("A locked up prisoner doesn't seem that useful to you. So you decide to leave him behind");
-                                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, QuestLootTable.OldKey);
+                                int a = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x != null && x.ItemName == "Old Key");
                                 if (a != -1) {
                                     Program.CurrentPlayer.Inventory.SetValue(null, a);
                                 }

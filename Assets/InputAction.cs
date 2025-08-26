@@ -44,31 +44,31 @@ namespace Saga.Assets
             var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
             var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
             if (itemToSearchFor == "healing potion" || itemToSearchFor == "potion" || itemToSearchFor == "potions" || itemToSearchFor == "healing potions") {
-                HUDTools.Print($"\n{Program.CurrentPlayer.CurrentHealingPotion.ItemDescription}", 3);
+                HUDTools.Print($"\n{Program.CurrentPlayer.Equipment[Slot.Potion].ItemDescription.Replace("\\n", "\n")}", 3);
             }
             else if (wat.Value == null && item == null) {
                 Console.WriteLine("\nNo such item exists...");
             }
             else if (wat.Value != null) {
-                if (wat.Value.ItemSlot == Slot.Quest) {
-                    HUDTools.Print($"\n{wat.Value.ItemDescription}", 3);
+                if (wat.Value is IQuestItem) {
+                    HUDTools.Print($"\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
-                else if (wat.Value.ItemSlot == Slot.Right_Hand) {
-                    HUDTools.Print($"\nThis is a weapon of type {((WeaponBase)wat.Value).WeaponCategory}.\n{wat.Value.ItemDescription}", 3);
+                else if (wat.Value is IWeapon weapon) {
+                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon.\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else {
-                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)wat.Value).ArmorType}.\n{wat.Value.ItemDescription}", 3);
+                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)wat.Value).ArmorType}.\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
             }
             else {
-                if (item.ItemSlot == Slot.Quest) {
-                    HUDTools.Print($"\n{item.ItemDescription}", 3);
+                if (item is IQuestItem) {
+                    HUDTools.Print($"\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
-                else if (item.ItemSlot == Slot.Right_Hand) {
-                    HUDTools.Print($"\nThis is a weapon of type {((WeaponBase)item).WeaponCategory}.\n{item.ItemDescription}", 3);
+                else if (item is IWeapon weapon) {
+                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon.\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else {
-                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)item).ArmorType}.\n{item.ItemDescription}", 3);
+                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)item).ArmorType}.\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
             }
             TextInput.PressToContinue();
@@ -86,14 +86,10 @@ namespace Saga.Assets
             else {
                 var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
                 if (item != null) {
-                    if (item.ItemSlot == Slot.Quest) {
+                    if (item is not IEquipable) {
                         HUDTools.Print("\nYou cannot equip this item...", 3);
-                    }
-                    else if (item.ItemSlot == Slot.Right_Hand) {
-                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((WeaponBase)item)}", 3);
-                    }
-                    else if (item.ItemSlot != Slot.Right_Hand) {
-                        HUDTools.Print($"\n{Program.CurrentPlayer.Equip((ArmorBase)item)}", 3);
+                    }else {
+                        HUDTools.Print($"\n{((IEquipable)item).Equip()}", 3);
                     }
                 }
                 else {
@@ -114,7 +110,7 @@ namespace Saga.Assets
                 Console.WriteLine("\nNo such item equipped...");
             }
             else {
-                HUDTools.Print($"\n{Program.CurrentPlayer.UnEquip(wat.Key, wat.Value)}", 3);
+                HUDTools.Print($"\n{((IEquipable)wat.Value).UnEquip()}", 3);
             }
             TextInput.PressToContinue();
             HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
@@ -151,7 +147,7 @@ namespace Saga.Assets
     }
     public class DrinkPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords = null) {
-            Program.CurrentPlayer.Heal();
+            ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).Consume();
             TextInput.PressToContinue();
             HUDTools.RoomHUD();
             return "";
