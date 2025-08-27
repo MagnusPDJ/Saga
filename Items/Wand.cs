@@ -13,8 +13,7 @@ namespace Saga.Items
         public string AttackDescription { get; set; }
 
         public Wand() {
-            SetWeaponAttributes();
-            SetItemPrice();
+
         }
 
         public void SetWeaponAttributes() => WeaponAttributes = CalculateWeaponAttributes(ItemLevel);

@@ -15,9 +15,7 @@ namespace Saga.Items
         public SecondaryAttributes SecondaryAttributes { get; set; }
 
         public ArmorBase() {
-            SetPrimaryAttributes();
-            SetSecondaryAttributes();
-            SetItemPrice();
+
         }
 
         public void SetPrimaryAttributes() => PrimaryAttributes = CalculatePrimaryAttributes(ItemLevel);

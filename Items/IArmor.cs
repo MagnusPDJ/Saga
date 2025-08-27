@@ -15,6 +15,8 @@ namespace Saga.Items
         public PrimaryAttributes PrimaryAttributes { get; set; }
         public SecondaryAttributes SecondaryAttributes { get; set; }
         PrimaryAttributes CalculatePrimaryAttributes(int level);
+        void SetPrimaryAttributes();
         SecondaryAttributes CalculateSecondaryAttributes(int level);
+        void SetSecondaryAttributes();
     }
 }

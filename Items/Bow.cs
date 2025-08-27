@@ -15,8 +15,7 @@ namespace Saga.Items
         public string AttackDescription { get; set; }
 
         public Bow() {
-            SetWeaponAttributes();
-            SetItemPrice();
+
         }
 
         public void SetWeaponAttributes() => WeaponAttributes = CalculateWeaponAttributes(ItemLevel);

@@ -14,8 +14,7 @@ namespace Saga.Items
         public string AttackDescription { get; set; }
 
         public TwoHandedSword() {
-            SetWeaponAttributes();
-            SetItemPrice();
+
         }
 
         public void SetWeaponAttributes() => WeaponAttributes = CalculateWeaponAttributes(ItemLevel);

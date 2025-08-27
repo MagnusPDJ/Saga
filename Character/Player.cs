@@ -332,15 +332,15 @@ namespace Saga.Character
         }
         //Metode til at få alle quest rewards og opdatere questlogs.
         public void CompleteAndTurnInQuest(Quest quest)  {
-            int a = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Old key");
+            int a = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Old Key");
             if (a != -1) {
                 Inventory.SetValue(null, a);
             }
-            int b = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Rat tail");
+            int b = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Rat Tail");
             if (b != -1) {
                 Inventory.SetValue(null, b);
             }
-            int c = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Bat wings");
+            int c = Array.FindIndex(Inventory, item => item != null && item.ItemName == "Bat Wings");
             if (c != -1) {
                 Inventory.SetValue(null, c);
             }
