@@ -13,6 +13,7 @@ namespace Saga.Items
         public HealingPotion() {
             PotionPotency = 5;
             PotionQuantity = 0;
+            ItemName = "Healing Potion";
             ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur";
             SetItemPrice();
         }
