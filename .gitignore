@@ -581,3 +581,10 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,csharp
+/Items/ArmorBaseOBSOLETE.cs
+/Items/ArmorLootTableOBSOLETE.cs
+/Items/QuestItemOBSOLETE.cs
+/Items/QuestLootTableOBSOLETE.cs
+/Items/PotionOBSOLETE.cs
+/Items/WeaponBaseOBSOLETE.cs
+/Items/WeaponLootTableOBSOLETE.cs

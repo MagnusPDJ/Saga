@@ -10,11 +10,13 @@ namespace Saga.Items
         Magic
     }
 
-    internal interface IWeapon
+    public interface IWeapon
     {
-        public WeaponCategory WeaponCategory { get; }
-        public WeaponAttributes WeaponAttributes { get; }
-        WeaponAttributes GetWeaponAttributes(int level);
+        WeaponCategory WeaponCategory { get; }
+        WeaponAttributes WeaponAttributes { get; set; }
+        string AttackDescription { get; set; }
+        WeaponAttributes CalculateWeaponAttributes(int level);
+        void SetWeaponAttributes();
         int Attack(Enemy Monster);
     }
 }

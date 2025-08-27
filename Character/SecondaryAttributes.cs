@@ -7,7 +7,7 @@ namespace Saga.Character
         public int MaxMana {  get; set; }
         public int Awareness { get; set; }
         public int ArmorRating { get; set; }
-        public int ElementalResistence { get; set; }
+        public int ElementalResistance { get; set; }
 
         // Checks if two SecondaryAttributes objects are equal.
         // <param name="obj">Object to compare to</param>
@@ -16,12 +16,12 @@ namespace Saga.Character
             return obj is SecondaryAttributes attributes &&
                    MaxHealth == attributes.MaxHealth &&
                    ArmorRating == attributes.ArmorRating &&
-                   ElementalResistence == attributes.ElementalResistence &&
+                   ElementalResistance == attributes.ElementalResistance &&
                    MaxMana == attributes.MaxMana &&
                    Awareness == attributes.Awareness;
         }
         public override int GetHashCode() {
-            return System.HashCode.Combine(MaxHealth, MaxMana, Awareness, ArmorRating, ElementalResistence);
+            return System.HashCode.Combine(MaxHealth, MaxMana, Awareness, ArmorRating, ElementalResistance);
         }
         // <summary>
         // Adds two PrimaryAttributes together.
@@ -32,7 +32,7 @@ namespace Saga.Character
         public static SecondaryAttributes operator +(SecondaryAttributes a, SecondaryAttributes b) => new() {
             MaxHealth = a.MaxHealth + b.MaxHealth,
             ArmorRating = a.ArmorRating + b.ArmorRating,
-            ElementalResistence = a.ElementalResistence + b.ElementalResistence,
+            ElementalResistance = a.ElementalResistance + b.ElementalResistance,
             MaxMana = a.MaxMana + b.MaxMana,
             Awareness = a.Awareness + b.Awareness
         };

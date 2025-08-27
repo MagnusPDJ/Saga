@@ -1,0 +1,222 @@
+﻿[
+  {
+    "$type": "armorBase",
+    "ItemName": "Linen Rags",
+    "ItemLevel": 1,
+    "ItemSlot": 1,
+    "ArmorType": 0,
+    "PrimaryAttributes": {
+      "Strength": 0,
+      "Dexterity": 0,
+      "Intellect": 0,
+      "Constitution": 0,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 0,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Clothes that mark you a prisoner but without them, you'd be naked."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Runed Simple Robe",
+    "ItemLevel": 2,
+    "ItemSlot": 1,
+    "ArmorType": 0,
+    "PrimaryAttributes": {
+      "Strength": 1,
+      "Dexterity": 1,
+      "Intellect": 3,
+      "Constitution": 1,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 4,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Soft to the touch and embroidered with golden runes all along the edges."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Enchanted Elegant Robe",
+    "ItemLevel": 5,
+    "ItemSlot": 1,
+    "ArmorType": 0,
+    "PrimaryAttributes": {
+      "Strength": 1,
+      "Dexterity": 1,
+      "Intellect": 5,
+      "Constitution": 2,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 8,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Purple and white robe, it has void black runes that seem to change the more you stare at it."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Arcanist's Robe",
+    "ItemLevel": 8,
+    "ItemSlot": 1,
+    "ArmorType": 0,
+    "PrimaryAttributes": {
+      "Strength": 1,
+      "Dexterity": 1,
+      "Intellect": 7,
+      "Constitution": 3,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 12,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "White robe that has a faint glow that constantly shift in the colours of the rainbow."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Hide Armor",
+    "ItemLevel": 2,
+    "ItemSlot": 1,
+    "ArmorType": 1,
+    "PrimaryAttributes": {
+      "Strength": 1,
+      "Dexterity": 3,
+      "Intellect": 1,
+      "Constitution": 1,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 4,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Various hides and pelts have been sewn together to form a protective shirt."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Hunter's Cuirass",
+    "ItemLevel": 5,
+    "ItemSlot": 1,
+    "ArmorType": 1,
+    "PrimaryAttributes": {
+      "Strength": 1,
+      "Dexterity": 5,
+      "Intellect": 1,
+      "Constitution": 2,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 8,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Hard leather that has been riveted into a cuirass and decorated with engravings."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Marksman's Brigandine",
+    "ItemLevel": 8,
+    "ItemSlot": 1,
+    "ArmorType": 2,
+    "PrimaryAttributes": {
+      "Strength": 1,
+      "Dexterity": 7,
+      "Intellect": 1,
+      "Constitution": 3,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 12,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "A nice velvet jacket riveted with metal plates on the inside giving the best protection while\nbeing lightweight."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Steel Mail Shirt",
+    "ItemLevel": 2,
+    "ItemSlot": 1,
+    "ArmorType": 2,
+    "PrimaryAttributes": {
+      "Strength": 3,
+      "Dexterity": 1,
+      "Intellect": 1,
+      "Constitution": 1,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 4,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "A plain mail shirt, but the steel is unusually black and it feels light."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Steel Breastplate",
+    "ItemLevel": 5,
+    "ItemSlot": 1,
+    "ArmorType": 3,
+    "PrimaryAttributes": {
+      "Strength": 5,
+      "Dexterity": 1,
+      "Intellect": 1,
+      "Constitution": 2,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 8,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Black and lightweight steel has been rolled into the shape of a person's torso, fortunately\nit fits you quite well."
+  },
+  {
+    "$type": "armorBase",
+    "ItemName": "Knight's Plate Armor",
+    "ItemLevel": 8,
+    "ItemSlot": 1,
+    "ArmorType": 3,
+    "PrimaryAttributes": {
+      "Strength": 7,
+      "Dexterity": 1,
+      "Intellect": 1,
+      "Constitution": 3,
+      "WillPower": 0
+    },
+    "SecondaryAttributes": {
+      "MaxHealth": 0,
+      "MaxMana": 0,
+      "Awareness": 0,
+      "ArmorRating": 12,
+      "ElementalResistance": 0
+    },
+    "ItemDescription": "Black steel with golden adornments, this was definitely custommade for someone powerful."
+  }
+]

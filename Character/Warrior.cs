@@ -1,9 +1,8 @@
-﻿using System;
-using Saga.Assets;
+﻿using Saga.Assets;
 using Saga.Items;
 using Saga.Dungeon;
-using Saga.Items.Loot;
-using Saga.Items.Loot.WeaponLootTable;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Saga.Character
 {
@@ -44,117 +43,16 @@ namespace Saga.Character
             return (weaponDPT.Item1 + dmgfromattribute+dmgfromwarrior, weaponDPT.Item2 + dmgfromattribute+dmgfromwarrior);
         }
 
-        //      Gear
-        public override string Equip(WeaponBase weapon) {
-            if (weapon.ItemLevel > Level) {
-                Console.WriteLine($"Character needs to be level {weapon.ItemLevel} to equip this item");
-                return "Item not equipped";
-            } else if (weapon is Axe && weapon is Sword && weapon is Hammer) {
-                Console.WriteLine($"Character can't equip a weapon {weapon.WeaponCategory}");
-                return "Item not equipped";
-            }
-            if (Equipment.TryGetValue(Slot.Right_Hand, out ItemBase value)) {
-                Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{weapon.ItemName}'? (Y/N)");
-                while (true) {
-                    string input = TextInput.PlayerPrompt();
-                    if (input == "y") {
-                        UnEquip(Slot.Right_Hand, Equipment[Slot.Right_Hand]);
-                        Equipment[weapon.ItemSlot] = weapon;
-                        int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
-                        Program.CurrentPlayer.Inventory.SetValue(null, a);
-                        return "New weapon equipped!";
-                    } else if (input == "n") {
-                        return "Item not equipped";
-                    } else {
-                        Console.WriteLine("Invalid input");
-                    }
-                }
-            } else {
-                Equipment[weapon.ItemSlot] = weapon;
-                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, weapon);
-                if (a == -1) {
-                } else {
-                    Program.CurrentPlayer.Inventory.SetValue(null, a);
-                }
-                Program.CurrentPlayer.CalculateTotalStats();
-                return "New weapon equipped!";
-            }
-        }
-        public override string Equip(ArmorBase armor) {
-            if (armor.ItemLevel > Level) {
-                Console.WriteLine($"Character needs to be level {armor.ItemLevel} to equip this item");
-                return "Item not equipped";
-            } else if (armor.ArmorType != ArmorType.Mail && armor.ArmorType != ArmorType.Plate && armor.ItemName != "Linen Rags") {
-                Console.WriteLine($"Character can't equip a {armor.ArmorType} armor");
-                return "Item not equipped";
-            }
-            if (Equipment.TryGetValue(armor.ItemSlot, out ItemBase value)) {
-                Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{armor.ItemName}'? (Y/N)");
-                while (true) {
-                    string input = TextInput.PlayerPrompt();
-                    if (input == "y") {
-                        UnEquip(armor.ItemSlot, Equipment[armor.ItemSlot]);
-                        Equipment[armor.ItemSlot] = armor;
-                        int a = Array.IndexOf(Program.CurrentPlayer.Inventory, armor);
-                        Program.CurrentPlayer.Inventory.SetValue(null, a);
-                        return "New armor equipped!";
-                    } else if (input == "n") {
-                        return "Item not equipped";
-                    } else {
-                        Console.WriteLine("Invalid input");
-                    }
-                }
-            } else {
-                Equipment[armor.ItemSlot] = armor;
-                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, armor);
-                if (a == -1) {
-                } else {
-                    Program.CurrentPlayer.Inventory.SetValue(null, a);
-                }
-                Program.CurrentPlayer.CalculateTotalStats();
-                return "New armor piece equipped!";
-            }
-        }
-        public override string Equip(Potion potion) {
-            Equipment[potion.ItemSlot] = potion;
-            Program.CurrentPlayer.CalculateTotalStats();
-            return "New potion equipped!";
-        }
-        public override string UnEquip(Slot slot, ItemBase item) {
-            int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
-            Program.CurrentPlayer.Inventory.SetValue(item, index);
-            Program.CurrentPlayer.Equipment.Remove(slot);
-            Program.CurrentPlayer.CalculateTotalStats();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
-            }
-            return "Item unequipped!";
-        }
         public override void SetStartingGear() {
-            Equip(RustySword);
-            Equip(ArmorLootTable.LinenRags);
+            List<ItemBase> weapons = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"));
+            List<ItemBase> armors = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"));
+            ((IEquipable)weapons.Find(w => w.ItemName == "Rusty Sword")).Equip();
+            ((IEquipable)armors.Find(w => w.ItemName == "Linen Rags")).Equip();
+            HealingPotion healingPotion = new();
+            healingPotion.Equip();
         }
 
         //      Skills
-        public override void Heal() {
-            if (Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity == 0) {
-                HUDTools.Print("No potions left!", 20);
-            }
-            else {
-                HUDTools.Print("You use a potion", 20);
-                Program.CurrentPlayer.Health += Program.CurrentPlayer.CurrentHealingPotion.PotionPotency;
-                Program.CurrentPlayer.CurrentHealingPotion.PotionQuantity--;
-                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                    Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
-                }
-                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                    HUDTools.Print("You heal to max health!", 20);
-                }
-                else {
-                    HUDTools.Print($"You gain {Program.CurrentPlayer.CurrentHealingPotion.PotionPotency} health", 20);
-                }
-            }
-        }
         public override void Defend(Enemy Monster) {
             HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
             Monster.AttackDebuff += 3+1;

@@ -1,0 +1,146 @@
+﻿[
+  {
+    "$type": "oneHandedSword",
+    "AttackDescription": "You swing your rusty sword.",
+    "ItemDescription": "Old and fragile but it is yours... You looted it yourself!",
+    "ItemLevel": 1,
+    "ItemName": "Rusty Sword",
+    "WeaponAttributes": {
+      "MinDamage": 1,
+      "MaxDamage": 2,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "wand",
+    "AttackDescription": "You shoot an arcane missile from your cracked wand.",
+    "ItemDescription": "It may be cracked, but nothing some duct tape couldn't fix!",
+    "ItemLevel": 1,
+    "ItemName": "Cracked Wand",
+    "WeaponAttributes": {
+      "MinDamage": 1,
+      "MaxDamage": 2,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "bow",
+    "AttackDescription": "You fire an arrow from your flimsy bow.",
+    "ItemDescription": "If you pull it too hard, it would probably snap. On the positive side, you'd have a nunchuck.",
+    "ItemLevel": 1,
+    "ItemName": "Flimsy Bow",
+    "WeaponAttributes": {
+      "MinDamage": 1,
+      "MaxDamage": 3,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "wand",
+    "AttackDescription": "You shoot an arcane missile from your enchanted wand.",
+    "ItemDescription": "A wand made from flexible yew making it more durable and less likely to crack.",
+    "ItemLevel": 2,
+    "ItemName": "Enchanted Wand",
+    "WeaponAttributes": {
+      "MinDamage": 2,
+      "MaxDamage": 4,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "staff",
+    "AttackDescription": "You shoot a small ball of fire from your gnarled staff.",
+    "ItemDescription": "Long staff made of aspen wood that has twisted along the shaft.",
+    "ItemLevel": 4,
+    "ItemName": "Gnarled staff",
+    "WeaponAttributes": {
+      "MinDamage": 4,
+      "MaxDamage": 8,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "staff",
+    "AttackDescription": "You shoot a small ball of fire from your arcanist's staff.",
+    "ItemDescription": "Long staff made of black wood with a white, egg-shaped gem embedded on the top.",
+    "ItemLevel": 7,
+    "ItemName": "Arcanist's Staff",
+    "WeaponAttributes": {
+      "MinDamage": 6,
+      "MaxDamage": 16,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "bow",
+    "AttackDescription": "You fire an arrow from your quick shortbow.",
+    "ItemDescription": "Small and flexible perfect for hunting where speed is more important than power.",
+    "ItemLevel": 2,
+    "ItemName": "Quick Shortbow",
+    "WeaponAttributes": {
+      "MinDamage": 2,
+      "MaxDamage": 4,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "bow",
+    "AttackDescription": "You fire an arrow from your sturdy longbow.",
+    "ItemDescription": "As tall as you are and very firm, this is made to penetrate armor.",
+    "ItemLevel": 4,
+    "ItemName": "Sturdy Longbow",
+    "WeaponAttributes": {
+      "MinDamage": 4,
+      "MaxDamage": 8,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "bow",
+    "AttackDescription": "You fire an arrow from your marksman's recurve.",
+    "ItemDescription": "This bow bends away from the holder making it easier to draw therefore giving the wielder\nmore precision.",
+    "ItemLevel": 7,
+    "ItemName": "Marksman's Recurve",
+    "WeaponAttributes": {
+      "MinDamage": 6,
+      "MaxDamage": 16,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "oneHandedSword",
+    "AttackDescription": "You swing your steel sword.",
+    "ItemDescription": "A plain sword but the steel is unusually black and it feels light.",
+    "ItemLevel": 2,
+    "ItemName": "Steel Sword",
+    "WeaponAttributes": {
+      "MinDamage": 2,
+      "MaxDamage": 4,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "twoHandedSword",
+    "AttackDescription": "You swing your fine longsword.",
+    "ItemDescription": "A black double-edged sword that feels quite light.",
+    "ItemLevel": 4,
+    "ItemName": "Fine Longsword",
+    "WeaponAttributes": {
+      "MinDamage": 4,
+      "MaxDamage": 8,
+      "AttackSpeed": 1
+    }
+  },
+  {
+    "$type": "twoHandedSword",
+    "AttackDescription": "You swing your knight's greatsword.",
+    "ItemDescription": "Black steel with golden adornments, this was definitely custommade for someone powerful.",
+    "ItemLevel": 7,
+    "ItemName": "Knight's Greatsword",
+    "WeaponAttributes": {
+      "MinDamage": 6,
+      "MaxDamage": 16,
+      "AttackSpeed": 1
+    }
+  }
+]

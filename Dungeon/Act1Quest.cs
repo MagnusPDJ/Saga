@@ -3,6 +3,7 @@ using Saga.Items.Loot;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Linq;
+using Saga.Items;
 
 namespace Saga.Dungeon
 {
@@ -12,7 +13,11 @@ namespace Saga.Dungeon
             var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Act1Quests.json"));
             var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
             if (questToAdd != null && questToAdd.Item?.ItemName == "Random") {
-                questToAdd.Item = ArmorLootTable.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
+                var item = (ItemBase)Shop.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
+                ((IArmor)item).SetPrimaryAttributes();
+                ((IArmor)item).SetSecondaryAttributes();
+                item.SetItemPrice();
+                questToAdd.Item = item;
             }
             Program.CurrentPlayer.QuestLog.Add(questToAdd);
             HUDTools.Print($"\u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
@@ -28,8 +33,8 @@ namespace Saga.Dungeon
             string target = "";
             string name = "";
             (int,int,int) reward = (0,0,-1);
-            if (roll == 0) { target = "Rat tail"; name = "Collect rat tails"; reward = (50*Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
-            else if (roll == 1) { target = "Bat wings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3+Program.CurrentPlayer.Level); }
+            if (roll == 0) { target = "Rat Tail"; name = "Collect rat tails"; reward = (50*Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
+            else if (roll == 1) { target = "Bat Wings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3+Program.CurrentPlayer.Level); }
             int amount = 3 + Program.CurrentPlayer.Level/2;
 
             Quest quest = new Act1Quest() {

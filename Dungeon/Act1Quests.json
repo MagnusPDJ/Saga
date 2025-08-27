@@ -2,14 +2,14 @@
   {
     "Name": "Free Flemsha",
     "QuestType": 2,
-    "Target": "Old key",
+    "Target": "Old Key",
     "Giver": "Flemsha",
     "Objective": "You've met a prisoner who calls himself Flemsha. He claims if you free him,\nhe will offer his alchemical expertise to your cause.",
     "TurnIn": "You have found an old key, it is likely a prison key.\nYou should return to Flemsha's cell.",
     "Gold": 100,
     "Exp": 100,
     "Requirements": {
-      "Old key": 1
+      "Old Key": 1
     }
   },
   {
@@ -21,7 +21,7 @@
     "TurnIn": "You have killed 5 monsters and should return to Gheed.",
     "Exp": 100,
     "Item": {
-      "$type": "armor",
+      "$type": "armorBase",
       "ItemName": "Random"
     },
     "Requirements": {

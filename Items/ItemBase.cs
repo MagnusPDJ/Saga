@@ -1,46 +1,30 @@
-﻿using System.Text.Json.Serialization;
+﻿
+using System.Text.Json.Serialization;
 
 namespace Saga.Items
 {
-    public enum Slot 
+    [JsonDerivedType(typeof(QuestItemBase), typeDiscriminator: "questItemBase")]
+    [JsonDerivedType(typeof(ArmorBase), typeDiscriminator: "armorBase")]
+    [JsonDerivedType(typeof(OneHandedSword), typeDiscriminator: "oneHandedSword")]
+    [JsonDerivedType(typeof(TwoHandedSword), typeDiscriminator: "twoHandedSword")]
+    [JsonDerivedType(typeof(OneHandedAxe), typeDiscriminator: "oneHandedAxe")]
+    [JsonDerivedType(typeof(OneHandedMace), typeDiscriminator: "oneHandedMace")]    
+    [JsonDerivedType(typeof(Wand), typeDiscriminator: "wand")]
+    [JsonDerivedType(typeof(Staff), typeDiscriminator: "staff")]
+    [JsonDerivedType(typeof(Tome), typeDiscriminator: "tome")]
+    [JsonDerivedType(typeof(Bow), typeDiscriminator: "bow")]
+    [JsonDerivedType(typeof(Dagger), typeDiscriminator: "dagger")]
+    [JsonDerivedType(typeof(Crossbow), typeDiscriminator: "crossbow")]
+    [JsonDerivedType(typeof(HealingPotion), typeDiscriminator: "healingPotion")]
+    public abstract class ItemBase : IItem
     {
-        Headgear,
-        Torso,
-        Legs,        
-        Feet,
-        Bracers,
-        Shoulders,
-        Belt,
-        Cape,
-        Gloves,
-        Right_Hand,
-        Left_Hand,
-        Amulet,
-        Quest,
-        SLOT_RING1,
-        SLOT_RING2,
-        SLOT_CREST,
-        SLOT_TRINKET,
-    }
-
-    [JsonDerivedType(typeof(WeaponBase), typeDiscriminator: "weapon")]
-    [JsonDerivedType(typeof(ArmorBase), typeDiscriminator: "armor")]
-    [JsonDerivedType(typeof(Potion), typeDiscriminator: "potion")]
-    [JsonDerivedType(typeof(QuestItem), typeDiscriminator: "questItem")]
-    public abstract class ItemBase 
-    {
-        public abstract string ItemName { get; protected set; }
+        public string ItemName { get; set; }
         public int ItemLevel { get; set; }
-        public Slot ItemSlot { get; set; }
-        public int ItemPrice { get; set; }
-        public string ItemDescription { get; set; } = "";
-        public abstract int CalculateItemPrice();
+        private int _itemPrice;
+        public int ItemPrice => _itemPrice;
+        public string ItemDescription { get; init; }
         
-        protected ItemBase()
-        {
-            ItemName = GenerateRandomName();
-        }
-
-        protected abstract string GenerateRandomName();
+        public void SetItemPrice() => _itemPrice = CalculateItemPrice();
+        public abstract int CalculateItemPrice();
     }
 }
