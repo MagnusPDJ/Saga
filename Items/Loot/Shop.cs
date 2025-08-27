@@ -275,97 +275,96 @@ namespace Saga.Items.Loot
             string itemName;
             switch (weapon) {
                 default:
-                    itemName = RandomWeaponName((IWeapon)typeof(OneHandedAxe));
+                    itemName = RandomWeaponName(new OneHandedAxe());
                     item = new OneHandedAxe() {
-                        ItemLevel = level,
-                        ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",                         
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
+                        ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 1:
-                    itemName = RandomWeaponName((IWeapon)typeof(OneHandedSword));
+                    itemName = RandomWeaponName(new OneHandedSword());
                     item = new OneHandedSword() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 2:
-                    itemName = RandomWeaponName((IWeapon)typeof(TwoHandedSword));
+                    itemName = RandomWeaponName(new TwoHandedSword());
                     item = new TwoHandedSword() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 3:
-                    itemName = RandomWeaponName((IWeapon)typeof(OneHandedMace));
+                    itemName = RandomWeaponName(new OneHandedMace());
                     item = new OneHandedMace() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 4:
-                    itemName = RandomWeaponName((IWeapon)typeof(Bow));
+                    itemName = RandomWeaponName(new Bow());
                     item = new Bow() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 5:
-                    itemName = RandomWeaponName((IWeapon)typeof(Dagger));
+                    itemName = RandomWeaponName(new Dagger());
                     item = new Dagger() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 6:
-                    itemName = RandomWeaponName((IWeapon)typeof(Crossbow));
+                    itemName = RandomWeaponName(new Crossbow());
                     item = new Crossbow() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 7:
-                    itemName = RandomWeaponName((IWeapon)typeof(Staff));
+                    itemName = RandomWeaponName(new Staff());
                     item = new Staff() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 8:
-                    itemName = RandomWeaponName((IWeapon)typeof(Wand));
+                    itemName = RandomWeaponName(new Wand());
                     item = new Wand() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
                 case 9:
-                    itemName = RandomWeaponName((IWeapon)typeof(Tome));
+                    itemName = RandomWeaponName(new Tome());
                     item = new Tome() {
-                        ItemLevel = level,
+                        ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
                     return (IEquipable)item;
             }
-
         }
         public static string RandomArmorName(ArmorType type, Slot slot) {
             string name = "Fine Hat";
@@ -1092,7 +1091,7 @@ namespace Saga.Items.Loot
                     }
             }
         }
-        public static string RandomWeaponName(IWeapon weapon) {
+        public static string RandomWeaponName(ItemBase weapon) {
             string name1 = "Sturdy";
             string name2 = "Stick";
             int rand = Program.Rand.Next(10);
@@ -1142,7 +1141,7 @@ namespace Saga.Items.Loot
             }
             return $"{name1}{name2}";
         }
-        public static string WeaponNameList(IWeapon weapon, int rand) {
+        public static string WeaponNameList(ItemBase weapon, int rand) {
             string name = "";
             switch (weapon) {
                 default:

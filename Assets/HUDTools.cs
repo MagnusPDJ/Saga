@@ -481,6 +481,9 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine("******************** Equipment *****************************");
             foreach (KeyValuePair<Slot, ItemBase> entry in Program.CurrentPlayer.Equipment) {
+                if (entry.Key == Slot.Potion) {
+                    continue;
+                }
                 if (entry.Key == Slot.Right_Hand) {
                     Console.WriteLine($" {((IEquipable)entry.Value).ItemSlot} - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
                 } else {
