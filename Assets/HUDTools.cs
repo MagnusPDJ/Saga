@@ -421,7 +421,7 @@ namespace Saga.Assets
             stats.AppendFormat($" (W)illpower: {totalPrimaryAttributes.WillPower}\n");
             stats.AppendFormat($"Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n");
             stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
-            stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {baseSecondaryAttributes.MaxHealth}\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
+            stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {baseSecondaryAttributes.MaxHealth}\t\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
             stats.AppendFormat($" Mana: {Program.CurrentPlayer.Mana} / {baseSecondaryAttributes.MaxMana}\t\t\tAwareness: {baseSecondaryAttributes.Awareness}\n");
             stats.AppendFormat($" Armor Rating: {baseSecondaryAttributes.ArmorRating}\t\tElemental Resistance: {baseSecondaryAttributes.ElementalResistance}");
 
@@ -432,44 +432,25 @@ namespace Saga.Assets
             for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0 ; i--) {
                 Console.Clear();
                 Program.CurrentPlayer.DisplayStats();
-                if (Program.CurrentPlayer.FreeAttributePoints > 0 && i != 0) {
-                    Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o",1);
-                    while (true) {
-                        string input = TextInput.PlayerPrompt();
-                        if (input == "s" || input == "strength") {
-                            Program.CurrentPlayer.BasePrimaryAttributes.Strength++;
-                            Program.CurrentPlayer.FreeAttributePoints--;
-                            break;
-                        }
-                        else if (input == "d" || input == "dexterity") {
-                            Program.CurrentPlayer.BasePrimaryAttributes.Dexterity++;
-                            Program.CurrentPlayer.FreeAttributePoints--;
-                            break;
-                        }
-                        else if (input == "i" || input == "intellect") {
-                            Program.CurrentPlayer.BasePrimaryAttributes.Intellect++;
-                            Program.CurrentPlayer.FreeAttributePoints--;
-                            break;
-                        }
-                        else if (input == "c" || input == "constitution") {
-                            Program.CurrentPlayer.BasePrimaryAttributes.Constitution++;
-                            Program.CurrentPlayer.FreeAttributePoints--;
-                            break;
-                        }
-                        else if (input == "w" || input == "willpower") {
-                            Program.CurrentPlayer.BasePrimaryAttributes.WillPower++;
-                            Program.CurrentPlayer.FreeAttributePoints--;
-                            break;
-                        }
-                        else if (input == "n" || input == "no") {
-                            i = 1;
-                            break;
-                        } else {
-                            Print("Invalid input", 1);
-                        }
-                    }
-                }           
+                i = Program.CurrentPlayer.SpendAttributePoint(i);           
             }       
+        }
+        public static void ShowSkillTree() {
+            Console.Clear();
+            Print($"Learned Skills:", 0);
+            for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
+                var s = Program.CurrentPlayer.LearnedSkills[i];
+                Print($"{i + 1}: {s.Name} ({s.Tier.Item1}/{s.Tier.Item2}) - {s.Description}", 0);
+            }
+            var availableSkills = Program.CurrentPlayer.SkillTree.GetAvailableSkills(Program.CurrentPlayer.Level);
+            if (availableSkills.Count != 0) {
+                Print("Available Skills:", 0);
+                for (int i = 0; i < availableSkills.Count; i++) {
+                    var s = availableSkills[i];
+                    Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Item1}/{s.Tier.Item2})", 0);
+                }
+            }
+            Print("\nEnter the number of the skill to unlock, or '(b)ack' to exit.", 10);
         }
         public static void InventoryScreen() {
             Console.Clear();
@@ -594,6 +575,7 @@ namespace Saga.Assets
             Console.WriteLine(" ==============Actions==============");
             Console.WriteLine(" V (C)haracter screen   (H)eal     V");
             Console.WriteLine(" V (I)nventory          Quest(L)og V");
+            Console.WriteLine(" V S(K)illtree                     V");
             Console.WriteLine(" ===================================\n");
             Console.WriteLine(" Write an action:");
         }
@@ -620,6 +602,7 @@ namespace Saga.Assets
             Console.WriteLine("0 (G)heed's shop     (H)eal          0");
             Console.WriteLine("0 (C)haracter screen (I)nventory     0");
             Console.WriteLine("0 Quest(L)og         (T)alk to NPC's 0");
+            Console.WriteLine("0 S(K)illtree                        0");
             Console.WriteLine("======================================");
             Console.WriteLine("  (Q)uit to Main Menu                 ");
             Console.WriteLine("Choose an action...\n");

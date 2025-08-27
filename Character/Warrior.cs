@@ -10,6 +10,7 @@ namespace Saga.Character
     {
         public Warrior(string name) : base(name, 0, 1, 1, 1, 1, 0) {
             CurrentClass = "Warrior";
+            SkillTree = new WarriorSkillTree();
         }
 
         //      Stats
@@ -50,12 +51,6 @@ namespace Saga.Character
             ((IEquipable)armors.Find(w => w.ItemName == "Linen Rags")).Equip();
             HealingPotion healingPotion = new();
             healingPotion.Equip();
-        }
-
-        //      Skills
-        public override void Defend(Enemy Monster) {
-            HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
-            Monster.AttackDebuff += 3+1;
         }
         public override bool RunAway(Enemy Monster) {
             bool escaped = false;

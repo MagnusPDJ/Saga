@@ -336,7 +336,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $"You fire an arrow from your {itemName}",
                     };
                     return (IEquipable)item;
                 case 5:
@@ -345,7 +345,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $"You stab with your {itemName}",
                     };
                     return (IEquipable)item;
                 case 6:
@@ -354,7 +354,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $"You fire a bolt with your {itemName}",
                     };
                     return (IEquipable)item;
                 case 7:
@@ -372,7 +372,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $"You stab with your {itemName}",
                     };
                     return (IEquipable)item;
                 case 9:
@@ -381,7 +381,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $"You bash with your {itemName}",
                     };
                     return (IEquipable)item;
             }

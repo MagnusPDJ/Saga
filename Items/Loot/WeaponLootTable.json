@@ -13,7 +13,7 @@
   },
   {
     "$type": "wand",
-    "AttackDescription": "You shoot an arcane missile from your cracked wand.",
+    "AttackDescription": "You poke with your cracked wand.",
     "ItemDescription": "It may be cracked, but nothing some duct tape couldn't fix!",
     "ItemLevel": 1,
     "ItemName": "Cracked Wand",
@@ -37,7 +37,7 @@
   },
   {
     "$type": "wand",
-    "AttackDescription": "You shoot an arcane missile from your enchanted wand.",
+    "AttackDescription": "poke with your enchanted wand.",
     "ItemDescription": "A wand made from flexible yew making it more durable and less likely to crack.",
     "ItemLevel": 2,
     "ItemName": "Enchanted Wand",
@@ -49,7 +49,7 @@
   },
   {
     "$type": "staff",
-    "AttackDescription": "You shoot a small ball of fire from your gnarled staff.",
+    "AttackDescription": "You swing your gnarled staff.",
     "ItemDescription": "Long staff made of aspen wood that has twisted along the shaft.",
     "ItemLevel": 4,
     "ItemName": "Gnarled staff",
@@ -61,7 +61,7 @@
   },
   {
     "$type": "staff",
-    "AttackDescription": "You shoot a small ball of fire from your arcanist's staff.",
+    "AttackDescription": "You swing your arcanist's staff.",
     "ItemDescription": "Long staff made of black wood with a white, egg-shaped gem embedded on the top.",
     "ItemLevel": 7,
     "ItemName": "Arcanist's Staff",

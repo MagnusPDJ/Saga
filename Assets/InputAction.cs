@@ -184,5 +184,21 @@ namespace Saga.Assets
             return "";
         }
     }
+    public class SeeSkillTree(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord)
+    {
+        public override string RespondToInput(string[] separatedInputWords = null) {
+            while (true) {
+                HUDTools.ShowSkillTree();
+                string input = TextInput.PlayerPrompt();
+                if (input == "b") {
+                    break;
+                } else if (int.TryParse(input, out int choice)) {
+                    Program.CurrentPlayer.SpendSkillPoint(choice - 1);
+                }
+            }
+            HUDTools.RoomHUD();
+            return "";
+        }
+    }
 }
 

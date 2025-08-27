@@ -10,6 +10,7 @@ namespace Saga.Character
     {
         public Mage(string name) : base(name, 0, 1, 1, 1, 1, 1) {
             CurrentClass = "Mage";
+            SkillTree = new MageSkillTree();
         }
 
         //      Stats
@@ -20,6 +21,7 @@ namespace Saga.Character
                 Program.CurrentPlayer.Exp -= GetLevelUpValue();
                 Program.CurrentPlayer.Level++;
                 Program.CurrentPlayer.FreeAttributePoints++;
+                Program.CurrentPlayer.SkillPoints++;
                 levels++;
             }
             PrimaryAttributes levelUpValues = new() { Constitution = 1 * levels, Strength = 0 * levels, Dexterity = 0 * levels, Intellect = 1 * levels, WillPower = 1 * levels };
@@ -29,7 +31,7 @@ namespace Saga.Character
             CalculateTotalStats();
             Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
 
-            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point.\u001b[0m", 20);
+            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point and 1 skill point.\u001b[0m", 20);
         }
         public override (int, int) CalculateDPT() {
             TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
@@ -50,12 +52,6 @@ namespace Saga.Character
             ((IEquipable)armors.Find(w => ((ItemBase)w).ItemName == "Linen Rags")).Equip();
             HealingPotion healingPotion = new();
             healingPotion.Equip();
-        }
-
-        //      Skills
-        public override void Defend(Enemy Monster) {
-            HUDTools.Print($"You defend the next three turns against {Monster.Name}", 20);
-            Monster.AttackDebuff += 3+1;
         }
         public override bool RunAway(Enemy Monster) {
             bool escaped = false;

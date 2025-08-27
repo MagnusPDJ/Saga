@@ -36,6 +36,9 @@ namespace Saga.Character
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
         public SecondaryAttributes TotalSecondaryAttributes { get; set; }
+        public List<SkillBase> LearnedSkills { get; set; }
+        public SkillTree SkillTree { get; set; }
+        public int SkillPoints { get; set; }
         public Dictionary<Slot, ItemBase> Equipment { get; set; }
         public ItemBase[] Inventory { get; set; }
         public List<Quest> QuestLog { get; set; }
@@ -63,6 +66,8 @@ namespace Saga.Character
             CalculateTotalStats();
             Health = TotalSecondaryAttributes.MaxHealth;
             Mana = TotalSecondaryAttributes.MaxMana;
+            LearnedSkills = [new BasicAttack()];
+            SkillPoints = 0;
             TimesExplored = 0;
         }
         
@@ -85,12 +90,62 @@ namespace Saga.Character
                 LevelUp();
             }
         }
+        public int SpendAttributePoint(int i) {
+            if (FreeAttributePoints > 0 && i != 0) {
+                HUDTools.Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o", 1);
+                while (true) {
+                    string input = TextInput.PlayerPrompt();
+                    if (input == "s" || input == "strength") {
+                        BasePrimaryAttributes.Strength++;
+                        FreeAttributePoints--;
+                        break;
+                    } else if (input == "d" || input == "dexterity") {
+                        BasePrimaryAttributes.Dexterity++;
+                        FreeAttributePoints--;
+                        break;
+                    } else if (input == "i" || input == "intellect") {
+                        BasePrimaryAttributes.Intellect++;
+                        FreeAttributePoints--;
+                        break;
+                    } else if (input == "c" || input == "constitution") {
+                        BasePrimaryAttributes.Constitution++;
+                        FreeAttributePoints--;
+                        break;
+                    } else if (input == "w" || input == "willpower") {
+                        BasePrimaryAttributes.WillPower++;
+                        FreeAttributePoints--;
+                        break;
+                    } else if (input == "n" || input == "no") {
+                        return 0;
+                    } else {
+                        HUDTools.Print("Invalid input", 1);
+                        TextInput.PressToContinue();
+                        HUDTools.ClearLastLine(3);
+                    }
+                }               
+            }
+            return i;
+        }
+        public void SpendSkillPoint(int skillIndex) {
+            var availableSkills = SkillTree.GetAvailableSkills(Level);
+            if (SkillPoints > 0 && skillIndex >= 0 && skillIndex < availableSkills.Count) {
+                var skill = availableSkills[skillIndex];
+                skill.IsUnlocked = true;
+                var tier = skill.Tier;
+                tier.Item1 += 1;
+                skill.Tier = tier;
+                LearnedSkills.Add(skill);
+                SkillPoints--;
+                HUDTools.Print($"Unlocked skill: {skill.Name}", 15);
+            } else {
+                HUDTools.Print("Cannot unlock this skill.", 15);
+            }
+        }
         // <returns> An integer with damage per turn</returns>
         public abstract (int, int) CalculateDPT();
         //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();
         public abstract bool RunAway(Enemy monster);
-        public abstract void Defend(Enemy monster);
 
         // Calculates and outputs hero stats.
         public void DisplayStats() {
@@ -278,7 +333,7 @@ namespace Saga.Character
             if (hasWeapon) {
                 return (((IWeapon)equippedWeapon).WeaponAttributes.MinDamage, ((IWeapon)equippedWeapon).WeaponAttributes.MaxDamage);
             } else {
-                return (1, 1);
+                return (0, 0);
             }
         }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
@@ -314,6 +369,16 @@ namespace Saga.Character
             } else if (input == "l" || input == "questlog") {
                 HUDTools.QuestLogHUD();
                 TextInput.PressToContinue();
+            } else if (input == "k" || input == "skill" || input == "skills" || input == "skilltree") {
+                while (true) {
+                    HUDTools.ShowSkillTree();
+                    string input2 = TextInput.PlayerPrompt();
+                    if (input2 == "b") {
+                        break;
+                    } else if (int.TryParse(input, out int choice)) {
+                        Program.CurrentPlayer.SpendSkillPoint(choice - 1);
+                    }
+                }
             } else {
                 HUDTools.Print($"There is no {input} action...", 15);
                 TextInput.PressToContinue();
@@ -362,9 +427,7 @@ namespace Saga.Character
             string input = TextInput.PlayerPrompt();
             if (input == "a" || input == "attack") {
                 //Attack
-                int damage = ((IWeapon)Program.CurrentPlayer.Equipment[Slot.Right_Hand]).Attack(Monster); ;
-                Monster.TakeDamage(damage);
-                HUDTools.WriteCombatLog("attack", TurnTimer, 0, damage, Monster);
+                ((IActiveSkill)LearnedSkills.Find(s => s.Name == "Basic Attack")).Activate(Program.CurrentPlayer, Monster, TurnTimer);
                 TurnTimer.TurnTimer++;
             }  else if (input == "r" || input == "run") {
                 //Run                   

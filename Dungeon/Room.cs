@@ -87,7 +87,8 @@ namespace Saga.Dungeon
             new DrinkPotion("heal", "h"),
             new SeeCharacterScreen("character", "c"),
             new SeeInventory("inventory", "i"),
-            new SeeQuestLog("questlog", "l")
+            new SeeQuestLog("questlog", "l"),
+            new SeeSkillTree("skilltree", "k")
             ];
         public InputAction[] InputInvActions = [
             new Examine("examine"),

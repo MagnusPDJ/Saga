@@ -1,0 +1,12 @@
+﻿
+namespace Saga.Character
+{
+    public interface ISkill
+    {
+        string Name { get; }
+        string Description { get; }
+        int LevelRequired { get; }
+        bool IsUnlocked { get; set; }
+        (int, int) Tier { get; set; }
+    }
+}
