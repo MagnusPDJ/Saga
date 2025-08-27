@@ -316,11 +316,11 @@ namespace Saga.Assets
             Console.WriteLine($"| Items in inventory:");
             foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
-                }
-                else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
+                } else if (item is IQuestItem item1) {
+                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
+                } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
                     Console.WriteLine($"| {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
-                }
-                else if (item is not IQuestItem){
+                } else if (item is IArmor) {
                     Console.Write($"| {item.ItemName}:");
                     if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
@@ -345,9 +345,6 @@ namespace Saga.Assets
                     }
                     Console.WriteLine("");
                 }
-                else if (item is IQuestItem item1) {
-                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
-                }
             }
             Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
@@ -360,11 +357,11 @@ namespace Saga.Assets
             Console.WriteLine($"| Items in inventory:");
             foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
-                }
-                else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
+                } else if (item is IQuestItem item1) {
+                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
+                } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
                     Console.WriteLine($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg,\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
-                }
-                else if (item is not IQuestItem) {
+                } else if (item is IArmor) {
                     Console.Write($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: ");
                     if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
@@ -388,9 +385,6 @@ namespace Saga.Assets
                         Console.Write(" Offers no protection");
                     }
                     Console.WriteLine($"\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
-                } 
-                else if (item is IQuestItem item1) {
-                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
                 }
             }
             Console.WriteLine($"|  Sell     (P)otion     $ {Shop.ShopPrice("sellpotion")}");
@@ -522,13 +516,15 @@ namespace Saga.Assets
             foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
+                }  else if (item is IQuestItem item1) {
+                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
                 } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
                     if (item is ITwoHanded) {
                         Console.WriteLine($" Both hands - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
                     } else {
                         Console.WriteLine($" {((IEquipable)item).ItemSlot} - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
                     }
-                } else if (item is not IQuestItem) {
+                } else if (item is IArmor) {
                     Console.Write($" {((IEquipable)item).ItemSlot} - {item.ItemName}:");
                     if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
@@ -552,8 +548,6 @@ namespace Saga.Assets
                         Console.Write(" Offers no protection");
                     }
                     Console.WriteLine("");
-                } else if (item is IQuestItem item1) {
-                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
                 }
             }
             Print($"\nTo equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\nTo examine item write examine Itemname else (b)ack\n", 0);
