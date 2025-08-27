@@ -54,7 +54,8 @@ namespace Saga.Assets
                     HUDTools.Print($"\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else if (wat.Value is IWeapon weapon) {
-                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon.\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
+                        var wat1 = Program.CurrentPlayer.Equipment[Slot.Right_Hand];
+                        HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon.\n{wat1.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else {
                     HUDTools.Print($"\nThis is an armor of type {((ArmorBase)wat.Value).ArmorType}.\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);

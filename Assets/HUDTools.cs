@@ -481,11 +481,15 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine("******************** Equipment *****************************");
             foreach (KeyValuePair<Slot, ItemBase> entry in Program.CurrentPlayer.Equipment) {
-                if (entry.Key == Slot.Potion) {
+                if (entry.Key == Slot.Potion || entry.Key == Slot.Left_Hand && ((ITwoHanded)entry.Value).IsTwohanded) {
                     continue;
                 }
                 if (entry.Key == Slot.Right_Hand) {
-                    Console.WriteLine($" {((IEquipable)entry.Value).ItemSlot} - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                    if (entry.Value is ITwoHanded) {
+                        Console.WriteLine($" Both hands - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                    } else {
+                        Console.WriteLine($" {((IEquipable)entry.Value).ItemSlot} - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                    }
                 } else {
                     Console.Write($" {((IEquipable)entry.Value).ItemSlot} - {entry.Value.ItemName}:");
                     if (((ArmorBase)entry.Value).SecondaryAttributes.ArmorRating > 0) {
@@ -519,7 +523,11 @@ namespace Saga.Assets
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
                 } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
-                    Console.WriteLine($" {((IEquipable)item).ItemSlot} - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    if (item is ITwoHanded) {
+                        Console.WriteLine($" Both hands - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    } else {
+                        Console.WriteLine($" {((IEquipable)item).ItemSlot} - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    }
                 } else if (item is not IQuestItem) {
                     Console.Write($" {((IEquipable)item).ItemSlot} - {item.ItemName}:");
                     if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {

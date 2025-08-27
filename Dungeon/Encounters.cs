@@ -135,8 +135,7 @@ namespace Saga.Dungeon
                         examined = true;
                         HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
                         Program.CurrentPlayer.Loot.GetQuestLoot(1,0,"MeetFlemsha");                          
-                        TextInput.PressToContinue();
-                        break;
+                        TextInput.PressToContinue();                       
                     } else if (input == "2" && !searched) {
                         HUDTools.Print(
                             "You search the prison cells and in one of them, you find a man laying on the stone floor rambling to\n" +
@@ -168,7 +167,6 @@ namespace Saga.Dungeon
                         }
                         searched = true;
                         TextInput.PressToContinue();
-                        break;
                     } else {
                         Program.CurrentPlayer.BasicActions(input);
                     }

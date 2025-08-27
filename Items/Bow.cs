@@ -44,7 +44,7 @@ namespace Saga.Items
                         ((IEquipable)valueRight)?.UnEquip();
                         ((IEquipable)valueLeft)?.UnEquip();
                         Program.CurrentPlayer.Equipment[ItemSlot] = this;
-                        Program.CurrentPlayer.Equipment[Slot.Left_Hand] = new TwoHandedSword() { ItemName = ItemName, WeaponAttributes = { } };
+                        Program.CurrentPlayer.Equipment[Slot.Left_Hand] = new Bow() { ItemName = ItemName, WeaponAttributes = { } };
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);
                         Program.CurrentPlayer.CalculateTotalStats();
@@ -57,7 +57,7 @@ namespace Saga.Items
                 }
             } else {
                 Program.CurrentPlayer.Equipment[ItemSlot] = this;
-                Program.CurrentPlayer.Equipment[Slot.Left_Hand] = new TwoHandedSword() { ItemName = ItemName, WeaponAttributes = { } };
+                Program.CurrentPlayer.Equipment[Slot.Left_Hand] = new Bow() { ItemName = ItemName, WeaponAttributes = { } };
                 int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                 if (a == -1) {
                 } else {
