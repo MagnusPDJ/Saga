@@ -1,7 +1,7 @@
 ﻿
 namespace Saga.Items
 {
-    internal interface IQuestItem
+    public interface IQuestItem
     {
         int Amount { get; set; }
     }

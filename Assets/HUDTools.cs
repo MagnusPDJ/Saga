@@ -711,7 +711,7 @@ namespace Saga.Assets
             Print($"=== Pick a class ===", 3);
             Print($"1. Warrior:\n" +
                            $"   The warrior class has a bonus to damage (based on level) making them strong in the early game.\n" +
-                           $"   Their primary stat is strength. A warrior is trained to use swords, axes and hammers.\n" +
+                           $"   Their primary stat is strength. A warrior is trained to use swords, axes and maces.\n" +
                            $"   They can wear mail and plate armor.", 15);
             Print($"2. Archer:\n" +
                            $"   The archer class can always escape enemies and therefore can choose their battles more carefully.\n" +

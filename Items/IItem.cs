@@ -1,7 +1,7 @@
 ﻿
 namespace Saga.Items
 {
-    internal interface IItem
+    public interface IItem
     {
         string ItemName { get; set; }
         int ItemLevel { get; set; }

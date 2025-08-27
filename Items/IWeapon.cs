@@ -10,7 +10,7 @@ namespace Saga.Items
         Magic
     }
 
-    internal interface IWeapon
+    public interface IWeapon
     {
         WeaponCategory WeaponCategory { get; }
         WeaponAttributes WeaponAttributes { get; set; }

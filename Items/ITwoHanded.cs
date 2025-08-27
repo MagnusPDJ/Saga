@@ -1,7 +1,7 @@
 ﻿
 namespace Saga.Items
 {
-    internal interface ITwoHanded
+    public interface ITwoHanded
     {
         bool IsTwohanded { get; }
     }

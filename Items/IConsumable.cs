@@ -6,7 +6,7 @@ namespace Saga.Items
         Healing,
         Mana
     }
-    internal interface IConsumable
+    public interface IConsumable
     {
         int PotionPotency { get; set; }
         int PotionQuantity { get; set; }
