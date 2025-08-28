@@ -5,9 +5,10 @@ using System;
 
 namespace Saga.Items
 {
-    public class OneHandedMace : ItemBase, IWeapon, IEquipable
+    public class OneHandedMace : ItemBase, IWeapon, IEquipable, IPhysical
     {
         public WeaponCategory WeaponCategory => WeaponCategory.Melee;
+        public PhysicalType PhysicalType => PhysicalType.Crushing;
         public Slot ItemSlot => Slot.Right_Hand;
         public WeaponAttributes WeaponAttributes { get; set; }
         public string AttackDescription { get; set; }
@@ -70,10 +71,10 @@ namespace Saga.Items
             }
             return "Weapon unequipped!";
         }
-        public int Attack(Enemy monster) {
+        public (IDamageType, int) Attack(Enemy monster) {
             HUDTools.Print($"{AttackDescription}", 15);
-            int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
-            HUDTools.Print($"You deal {attack} damage to {monster.Name}.", 10);
+            (IDamageType, int) attack = (this, Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1));
+            HUDTools.Print($"You deal {attack.Item2} damage to {monster.Name}.", 10);
             return attack;
         }
     }

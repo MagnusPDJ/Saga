@@ -336,6 +336,9 @@ namespace Saga.Character
                 return (0, 0);
             }
         }
+        public (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {
+            return damage;
+        }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void CheckForDeath(string message) {
             if (this.Health <= 0) {

@@ -1,14 +1,16 @@
 ﻿using Saga.Assets;
+using Saga.Character;
 using System;
 
 namespace Saga.Items
 {
-    public class HealingPotion : ItemBase, IConsumable, IEquipable
+    public class HealingPotion : ItemBase, IConsumable, IEquipable, IMagical
     {
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }
         public PotionType PotionType => PotionType.Healing;
         public Slot ItemSlot => Slot.Potion;
+        public MagicalType MagicalType => MagicalType.Life;
 
         public HealingPotion() {
             PotionPotency = 5;

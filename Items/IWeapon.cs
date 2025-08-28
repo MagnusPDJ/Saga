@@ -17,6 +17,6 @@ namespace Saga.Items
         string AttackDescription { get; set; }
         WeaponAttributes CalculateWeaponAttributes(int level);
         void SetWeaponAttributes();
-        int Attack(Enemy Monster);
+        (IDamageType, int) Attack(Enemy Monster);
     }
 }

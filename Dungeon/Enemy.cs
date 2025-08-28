@@ -1,4 +1,5 @@
-﻿
+﻿using Saga.Character;
+
 namespace Saga.Dungeon
 {
     public enum Tribe 
@@ -42,8 +43,8 @@ namespace Saga.Dungeon
         public abstract int GetPower(string name);
         public abstract void MonsterActions(Encounters TurnTimer);
 
-        public void TakeDamage(int amount) {
-            Health -= amount;
+        public void TakeDamage((IDamageType, int) amount) {
+            Health -= amount.Item2;
             if (Health < 0) Health = 0;
         }
         public void Heal(int amount) {

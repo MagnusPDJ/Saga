@@ -6,9 +6,10 @@ using System;
 
 namespace Saga.Items
 {
-    public class Bow : ItemBase, IWeapon, IEquipable, ITwoHanded
+    public class Bow : ItemBase, IWeapon, IEquipable, ITwoHanded, IPhysical
     {
         public WeaponCategory WeaponCategory => WeaponCategory.Ranged;
+        public PhysicalType PhysicalType => PhysicalType.Piercing;
         public Slot ItemSlot => Slot.Right_Hand;
         public bool IsTwohanded => true;
         public WeaponAttributes WeaponAttributes { get; set; }
@@ -77,10 +78,10 @@ namespace Saga.Items
             }
             return "Weapon unequipped!";
         }
-        public int Attack(Enemy monster) {
+        public (IDamageType, int) Attack(Enemy monster) {
             HUDTools.Print($"{AttackDescription}", 15);
-            int attack = Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1);
-            HUDTools.Print($"You deal {attack} damage to {monster.Name}.", 10);
+            (IDamageType, int) attack = (this, Program.Rand.Next(Program.CurrentPlayer.CalculateDPT().Item1, Program.CurrentPlayer.CalculateDPT().Item2 + 1));
+            HUDTools.Print($"You deal {attack.Item2} damage to {monster.Name}.", 10);
             return attack;
         }
     }

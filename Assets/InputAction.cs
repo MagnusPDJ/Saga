@@ -1,4 +1,5 @@
-﻿using Saga.Dungeon;
+﻿using Saga.Character;
+using Saga.Dungeon;
 using Saga.Items;
 using System;
 using System.Linq;
@@ -55,7 +56,7 @@ namespace Saga.Assets
                 }
                 else if (wat.Value is IWeapon weapon) {
                         var wat1 = Program.CurrentPlayer.Equipment[Slot.Right_Hand];
-                        HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon.\n{wat1.ItemDescription.Replace("\\n", "\n")}", 3);
+                        HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{wat1.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else {
                     HUDTools.Print($"\nThis is an armor of type {((ArmorBase)wat.Value).ArmorType}.\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
@@ -66,7 +67,7 @@ namespace Saga.Assets
                     HUDTools.Print($"\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else if (item is IWeapon weapon) {
-                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon.\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
                 else {
                     HUDTools.Print($"\nThis is an armor of type {((ArmorBase)item).ArmorType}.\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
