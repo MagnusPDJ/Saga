@@ -39,8 +39,8 @@ namespace Saga.Character
         public List<SkillBase> LearnedSkills { get; set; }
         public SkillTree SkillTree { get; set; }
         public int SkillPoints { get; set; }
-        public Dictionary<Slot, ItemBase> Equipment { get; set; }
-        public ItemBase[] Inventory { get; set; }
+        public Dictionary<Slot, IEquipable> Equipment { get; set; }
+        public IItem[] Inventory { get; set; }
         public List<Quest> QuestLog { get; set; }
         public List<Quest> FailedQuests { get; set; }
         public List<Quest> CompletedQuests { get; set; }
@@ -54,7 +54,7 @@ namespace Saga.Character
             CurrentAct = Act.Start;
             Loot = new Act1Loot();
             Equipment = [];
-            Inventory = new ItemBase[10];
+            Inventory = new IItem[10];
             QuestLog = [];
             FailedQuests = [];
             CompletedQuests = [];
@@ -163,20 +163,20 @@ namespace Saga.Character
         public PrimaryAttributes CalculatePrimaryArmorBonus() {
             PrimaryAttributes armorBonusValues = new() { Strength = 0, Dexterity = 0, Intellect = 0, Constitution = 0, WillPower = 0 };
 
-            bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out ItemBase headArmor);
-            bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out ItemBase bodyArmor);
-            bool hasLegsArmor = Equipment.TryGetValue(Slot.Legs, out ItemBase legsArmor);
-            bool hasFeetArmor = Equipment.TryGetValue(Slot.Feet, out ItemBase FeetArmor);
-            bool hasArmsArmor = Equipment.TryGetValue(Slot.Bracers, out ItemBase ArmsArmor);
-            bool hasShouldersArmor = Equipment.TryGetValue(Slot.Shoulders, out ItemBase ShouldersArmor);
-            bool hasBeltArmor = Equipment.TryGetValue(Slot.Belt, out ItemBase BeltArmor);
-            bool hasCapeArmor = Equipment.TryGetValue(Slot.Cape, out ItemBase CapeArmor);
-            bool hasGlovesArmor = Equipment.TryGetValue(Slot.Gloves, out ItemBase GlovesArmor);
-            bool hasAmuletArmor = Equipment.TryGetValue(Slot.Amulet, out ItemBase AmuletArmor);
-            bool hasRing1Armor = Equipment.TryGetValue(Slot.Finger_1, out ItemBase Ring1Armor);
-            bool hasRing2Armor = Equipment.TryGetValue(Slot.Finger_2, out ItemBase Ring2Armor);
-            bool hasCrestArmor = Equipment.TryGetValue(Slot.Crest, out ItemBase CrestArmor);
-            bool hasTrinketArmor = Equipment.TryGetValue(Slot.Trinket, out ItemBase TrinketArmor);
+            bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out IEquipable headArmor);
+            bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out IEquipable bodyArmor);
+            bool hasLegsArmor = Equipment.TryGetValue(Slot.Legs, out IEquipable legsArmor);
+            bool hasFeetArmor = Equipment.TryGetValue(Slot.Feet, out IEquipable  FeetArmor);
+            bool hasArmsArmor = Equipment.TryGetValue(Slot.Bracers, out IEquipable ArmsArmor);
+            bool hasShouldersArmor = Equipment.TryGetValue(Slot.Shoulders, out IEquipable ShouldersArmor);
+            bool hasBeltArmor = Equipment.TryGetValue(Slot.Belt, out IEquipable BeltArmor);
+            bool hasCapeArmor = Equipment.TryGetValue(Slot.Cape, out IEquipable CapeArmor);
+            bool hasGlovesArmor = Equipment.TryGetValue(Slot.Gloves, out IEquipable GlovesArmor);
+            bool hasAmuletArmor = Equipment.TryGetValue(Slot.Amulet, out IEquipable AmuletArmor);
+            bool hasRing1Armor = Equipment.TryGetValue(Slot.Finger_1, out IEquipable Ring1Armor);
+            bool hasRing2Armor = Equipment.TryGetValue(Slot.Finger_2, out IEquipable Ring2Armor);
+            bool hasCrestArmor = Equipment.TryGetValue(Slot.Crest, out IEquipable CrestArmor);
+            bool hasTrinketArmor = Equipment.TryGetValue(Slot.Trinket, out IEquipable TrinketArmor);
 
             if (hasHeadArmor) {
                 ArmorBase a = (ArmorBase)headArmor;
@@ -239,21 +239,21 @@ namespace Saga.Character
         public SecondaryAttributes CalculateSecondaryArmorBonus() {
             SecondaryAttributes armorBonusValues = new() { ArmorRating = 0, MaxHealth = 0, MaxMana = 0, Awareness = 0, ElementalResistance = 0 };
 
-            bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out ItemBase headArmor);
-            bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out ItemBase bodyArmor);
-            bool hasLegsArmor = Equipment.TryGetValue(Slot.Legs, out ItemBase legsArmor);
-            bool hasFeetArmor = Equipment.TryGetValue(Slot.Feet, out ItemBase FeetArmor);
-            bool hasArmsArmor = Equipment.TryGetValue(Slot.Bracers, out ItemBase ArmsArmor);
-            bool hasShouldersArmor = Equipment.TryGetValue(Slot.Shoulders, out ItemBase ShouldersArmor);
-            bool hasBeltArmor = Equipment.TryGetValue(Slot.Belt, out ItemBase BeltArmor);
-            bool hasCapeArmor = Equipment.TryGetValue(Slot.Cape, out ItemBase CapeArmor);
-            bool hasGlovesArmor = Equipment.TryGetValue(Slot.Gloves, out ItemBase GlovesArmor);
-            bool hasShield = Equipment.TryGetValue(Slot.Left_Hand, out ItemBase ShieldArmor);
-            bool hasAmuletArmor = Equipment.TryGetValue(Slot.Amulet, out ItemBase AmuletArmor);
-            bool hasRing1Armor = Equipment.TryGetValue(Slot.Finger_1, out ItemBase Ring1Armor);
-            bool hasRing2Armor = Equipment.TryGetValue(Slot.Finger_2, out ItemBase Ring2Armor);
-            bool hasCrestArmor = Equipment.TryGetValue(Slot.Crest, out ItemBase CrestArmor);
-            bool hasTrinketArmor = Equipment.TryGetValue(Slot.Trinket, out ItemBase TrinketArmor);
+            bool hasHeadArmor = Equipment.TryGetValue(Slot.Headgear, out IEquipable headArmor);
+            bool hasBodyArmor = Equipment.TryGetValue(Slot.Torso, out IEquipable bodyArmor);
+            bool hasLegsArmor = Equipment.TryGetValue(Slot.Legs, out IEquipable legsArmor);
+            bool hasFeetArmor = Equipment.TryGetValue(Slot.Feet, out IEquipable FeetArmor);
+            bool hasArmsArmor = Equipment.TryGetValue(Slot.Bracers, out IEquipable ArmsArmor);
+            bool hasShouldersArmor = Equipment.TryGetValue(Slot.Shoulders, out IEquipable ShouldersArmor);
+            bool hasBeltArmor = Equipment.TryGetValue(Slot.Belt, out IEquipable BeltArmor);
+            bool hasCapeArmor = Equipment.TryGetValue(Slot.Cape, out IEquipable CapeArmor);
+            bool hasGlovesArmor = Equipment.TryGetValue(Slot.Gloves, out IEquipable GlovesArmor);
+            bool hasShield = Equipment.TryGetValue(Slot.Left_Hand, out IEquipable ShieldArmor);
+            bool hasAmuletArmor = Equipment.TryGetValue(Slot.Amulet, out IEquipable AmuletArmor);
+            bool hasRing1Armor = Equipment.TryGetValue(Slot.Finger_1, out IEquipable Ring1Armor);
+            bool hasRing2Armor = Equipment.TryGetValue(Slot.Finger_2, out IEquipable Ring2Armor);
+            bool hasCrestArmor = Equipment.TryGetValue(Slot.Crest, out IEquipable CrestArmor);
+            bool hasTrinketArmor = Equipment.TryGetValue(Slot.Trinket, out IEquipable TrinketArmor);
 
             if (hasHeadArmor) {
                 ArmorBase a = (ArmorBase)headArmor;
@@ -329,7 +329,7 @@ namespace Saga.Character
         }
         // Calculates a weapons damage per turn.
         public (int, int) CalculateWeaponDPT() {
-            bool hasWeapon = Equipment.TryGetValue(Slot.Right_Hand, out ItemBase equippedWeapon);
+            bool hasWeapon = Equipment.TryGetValue(Slot.Right_Hand, out IEquipable equippedWeapon);
             if (hasWeapon) {
                 return (((IWeapon)equippedWeapon).WeaponAttributes.MinDamage, ((IWeapon)equippedWeapon).WeaponAttributes.MaxDamage);
             } else {

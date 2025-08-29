@@ -5,12 +5,16 @@ using System;
 
 namespace Saga.Items
 {
-    public class TwoHandedSword : ItemBase, IWeapon, IEquipable, ITwoHanded, IPhysical
+    [Discriminator("twoHandedSword")]
+    public class TwoHandedSword : ITwoHanded, IPhysical
     {
+        public string ItemName { get; set; }
+        public int ItemLevel { get; set; }
+        public int ItemPrice { get; set; }
+        public string ItemDescription { get; init; }
         public WeaponCategory WeaponCategory => WeaponCategory.Melee;
         public PhysicalType PhysicalType => PhysicalType.Normal;
         public Slot ItemSlot => Slot.Right_Hand;
-        public bool IsTwohanded => true;
         public WeaponAttributes WeaponAttributes { get; set; }
         public string AttackDescription { get; set; }
 
@@ -22,7 +26,7 @@ namespace Saga.Items
         public WeaponAttributes CalculateWeaponAttributes(int level) {
             return new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level / 2 + level), MaxDamage = Math.Max(5, Program.CurrentPlayer.Level + level * 2) + Program.Rand.Next(3, 8), AttackSpeed = 1 };
         }
-        public override int CalculateItemPrice() {
+        public int CalculateItemPrice() {
             return Convert.ToInt32(ItemLevel * 100 + (WeaponAttributes.MaxDamage * 100 + WeaponAttributes.MinDamage * 50) * (1 + 1 / (WeaponAttributes.MaxDamage - WeaponAttributes.MinDamage)));
         }
 
@@ -34,15 +38,15 @@ namespace Saga.Items
                 Console.WriteLine($"Character can't equip a weapon of type two-handed sword, {ItemName}.");
                 return "Weapon not equipped.";
             }
-            bool hasRight = Program.CurrentPlayer.Equipment.TryGetValue(Slot.Right_Hand, out ItemBase valueRight);
-            bool hasLeft = Program.CurrentPlayer.Equipment.TryGetValue(Slot.Left_Hand, out ItemBase valueLeft);
+            bool hasRight = Program.CurrentPlayer.Equipment.TryGetValue(Slot.Right_Hand, out IEquipable valueRight);
+            bool hasLeft = Program.CurrentPlayer.Equipment.TryGetValue(Slot.Left_Hand, out IEquipable valueLeft);
             if (hasRight || hasLeft) {
                 Console.WriteLine($"Do you want to switch {(valueRight != null ? valueRight.ItemName : "")}{(valueRight!=null &&valueLeft!=null ? " and ": "")}{(valueLeft != null ? valueLeft.ItemName : "")} for '{ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
-                        ((IEquipable)valueRight)?.UnEquip();
-                        ((IEquipable)valueLeft)?.UnEquip();
+                        valueRight?.UnEquip();
+                        valueLeft?.UnEquip();
                         Program.CurrentPlayer.Equipment[ItemSlot] = this;
                         Program.CurrentPlayer.Equipment[Slot.Left_Hand] = new TwoHandedSword() { ItemName = ItemName, WeaponAttributes = { } };
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);

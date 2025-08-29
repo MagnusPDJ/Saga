@@ -16,7 +16,7 @@ namespace Saga.Character
             Tier = (1, 1);
         }
         public override void Activate(Player player, Enemy target = null, Encounters turnTimer = null) {
-            if (player.Equipment.TryGetValue(Slot.Right_Hand, out ItemBase value) && value is IWeapon weapon) {
+            if (player.Equipment.TryGetValue(Slot.Right_Hand, out IEquipable value) && value is IWeapon weapon) {
                 (IDamageType, int) damage = weapon.Attack(target);
                 damage = player.CalculateDamageModifiers(damage);
                 target.TakeDamage(damage);

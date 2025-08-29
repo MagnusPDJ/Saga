@@ -21,7 +21,7 @@
     "TurnIn": "You have killed 5 monsters and should return to Gheed.",
     "Exp": 100,
     "Item": {
-      "$type": "armorBase",
+      "Type": "armorBase",
       "ItemName": "Random"
     },
     "Requirements": {

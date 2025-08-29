@@ -1,8 +1,8 @@
 ﻿
 namespace Saga.Items
 {
-    public interface ITwoHanded
+    public interface ITwoHanded : IWeapon
     {
-        bool IsTwohanded { get; }
+        bool IsTwohanded => true;
     }
 }

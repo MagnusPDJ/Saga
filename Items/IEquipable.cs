@@ -21,7 +21,7 @@ namespace Saga.Items
         Trinket,
         Potion
     }
-    public interface IEquipable
+    public interface IEquipable : IItem
     {
         Slot ItemSlot { get; }
         string Equip();

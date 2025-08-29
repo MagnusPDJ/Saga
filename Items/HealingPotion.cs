@@ -4,8 +4,13 @@ using System;
 
 namespace Saga.Items
 {
-    public class HealingPotion : ItemBase, IConsumable, IEquipable, IMagical
+    [Discriminator("healingPotion")]
+    public class HealingPotion : IConsumable, IEquipable, IMagical
     {
+        public string ItemName { get; set; }
+        public int ItemLevel { get; set; }
+        public int ItemPrice { get; set; }
+        public string ItemDescription { get; init; }
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }
         public PotionType PotionType => PotionType.Healing;
@@ -17,10 +22,10 @@ namespace Saga.Items
             PotionQuantity = 0;
             ItemName = "Healing Potion";
             ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur";
-            SetItemPrice();
+            ItemPrice = CalculateItemPrice();
         }
 
-        public override int CalculateItemPrice() {
+        public int CalculateItemPrice() {
             return 20 + 10 * PotionPotency;
         }
         public string Equip() {

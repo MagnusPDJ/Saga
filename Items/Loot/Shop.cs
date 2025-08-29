@@ -30,7 +30,7 @@ namespace Saga.Items.Loot
                     armor.SetPrimaryAttributes();
                     armor.SetSecondaryAttributes();
                 }
-                ((ItemBase)item).SetItemPrice();
+                item.ItemPrice = item.CalculateItemPrice();
             }
 
             Shop shop = new() {
@@ -81,7 +81,7 @@ namespace Saga.Items.Loot
                     HUDTools.Print($"You sure you want to buy item # {input}? (Y/N)", 4);
                     string input2 = TextInput.PlayerPrompt();
                     if (input2 == "y") {
-                        TryBuyItem(int.Parse(input) - 1, ((ItemBase)shop.Forsale[int.Parse(input) - 1]).CalculateItemPrice(), shop ,p);
+                        TryBuyItem(int.Parse(input) - 1, shop.Forsale[int.Parse(input) - 1].CalculateItemPrice(), shop ,p);
                         TextInput.PressToContinue();
                     }
                 }
@@ -291,7 +291,7 @@ namespace Saga.Items.Loot
         }
         public static IEquipable CreateRandomWeapon(int level) {
             int weapon = Program.Rand.Next(10);
-            ItemBase item;
+            IWeapon item;
             string itemName;
             switch (weapon) {
                 default:
@@ -302,7 +302,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 1:
                     itemName = RandomWeaponName(new OneHandedSword());
                     item = new OneHandedSword() {
@@ -311,7 +311,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 2:
                     itemName = RandomWeaponName(new TwoHandedSword());
                     item = new TwoHandedSword() {
@@ -320,7 +320,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 3:
                     itemName = RandomWeaponName(new OneHandedMace());
                     item = new OneHandedMace() {
@@ -329,7 +329,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 4:
                     itemName = RandomWeaponName(new Bow());
                     item = new Bow() {
@@ -338,7 +338,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You fire an arrow from your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 5:
                     itemName = RandomWeaponName(new Dagger());
                     item = new Dagger() {
@@ -347,7 +347,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You stab with your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 6:
                     itemName = RandomWeaponName(new Crossbow());
                     item = new Crossbow() {
@@ -356,7 +356,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You fire a bolt with your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 7:
                     itemName = RandomWeaponName(new Staff());
                     item = new Staff() {
@@ -365,7 +365,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You swing your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 8:
                     itemName = RandomWeaponName(new Wand());
                     item = new Wand() {
@@ -374,7 +374,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You stab with your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
                 case 9:
                     itemName = RandomWeaponName(new Tome());
                     item = new Tome() {
@@ -383,7 +383,7 @@ namespace Saga.Items.Loot
                         ItemName = itemName,
                         AttackDescription = $"You bash with your {itemName}",
                     };
-                    return (IEquipable)item;
+                    return item;
             }
         }
         public static string RandomArmorName(ArmorType type, Slot slot) {
@@ -1111,7 +1111,7 @@ namespace Saga.Items.Loot
                     }
             }
         }
-        public static string RandomWeaponName(ItemBase weapon) {
+        public static string RandomWeaponName(IWeapon weapon) {
             string name1 = "Sturdy";
             string name2 = "Stick";
             int rand = Program.Rand.Next(10);
@@ -1161,7 +1161,7 @@ namespace Saga.Items.Loot
             }
             return $"{name1}{name2}";
         }
-        public static string WeaponNameList(ItemBase weapon, int rand) {
+        public static string WeaponNameList(IWeapon weapon, int rand) {
             string name = "";
             switch (weapon) {
                 default:

@@ -55,6 +55,7 @@
     <Compile Remove="ArmorBase.cs" />
     <Compile Remove="Items\ArmorBaseOBSOLETE.cs" />
     <Compile Remove="Items\ArmorLootTableOBSOLETE.cs" />
+    <Compile Remove="Items\ItemBase.cs" />
     <Compile Remove="Items\Loot\ArmorLootTable.cs" />
     <Compile Remove="Items\Loot\ArmorLootTableOBSOLETE.cs" />
     <Compile Remove="Items\Loot\QuestLootTable.cs" />

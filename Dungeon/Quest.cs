@@ -24,7 +24,7 @@ namespace Saga.Dungeon
         public int Gold { get; set; }
         public int Exp { get; set; }
         public int Potions { get; set; } = -1;
-        public ItemBase Item { get; set; }
+        public IItem Item { get; set; }
         public bool Accepted { get; set; } = false;
         public bool Completed { get; set; } = false;
         public string Target { get; set; }
@@ -32,7 +32,7 @@ namespace Saga.Dungeon
         public Dictionary<string, int> Requirements { get; set; }
         public bool CheckRequirements() {
             if (this.QuestType == Type.Collect || this.QuestType == Type.Find) {
-                foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
+                foreach (IItem item in Program.CurrentPlayer.Inventory) {
                     if (item == null) {
                         continue;
                     }

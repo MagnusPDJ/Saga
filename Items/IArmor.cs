@@ -9,7 +9,7 @@ namespace Saga.Items
         Mail,
         Plate
     }
-    public interface IArmor
+    public interface IArmor : IEquipable
     {
         public ArmorType ArmorType { get; set; }
         public PrimaryAttributes PrimaryAttributes { get; set; }

@@ -32,7 +32,7 @@ namespace Saga.Dungeon
         }
         //Funktion til at tilføje en NPC til campen som kan snakkes med.
         public static void AddNpcToCamp(string name) {
-            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"));
+            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"), Program.Options);
             var npcToAdd = allNpcs.Where(x => x.Name.Equals(name)).FirstOrDefault();
             npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
             Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);

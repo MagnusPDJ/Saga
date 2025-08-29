@@ -55,8 +55,8 @@ namespace Saga.Items.Loot
         }
         //Metode til at få loot fra en skattekiste:
         public override void GetTreasureChestLoot() {
-            List<ItemBase> weapons = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"));
-            List<ItemBase> armors = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"));
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"), Program.Options);
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"), Program.Options);
             HUDTools.Print("You find Treasure!", 10);
             GetGold(3);
             GetPotions();
@@ -221,7 +221,7 @@ namespace Saga.Items.Loot
         }
         //Metode til at få specifikke quest items i encounters:
         public override void GetQuestLoot(int findgold, int findpotions, string questname, Enemy enemy=null) {
-            List<ItemBase> questItems = JsonSerializer.Deserialize<List<ItemBase>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.QuestLootTable.json"));
+            List<IQuestItem> questItems = JsonSerializer.Deserialize<List<IQuestItem>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.QuestLootTable.json"), Program.Options);
             GetGold(findgold);
             if (findpotions != 0) {
                 GetPotions(findpotions);

@@ -276,10 +276,10 @@ namespace Saga.Assets
                 if (item == null) {
                 }
                 else if (item.ItemSlot == Slot.Right_Hand) {
-                    Console.WriteLine($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {((ItemBase)item).ItemLevel}, {((IWeapon)item).WeaponCategory}, {((ItemBase)item).ItemName}, $ {((ItemBase)item).CalculateItemPrice()}, +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    Console.WriteLine($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {item.ItemLevel}, {((IWeapon)item).WeaponCategory}, {item.ItemName}, $ {item.CalculateItemPrice()}, +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
                 }
                 else {
-                    Console.Write($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {((ItemBase)item).ItemLevel}, {item.ItemSlot}, {((ArmorBase)item).ArmorType}, {((ItemBase)item).ItemName}, $ {((ItemBase)item).CalculateItemPrice()},");
+                    Console.Write($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {item.ItemLevel}, {item.ItemSlot}, {((ArmorBase)item).ArmorType}, {item.ItemName}, $ {item.CalculateItemPrice()},");
                     if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
                     }
@@ -314,7 +314,7 @@ namespace Saga.Assets
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"| Potions:                {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
-            foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
+            foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                 } else if (item is IQuestItem item1) {
                     Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
@@ -355,7 +355,7 @@ namespace Saga.Assets
             Console.WriteLine("         Gheed's Shop        ");
             Console.WriteLine("=======================================================");
             Console.WriteLine($"| Items in inventory:");
-            foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
+            foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                 } else if (item is IQuestItem item1) {
                     Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
@@ -455,7 +455,7 @@ namespace Saga.Assets
         public static void InventoryScreen() {
             Console.Clear();
             Console.WriteLine("******************** Equipment *****************************");
-            foreach (KeyValuePair<Slot, ItemBase> entry in Program.CurrentPlayer.Equipment) {
+            foreach (KeyValuePair<Slot, IEquipable> entry in Program.CurrentPlayer.Equipment) {
                 if (entry.Key == Slot.Potion || entry.Key == Slot.Left_Hand && ((ITwoHanded)entry.Value).IsTwohanded) {
                     continue;
                 }
@@ -463,10 +463,10 @@ namespace Saga.Assets
                     if (entry.Value is ITwoHanded) {
                         Console.WriteLine($" Both hands - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
                     } else {
-                        Console.WriteLine($" {((IEquipable)entry.Value).ItemSlot} - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                        Console.WriteLine($" {entry.Value.ItemSlot} - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
                     }
                 } else {
-                    Console.Write($" {((IEquipable)entry.Value).ItemSlot} - {entry.Value.ItemName}:");
+                    Console.Write($" {entry.Value.ItemSlot} - {entry.Value.ItemName}:");
                     if (((ArmorBase)entry.Value).SecondaryAttributes.ArmorRating > 0) {
                         Console.Write($" +{((ArmorBase)entry.Value).SecondaryAttributes.ArmorRating} Armor Rating");
                     }
@@ -494,7 +494,7 @@ namespace Saga.Assets
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
             Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($" Healing Potions: {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}\t\tPotion Strength: +{((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionPotency}  {(Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
-            foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
+            foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
                 }  else if (item is IQuestItem item1) {
@@ -617,7 +617,7 @@ namespace Saga.Assets
             Console.WriteLine("]");
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Quest Items @@@@@@@@@@@@@@@@@@@");
             int i = 0;
-            foreach (ItemBase item in Program.CurrentPlayer.Inventory) {
+            foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     i++;
                     if (i == 10) {

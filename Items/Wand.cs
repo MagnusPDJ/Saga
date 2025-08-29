@@ -5,8 +5,13 @@ using System;
 
 namespace Saga.Items
 {
-    public class Wand : ItemBase, IWeapon, IEquipable, IPhysical
+    [Discriminator("wand")]
+    public class Wand : IWeapon, IPhysical
     {
+        public string ItemName { get; set; }
+        public int ItemLevel { get; set; }
+        public int ItemPrice { get; set; }
+        public string ItemDescription { get; init; }
         public WeaponCategory WeaponCategory => WeaponCategory.Magic;
         public PhysicalType PhysicalType => PhysicalType.Normal;
         public Slot ItemSlot => Slot.Right_Hand;
@@ -21,7 +26,7 @@ namespace Saga.Items
         public WeaponAttributes CalculateWeaponAttributes(int level) {
             return new WeaponAttributes() { MinDamage = Math.Max(1, Program.CurrentPlayer.Level + level), MaxDamage = Math.Max(1, Program.CurrentPlayer.Level + level) + Program.Rand.Next(2, 6), AttackSpeed = 1 };
         }
-        public override int CalculateItemPrice() {
+        public int CalculateItemPrice() {
             return Convert.ToInt32(ItemLevel * 100 + (WeaponAttributes.MaxDamage * 100 + WeaponAttributes.MinDamage * 50) * (1 + 1 / (WeaponAttributes.MaxDamage - WeaponAttributes.MinDamage)));
         }
         public string Equip() {
@@ -32,12 +37,12 @@ namespace Saga.Items
                 Console.WriteLine($"Character can't equip a weapon of type wand, {ItemName}.");
                 return "Weapon not equipped.";
             }
-            if (Program.CurrentPlayer.Equipment.TryGetValue(Slot.Right_Hand, out ItemBase value)) {
+            if (Program.CurrentPlayer.Equipment.TryGetValue(Slot.Right_Hand, out IEquipable value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
-                        ((IEquipable)value).UnEquip();
+                        value.UnEquip();
                         Program.CurrentPlayer.Equipment[ItemSlot] = this;
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);

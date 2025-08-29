@@ -1,14 +1,16 @@
-﻿
-using NAudio.CoreAudioApi;
-using Saga.Assets;
+﻿using Saga.Assets;
 using Saga.Character;
 using System;
-using System.Xml.Linq;
 
 namespace Saga.Items
 {
-    public class ArmorBase : ItemBase, IArmor, IEquipable
+    [Discriminator("armorBase")]
+    public class ArmorBase : IArmor
     {
+        public string ItemName { get; set; }
+        public int ItemLevel { get; set; }
+        public int ItemPrice { get; set; }
+        public string ItemDescription { get; init; }
         public ArmorType ArmorType { get; set; }
         public Slot ItemSlot { get; set; }
         public PrimaryAttributes PrimaryAttributes { get; set; }
@@ -81,7 +83,7 @@ namespace Saga.Items
             }
             return new SecondaryAttributes() { MaxHealth = maxHealth, MaxMana = maxMana, Awareness = awareness, ArmorRating = armorRating, ElementalResistance = elementalResistance };
         }
-        public override int CalculateItemPrice() {
+        public int CalculateItemPrice() {
             return Convert.ToInt32(
                 ItemLevel * 30 + SecondaryAttributes.ArmorRating * 95 + (
                     Math.Pow(PrimaryAttributes.Strength, 1 / 1000) * 55 + 
@@ -102,13 +104,13 @@ namespace Saga.Items
                 Console.WriteLine($"Character can't equip a {ArmorType} armor.");
                 return "Armor not equipped.";
             }
-            if (Program.CurrentPlayer.Equipment.TryGetValue(ItemSlot, out ItemBase value)) {
+            if (Program.CurrentPlayer.Equipment.TryGetValue(ItemSlot, out IEquipable value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
-                        ((IEquipable)value).UnEquip();
-                        Program.CurrentPlayer.Equipment[ItemSlot] = this;                        
+                        value.UnEquip();
+                        Program.CurrentPlayer.Equipment[ItemSlot] = (IEquipable)this;                        
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);
                         Program.CurrentPlayer.CalculateTotalStats();
@@ -120,7 +122,7 @@ namespace Saga.Items
                     }
                 }
             } else {
-                Program.CurrentPlayer.Equipment[ItemSlot] = this;
+                Program.CurrentPlayer.Equipment[ItemSlot] = (IEquipable)this;
                 int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                 if (a == -1) {
                 } else {

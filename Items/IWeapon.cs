@@ -9,8 +9,7 @@ namespace Saga.Items
         Ranged,
         Magic
     }
-
-    public interface IWeapon
+    public interface IWeapon : IEquipable
     {
         WeaponCategory WeaponCategory { get; }
         WeaponAttributes WeaponAttributes { get; set; }
