@@ -310,7 +310,7 @@ namespace Saga.Assets
             Console.WriteLine($"| Level: {Program.CurrentPlayer.Level}");
             Console.Write("| EXP  ");
             Console.Write("[");
-            ProgressBar("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20);
+            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
@@ -439,20 +439,65 @@ namespace Saga.Assets
         }
         public static void ShowSkillTree() {
             Console.Clear();
-            Print($"Learned Skills:", 0);
-            for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
-                var s = Program.CurrentPlayer.LearnedSkills[i];
-                Print($"{i + 1}: {s.Name} ({s.Tier.Item1}/{s.Tier.Item2}) - {s.Description}", 0);
-            }
-            var availableSkills = Program.CurrentPlayer.SkillTree.GetAvailableSkills(Program.CurrentPlayer.Level);
-            if (availableSkills.Count != 0) {
-                Print("Available Skills:", 0);
-                for (int i = 0; i < availableSkills.Count; i++) {
-                    var s = availableSkills[i];
-                    Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Item1}/{s.Tier.Item2})", 0);
-                }
-            }
-            Print("\nEnter the number of the skill to unlock, or '(b)ack' to exit.", 10);
+            Console.WriteLine("************************************* Skill Tree ***************************************************\n" +
+                              "                                    ┌───────────┐\r\n" +
+                              "                                    │  [X] ROOT │\r\n" +
+                              "             ┌──────────────────────┴─────┬─────┴───────────────────────┐\r\n" +
+                              "        ┌────┴────┐                       │                        ┌────┴─────┐\r\n" +
+                              "        │[*]Attack│                       │                        │[X]Defense│\r\n" +
+                              "        └────┬────┘                       │                        └──────┬───┘\r\n" +
+                              "     ┌───────┴────────────┐               │                      ┌────────┴──────┐\r\n" +
+                              " ┌───┴────┐           ┌───┴─────┐         │                ┌─────┴─────┐    ┌────┴────┐\r\n" +
+                              " │[ ]Sword│           │[ ]Ranged│         │                │ [*]Armor  │    │[*]Shield│\r\n" +
+                              " └───┬────┘           └───┬─────┘         │                └─────┬─────┘    └────┬────┘\r\n" +
+                              "     │                    │               │                      │               │\r\n" +
+                              "┌────┴────┐         ┌─────┴──────┐        │                ┌─────┴────┐      ┌───┴────┐\r\n" +
+                              "│ [ ]Slash│         │[ ]Precision│        │                │[ ]Fortify│      │[ ]Block│\r\n" +
+                              "└────┬────┘         └─────┬──────┘        │                └─────┬────┘      └───┬────┘\r\n" +
+                              "     │                    │               │                      │               │\r\n" +
+                              "┌────┴──────┐      ┌──────┴──┐            │               ┌──────┴─────┐     ┌───┴────────┐\r\n" +
+                              "│[ ]Critical│      │[ ]Volley│            │               │[ ]Iron Skin│     │[ ]Iron Will│\r\n" +
+                              "└───────────┘      └─────────┘            │               └────────────┘     └────────────┘\r\n" +
+                              "             ┌────────────────────────────┴────────────────────────────┐\r\n" +
+                              "        ┌────┴────┐                                               ┌────┴─────┐\r\n" +
+                              "        │[ ]Magic │                                               │[ ]Utility│\r\n" +
+                              "        └────┬────┘                                               └────┬─────┘\r\n" +
+                              "     ┌───────┴─────────┐                                   ┌───────────┴─────────┐\r\n" +
+                              " ┌───┴────┐        ┌───┴────┐                         ┌────┴─────┐         ┌─────┴─────┐\r\n" +
+                              " │[ ]Fire │        │[ ]Frost│                         │[ ]Stealth│         │[ ]Crafting│\r\n" +
+                              " └───┬────┘        └───┬────┘                         └────┬─────┘         └─────┬─────┘\r\n" +
+                              "     │                 │                                   │                     │\r\n" +
+                              "┌────┴──────┐      ┌───┴────────┐                   ┌──────┴────┐        ┌───────┴──┐\r\n" +
+                              "│[ ]Fireball│      │[ ]Ice Shard│                   │[ ]Backstab│        │[ ]Alchemy│\r\n" +
+                              "└────┬──────┘      └───┬────────┘                   └──────┬────┘        └───────┬──┘\r\n" +
+                              "     │                 │                                   │                     │\r\n" +
+                              "┌────┴─────┐       ┌───┴───────┐                      ┌────┴─────────┐     ┌─────┴────┐\r\n" +
+                              "│[ ]Inferno│       │[ ]Blizzard│                      │[ ]Assassinate│     │[ ]Enchant│\r\n" +
+                              "└──────────┘       └───────────┘                      └──────────────┘     └──────────┘\r\n" +
+                              "****************************************************************************************************\n" +
+                              "Legend:\r\n" +
+                              "[X] = unlocked skill\r\n" +
+                              "[*] = available to learn\r\n" +
+                              "[ ] = locked\r\n" +
+                              "Commands: \r\n" +
+                              "- learn <SkillName>   → Unlock a skill\r\n" +
+                              "- info <SkillName>    → View skill details\r\n" +
+                              "- (b)ack              → Return");
+            //Console.Clear();  
+            //Print($"Learned Skills:", 0);
+            //for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
+            //    var s = Program.CurrentPlayer.LearnedSkills[i];
+            //    Print($"{i + 1}: {s.Name} ({s.Tier.Item1}/{s.Tier.Item2}) - {s.Description}", 0);
+            //}
+            //var availableSkills = Program.CurrentPlayer.SkillTree.GetAvailableSkills(Program.CurrentPlayer.Level);
+            //if (availableSkills.Count != 0) {
+            //    Print("Available Skills:", 0);
+            //    for (int i = 0; i < availableSkills.Count; i++) {
+            //        var s = availableSkills[i];
+            //        Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Item1}/{s.Tier.Item2})", 0);
+            //    }
+            //}
+            //Print("\nEnter the number of the skill to unlock, or '(b)ack' to exit.", 10);
         }
         public static void InventoryScreen() {
             Console.Clear();
