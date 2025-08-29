@@ -1,4 +1,4 @@
-﻿using Saga.Dungeon;
+﻿using Saga.Dungeon.Monsters;
 using System.Text.Json.Serialization;
 
 namespace Saga.Items.Loot

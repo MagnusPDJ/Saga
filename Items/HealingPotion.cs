@@ -1,5 +1,5 @@
 ﻿using Saga.Assets;
-using Saga.Character;
+using Saga.Character.DmgLogic;
 using System;
 
 namespace Saga.Items

@@ -1,8 +1,9 @@
 ﻿using Saga.Assets;
-using Saga.Dungeon;
 using System;
 using System.Text.Json;
 using System.Collections.Generic;
+using Saga.Dungeon.Quests;
+using Saga.Dungeon.Monsters;
 
 namespace Saga.Items.Loot
 {
@@ -258,7 +259,7 @@ namespace Saga.Items.Loot
                         HUDTools.Print($"You gain {questItem.ItemName}", 15);
                     }
                 }
-                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
+                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Quests.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
                     found.Amount++;
                 }
             }

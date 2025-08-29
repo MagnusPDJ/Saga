@@ -11,6 +11,8 @@ using Saga.Dungeon;
 using Saga.Items;
 using Saga.Character;
 using Saga.Items.Loot;
+using Saga.Dungeon.Quests;
+using Saga.Dungeon.Monsters;
 
 namespace Saga.Assets
 {
@@ -634,7 +636,7 @@ namespace Saga.Assets
                 Console.WriteLine("You don't have any active quests...");
             } else {
                 foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
-                    Console.WriteLine($"\u001b[96m{quest.Name}:\u001b[0m{(quest.QuestType == Dungeon.Type.Elimination ? $"\t{quest.Amount}/{quest.Requirements[quest.Target]} " : "")}");
+                    Console.WriteLine($"\u001b[96m{quest.Name}:\u001b[0m{(quest.QuestType == Dungeon.Quests.Type.Elimination ? $"\t{quest.Amount}/{quest.Requirements[quest.Target]} " : "")}");
                     if (!quest.Completed) {
                         Console.WriteLine(quest.Objective);
                     } else if (quest.Completed) {

@@ -1,5 +1,4 @@
-﻿
-namespace Saga.Character
+﻿namespace Saga.Character.Skills
 {
     public interface ISkill
     {

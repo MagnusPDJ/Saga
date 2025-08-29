@@ -1,4 +1,4 @@
-﻿using Saga.Character;
+﻿using Saga.Character.DmgLogic;
 using Saga.Dungeon;
 using Saga.Items;
 using System;

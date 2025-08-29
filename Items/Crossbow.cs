@@ -1,6 +1,7 @@
 ﻿using Saga.Assets;
 using Saga.Character;
-using Saga.Dungeon;
+using Saga.Character.DmgLogic;
+using Saga.Dungeon.Monsters;
 using System;
 
 namespace Saga.Items

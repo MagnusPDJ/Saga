@@ -1,5 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Character;
+using Saga.Character.Skills;
 using Saga.Dungeon;
 using Saga.Items;
 using System;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
-using static System.Resources.ResXFileRef;
 
 namespace Saga
 {
@@ -66,12 +66,14 @@ namespace Saga
             Console.SetWindowSize(100, 45);
             Console.SetBufferSize(100, 45);
             Console.Title = "Saga";
-
+            //Item types til json serializer
             Options.Converters.Add(new PolymorphicConverter<IItem>());
             Options.Converters.Add(new PolymorphicConverter<IEquipable>());
             Options.Converters.Add(new PolymorphicConverter<IWeapon>());
             Options.Converters.Add(new PolymorphicConverter<IArmor>());
             Options.Converters.Add(new PolymorphicConverter<IQuestItem>());
+            //Skill types til json serializer
+            Options.Converters.Add(new PolymorphicConverter<ISkill>());
 
             //Sætter lydniveauet til variablen sat fra configfilen.
             SoundController = new() {

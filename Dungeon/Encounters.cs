@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Saga.Assets;
+using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
 

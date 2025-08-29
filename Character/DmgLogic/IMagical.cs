@@ -1,7 +1,6 @@
-﻿
-using System.Configuration;
+﻿using System.Configuration;
 
-namespace Saga.Character
+namespace Saga.Character.DmgLogic
 {
     public enum MagicalType
     {

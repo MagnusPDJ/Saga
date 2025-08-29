@@ -1,5 +1,4 @@
-﻿
-namespace Saga.Character
+﻿namespace Saga.Character.DmgLogic
 {
     public enum PhysicalType
     {

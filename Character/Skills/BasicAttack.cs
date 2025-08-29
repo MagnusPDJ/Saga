@@ -1,21 +1,27 @@
 ﻿using Saga.Assets;
+using Saga.Character.DmgLogic;
 using Saga.Dungeon;
+using Saga.Dungeon.Monsters;
 using Saga.Items;
-using Saga.Character;
 
-namespace Saga.Character
+namespace Saga.Character.Skills
 {
-    public class BasicAttack : ActiveSkillBase, IPhysical
+    [Discriminator("basicAttack")]
+    public class BasicAttack : IActiveSkill, IPhysical
     {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int LevelRequired => 0;
+        public bool IsUnlocked { get; set; }
+        public (int, int) Tier {  get; set; }
         public PhysicalType PhysicalType => PhysicalType.Normal;
         public BasicAttack() {
             Name = "Basic Attack";
             Description = "Attack using your equipped weapon.";
-            LevelRequired = 0;
             IsUnlocked = true;
             Tier = (1, 1);
         }
-        public override void Activate(Player player, Enemy target = null, Encounters turnTimer = null) {
+        public void Activate(Player player, Enemy target = null, Encounters turnTimer = null) {
             if (player.Equipment.TryGetValue(Slot.Right_Hand, out IEquipable value) && value is IWeapon weapon) {
                 (IDamageType, int) damage = weapon.Attack(target);
                 damage = player.CalculateDamageModifiers(damage);

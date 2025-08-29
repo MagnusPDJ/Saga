@@ -1,6 +1,6 @@
-﻿using Saga.Character;
+﻿using Saga.Character.DmgLogic;
 
-namespace Saga.Dungeon
+namespace Saga.Dungeon.Monsters
 {
     public enum Tribe 
     {

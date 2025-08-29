@@ -1,8 +1,9 @@
 ﻿using Saga.Assets;
 using Saga.Items;
-using Saga.Dungeon;
+using Saga.Character.Skills;
 using System.Collections.Generic;
 using System.Text.Json;
+using Saga.Dungeon.Monsters;
 
 namespace Saga.Character
 {

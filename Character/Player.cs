@@ -1,5 +1,9 @@
 ﻿using Saga.Assets;
+using Saga.Character.DmgLogic;
+using Saga.Character.Skills;
 using Saga.Dungeon;
+using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
 using System;
@@ -36,7 +40,7 @@ namespace Saga.Character
         public PrimaryAttributes TotalPrimaryAttributes { get; set; }
         public SecondaryAttributes BaseSecondaryAttributes { get; set; }
         public SecondaryAttributes TotalSecondaryAttributes { get; set; }
-        public List<SkillBase> LearnedSkills { get; set; }
+        public List<ISkill> LearnedSkills { get; set; }
         public SkillTree SkillTree { get; set; }
         public int SkillPoints { get; set; }
         public Dictionary<Slot, IEquipable> Equipment { get; set; }

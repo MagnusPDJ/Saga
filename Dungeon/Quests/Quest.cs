@@ -3,7 +3,7 @@ using Saga.Items;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Saga.Dungeon
+namespace Saga.Dungeon.Quests
 {
 
     public enum Type {
@@ -31,7 +31,7 @@ namespace Saga.Dungeon
         public int Amount { get; set; } = 0;
         public Dictionary<string, int> Requirements { get; set; }
         public bool CheckRequirements() {
-            if (this.QuestType == Type.Collect || this.QuestType == Type.Find) {
+            if (QuestType == Type.Collect || QuestType == Type.Find) {
                 foreach (IItem item in Program.CurrentPlayer.Inventory) {
                     if (item == null) {
                         continue;
@@ -44,7 +44,7 @@ namespace Saga.Dungeon
                         }
                     }
                 }
-            } else if (this.QuestType == Type.Elimination) {
+            } else if (QuestType == Type.Elimination) {
                 foreach (string target in Requirements.Keys) {
                     if (Amount == Requirements[target]) {
                         return true;
