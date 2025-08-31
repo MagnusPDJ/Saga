@@ -1,5 +1,4 @@
-﻿using System;
-using Saga.Assets;
+﻿using Saga.Assets;
 
 namespace Saga.Dungeon.Monsters
 {
@@ -193,19 +192,19 @@ namespace Saga.Dungeon.Monsters
             return 0;
         }
 
-        public override void MonsterActions(Encounters TurnTimer) {
-            if (Program.CurrentPlayer.TotalDerivedStats.Awareness > Awareness) {
-                if (EnemyTurn < TurnTimer.TurnTimer && Health > 0) {
+        public override void MonsterActions(Encounters turnTimer) {
+            if (Program.CurrentPlayer.DerivedStats.Initiative > Initiative) {
+                if (EnemyTurn < turnTimer.TurnTimer && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
-                        attack /= Math.Max(2, Program.CurrentPlayer.TotalDerivedStats.ArmorRating);
+                        attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
                         Program.CurrentPlayer.Health -= attack;
                         AttackDebuff--;
                         if (AttackDebuff == 0) {
                             HUDTools.Print("You are no longer defended!", 5);
                         }
                     } else {
-                        attack -= Program.CurrentPlayer.TotalDerivedStats.ArmorRating;
+                        attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;
                         if (attack <= 0) {
                             attack = 1;
                         }
@@ -213,18 +212,18 @@ namespace Saga.Dungeon.Monsters
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-                    HUDTools.WriteCombatLog("enemysecond", TurnTimer, attack, 0, this);
+                    HUDTools.WriteCombatLog(action: "enemysecond", TurnTimer: turnTimer, Monster: this, damage: attack);
                     TextInput.PressToContinue();
                 }
             } else {
-                if (EnemyTurn == TurnTimer.TurnTimer && Health > 0) {
+                if (EnemyTurn == turnTimer.TurnTimer && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
-                        attack /= Math.Max(2, Program.CurrentPlayer.TotalDerivedStats.ArmorRating);
+                        attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
                         Program.CurrentPlayer.Health -= attack;
                         AttackDebuff--;
                     } else {
-                        attack -= Program.CurrentPlayer.TotalDerivedStats.ArmorRating;
+                        attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;
                         if (attack <= 0) {
                             attack = 1;
                         }
@@ -232,7 +231,7 @@ namespace Saga.Dungeon.Monsters
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-                    HUDTools.WriteCombatLog("enemyfirst", TurnTimer, attack, 0, this);
+                    HUDTools.WriteCombatLog(action: "enemyfirst", TurnTimer: turnTimer, Monster: this, damage: attack);
                 }
             }
         }

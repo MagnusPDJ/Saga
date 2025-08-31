@@ -1,81 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <!-- Target modern .NET 9 (Windows specific because of WinForms/WPF?) -->
     <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
+
+    <!-- Executable app -->
     <OutputType>Exe</OutputType>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Magnus\Documents\GitHub\Saga\WebSite\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+
+    <!-- Compiler/assembly settings -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>3CAF1551727E103856634FB88AB1DF61D8594CA4</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>Saga_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Saga.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <!-- Nullable + implicit usings -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Metadata -->
     <AssemblyTitle>Saga</AssemblyTitle>
     <Product>Saga</Product>
-    <Copyright>Copyright ©  2024</Copyright>
+    <Copyright>Copyright © 2024</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
+
+    <!-- App startup -->
+    <StartupObject>Saga.Program</StartupObject>
     <ApplicationIcon>Assets\Textures\SAGA-removedbg.ico</ApplicationIcon>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="ArmorBase.cs" />
-    <Compile Remove="Items\ArmorBaseOBSOLETE.cs" />
-    <Compile Remove="Items\ArmorLootTableOBSOLETE.cs" />
-    <Compile Remove="Items\ItemBase.cs" />
-    <Compile Remove="Items\Loot\ArmorLootTable.cs" />
-    <Compile Remove="Items\Loot\ArmorLootTableOBSOLETE.cs" />
-    <Compile Remove="Items\Loot\QuestLootTable.cs" />
-    <Compile Remove="Items\Loot\QuestLootTableOBSOLETE.cs" />
-    <Compile Remove="Items\Loot\WeaponLootTable.cs" />
-    <Compile Remove="Items\Loot\WeaponLootTableOBSOLETE.cs" />
-    <Compile Remove="Items\Potion.cs" />
-    <Compile Remove="Items\PotionOBSOLETE.cs" />
-    <Compile Remove="Items\QuestItem.cs" />
-    <Compile Remove="Items\QuestItemOBSOLETE.cs" />
-    <Compile Remove="Items\QuestLootTableOBSOLETE.cs" />
-    <Compile Remove="Items\WeaponBase.cs" />
-    <Compile Remove="Items\WeaponBaseOBSOLETE.cs" />
-    <Compile Remove="Items\WeaponLootTableOBSOLETE.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Dungeon\RoomExits.txt" />
-    <None Remove="Dungeon\RoomNames.txt" />
-    <None Remove="Items\Loot\WeaponLootTable.json" />
-  </ItemGroup>
+  
+  <!-- Auto-generated designer for resources -->
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -83,39 +36,29 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <!-- Embedded resources -->
   <ItemGroup>
     <EmbeddedResource Include="Dungeon\Quests\Act1Quests.json" />
     <EmbeddedResource Include="Dungeon\Npcs.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Textures\SAGA-removedbg.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
     <EmbeddedResource Include="Dungeon\RoomExits.txt" />
     <EmbeddedResource Include="Dungeon\RoomNames.txt" />
     <EmbeddedResource Include="Items\Loot\QuestLootTable.json" />
     <EmbeddedResource Include="Items\Loot\ArmorLootTable.json" />
     <EmbeddedResource Include="Items\Loot\WeaponLootTable.json" />
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
+
+  <!-- Content -->
+  <ItemGroup>
+    <Content Include="Assets\Textures\SAGA-removedbg.ico" />
+  </ItemGroup>
+
+  <!-- NuGet packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -136,4 +79,5 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.1" />
     <PackageReference Include="System.Text.Json" Version="9.0.1" />
   </ItemGroup>
+
 </Project>

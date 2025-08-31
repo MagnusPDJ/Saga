@@ -46,11 +46,11 @@ namespace Saga
         }
 
         //Genere spilleren som objekt så den kan sættes senere.
-        public static Player CurrentPlayer { get; set; }
-        public static AudioManager SoundController { get; set; }
-        public static RoomController RoomController { get; set; }
+        public static Player CurrentPlayer { get; set; } = new Warrior("Adventurer");
+        public static AudioManager SoundController { get; set; } = new AudioManager();
+        public static RoomController RoomController { get; set; } = new RoomController();
         //Sætter variablen til Lydniveauet fra configfilen.
-        public static float VolumeLevel { get; set; } = float.Parse(ConfigurationManager.AppSettings.Get("volume"));
+        public static float VolumeLevel { get; set; } = float.Parse(ConfigurationManager.AppSettings.Get("volume")!);
         //Genere et objekt som kan returnere tilfældige tal mm.
         public static Random Rand { get; set; } = new();
         //Gør savefilen nemmere at læse.
@@ -162,15 +162,17 @@ namespace Saga
             string[] paths = Directory.GetFiles("saves");
             List<Player> players = [];
             foreach (string path in paths) {
-                Player player = JsonSerializer.Deserialize<Player>(File.ReadAllText(path), Options);                          
-                players.Add(player);
+                Player? save = JsonSerializer.Deserialize<Player>(File.ReadAllText(path), Options);
+                if (save != null) {
+                    players.Add(save);
+                }
             }
             int idCount = players.Count+1;
             Console.Clear();
             SoundController.Play("typewriter");
             HUDTools.LoadSaves(players);
             while (true) {
-                string[] data = Console.ReadLine().Split(':');
+                string[] data = (Console.ReadLine() ?? "").Split(':');
                 try {
                     if (data[0] == "id") {
                         if (int.TryParse(data[1], out int id)) {
@@ -237,12 +239,12 @@ namespace Saga
                     } else if (data[0] == "new game") {
                         newP = true;
                         Player newPlayer = CreateCharacter(PickName(), PickClass());
-                        newPlayer.Id = idCount;
+                        newPlayer.Id = idCount; 
                         return newPlayer;
                     }
                     else if (data[0] == "back" || data[0] == "b") {
                         HUDTools.MainMenu();
-                        return null;
+                        return null!;
                     }
                     else {
                         foreach (Player player in players) {
@@ -279,7 +281,7 @@ namespace Saga
                 Console.WriteLine("//////////////");
                 Console.WriteLine("Enter a name: ");
                 do {
-                    input = Console.ReadLine();
+                    input = Console.ReadLine() ?? throw new ArgumentNullException("User Input Failed.");
                     if (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027')) {
                         Console.WriteLine("Invalid name");
                     }
@@ -422,7 +424,7 @@ namespace Saga
                         try {
                             Console.WriteLine($"Adjusting Volume (Between 0,0-1,0) - Volume {settings["volume"].Value}");
                             Console.WriteLine("Write (b)ack to return");
-                            string input1 = Console.ReadLine();
+                            string input1 = Console.ReadLine() ?? throw new ArgumentNullException("User Input Failed.");
                             if (input1 == "back" || input1 == "b") {
                                 break;
                             }

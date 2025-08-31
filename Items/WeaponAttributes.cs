@@ -1,5 +1,4 @@
-﻿
-namespace Saga.Character
+﻿namespace Saga.Items
 {
     public class WeaponAttributes
     {

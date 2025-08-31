@@ -12,8 +12,8 @@ namespace Saga.Items
     public interface IArmor : IEquipable
     {
         public ArmorType ArmorType { get; set; }
-        public Attributes PrimaryAttributes { get; set; }
-        public DerivedStats SecondaryAttributes { get; set; }
+        public PrimaryAttributes PrimaryAttributes { get; set; }
+        public SecondaryAttributes SecondaryAttributes { get; set; }
         Attributes CalculatePrimaryAttributes(int level);
         void SetPrimaryAttributes();
         DerivedStats CalculateSecondaryAttributes(int level);

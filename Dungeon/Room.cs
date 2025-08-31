@@ -1,20 +1,21 @@
 ﻿using Saga.Assets;
+using Saga.Character;
 using System.Collections.Generic;
 
 namespace Saga.Dungeon
 {
     public class Exit
     {
-        public string keyString;
-        public string exitDescription;
-        public Room valueRoom;
+        public string keyString = "";
+        public string exitDescription = "";
+        public Room? valueRoom;
     }
 
     public abstract class Room
     {
-        public string description;
-        public string roomName;
-        public Exit[] exits;
+        public string description = "";
+        public string roomName = "";
+        public Exit[] exits = [];
         public abstract void LoadRoom();
 
         public static Room CreateRandomBasicCombatRoom(Room[] rooms, int i) {
@@ -96,11 +97,11 @@ namespace Saga.Dungeon
             new UnEquip("unequip"),
             new Back("back", "b"),
             ];
-        public Room currentRoom;
-        public DungeonTemplate currentDungeonInstance;
+        public Room currentRoom = Rooms.Camp;
+        public DungeonTemplate currentDungeonInstance = new();
         public bool ran = false;
 
-        public void ChangeRoom(string keystring, Room room = null) {
+        public void ChangeRoom(string keystring, Room? room = null) {
             bool foundRoom = false;
             if (room != null) { 
                 currentRoom = room;
@@ -108,7 +109,9 @@ namespace Saga.Dungeon
             }
             foreach (Exit exit in currentRoom.exits) {
                 if (exit.keyString == keystring) {
-                    currentRoom = exit.valueRoom;
+                    if (exit.valueRoom != null) {
+                        currentRoom = exit.valueRoom;
+                    }
                     foundRoom = true;
                     break;
                 }
@@ -120,7 +123,7 @@ namespace Saga.Dungeon
         public void ExploreDungeon() {
             Program.RoomController.currentDungeonInstance = GenerateDungeon();
             Program.CurrentPlayer.TimesExplored++;
-            ChangeRoom("",currentDungeonInstance.rooms[^1]);
+            ChangeRoom("", currentDungeonInstance.rooms[^1]);
         }
         public static DungeonTemplate GenerateDungeon() {
             var dungeon = new DungeonTemplate()
@@ -211,6 +214,7 @@ namespace Saga.Dungeon
                 string choice = Encounters.Camp();
             Program.SoundController.Stop();
             if (choice == "quit") {
+                Program.CurrentPlayer = new Warrior("Adventurer");
                 Program.MainMenu();
             } else if (choice == "explore") {
                 Program.RoomController.ExploreDungeon();

@@ -1,66 +1,61 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
+﻿
 namespace Saga.Character
 {
     public class Attributes
     {
-        private int constitution;
-        private int willPower;
-        private int awareness;
-        private int virtue;
+        private readonly Player _player;
+
         //Primary attributes
-        public int Strength { get; set; }
-        public int Dexterity { get; set; }
-        public int Intellect { get; set; }
+        public int Strength { get; private set; }
+        public int Dexterity { get; private set; }
+        public int Intellect { get; private set; }
+
+        private int _constitution;
+        private int _willPower;
+        private int _awareness;
+        private int _virtue;
 
         //Secondary attributes
-        public int Constitution {
-            get { return constitution; }
-            set { constitution = CalculateConstiution(); }
-        }
-        public int WillPower {
-            get { return willPower; }
-            set { willPower = CalculateWillPower(); }
-        }
-        public int Awareness {
-            get { return awareness; }
-            set { awareness = CalculateAwareness(); }
-        }
-        public int Virtue { 
-            get { return  virtue; }
-            set { virtue = CalculateVirtue(); } 
-        }
+        public int Constitution { get; private set; }
+        public int WillPower { get; private set; }
+        public int Awareness { get; private set; }
+        public int Virtue { get; private set; }
 
-        // <summary>
-        // Adds two PrimaryAttributes together.
-        // </summary>
-        // <param name="a">Object one</param>
-        // <param name="b">Object two</param>
-        // <returns>New PrimaryAttributes object of sum of the inputs</returns>
-        public static Attributes operator +(Attributes a, Attributes b) => new()
-        {
-            Strength = a.Strength + b.Strength,
-            Dexterity = a.Dexterity + b.Dexterity,
-            Intellect = a.Intellect + b.Intellect,
-            Constitution = a.Constitution + b.Constitution,
-            WillPower = a.WillPower + b.WillPower,
-            Awareness = a.Awareness + b.Awareness,
-        };
+        public event Action? AttributesChanged;
 
+        public Attributes(Player player) {
+            _player = player;
+            _player.PlayerChanged += RecalculateAttributes;
+            RecalculateAttributes();
+        }
+        public void RecalculateAttributes() {
+            Constitution = CalculateConstiution();
+            WillPower = CalculateWillPower();
+            Awareness = CalculateAwareness();
+            Virtue = CalculateVirtue();
+        }
         int CalculateConstiution() {
-            return (Strength + Dexterity) / 2;
+            return _constitution + (Strength + Dexterity) / 2;
         }
         int CalculateWillPower() {
-            return (Strength + Intellect) / 2;
+            return _willPower + (Strength + Intellect) / 2;
         }
         int CalculateAwareness() {
-            return (Dexterity + Intellect) / 2;
+            return _awareness + (Dexterity + Intellect) / 2;
         }
         int CalculateVirtue() {
             List<int> list = [Strength, Constitution, WillPower];
-            return list.Min();
+            return _virtue + list.Min();
         }
-
+        public void AddValues(int strenght = 0, int dexterity = 0, int intellect = 0, int constitution = 0, int willPower = 0, int awareness = 0, int virtue = 0) {
+            Strength += strenght;
+            Dexterity += dexterity;
+            Intellect += intellect;
+            _constitution += constitution;
+            _willPower += willPower;
+            _awareness += awareness;
+            _virtue += virtue;
+            AttributesChanged?.Invoke();
+        }
     }
 }

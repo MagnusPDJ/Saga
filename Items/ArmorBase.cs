@@ -1,36 +1,32 @@
 ﻿using Saga.Assets;
 using Saga.Character;
-using System;
 
 namespace Saga.Items
 {
     [Discriminator("armorBase")]
     public class ArmorBase : IArmor
     {
-        public string ItemName { get; set; }
+        public required string ItemName { get; set; }
         public int ItemLevel { get; set; }
         public int ItemPrice { get; set; }
-        public string ItemDescription { get; init; }
+        public required string ItemDescription { get; init; }
         public ArmorType ArmorType { get; set; }
         public Slot ItemSlot { get; set; }
-        public Attributes PrimaryAttributes { get; set; }
-        public DerivedStats SecondaryAttributes { get; set; }
-
-        public ArmorBase() {
-
-        }
+        public required PrimaryAttributes PrimaryAttributes { get; set; }
+        public required SecondaryAttributes SecondaryAttributes { get; set; }
 
         public void SetPrimaryAttributes() => PrimaryAttributes = CalculatePrimaryAttributes(ItemLevel);
         public void SetSecondaryAttributes() => SecondaryAttributes = CalculateSecondaryAttributes(ItemLevel);
         public Attributes CalculatePrimaryAttributes(int level) {
-            int constitution = 0;
             int strength = 0;
             int dexterity = 0;
             int intellect = 0;
+            int constitution = 0;
+            int awareness = 0;
             int willpower = 0;
             
             //Roll for primary stats:
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
 
                 int roll = Program.Rand.Next(1, 100 + 1);
 
@@ -49,19 +45,21 @@ namespace Saga.Items
                 if (i == 4 && roll <= 10) {
                     willpower = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
+                if (i == 5 && roll <= 10) {
+                    awareness = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
+                }
 
             }
-            return new Attributes() { Constitution = constitution, Strength = strength, Dexterity = dexterity, Intellect = intellect, WillPower = willpower };
+            return new Attributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, Awareness = awareness , WillPower = willpower };
         }
         public DerivedStats CalculateSecondaryAttributes(int level) {
             int maxHealth = 0;
             int maxMana = 0;
-            int awareness = 0;
             int armorRating = 1;
             int elementalResistance = 0;
 
             //Roll for secondary stats:
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 4; i++) {
 
                 int roll = Program.Rand.Next(1, 100 + 1);
 
@@ -71,17 +69,14 @@ namespace Saga.Items
                 if (i == 1 && roll <= -1) {
                     maxMana = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 2 && roll <= -1) {
-                    awareness = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
-                }
-                if (i == 3 && roll <= 10) {
+                if (i == 2 && roll <= 10) {
                     armorRating = Program.Rand.Next(Program.CurrentPlayer.Level / 2, 2 + Math.Max(3, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 4 && roll <= -1) {
+                if (i == 3 && roll <= -1) {
                     elementalResistance = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
             }
-            return new DerivedStats() { MaxHealth = maxHealth, MaxMana = maxMana, Awareness = awareness, ArmorRating = armorRating, ElementalResistance = elementalResistance };
+            return new DerivedStats() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance };
         }
         public int CalculateItemPrice() {
             return Convert.ToInt32(
@@ -104,16 +99,15 @@ namespace Saga.Items
                 Console.WriteLine($"Character can't equip a {ArmorType} armor.");
                 return "Armor not equipped.";
             }
-            if (Program.CurrentPlayer.Equipment.TryGetValue(ItemSlot, out IEquipable value)) {
+            if (Program.CurrentPlayer.Equipment.TryGetSlot(ItemSlot, out IEquipable? value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{ItemName}'? (Y/N)");
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
                         value.UnEquip();
-                        Program.CurrentPlayer.Equipment[ItemSlot] = (IEquipable)this;                        
+                        Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, this);                        
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                         Program.CurrentPlayer.Inventory.SetValue(null, a);
-                        Program.CurrentPlayer.CalculateTotalStats();
                         return "New armor piece equipped!";
                     } else if (input == "n") {
                         return "Armor not equipped.";
@@ -122,23 +116,21 @@ namespace Saga.Items
                     }
                 }
             } else {
-                Program.CurrentPlayer.Equipment[ItemSlot] = (IEquipable)this;
+                Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, this);
                 int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                 if (a == -1) {
                 } else {
                     Program.CurrentPlayer.Inventory.SetValue(null, a);
                 }
-                Program.CurrentPlayer.CalculateTotalStats();
                 return "New armor piece equipped!";
             }
         }
         public string UnEquip() {
             int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(this, index);
-            Program.CurrentPlayer.Equipment.Remove(ItemSlot);
-            Program.CurrentPlayer.CalculateTotalStats();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
+            Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, null);
+            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.DerivedStats.MaxHealth) {
+                Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
             }
             return "Armor piece unequipped!";
         }

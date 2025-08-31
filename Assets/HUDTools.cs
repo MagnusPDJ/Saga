@@ -1,11 +1,5 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Saga.Dungeon;
 using Saga.Items;
@@ -18,9 +12,6 @@ namespace Saga.Assets
 {
     public class HUDTools
     {
-        //Get metode til at få teksten fra memory til filen.
-        public static TextWriter Out { get; }
-
         //Metode til at "Slow-print" tekst, med indbygget toggle setting.
         public static void Print(string text, int time = 40) {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
@@ -77,7 +68,7 @@ namespace Saga.Assets
         }
 
         // Metode til at skrive en logfil til kamp
-        public static void WriteCombatLog(string action, Encounters TurnTimer, int damage=0, int attack = 0, Enemy Monster=null) {
+        public static void WriteCombatLog(string action, Encounters TurnTimer, Enemy Monster, int damage=0, int attack = 0) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
             }
@@ -103,7 +94,7 @@ namespace Saga.Assets
             Console.Write($"{text}\n");
 
             //Skriver og tilføjer den nye tekst.
-            if (Program.CurrentPlayer.TotalAttributes.Awareness > Monster.Awareness) {
+            if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
                 switch (action) {
                     case "attack":
                         Console.WriteLine($"Turn: {TurnTimer.TurnTimer}\nYou attacked and dealt {attack} damage.");
@@ -113,16 +104,16 @@ namespace Saga.Assets
                         break;
                     case "heal":
                         Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
-                        if (((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity == 0) {
+                        if (Program.CurrentPlayer.Equipment.Potion is IConsumable potion && potion.PotionQuantity == 0) {
                             Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            if (Program.CurrentPlayer.TotalDerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
+                            if (Program.CurrentPlayer.DerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
                                 Console.WriteLine("You healed to max health by drinking a potion.");
                             }
                             else {
                                 int mageBonus = (Program.CurrentPlayer.CurrentClass == "Mage"? 1 + Program.CurrentPlayer.Level * 2 : 0);
-                                Console.WriteLine($"You gained {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionPotency+mageBonus} health by drinking a potion.");
+                                Console.WriteLine($"You gained {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionPotency + mageBonus} health by drinking a potion.");
                             }
                         }
                         break;
@@ -143,16 +134,16 @@ namespace Saga.Assets
                         Console.WriteLine($"You defended and lowered the next two attacks.");
                         break;
                     case "heal":
-                        if (((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity == 0) {
+                        if (Program.CurrentPlayer.Equipment.Potion is IConsumable { PotionQuantity: 0 }) {
                             Console.WriteLine($"You tried to drink a potion you didn't have.");
                         }
                         else {
-                            if (Program.CurrentPlayer.TotalDerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
+                            if (Program.CurrentPlayer.DerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
                                 Console.WriteLine("You healed to max health by drinking a potion.");
                             }
                             else {
                                 int mageBonus = (Program.CurrentPlayer.CurrentClass == "Mage" ? 1 + Program.CurrentPlayer.Level * 2 : 0);
-                                Console.WriteLine($"You gained {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionPotency+mageBonus} health by drinking a potion.");
+                                Console.WriteLine($"You gained {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionPotency+mageBonus} health by drinking a potion.");
                             }
                         }
                         break;
@@ -186,13 +177,15 @@ namespace Saga.Assets
 
         //Read all lines fra embedded resource til en liste.
         public static List<string> ReadAllResourceLines(string resourceName) {
-            using Stream stream = Assembly.GetEntryAssembly()
-                .GetManifestResourceStream(resourceName);
+            ArgumentNullException.ThrowIfNull(resourceName);
+
+            Assembly? assembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("No entry assembly found.");
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException($"Resource '{resourceName}' not found in assembly.");
             using StreamReader reader = new(stream);
             return [.. EnumerateLines(reader)];
         }
         static IEnumerable<string> EnumerateLines(StreamReader reader) {
-            string line;
+            string? line;
             while ((line = reader.ReadLine()) != null) {
                 yield return line;
             }
@@ -200,8 +193,10 @@ namespace Saga.Assets
 
         //Read all text fra embedded reource til en string.
         public static string ReadAllResourceText(string resourceName) {
-            using Stream stream = Assembly.GetEntryAssembly()
-                .GetManifestResourceStream(resourceName);
+            ArgumentNullException.ThrowIfNull(resourceName);
+
+            Assembly? assembly = Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("No entry assembly found.");
+            using Stream stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException($"Resource '{resourceName}' not found in assembly.");
             using StreamReader reader = new(stream);
             return reader.ReadToEnd();
         }
@@ -312,9 +307,9 @@ namespace Saga.Assets
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}");
+            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($"| Potions:                {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}");
+            Console.WriteLine($"| Potions:                {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
@@ -390,7 +385,7 @@ namespace Saga.Assets
                 }
             }
             Console.WriteLine($"|  Sell     (P)otion     $ {Shop.ShopPrice("sellpotion")}");
-            if (((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity >= 5) {
+            if (Program.CurrentPlayer.Equipment.Potion is IConsumable { PotionQuantity: >= 5 }) {
                 Console.WriteLine($"|  Sell (F)ive Potions   $ {Shop.ShopPrice("sellpotion5")}");
             }
             Console.WriteLine("=======================================================");
@@ -402,30 +397,31 @@ namespace Saga.Assets
             Console.Write("[");
             ProgressBar("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20);
             Console.WriteLine("]");
-            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}");
+            Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($"| Potions:                {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}");
+            Console.WriteLine($"| Potions:                {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
             Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
             Console.WriteLine("Choose what to sell");
         }
-        public static void WriteStatsToConsole(string name, int level, int timesExplored, Attributes totalPrimaryAttributes, DerivedStats totalDerivedStats, (int, int) dpt) {
+        public static void DisplayStats(Player player) {
             StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~\n");
 
-            stats.AppendFormat($" Name: {name}\t\t\tClass: {Program.CurrentPlayer.CurrentClass}\n");
-            stats.AppendFormat($" Level: {level}\t\t\tTimes Explored: {timesExplored}\n");
+            stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
+            stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
             stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
             stats.AppendFormat($"\n----------------- Primary Attributes -----------------------\n");
-            stats.AppendFormat($" (S)trength: {totalPrimaryAttributes.Strength}\n");
-            stats.AppendFormat($" (D)exterity: {totalPrimaryAttributes.Dexterity}\n");
-            stats.AppendFormat($" (C)onstitution: {totalPrimaryAttributes.Constitution}\n");
-            stats.AppendFormat($" (I)ntellect: {totalPrimaryAttributes.Intellect}\n");
-            stats.AppendFormat($" (W)illpower: {totalPrimaryAttributes.WillPower}\n");
+            stats.AppendFormat($" (S)trength:     {player.Attributes.Strength}\n");
+            stats.AppendFormat($" (D)exterity:    {player.Attributes.Dexterity}\n");
+            stats.AppendFormat($" (I)ntellect:    {player.Attributes.Intellect}\n");
+            stats.AppendFormat($" (C)onstitution: {player.Attributes.Constitution}\n");
+            stats.AppendFormat($" (W)illpower:    {player.Attributes.WillPower}\n");
+            stats.AppendFormat($" (A)wareness:    {player.Attributes.Awareness}\n");
             stats.AppendFormat($"Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n");
             stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
-            stats.AppendFormat($" Health: {Program.CurrentPlayer.Health} / {totalDerivedStats.MaxHealth}\t\t\tDamage: {dpt.Item1}-{dpt.Item2}\n");
-            stats.AppendFormat($" Mana: {Program.CurrentPlayer.Mana} / {totalDerivedStats.MaxMana}\t\t\tAwareness: {totalPrimaryAttributes.Awareness}\n");
-            stats.AppendFormat($" Armor Rating: {totalDerivedStats.ArmorRating}\t\tElemental Resistance: {totalDerivedStats.ElementalResistance}");
+            stats.AppendFormat($" Health: {player.Health} / {player.DerivedStats.MaxHealth}\t\t\tWeapon Damage: {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage}\n");
+            stats.AppendFormat($" Mana: {player.Mana} / {player.DerivedStats.MaxMana}\t\t\tMagical Resistance: {player.DerivedStats.MagicalResistance}\n");
+            stats.AppendFormat($" Armor Rating: {player.DerivedStats.ArmorRating}\t\tElemental Resistance: {player.DerivedStats.ElementalResistance}");
 
             Print(stats.ToString(),0);
         }
@@ -433,7 +429,7 @@ namespace Saga.Assets
             //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
             for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0 ; i--) {
                 Console.Clear();
-                Program.CurrentPlayer.DisplayStats();
+                DisplayStats(Program.CurrentPlayer);
                 i = Program.CurrentPlayer.SpendAttributePoint(i);           
             }       
         }
@@ -502,37 +498,34 @@ namespace Saga.Assets
         public static void InventoryScreen() {
             Console.Clear();
             Console.WriteLine("******************** Equipment *****************************");
-            foreach (KeyValuePair<Slot, IEquipable> entry in Program.CurrentPlayer.Equipment) {
-                if (entry.Key == Slot.Potion || entry.Key == Slot.Left_Hand && ((ITwoHanded)entry.Value).IsTwohanded) {
-                    continue;
-                }
-                if (entry.Key == Slot.Right_Hand) {
-                    if (entry.Value is ITwoHanded) {
-                        Console.WriteLine($" Both hands - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+            foreach (var slot in Program.CurrentPlayer.Equipment) {
+                if (slot.Value is IWeapon weapon) {
+                    if (slot.Value is ITwoHanded) {
+                        Console.WriteLine($" Both hands - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");
                     } else {
-                        Console.WriteLine($" {entry.Value.ItemSlot} - {entry.Value.ItemName}: +{((IWeapon)entry.Value).WeaponAttributes.MinDamage}-{((IWeapon)entry.Value).WeaponAttributes.MaxDamage} dmg");
+                        Console.WriteLine($" {weapon.ItemSlot} - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");
                     }
-                } else {
-                    Console.Write($" {entry.Value.ItemSlot} - {entry.Value.ItemName}:");
-                    if (((ArmorBase)entry.Value).SecondaryAttributes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)entry.Value).SecondaryAttributes.ArmorRating} Armor Rating");
+                } else if (slot.Value is IArmor armor) {
+                    Console.Write($" {armor.ItemSlot} - {armor.ItemName}:");
+                    if (((ArmorBase)slot.Value).SecondaryAttributes.ArmorRating > 0) {
+                        Console.Write($" +{armor.SecondaryAttributes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)entry.Value).PrimaryAttributes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)entry.Value).PrimaryAttributes.Strength} Str");
+                    if (((ArmorBase)slot.Value).PrimaryAttributes.Strength > 0) {
+                        Console.Write($", +{armor.PrimaryAttributes.Strength} Str");
                     }
-                    if (((ArmorBase)entry.Value).PrimaryAttributes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)entry.Value).PrimaryAttributes.Dexterity} Dex");
+                    if (((ArmorBase)slot.Value).PrimaryAttributes.Dexterity > 0) {
+                        Console.Write($", +{armor.PrimaryAttributes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)entry.Value).PrimaryAttributes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)entry.Value).PrimaryAttributes.Intellect} Int");
+                    if (((ArmorBase)slot.Value).PrimaryAttributes.Intellect > 0) {
+                        Console.Write($", +{armor.PrimaryAttributes.Intellect} Int");
                     }
-                    if (((ArmorBase)entry.Value).PrimaryAttributes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)entry.Value).PrimaryAttributes.Constitution} Const");
+                    if (((ArmorBase)slot.Value).PrimaryAttributes.Constitution > 0) {
+                        Console.Write($", +{armor.PrimaryAttributes.Constitution} Const");
                     }
-                    if (((ArmorBase)entry.Value).PrimaryAttributes.WillPower > 0) {
-                        Console.Write($", +{((ArmorBase)entry.Value).PrimaryAttributes.WillPower} Wp");
+                    if (((ArmorBase)slot.Value).PrimaryAttributes.WillPower > 0) {
+                        Console.Write($", +{armor.PrimaryAttributes.WillPower} Wp");
                     }
-                    if (entry.Value.ItemName == "Linen Rags") {
+                    if (armor.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
                     }
                     Console.WriteLine("");
@@ -540,7 +533,7 @@ namespace Saga.Assets
             }
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
             Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($" Healing Potions: {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}\t\tPotion Strength: +{((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionPotency}  {(Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
+            Console.WriteLine($" Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}\t\tPotion Strength: +{(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionPotency}  {(Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
@@ -585,7 +578,7 @@ namespace Saga.Assets
             Console.WriteLine($" Turn: {TurnTimer.TurnTimer}\t\tLocation: {Program.RoomController.currentRoom.roomName}\n");
             Console.WriteLine($" Fighting: {Monster.Name}!");
             Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
-            if (Program.CurrentPlayer.TotalAttributes.Awareness > Monster.Awareness) {
+            if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
                 Console.WriteLine("\n------------------------------------");
                 Console.WriteLine(" You go first!\n");
             } else {
@@ -593,7 +586,7 @@ namespace Saga.Assets
                 Console.WriteLine("------------------------------------\n");
             }           
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}\t|| Healing Potions: {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}");
+            Console.WriteLine($" Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -613,7 +606,7 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine($"Location:\t{Program.RoomController.currentRoom.roomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}\t|| Healing Potions: {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -630,7 +623,7 @@ namespace Saga.Assets
             Console.Clear();
             Print("[][][][][][]  Camp   [][][][][][]", 5);
             Print($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:", 10);
-            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}\t|| Healing Potions: {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}", 10);
+            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}", 10);
             Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 5);
             Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]", 10);
         }
@@ -638,7 +631,7 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
             Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}\t|| Healing Potions: {((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity}");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
             Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("EXP  ");
             Console.Write("[");
@@ -657,7 +650,7 @@ namespace Saga.Assets
         public static void QuestLogHUD() {
             Console.Clear();
             Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.TotalDerivedStats.MaxHealth}\t|| Level: {Program.CurrentPlayer.Level}");
+            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Level: {Program.CurrentPlayer.Level}");
             Console.Write("EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);

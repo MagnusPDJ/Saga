@@ -188,7 +188,10 @@ namespace Saga.Dungeon
                     HUDTools.RoomHUD();
                     HUDTools.Print("You return to Flemsha and try the key. With some resistance you turn the mechanism and\nthe door slides open.", 20);
                     HUDTools.Print("He thanks you very much and you tell him about your camp, where Gheed is too.", 20);
-                    Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest=> quest.Name == "Free Flemsha"));
+                    var quest = Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == "Free Flemsha");
+                    if (quest != null) {
+                        Program.CurrentPlayer.CompleteAndTurnInQuest(quest);
+                    }
                     NonPlayableCharacters.AddNpcToCamp("Flemsha");
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(8);
@@ -230,7 +233,7 @@ namespace Saga.Dungeon
                 MaxHealth = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
                 Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
                 ExpModifier = 3,
-                Awareness = 5,
+                Initiative = 5,
             };
             Combat(WizardEncounter);
             Console.Clear();
@@ -494,7 +497,7 @@ namespace Saga.Dungeon
             //Starter en tur tæller:
             Encounters TurnTimer = new();
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
-            if (Program.CurrentPlayer.TotalDerivedStats.Awareness > Monster.Awareness) {
+            if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.CombatHUD(Monster, TurnTimer);
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);                   

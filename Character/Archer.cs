@@ -1,19 +1,13 @@
 ﻿using Saga.Assets;
-using Saga.Items;
 using Saga.Character.Skills;
-using System.Text.Json;
-using System.Collections.Generic;
 using Saga.Dungeon.Monsters;
+using Saga.Items;
+using System.Text.Json;
 
 namespace Saga.Character
 {
-    public class Archer : Player
+    public class Archer(string name) : Player(name, "Archer", new ArcherSkillTree(), 1, 2, 1)
     {
-        public Archer(string name) : base(name, 0, 1, 1, 1) {
-            CurrentClass = "Archer";
-            SkillTree = new ArcherSkillTree();
-        }
-
         //      Stats
         public override void LevelUp() {
             int levels = 0;
@@ -24,32 +18,25 @@ namespace Saga.Character
                 Program.CurrentPlayer.FreeAttributePoints++;
                 levels++;
             }
-            Attributes levelUpValues = new() { Constitution = 1 * levels, Strength = 0 * levels, Dexterity = 1 * levels, Intellect = 0 * levels, WillPower = 0 * levels };
+            Attributes.AddValues(
+                dexterity: 1 * levels,
+                constitution: 1 * levels
+                );
 
-            BaseAttributes += levelUpValues;
-
-            CalculateTotalStats();
-            Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
+            Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
 
             HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point.\u001b[0m", 20);
         }
-        public override (int, int) CalculateDPT() {
-            TotalAttributes = CalculatePrimaryArmorBonus();
-            (int, int) weaponDPT = CalculateWeaponDPT();
-            if (weaponDPT == (0, 0)) {
-                return (1, 1);
-            }
-
-            int dmgfromattribute = (1+TotalAttributes.Dexterity) / 3;
-
-            return (weaponDPT.Item1 + dmgfromattribute, weaponDPT.Item2 + dmgfromattribute);
-        }
 
         public override void SetStartingGear() {
-            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"), Program.Options);
-            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"), Program.Options);
-            weapons.Find(w => w.ItemName == "Flimsy Bow").Equip();
-            armors.Find(w => w.ItemName == "Linen Rags").Equip();
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"), Program.Options) ?? [];
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"), Program.Options) ?? [];
+            if (weapons.Find(w => w.ItemName == "Flimsy Bow") is IEquipable weapon) {
+                weapon.Equip();
+            }
+            if (armors.Find(a => a.ItemName == "Linen Rags") is IEquipable armor) {
+                armor.Equip();
+            }
             HealingPotion healingPotion = new();
             healingPotion.Equip();
         }

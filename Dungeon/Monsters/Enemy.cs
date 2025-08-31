@@ -17,7 +17,7 @@ namespace Saga.Dungeon.Monsters
     public abstract class Enemy
     {
         public Tribe EnemyTribe { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         private int _maxHealth;
         public int MaxHealth
         {
@@ -37,7 +37,7 @@ namespace Saga.Dungeon.Monsters
         public int EnemyTurn { get; set; } = 1;
         public int AttackDebuff { get; set; } = 0;
         public int Armor { get; set; } = 0;
-        public int Awareness { get; set; } = 0;
+        public int Initiative { get; set; } = 0;
         public abstract void GetExp();
         public abstract int GetHealth(string name);
         public abstract int GetPower(string name);
