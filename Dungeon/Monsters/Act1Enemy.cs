@@ -194,18 +194,18 @@ namespace Saga.Dungeon.Monsters
         }
 
         public override void MonsterActions(Encounters TurnTimer) {
-            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Awareness) {
+            if (Program.CurrentPlayer.TotalDerivedStats.Awareness > Awareness) {
                 if (EnemyTurn < TurnTimer.TurnTimer && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
-                        attack /= Math.Max(2, Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating);
+                        attack /= Math.Max(2, Program.CurrentPlayer.TotalDerivedStats.ArmorRating);
                         Program.CurrentPlayer.Health -= attack;
                         AttackDebuff--;
                         if (AttackDebuff == 0) {
                             HUDTools.Print("You are no longer defended!", 5);
                         }
                     } else {
-                        attack -= Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating;
+                        attack -= Program.CurrentPlayer.TotalDerivedStats.ArmorRating;
                         if (attack <= 0) {
                             attack = 1;
                         }
@@ -220,11 +220,11 @@ namespace Saga.Dungeon.Monsters
                 if (EnemyTurn == TurnTimer.TurnTimer && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
-                        attack /= Math.Max(2, Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating);
+                        attack /= Math.Max(2, Program.CurrentPlayer.TotalDerivedStats.ArmorRating);
                         Program.CurrentPlayer.Health -= attack;
                         AttackDebuff--;
                     } else {
-                        attack -= Program.CurrentPlayer.TotalSecondaryAttributes.ArmorRating;
+                        attack -= Program.CurrentPlayer.TotalDerivedStats.ArmorRating;
                         if (attack <= 0) {
                             attack = 1;
                         }

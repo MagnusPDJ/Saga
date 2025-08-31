@@ -77,8 +77,8 @@ namespace Saga.Items
             Program.CurrentPlayer.Equipment.Remove(ItemSlot);
             Program.CurrentPlayer.Equipment.Remove(Slot.Left_Hand);
             Program.CurrentPlayer.CalculateTotalStats();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
+            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
+                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
             }
             return "Weapon unequipped!";
         }

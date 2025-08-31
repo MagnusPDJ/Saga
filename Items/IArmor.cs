@@ -12,11 +12,11 @@ namespace Saga.Items
     public interface IArmor : IEquipable
     {
         public ArmorType ArmorType { get; set; }
-        public PrimaryAttributes PrimaryAttributes { get; set; }
-        public SecondaryAttributes SecondaryAttributes { get; set; }
-        PrimaryAttributes CalculatePrimaryAttributes(int level);
+        public Attributes PrimaryAttributes { get; set; }
+        public DerivedStats SecondaryAttributes { get; set; }
+        Attributes CalculatePrimaryAttributes(int level);
         void SetPrimaryAttributes();
-        SecondaryAttributes CalculateSecondaryAttributes(int level);
+        DerivedStats CalculateSecondaryAttributes(int level);
         void SetSecondaryAttributes();
     }
 }

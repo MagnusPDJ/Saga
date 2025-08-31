@@ -46,10 +46,10 @@ namespace Saga.Items
                 HUDTools.Print("You use a healing potion amplified by your magic", 10);
                 PotionQuantity--;
                 Program.CurrentPlayer.Health += PotionPotency + mageBonus;
-                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                    Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
+                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
+                    Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
                 }
-                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
+                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
                     HUDTools.Print("You heal to max health!", 20);
                 } else {
                     HUDTools.Print($"You gain {PotionPotency + mageBonus} health", 20);
@@ -58,10 +58,10 @@ namespace Saga.Items
                 HUDTools.Print("You use a healing potion", 10);
                 PotionQuantity--;
                 Program.CurrentPlayer.Health += PotionPotency;
-                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                    Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
+                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
+                    Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
                 }
-                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
+                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
                     HUDTools.Print("You heal to max health!", 20);
                 } else {
                     HUDTools.Print($"You gain {PotionPotency} health", 20);

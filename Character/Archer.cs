@@ -9,7 +9,7 @@ namespace Saga.Character
 {
     public class Archer : Player
     {
-        public Archer(string name) : base(name, 0, 1, 1, 1, 1, 0) {
+        public Archer(string name) : base(name, 0, 1, 1, 1) {
             CurrentClass = "Archer";
             SkillTree = new ArcherSkillTree();
         }
@@ -24,23 +24,23 @@ namespace Saga.Character
                 Program.CurrentPlayer.FreeAttributePoints++;
                 levels++;
             }
-            PrimaryAttributes levelUpValues = new() { Constitution = 1 * levels, Strength = 0 * levels, Dexterity = 1 * levels, Intellect = 0 * levels, WillPower = 0 * levels };
+            Attributes levelUpValues = new() { Constitution = 1 * levels, Strength = 0 * levels, Dexterity = 1 * levels, Intellect = 0 * levels, WillPower = 0 * levels };
 
-            BasePrimaryAttributes += levelUpValues;
+            BaseAttributes += levelUpValues;
 
             CalculateTotalStats();
-            Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
+            Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
 
             HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point.\u001b[0m", 20);
         }
         public override (int, int) CalculateDPT() {
-            TotalPrimaryAttributes = CalculatePrimaryArmorBonus();
+            TotalAttributes = CalculatePrimaryArmorBonus();
             (int, int) weaponDPT = CalculateWeaponDPT();
             if (weaponDPT == (0, 0)) {
                 return (1, 1);
             }
 
-            int dmgfromattribute = (1+TotalPrimaryAttributes.Dexterity) / 3;
+            int dmgfromattribute = (1+TotalAttributes.Dexterity) / 3;
 
             return (weaponDPT.Item1 + dmgfromattribute, weaponDPT.Item2 + dmgfromattribute);
         }

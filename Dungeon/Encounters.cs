@@ -494,7 +494,7 @@ namespace Saga.Dungeon
             //Starter en tur tæller:
             Encounters TurnTimer = new();
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
-            if (Program.CurrentPlayer.TotalSecondaryAttributes.Awareness > Monster.Awareness) {
+            if (Program.CurrentPlayer.TotalDerivedStats.Awareness > Monster.Awareness) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.CombatHUD(Monster, TurnTimer);
                     Program.CurrentPlayer.CombatActions(Monster, TurnTimer);                   

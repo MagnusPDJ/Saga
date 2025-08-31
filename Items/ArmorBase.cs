@@ -13,8 +13,8 @@ namespace Saga.Items
         public string ItemDescription { get; init; }
         public ArmorType ArmorType { get; set; }
         public Slot ItemSlot { get; set; }
-        public PrimaryAttributes PrimaryAttributes { get; set; }
-        public SecondaryAttributes SecondaryAttributes { get; set; }
+        public Attributes PrimaryAttributes { get; set; }
+        public DerivedStats SecondaryAttributes { get; set; }
 
         public ArmorBase() {
 
@@ -22,7 +22,7 @@ namespace Saga.Items
 
         public void SetPrimaryAttributes() => PrimaryAttributes = CalculatePrimaryAttributes(ItemLevel);
         public void SetSecondaryAttributes() => SecondaryAttributes = CalculateSecondaryAttributes(ItemLevel);
-        public PrimaryAttributes CalculatePrimaryAttributes(int level) {
+        public Attributes CalculatePrimaryAttributes(int level) {
             int constitution = 0;
             int strength = 0;
             int dexterity = 0;
@@ -51,9 +51,9 @@ namespace Saga.Items
                 }
 
             }
-            return new PrimaryAttributes() { Constitution = constitution, Strength = strength, Dexterity = dexterity, Intellect = intellect, WillPower = willpower };
+            return new Attributes() { Constitution = constitution, Strength = strength, Dexterity = dexterity, Intellect = intellect, WillPower = willpower };
         }
-        public SecondaryAttributes CalculateSecondaryAttributes(int level) {
+        public DerivedStats CalculateSecondaryAttributes(int level) {
             int maxHealth = 0;
             int maxMana = 0;
             int awareness = 0;
@@ -81,7 +81,7 @@ namespace Saga.Items
                     elementalResistance = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
             }
-            return new SecondaryAttributes() { MaxHealth = maxHealth, MaxMana = maxMana, Awareness = awareness, ArmorRating = armorRating, ElementalResistance = elementalResistance };
+            return new DerivedStats() { MaxHealth = maxHealth, MaxMana = maxMana, Awareness = awareness, ArmorRating = armorRating, ElementalResistance = elementalResistance };
         }
         public int CalculateItemPrice() {
             return Convert.ToInt32(
@@ -137,8 +137,8 @@ namespace Saga.Items
             Program.CurrentPlayer.Inventory.SetValue(this, index);
             Program.CurrentPlayer.Equipment.Remove(ItemSlot);
             Program.CurrentPlayer.CalculateTotalStats();
-            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalSecondaryAttributes.MaxHealth;
+            if (Program.CurrentPlayer.Health > Program.CurrentPlayer.TotalDerivedStats.MaxHealth) {
+                Program.CurrentPlayer.Health = Program.CurrentPlayer.TotalDerivedStats.MaxHealth;
             }
             return "Armor piece unequipped!";
         }
