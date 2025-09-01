@@ -165,6 +165,7 @@ namespace Saga
                 Player save = JsonSerializer.Deserialize<Player>(File.ReadAllText(path), Options) ?? new Warrior("Adventurer");
                 save.Attributes.AttachToPlayer(save);
                 save.DerivedStats.AttachToPlayer(save);
+                save.Equipment.AttachToPlayer(save);
                 if (save != null) {
                     players.Add(save);
                 }
@@ -406,7 +407,7 @@ namespace Saga
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;        
             while (true) {
-                HUDTools.InstantSettings();
+                HUDTools.Settings();
                 string input = TextInput.PlayerPrompt();
                 if (input == "1") {
                     if (settings["toggleReadLine"].Value == "true") {

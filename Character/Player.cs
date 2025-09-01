@@ -56,7 +56,7 @@ namespace Saga.Character
             Level = 1;
             CurrentAct = Act.Start;
             Loot = new Act1Loot();
-            Equipment = new Equipment();
+            Equipment = new Equipment(this);
             Inventory = new IItem[10];
             QuestLog = [];
             FailedQuests = [];
@@ -73,6 +73,7 @@ namespace Saga.Character
             SkillPoints = 0;
             TimesExplored = 0;
             Attributes.AttributesChanged += () => PlayerChanged?.Invoke();
+            Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
         }
         
         public abstract void LevelUp();
@@ -100,7 +101,7 @@ namespace Saga.Character
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "s" || input == "strength") {
-                        Attributes.AddValues(strenght: 1);
+                        Attributes.AddValues(strength: 1);
                         FreeAttributePoints--;
                         break;
                     } else if (input == "d" || input == "dexterity") {
@@ -154,7 +155,12 @@ namespace Saga.Character
         public abstract bool RunAway(Enemy monster);
 
         public (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {
-            return damage;
+            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);
+            modifiedDamage.Item1 = damage.Item1;
+            if (CurrentClass == "Warrior" && damage.Item1 is IPhysical) {
+                modifiedDamage.Item2 = damage.Item2 + Level;
+            }
+            return modifiedDamage;
         }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void CheckForDeath(string message) {

@@ -5,14 +5,14 @@
     "ItemLevel": 1,
     "ItemSlot": 1,
     "ArmorType": 0,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 0,
       "Dexterity": 0,
       "Intellect": 0,
       "Constitution": 0,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -27,14 +27,14 @@
     "ItemLevel": 2,
     "ItemSlot": 1,
     "ArmorType": 0,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 1,
       "Dexterity": 1,
       "Intellect": 3,
       "Constitution": 1,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -49,14 +49,14 @@
     "ItemLevel": 5,
     "ItemSlot": 1,
     "ArmorType": 0,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 1,
       "Dexterity": 1,
       "Intellect": 5,
       "Constitution": 2,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -71,14 +71,14 @@
     "ItemLevel": 8,
     "ItemSlot": 1,
     "ArmorType": 0,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 1,
       "Dexterity": 1,
       "Intellect": 7,
       "Constitution": 3,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -93,14 +93,14 @@
     "ItemLevel": 2,
     "ItemSlot": 1,
     "ArmorType": 1,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 1,
       "Dexterity": 3,
       "Intellect": 1,
       "Constitution": 1,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -115,14 +115,14 @@
     "ItemLevel": 5,
     "ItemSlot": 1,
     "ArmorType": 1,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 1,
       "Dexterity": 5,
       "Intellect": 1,
       "Constitution": 2,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -137,14 +137,14 @@
     "ItemLevel": 8,
     "ItemSlot": 1,
     "ArmorType": 2,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 1,
       "Dexterity": 7,
       "Intellect": 1,
       "Constitution": 3,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -159,14 +159,14 @@
     "ItemLevel": 2,
     "ItemSlot": 1,
     "ArmorType": 2,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 3,
       "Dexterity": 1,
       "Intellect": 1,
       "Constitution": 1,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -181,14 +181,14 @@
     "ItemLevel": 5,
     "ItemSlot": 1,
     "ArmorType": 3,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 5,
       "Dexterity": 1,
       "Intellect": 1,
       "Constitution": 2,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,
@@ -203,14 +203,14 @@
     "ItemLevel": 8,
     "ItemSlot": 1,
     "ArmorType": 3,
-    "PrimaryAttributes": {
+    "PrimaryAffixes": {
       "Strength": 7,
       "Dexterity": 1,
       "Intellect": 1,
       "Constitution": 3,
       "WillPower": 0
     },
-    "SecondaryAttributes": {
+    "SecondaryAffixes": {
       "MaxHealth": 0,
       "MaxMana": 0,
       "Awareness": 0,

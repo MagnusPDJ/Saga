@@ -12,12 +12,12 @@ namespace Saga.Items
         public string ItemDescription { get; init; } = string.Empty;
         public ArmorType ArmorType { get; set; }
         public Slot ItemSlot { get; set; }
-        public PrimaryAttributes PrimaryAttributes { get; set; } = new PrimaryAttributes();
-        public SecondaryAttributes SecondaryAttributes { get; set; } = new SecondaryAttributes();
+        public PrimaryAffixes PrimaryAffixes { get; set; } = new PrimaryAffixes();
+        public SecondaryAffixes SecondaryAffixes { get; set; } = new SecondaryAffixes();
 
-        public void SetPrimaryAttributes() => PrimaryAttributes = CalculatePrimaryAttributes(ItemLevel);
-        public void SetSecondaryAttributes() => SecondaryAttributes = CalculateSecondaryAttributes(ItemLevel);
-        public PrimaryAttributes CalculatePrimaryAttributes(int level) {
+        public void SetPrimaryAffixes() => PrimaryAffixes = CalculatePrimaryAffixes(ItemLevel);
+        public void SetSecondaryAffixes() => SecondaryAffixes = CalculateSecondaryAffixes(ItemLevel);
+        public PrimaryAffixes CalculatePrimaryAffixes(int level) {
             int strength = 0;
             int dexterity = 0;
             int intellect = 0;
@@ -50,9 +50,9 @@ namespace Saga.Items
                 }
 
             }
-            return new PrimaryAttributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, Awareness = awareness , WillPower = willpower };
+            return new PrimaryAffixes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, Awareness = awareness , WillPower = willpower };
         }
-        public SecondaryAttributes CalculateSecondaryAttributes(int level) {
+        public SecondaryAffixes CalculateSecondaryAffixes(int level) {
             int maxHealth = 0;
             int maxMana = 0;
             int armorRating = 1;
@@ -77,17 +77,17 @@ namespace Saga.Items
                     elementalResistance = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
             }
-            return new SecondaryAttributes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance, MagicalResistance = magicalResistance };
+            return new SecondaryAffixes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance, MagicalResistance = magicalResistance };
         }
         public int CalculateItemPrice() {
             return Convert.ToInt32(
-                ItemLevel * 30 + SecondaryAttributes.ArmorRating * 95 + (
-                    Math.Pow(PrimaryAttributes.Strength, 1 / 1000) * 55 + 
-                    Math.Pow(PrimaryAttributes.Dexterity, 1 / 1000) * 55 + 
-                    Math.Pow(PrimaryAttributes.Intellect, 1 / 1000) * 55 + 
-                    Math.Pow(PrimaryAttributes.Constitution, 1 / 1000) * 40 + 
-                    Math.Pow(PrimaryAttributes.WillPower, 1 / 1000) * 40) 
-                    * (PrimaryAttributes.Strength + PrimaryAttributes.Dexterity + PrimaryAttributes.Intellect + PrimaryAttributes.Constitution + PrimaryAttributes.WillPower)
+                ItemLevel * 30 + SecondaryAffixes.ArmorRating * 95 + (
+                    Math.Pow(PrimaryAffixes.Strength, 1 / 1000) * 55 + 
+                    Math.Pow(PrimaryAffixes.Dexterity, 1 / 1000) * 55 + 
+                    Math.Pow(PrimaryAffixes.Intellect, 1 / 1000) * 55 + 
+                    Math.Pow(PrimaryAffixes.Constitution, 1 / 1000) * 40 + 
+                    Math.Pow(PrimaryAffixes.WillPower, 1 / 1000) * 40) 
+                    * (PrimaryAffixes.Strength + PrimaryAffixes.Dexterity + PrimaryAffixes.Intellect + PrimaryAffixes.Constitution + PrimaryAffixes.WillPower)
              );
         }
         public string Equip() {

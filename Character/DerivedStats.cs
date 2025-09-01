@@ -32,16 +32,15 @@ namespace Saga.Character
             RecalculateDerivedStats();
         }
         private void RecalculateDerivedStats() {
-            MaxHealth = CalculateMaxHealth();
-            MaxMana = CalculateMaxMana();
-            ArmorRating = CalculateArmorRating();
-            Initiative = CalculateInitiative();
-            ElementalResistance = CalculateElementalResistance();
-            MagicalResistance = CalculateMagicalResistance();
+            MaxHealth = CalculateMaxHealth() + _player!.Equipment.BonusHealth;
+            MaxMana = CalculateMaxMana() + _player!.Equipment.BonusMana;
+            ArmorRating = CalculateArmorRating() + _player!.Equipment.BonusArmorRating;
+            Initiative = CalculateInitiative() + _player!.Equipment.BonusInitiative;
+            ElementalResistance = CalculateElementalResistance() + _player!.Equipment.BonusElementRes;
+            MagicalResistance = CalculateMagicalResistance() + _player!.Equipment.BonusMagicRes;
         }
         int CalculateMaxHealth() {
             int baseHealth = 5 + 5 * _player!.Attributes.Constitution;
-            //int equipmentBonus = _player.Equipment.BonusHealth;
             return baseHealth;
         }
         int CalculateMaxMana() {

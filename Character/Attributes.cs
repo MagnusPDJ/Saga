@@ -9,10 +9,13 @@ namespace Saga.Character
 
         //Primary attributes
         [JsonInclude]
+        private int _strength;
+        [JsonInclude]
+        private int _dexterity;
+        [JsonInclude]
+        private int _intellect;
         public int Strength { get; private set; }
-        [JsonInclude]
         public int Dexterity { get; private set; }
-        [JsonInclude]
         public int Intellect { get; private set; }
         [JsonInclude]
         private int _constitution;
@@ -25,21 +28,17 @@ namespace Saga.Character
 
 
         //Secondary attributes
-        [JsonInclude]
         public int Constitution { get; private set; }
-        [JsonInclude]
         public int WillPower { get; private set; }
-        [JsonInclude]
         public int Awareness { get; private set; }
-        [JsonInclude]
         public int Virtue { get; private set; }
 
         public event Action? AttributesChanged;
 
         public Attributes(Player player, int strength, int dexterity, int intellect) {
-            Strength = strength;
-            Dexterity = dexterity;
-            Intellect = intellect;
+            _strength = strength;
+            _dexterity = dexterity;
+            _intellect = intellect;
 
             AttachToPlayer(player);
         }
@@ -53,10 +52,13 @@ namespace Saga.Character
             RecalculateAttributes();
         }
         public void RecalculateAttributes() {
-            Constitution = CalculateConstiution();
-            WillPower = CalculateWillPower();
-            Awareness = CalculateAwareness();
-            Virtue = CalculateVirtue();
+            Strength = _strength + _player!.Equipment.BonusStr;
+            Dexterity = _dexterity + _player!.Equipment.BonusDex;
+            Intellect = _intellect + _player!.Equipment.BonusInt;
+            Constitution = CalculateConstiution() + _player!.Equipment.BonusCon;
+            WillPower = CalculateWillPower() + _player!.Equipment.BonusWP;
+            Awareness = CalculateAwareness() + _player!.Equipment.BonusAwa;
+            Virtue = CalculateVirtue() + _player!.Equipment.BonusVirtue;
         }
         int CalculateConstiution() {
             return _constitution + (Strength + Dexterity) / 2;
@@ -71,10 +73,10 @@ namespace Saga.Character
             List<int> list = [Strength, Constitution, WillPower];
             return _virtue + list.Min();
         }
-        public void AddValues(int strenght = 0, int dexterity = 0, int intellect = 0, int constitution = 0, int willPower = 0, int awareness = 0, int virtue = 0) {
-            Strength += strenght;
-            Dexterity += dexterity;
-            Intellect += intellect;
+        public void AddValues(int strength = 0, int dexterity = 0, int intellect = 0, int constitution = 0, int willPower = 0, int awareness = 0, int virtue = 0) {
+            _strength += strength;
+            _dexterity += dexterity;
+            _intellect += intellect;
             _constitution += constitution;
             _willPower += willPower;
             _awareness += awareness;

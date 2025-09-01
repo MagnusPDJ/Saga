@@ -14,8 +14,8 @@ namespace Saga.Dungeon.Quests
             var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
             if (questToAdd != null && questToAdd.Item?.ItemName == "Random") {
                 var item = Shop.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
-                ((IArmor)item).SetPrimaryAttributes();
-                ((IArmor)item).SetSecondaryAttributes();
+                ((IArmor)item).SetPrimaryAffixes();
+                ((IArmor)item).SetSecondaryAffixes();
                 item.ItemPrice = item.CalculateItemPrice();
                 questToAdd.Item = item;
             }

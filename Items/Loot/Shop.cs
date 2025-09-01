@@ -27,8 +27,8 @@ namespace Saga.Items.Loot
                     weapon.SetWeaponAttributes();
                 }
                 if (item is IArmor armor) {
-                    armor.SetPrimaryAttributes();
-                    armor.SetSecondaryAttributes();
+                    armor.SetPrimaryAffixes();
+                    armor.SetSecondaryAffixes();
                 }
                 item.ItemPrice = item.CalculateItemPrice();
             }

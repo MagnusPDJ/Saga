@@ -19,7 +19,7 @@ namespace Saga.Character
                 levels++;
             }
             Attributes.AddValues(
-                strenght: 1 * levels,
+                strength: 1 * levels,
                 constitution: 1 * levels
                 );
 

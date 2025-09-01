@@ -76,7 +76,6 @@ namespace Saga.Items
         public (IDamageType, int) Attack(Enemy monster) {
             HUDTools.Print($"{AttackDescription}", 15);
             (IDamageType, int) attack = (this, Program.Rand.Next(WeaponAttributes.MinDamage, WeaponAttributes.MaxDamage + 1));
-            HUDTools.Print($"You deal {attack.Item2} damage to {monster.Name}.", 10);
             return attack;
         }
     }

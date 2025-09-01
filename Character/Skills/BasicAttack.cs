@@ -2,6 +2,7 @@
 using Saga.Character.DmgLogic;
 using Saga.Dungeon.Monsters;
 using Saga.Items;
+using System.Threading;
 
 namespace Saga.Character.Skills
 {
@@ -25,6 +26,7 @@ namespace Saga.Character.Skills
                 (IDamageType, int) damage = weapon.Attack(target);
                 (IDamageType, int) modifiedDamage = player.CalculateDamageModifiers(damage);
                 target.TakeDamage(modifiedDamage);
+                HUDTools.Print($"You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
             } else {
                 HUDTools.Print($"You punch the {target.Name}!", 15);
                 (IDamageType, int) damage = (this, 1);

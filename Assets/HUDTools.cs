@@ -7,6 +7,7 @@ using Saga.Character;
 using Saga.Items.Loot;
 using Saga.Dungeon.Quests;
 using Saga.Dungeon.Monsters;
+using Saga.Character.DmgLogic;
 
 namespace Saga.Assets
 {
@@ -243,7 +244,7 @@ namespace Saga.Assets
             WriteCenterLine("2.        Settings\n");
             WriteCenterLine("3.       Quit Game\n");
         }
-        public static void InstantSettings() {
+        public static void Settings() {
             Console.Clear();
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
@@ -277,23 +278,23 @@ namespace Saga.Assets
                 }
                 else {
                     Console.Write($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {item.ItemLevel}, {item.ItemSlot}, {((ArmorBase)item).ArmorType}, {item.ItemName}, $ {item.CalculateItemPrice()},");
-                    if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
+                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Strength} Str");
+                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Dexterity} Dex");
+                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Intellect} Int");
+                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Constitution} Const");
+                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.WillPower > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.WillPower} Wp");
+                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
                     }
                     Console.WriteLine($"");
                 }
@@ -319,23 +320,23 @@ namespace Saga.Assets
                     Console.WriteLine($"| {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
                 } else if (item is IArmor) {
                     Console.Write($"| {item.ItemName}:");
-                    if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
+                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Strength} Str");
+                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Dexterity} Dex");
+                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Intellect} Int");
+                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Constitution} Const");
+                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.WillPower > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.WillPower} Wp");
+                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -360,23 +361,23 @@ namespace Saga.Assets
                     Console.WriteLine($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg,\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
                 } else if (item is IArmor) {
                     Console.Write($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: ");
-                    if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
+                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Strength} Str");
+                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Dexterity} Dex");
+                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Intellect} Int");
+                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Constitution} Cons");
+                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Cons");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.WillPower > 0) {
-                        Console.WriteLine($", +{((ArmorBase)item).PrimaryAttributes.WillPower} Wp");
+                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
+                        Console.WriteLine($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -419,7 +420,7 @@ namespace Saga.Assets
             stats.AppendFormat($" (A)wareness:    {player.Attributes.Awareness}\n");
             stats.AppendFormat($"Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n");
             stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
-            stats.AppendFormat($" Health: {player.Health} / {player.DerivedStats.MaxHealth}\t\t\tWeapon Damage: {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage}\n");
+            stats.AppendFormat($" Health: {player.Health} / {player.DerivedStats.MaxHealth}\t\t\tWeapon Damage: {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage} {(Program.CurrentPlayer.CurrentClass == "Warrior" && (Program.CurrentPlayer.Equipment.Right_Hand as IWeapon is IPhysical) ? $"(+{Program.CurrentPlayer.Level} warrior bonus)" : "")}\n");
             stats.AppendFormat($" Mana: {player.Mana} / {player.DerivedStats.MaxMana}\t\t\tMagical Resistance: {player.DerivedStats.MagicalResistance}\n");
             stats.AppendFormat($" Armor Rating: {player.DerivedStats.ArmorRating}\t\tElemental Resistance: {player.DerivedStats.ElementalResistance}");
 
@@ -507,23 +508,23 @@ namespace Saga.Assets
                     }
                 } else if (slot.Value is IArmor armor) {
                     Console.Write($" {armor.ItemSlot} - {armor.ItemName}:");
-                    if (((ArmorBase)slot.Value).SecondaryAttributes.ArmorRating > 0) {
-                        Console.Write($" +{armor.SecondaryAttributes.ArmorRating} Armor Rating");
+                    if (((ArmorBase)slot.Value).SecondaryAffixes.ArmorRating > 0) {
+                        Console.Write($" +{armor.SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAttributes.Strength > 0) {
-                        Console.Write($", +{armor.PrimaryAttributes.Strength} Str");
+                    if (((ArmorBase)slot.Value).PrimaryAffixes.Strength > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAttributes.Dexterity > 0) {
-                        Console.Write($", +{armor.PrimaryAttributes.Dexterity} Dex");
+                    if (((ArmorBase)slot.Value).PrimaryAffixes.Dexterity > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAttributes.Intellect > 0) {
-                        Console.Write($", +{armor.PrimaryAttributes.Intellect} Int");
+                    if (((ArmorBase)slot.Value).PrimaryAffixes.Intellect > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAttributes.Constitution > 0) {
-                        Console.Write($", +{armor.PrimaryAttributes.Constitution} Const");
+                    if (((ArmorBase)slot.Value).PrimaryAffixes.Constitution > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Constitution} Const");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAttributes.WillPower > 0) {
-                        Console.Write($", +{armor.PrimaryAttributes.WillPower} Wp");
+                    if (((ArmorBase)slot.Value).PrimaryAffixes.WillPower > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.WillPower} Wp");
                     }
                     if (armor.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -547,23 +548,23 @@ namespace Saga.Assets
                     }
                 } else if (item is IArmor) {
                     Console.Write($" {((IEquipable)item).ItemSlot} - {item.ItemName}:");
-                    if (((ArmorBase)item).SecondaryAttributes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAttributes.ArmorRating} Armor Rating");
+                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
+                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Strength} Str");
+                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Dexterity} Dex");
+                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Intellect} Int");
+                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.Constitution} Const");
+                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
                     }
-                    if (((ArmorBase)item).PrimaryAttributes.WillPower > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAttributes.WillPower} Wp");
+                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
+                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -693,23 +694,23 @@ namespace Saga.Assets
                             Console.WriteLine($" {((IEquipable)quest.Item).ItemSlot} - {quest.Item.ItemName}: +{((IWeapon)quest.Item).WeaponAttributes.MinDamage}-{((IWeapon)quest.Item).WeaponAttributes.MaxDamage} dmg");
                         } else if (quest.Item is not IQuestItem) {
                             Console.Write($" {((IEquipable)quest.Item).ItemSlot} - {quest.Item.ItemName}:");
-                            if (((ArmorBase)quest.Item).SecondaryAttributes.ArmorRating > 0) {
-                                Console.Write($" +{((ArmorBase)quest.Item).SecondaryAttributes.ArmorRating} Armor Rating");
+                            if (((ArmorBase)quest.Item).SecondaryAffixes.ArmorRating > 0) {
+                                Console.Write($" +{((ArmorBase)quest.Item).SecondaryAffixes.ArmorRating} Armor Rating");
                             }
-                            if (((ArmorBase)quest.Item).PrimaryAttributes.Strength > 0) {
-                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAttributes.Strength} Str");
+                            if (((ArmorBase)quest.Item).PrimaryAffixes.Strength > 0) {
+                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAffixes.Strength} Str");
                             }
-                            if (((ArmorBase)quest.Item).PrimaryAttributes.Dexterity > 0) {
-                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAttributes.Dexterity} Dex");
+                            if (((ArmorBase)quest.Item).PrimaryAffixes.Dexterity > 0) {
+                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAffixes.Dexterity} Dex");
                             }
-                            if (((ArmorBase)quest.Item).PrimaryAttributes.Intellect > 0) {
-                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAttributes.Intellect} Int");
+                            if (((ArmorBase)quest.Item).PrimaryAffixes.Intellect > 0) {
+                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAffixes.Intellect} Int");
                             }
-                            if (((ArmorBase)quest.Item).PrimaryAttributes.Constitution > 0) {
-                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAttributes.Constitution} Const");
+                            if (((ArmorBase)quest.Item).PrimaryAffixes.Constitution > 0) {
+                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAffixes.Constitution} Const");
                             }
-                            if (((ArmorBase)quest.Item).PrimaryAttributes.WillPower > 0) {
-                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAttributes.WillPower} Wp");
+                            if (((ArmorBase)quest.Item).PrimaryAffixes.WillPower > 0) {
+                                Console.Write($", +{((ArmorBase)quest.Item).PrimaryAffixes.WillPower} Wp");
                             }
                             if (quest.Item.ItemName == "Linen Rags") {
                                 Console.Write(" Offers no protection");
