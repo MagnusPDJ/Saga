@@ -23,7 +23,11 @@ namespace Saga.Character
 
         public event Action? AttributesChanged;
 
-        public Attributes(Player player) {
+        public Attributes(Player player, int strength, int dexterity, int intellect) {
+            Strength = strength;
+            Dexterity = dexterity;
+            Intellect = intellect;
+
             _player = player;
             _player.PlayerChanged += RecalculateAttributes;
             RecalculateAttributes();

@@ -65,7 +65,7 @@ namespace Saga.Character
             Exp = 0;
             Gold = 0;
             FreeAttributePoints = 0;
-            Attributes = new Attributes(this) { Strength = strength, Dexterity = dexterity, Intellect = intellect };
+            Attributes = new Attributes(this, strength, dexterity, intellect);
             DerivedStats = new DerivedStats(this);
             Health = DerivedStats.MaxHealth;
             Mana = DerivedStats.MaxMana;
@@ -100,15 +100,15 @@ namespace Saga.Character
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "s" || input == "strength") {
-                        Attributes.Strength++;
+                        Attributes.AddValues(strenght: 1);
                         FreeAttributePoints--;
                         break;
                     } else if (input == "d" || input == "dexterity") {
-                        Attributes.Dexterity++;
+                        Attributes.AddValues(dexterity: 1);
                         FreeAttributePoints--;
                         break;
                     } else if (input == "i" || input == "intellect") {
-                        Attributes.Intellect++;
+                        Attributes.AddValues(intellect: 1);
                         FreeAttributePoints--;
                         break;
                     } else if (input == "c" || input == "constitution") {

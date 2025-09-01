@@ -6,11 +6,12 @@ using System.Linq;
 
 namespace Saga.Assets
 {
-    public abstract class InputAction(string keyWord, string abrKeyWord = null) {
+    public abstract class InputAction(string keyWord, string? abrKeyWord = null)
+    {
         public string KeyWord { get; set; } = keyWord;
-        public string AbrKeyWord { get; set; } = abrKeyWord;
+        public string? AbrKeyWord { get; set; } = abrKeyWord;
 
-        public abstract string RespondToInput(string[] separatedInputWords = null);
+        public abstract string RespondToInput(string[] separatedInputWords);
     }
 
     public class Go(string keyWord) : InputAction(keyWord) {
@@ -42,38 +43,32 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
-            var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            var equipped = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
             var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
-            if (itemToSearchFor == "healing potion" || itemToSearchFor == "potion" || itemToSearchFor == "potions" || itemToSearchFor == "healing potions") {
-                HUDTools.Print($"\n{Program.CurrentPlayer.Equipment[Slot.Potion].ItemDescription.Replace("\\n", "\n")}", 3);
-            }
-            else if (wat.Value == null && item == null) {
-                Console.WriteLine("\nNo such item exists...");
-            }
-            else if (wat.Value != null) {
-                if (wat.Value is IQuestItem) {
-                    HUDTools.Print($"\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
+            if (equipped.Value != null) {
+                if (equipped.Value is IWeapon weapon) {
+                    if (equipped.Value.ItemSlot == Slot.Left_Hand) {
+                        Program.CurrentPlayer.Equipment.TryGetSlot(Slot.Right_Hand, out IEquipable? equipped1);
+                        HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{equipped1?.ItemDescription.Replace("\\n", "\n")}", 3);
+                    }
+                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{weapon.ItemDescription.Replace("\\n", "\n")}", 3);
+                } else if (equipped.Value is IArmor armor) {
+                    HUDTools.Print($"\nThis is an armor of type {armor.ArmorType}.\n{armor.ItemDescription.Replace("\\n", "\n")}", 3);
+                } else {
+                    HUDTools.Print($"\n{equipped.Value.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
-                else if (wat.Value is IWeapon weapon) {
-                        var wat1 = Program.CurrentPlayer.Equipment[Slot.Right_Hand];
-                        HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{wat1.ItemDescription.Replace("\\n", "\n")}", 3);
-                }
-                else {
-                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)wat.Value).ArmorType}.\n{wat.Value.ItemDescription.Replace("\\n", "\n")}", 3);
-                }
-            }
-            else {
-                if (item is IQuestItem) {
+            } else if (item != null) {
+                if (item is IWeapon weapon) {
+                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{weapon.ItemDescription.Replace("\\n", "\n")}", 3);
+                } else if (item is IArmor armor) {
+                    HUDTools.Print($"\nThis is an armor of type {armor.ArmorType}.\n{armor.ItemDescription.Replace("\\n", "\n")}", 3);
+                } else {
                     HUDTools.Print($"\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
-                else if (item is IWeapon weapon) {
-                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
-                }
-                else {
-                    HUDTools.Print($"\nThis is an armor of type {((ArmorBase)item).ArmorType}.\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
-                }
+            } else {
+                Console.WriteLine("\nNo such item exists...");
             }
-            TextInput.PressToContinue();
+                TextInput.PressToContinue();
             HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
             return "";
         }
@@ -88,10 +83,10 @@ namespace Saga.Assets
             else {
                 var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
                 if (item != null) {
-                    if (item is not IEquipable) {
-                        HUDTools.Print("\nYou cannot equip this item...", 3);
+                    if (item is IEquipable equipable) {
+                        HUDTools.Print($"\n{equipable.Equip()}", 3);                      
                     }else {
-                        HUDTools.Print($"\n{((IEquipable)item).Equip()}", 3);
+                        HUDTools.Print("\nYou cannot equip this item...", 3);
                     }
                 }
                 else {
@@ -104,15 +99,15 @@ namespace Saga.Assets
         }
     }
     public class UnEquip(string keyWord) : InputAction(keyWord) {
-        public override string RespondToInput(string[] separatedInputWords = null) {
+        public override string RespondToInput(string[] separatedInputWords) {
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
-            var wat = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
-            if (wat.Value == null) {
+            var equipped = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            if (equipped.Value == null) {
                 Console.WriteLine("\nNo such item equipped...");
             }
             else {
-                HUDTools.Print($"\n{((IEquipable)wat.Value).UnEquip()}", 3);
+                HUDTools.Print($"\n{equipped.Value.UnEquip()}", 3);
             }
             TextInput.PressToContinue();
             HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
@@ -120,7 +115,7 @@ namespace Saga.Assets
         }
     }
     public class Use(string keyWord) : InputAction(keyWord) {
-        public override string RespondToInput(string[] separatedInputWords = null) {
+        public override string RespondToInput(string[] separatedInputWords) {
             throw new NotImplementedException();
         }
     }
@@ -148,15 +143,15 @@ namespace Saga.Assets
         }
     }
     public class DrinkPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
-        public override string RespondToInput(string[] separatedInputWords = null) {
-            ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).Consume();
+        public override string RespondToInput(string[] separatedInputWords) {
+            (Program.CurrentPlayer.Equipment.Potion as IConsumable)?.Consume();
             TextInput.PressToContinue();
             HUDTools.RoomHUD();
             return "";
         }
     }
     public class SeeCharacterScreen(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
-        public override string RespondToInput(string[] separatedInputWords = null) {
+        public override string RespondToInput(string[] separatedInputWords) {
             HUDTools.CharacterScreen();
             TextInput.PressToContinue();
             HUDTools.RoomHUD();
@@ -164,7 +159,7 @@ namespace Saga.Assets
         }
     }
     public class SeeInventory(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
-        public override string RespondToInput(string[] separatedInputWords = null) {        
+        public override string RespondToInput(string[] separatedInputWords) {        
             while (true) {
                 HUDTools.InventoryScreen();
                 string input = TextInput.PlayerPrompt(false);
@@ -178,7 +173,7 @@ namespace Saga.Assets
     }
     public class SeeQuestLog(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) 
     {
-        public override string RespondToInput(string[] separatedInputWords = null) {
+        public override string RespondToInput(string[] separatedInputWords) {
             HUDTools.QuestLogHUD();
             TextInput.PressToContinue();
             HUDTools.RoomHUD();
@@ -187,7 +182,7 @@ namespace Saga.Assets
     }
     public class SeeSkillTree(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord)
     {
-        public override string RespondToInput(string[] separatedInputWords = null) {
+        public override string RespondToInput(string[] separatedInputWords) {
             while (true) {
                 HUDTools.ShowSkillTree();
                 string input = TextInput.PlayerPrompt();

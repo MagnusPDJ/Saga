@@ -36,13 +36,11 @@ namespace Saga.Character
                 }
             }
         }
-
         public bool TryGetSlot(Slot slot, [NotNullWhen(true)] out IEquipable? value) {
             var prop = typeof(Equipment).GetProperty(slot.ToString());
             value = (IEquipable?)prop?.GetValue(this);
             return value is not null;
         }
-
         public void SetSlot(Slot slot, IEquipable? item) {
             var prop = typeof(Equipment).GetProperty(slot.ToString());
             if (prop != null && typeof(IEquipable).IsAssignableFrom(prop.PropertyType)) {
