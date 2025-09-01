@@ -14,9 +14,9 @@ namespace Saga.Items
         public ArmorType ArmorType { get; set; }
         public PrimaryAttributes PrimaryAttributes { get; set; }
         public SecondaryAttributes SecondaryAttributes { get; set; }
-        Attributes CalculatePrimaryAttributes(int level);
+        PrimaryAttributes CalculatePrimaryAttributes(int level);
         void SetPrimaryAttributes();
-        DerivedStats CalculateSecondaryAttributes(int level);
+        SecondaryAttributes CalculateSecondaryAttributes(int level);
         void SetSecondaryAttributes();
     }
 }

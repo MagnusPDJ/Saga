@@ -12,12 +12,12 @@ namespace Saga.Items
         public required string ItemDescription { get; init; }
         public ArmorType ArmorType { get; set; }
         public Slot ItemSlot { get; set; }
-        public required PrimaryAttributes PrimaryAttributes { get; set; }
-        public required SecondaryAttributes SecondaryAttributes { get; set; }
+        public PrimaryAttributes PrimaryAttributes { get; set; }
+        public SecondaryAttributes SecondaryAttributes { get; set; }
 
         public void SetPrimaryAttributes() => PrimaryAttributes = CalculatePrimaryAttributes(ItemLevel);
         public void SetSecondaryAttributes() => SecondaryAttributes = CalculateSecondaryAttributes(ItemLevel);
-        public Attributes CalculatePrimaryAttributes(int level) {
+        public PrimaryAttributes CalculatePrimaryAttributes(int level) {
             int strength = 0;
             int dexterity = 0;
             int intellect = 0;
@@ -50,9 +50,9 @@ namespace Saga.Items
                 }
 
             }
-            return new Attributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, Awareness = awareness , WillPower = willpower };
+            return new PrimaryAttributes() { Strength = strength, Dexterity = dexterity, Intellect = intellect, Constitution = constitution, Awareness = awareness , WillPower = willpower };
         }
-        public DerivedStats CalculateSecondaryAttributes(int level) {
+        public SecondaryAttributes CalculateSecondaryAttributes(int level) {
             int maxHealth = 0;
             int maxMana = 0;
             int armorRating = 1;
@@ -76,7 +76,7 @@ namespace Saga.Items
                     elementalResistance = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
             }
-            return new DerivedStats() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance };
+            return new SecondaryAttributes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance };
         }
         public int CalculateItemPrice() {
             return Convert.ToInt32(
