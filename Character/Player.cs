@@ -75,7 +75,14 @@ namespace Saga.Character
             Attributes.AttributesChanged += () => PlayerChanged?.Invoke();
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
         }
-        
+        public void AttachAfterLoad() {
+            Attributes.AttachToPlayer(this);
+            Equipment.AttachToPlayer(this);
+            DerivedStats.AttachToPlayer(this);
+            
+            Attributes.AttributesChanged += () => PlayerChanged?.Invoke();
+            Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
+        }
         public abstract void LevelUp();
         //Metode til udregning af det exp det koster at level op.
         public int GetLevelUpValue() {

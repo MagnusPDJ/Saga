@@ -6,7 +6,6 @@ namespace Saga.Character
 {  
     public class Equipment
     {
-        [JsonIgnore]
         private Player? _player;
 
         public IEquipable? Headgear { get; set; }
@@ -28,7 +27,6 @@ namespace Saga.Character
         public IEquipable? Potion { get; set; }
 
         public event Action? EquipmentChanged;
-
 
         public int BonusStr { get; private set; }
         public int BonusDex { get; private set; }

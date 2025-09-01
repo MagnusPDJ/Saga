@@ -4,7 +4,6 @@ namespace Saga.Character
 {
     public class Attributes
     {
-        [JsonIgnore]
         private Player? _player;
 
         //Primary attributes

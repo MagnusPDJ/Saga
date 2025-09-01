@@ -5,7 +5,6 @@ namespace Saga.Character
 {
     public class DerivedStats
     {
-        [JsonIgnore]
         private Player? _player;
         [JsonInclude]
         public int MaxHealth { get; private set; }

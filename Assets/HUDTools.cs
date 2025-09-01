@@ -661,15 +661,14 @@ namespace Saga.Assets
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Quest Items @@@@@@@@@@@@@@@@@@@");
             int i = 0;
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
-                if (item == null) {
+                if (item is null || item is not IQuestItem) {
                     i++;
-                    if (i == 10) {
-                        Console.WriteLine("You don't have any quest items...\n");
-                    }
+                } else if (item is IQuestItem item1) {
+                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
                     continue;
                 }
-                if (item is IQuestItem item1) {
-                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
+                if (i == 10) {
+                    Console.WriteLine("You don't have any quest items...\n");
                 }
             }
             Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");

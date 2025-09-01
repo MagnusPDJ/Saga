@@ -18,7 +18,7 @@ namespace Saga.Character
                 Program.CurrentPlayer.FreeAttributePoints++;
                 levels++;
             }
-            Attributes.AddValues(
+             Attributes.AddValues(
                 dexterity: 1 * levels,
                 constitution: 1 * levels
                 );
