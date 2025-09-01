@@ -26,6 +26,7 @@ namespace Saga.Assets
             foreach (Exit exit in Program.RoomController.currentRoom.exits) {
                 if (exit.keyString == separatedInputWords[1]) {
                     foundRoom = true;
+                    Program.CurrentPlayer.RegainMana();
                     break;
                 }
             }

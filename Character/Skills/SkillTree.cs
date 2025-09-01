@@ -9,6 +9,7 @@ namespace Saga.Character.Skills
     public abstract class SkillTree
     {
         public List<ISkill> Skills { get; set; } = [];
+        public IActiveSkill? QuickCast { get; set; }
 
         public List<ISkill> GetAvailableSkills(int playerlvl) {
             return Skills.FindAll(skill => !skill.IsUnlocked && skill.LevelRequired <= playerlvl);

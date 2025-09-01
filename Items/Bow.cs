@@ -69,10 +69,14 @@ namespace Saga.Items
             Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, null);
             Program.CurrentPlayer.Equipment.SetSlot(Slot.Left_Hand, null);
             if (Program.CurrentPlayer.Health > Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
+                Program.CurrentPlayer.SetHealth(Program.CurrentPlayer.DerivedStats.MaxHealth);
+            }
+            if (Program.CurrentPlayer.Mana > Program.CurrentPlayer.DerivedStats.MaxMana) {
+                Program.CurrentPlayer.SetMana(Program.CurrentPlayer.DerivedStats.MaxMana);
             }
             return "Weapon unequipped!";
         }
+
         public (IDamageType, int) Attack(Enemy monster) {
             HUDTools.Print($"{AttackDescription}", 15);
             (IDamageType, int) attack = (this, Program.Rand.Next(WeaponAttributes.MinDamage, WeaponAttributes.MaxDamage + 1));

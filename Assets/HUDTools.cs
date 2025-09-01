@@ -578,38 +578,41 @@ namespace Saga.Assets
         }
         public static void CombatHUD(Enemy Monster, Encounters TurnTimer) {
             Console.Clear();
-            Console.WriteLine($" Turn: {TurnTimer.TurnTimer}\t\tLocation: {Program.RoomController.currentRoom.roomName}\n");
+            Console.WriteLine($" Turn: {TurnTimer.TurnTimer} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
             Console.WriteLine($" Fighting: {Monster.Name}!");
             Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
                 Console.WriteLine("\n------------------------------------");
-                Console.WriteLine(" You go first!\n");
+                Console.WriteLine("  You go first!\n");
             } else {
-                Console.WriteLine("\n The enemy goes first!");
+                Console.WriteLine("\n  The enemy goes first!");
                 Console.WriteLine("------------------------------------\n");
             }           
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
-            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t\t|| Gold: ${Program.CurrentPlayer.Gold}");
-            Console.Write(" EXP  ");
+            Console.WriteLine($"  Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
+            Console.WriteLine($"       Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
+            Console.WriteLine($"  Level: {Program.CurrentPlayer.Level}\t\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.Write("  EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            Console.WriteLine("========== Actions =========");
-            Console.WriteLine("|  (A)ttack     (H)eal     |");
-            Console.WriteLine("|  (R)un                   |");
-            Console.WriteLine("=========== Info ===========");
-            Console.WriteLine("|  (C)haracter screen      |");
-            Console.WriteLine("|   Combat (L)og           |");
-            Console.WriteLine("|  (Q)uestlog              |");
-            Console.WriteLine("============================");
-            Console.WriteLine(" Choose an action...\n");
+            Console.WriteLine($" ============== Actions =============");
+            Console.WriteLine($" |  (1) Attack     (2) Heal         |");
+            Console.WriteLine($" |  (3) Run        (4) Skills       |");
+            Console.WriteLine($" |  (5) Quick Cast: {Program.CurrentPlayer.SkillTree.QuickCast?.Name ?? "\t\t   "} |");
+            Console.WriteLine($" =============== Info ===============");
+            Console.WriteLine($" |  (C)haracter screen              |");
+            Console.WriteLine($" |   Combat (L)og                   |");
+            Console.WriteLine($" |  (Q)uestlog                      |");      
+            Console.WriteLine($" ====================================");
+            Console.WriteLine($"  Choose an action...\n");
         }
         public static void RoomHUD() {
             Console.Clear();
-            Console.WriteLine($"Location:\t{Program.RoomController.currentRoom.roomName}");
+            Console.WriteLine($" Location:\t{Program.RoomController.currentRoom.roomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
             Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
+            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -622,33 +625,26 @@ namespace Saga.Assets
             Console.WriteLine(" ===================================\n");
             Console.WriteLine(" Write an action:");
         }
-        public static void TopCampHUD() {
-            Console.Clear();
-            Print("[][][][][][]  Camp   [][][][][][]", 5);
-            Print($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:", 10);
-            Print($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}", 10);
-            Print($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}", 5);
-            Print($"EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20)}]", 10);
-        }
         public static void FullCampHUD() {
             Console.Clear();
-            Console.WriteLine("[][][][][][]  Camp   [][][][][][]");
-            Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
-            Console.WriteLine($"Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
-            Console.Write("EXP  ");
+            Console.WriteLine("[][][][][][][][]  Camp   [][][][][][][][]");
+            Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
+            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
+            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            Console.WriteLine("==============Actions=================");
-            Console.WriteLine("0 (E)xplore          (S)leep (Save)  0");
-            Console.WriteLine("0 (G)heed's shop     (H)eal          0");
-            Console.WriteLine("0 (C)haracter screen (I)nventory     0");
-            Console.WriteLine("0 Quest(L)og         (T)alk to NPC's 0");
-            Console.WriteLine("0 S(K)illtree                        0");
-            Console.WriteLine("======================================");
-            Console.WriteLine("  (Q)uit to Main Menu                 ");
-            Console.WriteLine("Choose an action...\n");
+            Console.WriteLine(" ==============Actions=================");
+            Console.WriteLine(" 0 (E)xplore          (S)leep (Save)  0");
+            Console.WriteLine(" 0 (G)heed's shop     (H)eal          0");
+            Console.WriteLine(" 0 (C)haracter screen (I)nventory     0");
+            Console.WriteLine(" 0 Quest(L)og         (T)alk to NPC's 0");
+            Console.WriteLine(" 0 S(K)illtree                        0");
+            Console.WriteLine(" ======================================");
+            Console.WriteLine("   (Q)uit to Main Menu                 ");
+            Console.WriteLine("  Choose an action...\n");
         }
         public static void QuestLogHUD() {
             Console.Clear();

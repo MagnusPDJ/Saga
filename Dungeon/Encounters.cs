@@ -11,6 +11,7 @@ namespace Saga.Dungeon
     public class Encounters {
         public int TurnTimer { get; set; } = 1;
         public bool Ran { get; set; } = false;
+        public bool UsedMana { get; set; } = false;
 
       //Encounters:
 
@@ -396,7 +397,7 @@ namespace Saga.Dungeon
                     } else {
                         Program.SoundController.Play("darts");
                         HUDTools.Print($"Darts fly out of the walls! You take 2 damage.)", 10);
-                        Program.CurrentPlayer.Health -= 2;
+                        Program.CurrentPlayer.TakeDamage(2);
                         TextInput.PressToContinue();
                         Program.CurrentPlayer.CheckForDeath("You start to feel sick. The poison from the darts slowly kills you");
                     }
@@ -493,25 +494,39 @@ namespace Saga.Dungeon
         }
         //Metode til at køre kamp
         public static void Combat(Enemy Monster) {
+            var player = Program.CurrentPlayer;
+            int manaRegen = 0;
             HUDTools.ClearLog();
             //Starter en tur tæller:
             Encounters TurnTimer = new();
             //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
-            if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
+            if (player.DerivedStats.Initiative > Monster.Initiative) {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.CombatHUD(Monster, TurnTimer);
-                    Program.CurrentPlayer.CombatActions(Monster, TurnTimer);                   
+                    player.CombatActions(Monster, TurnTimer);                   
                     if (TurnTimer.Ran == false) {
                         Monster.MonsterActions(TurnTimer);
                     }                   
-                    Program.CurrentPlayer.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
+                    player.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
+                    if (manaRegen < TurnTimer.TurnTimer && !TurnTimer.UsedMana) {
+                        player.RegainMana();
+                        manaRegen++;
+                    } else {
+                        TurnTimer.UsedMana = false;
+                    }
                 }
             }  else {
                 while (Monster.Health > 0 && TurnTimer.Ran == false) {
                     HUDTools.CombatHUD(Monster, TurnTimer);
                     Monster.MonsterActions(TurnTimer);
-                    Program.CurrentPlayer.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
-                    Program.CurrentPlayer.CombatActions(Monster, TurnTimer);
+                    player.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
+                    if (manaRegen < TurnTimer.TurnTimer && !TurnTimer.UsedMana) {
+                        player.RegainMana();
+                        manaRegen++;
+                    } else {
+                        TurnTimer.UsedMana = false;
+                    }
+                        player.CombatActions(Monster, TurnTimer);
                 }
             }
             //Tjekker om monstret er besejret:
@@ -519,7 +534,7 @@ namespace Saga.Dungeon
                 Program.SoundController.Stop();
                 HUDTools.ClearLog();
                 Program.SoundController.Play("win");
-                Program.CurrentPlayer.Loot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
+                player.Loot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
             }
         }
     }

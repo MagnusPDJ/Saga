@@ -31,7 +31,7 @@ namespace Saga.Character
         public int Level { get; set; }
         public int Exp { get; set; }
         public int Gold { get; set; }
-        public int Health { get; set; }
+        public int Health { get; private set; }
         public int Mana { get; set; }
         public int FreeAttributePoints { get; set; }
         public Attributes Attributes { get; set; }
@@ -162,17 +162,25 @@ namespace Saga.Character
         public abstract bool RunAway(Enemy monster);
 
         public (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {
-            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);           
+            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);
             if (CurrentClass == "Warrior" && damage.Item1 is IPhysical) {
                 modifiedDamage.Item1 = damage.Item1;
-                modifiedDamage.Item2 = damage.Item2 + Level;
+                modifiedDamage.Item2 = damage.Item2 + Level + Attributes.Strength / 3;
+                return modifiedDamage;
+            } else if (CurrentClass == "Mage" && damage.Item1 is IMagical) {
+                modifiedDamage.Item1 = damage.Item1;
+                modifiedDamage.Item2 = damage.Item2 + Attributes.Intellect / 3;
+                return modifiedDamage;
+            } else if (CurrentClass == "Archer" && damage.Item1 is IPhysical) {
+                modifiedDamage.Item1 = damage.Item1;
+                modifiedDamage.Item2 = damage.Item2 + Attributes.Dexterity / 3;
                 return modifiedDamage;
             }
-            return damage;
+                return damage;
         }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void CheckForDeath(string message) {
-            if (this.Health <= 0) {
+            if (Health <= 0) {
                 Program.SoundController.Stop();
                 HUDTools.ClearLog();
                 Program.SoundController.Play("gameover");
@@ -257,32 +265,41 @@ namespace Saga.Character
             }
         }
         //Metode til at vælge mellem klasse skills i kamp.
-        public void CombatActions(Enemy Monster, Encounters TurnTimer) {            
+        public void CombatActions(Enemy monster, Encounters turnTimer) {            
             string input = TextInput.PlayerPrompt();
-            if (input == "a" || input == "attack") {
+            if (input == "1" || input == "basic attack") {
                 //Attack
                 if (LearnedSkills.Find(s => s.Name == "Basic Attack") is ITargetedSkill skill) {
-                    skill.Activate(Program.CurrentPlayer, Monster);
+                    skill.Activate(Program.CurrentPlayer, monster);
                 }
-                TurnTimer.TurnTimer++;
-            }  else if (input == "r" || input == "run") {
-                //Run                   
-                if (RunAway(Monster)) {
-                    Program.SoundController.Stop();
-                    HUDTools.ClearLog();
-                    TurnTimer.Ran = true;
-                } else {
-                    HUDTools.WriteCombatLog(action: "run", TurnTimer: TurnTimer, Monster: Monster);
-                    TurnTimer.TurnTimer++;
-                }
-            } else if (input == "h" || input == "heal") {
+                turnTimer.TurnTimer++;
+            } else if (input == "2" || input == "heal") {
                 //Heal
                 (Equipment.Potion as IConsumable)?.Consume();
-                HUDTools.WriteCombatLog(action: "heal", TurnTimer: TurnTimer, Monster: Monster);
-                TurnTimer.TurnTimer++;
-            } else if (input == "c" || input == "character" || input == "character screen") {
+                HUDTools.WriteCombatLog(action: "heal", TurnTimer: turnTimer, Monster: monster);
+                turnTimer.TurnTimer++;
+            } else if (input == "3" || input == "run") {
+                //Run                   
+                if (RunAway(monster)) {
+                    Program.SoundController.Stop();
+                    HUDTools.ClearLog();
+                    turnTimer.Ran = true;
+                } else {
+                    HUDTools.WriteCombatLog(action: "run", TurnTimer: turnTimer, Monster: monster);
+                    turnTimer.TurnTimer++;
+                }
+            } else if (input == "4" || input == "look at skills") {
+                //
+            } else if (input == "5" || input == "quickcast") {
+                int tempMana = Mana;
+                (SkillTree.QuickCast as ITargetedSkill)?.Activate(this, monster);
+                if (tempMana > Mana) {
+                    turnTimer.UsedMana = true;
+                }
+                turnTimer.TurnTimer++;
+            } else if (input == "c" || input == "character screen") {
                 HUDTools.CharacterScreen();
-            } else if (input == "l" || input == "log" || input == "combat log") {
+            } else if (input == "l" || input == "combat log") {
                 Console.Clear();
                 HUDTools.GetLog();
             } else if (input == "q" || input == "questlog") {
@@ -290,6 +307,45 @@ namespace Saga.Character
             }
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
+        }
+        public void TakeDamage(int damage) {
+            Health -= damage;
+        }
+        public void RegainHealth(int amount) {
+            Health += amount;
+            if (Health > DerivedStats.MaxHealth) {
+                Health = DerivedStats.MaxHealth;
+            }
+        }
+        public void RegenToFull() {
+            Health = DerivedStats.MaxHealth;
+            Mana = DerivedStats.MaxMana;
+        }
+        public void SetHealth(int amount) {
+            Health = amount;
+        }
+        public void SetMana(int amount) {
+            Mana = amount;
+        }
+        public void RegainMana(int? amount = null) {
+            if (amount != null) {
+                Mana += (int)amount;
+                if (Mana > DerivedStats.MaxMana) {
+                    Mana = DerivedStats.MaxMana;
+                }
+            } else {
+                Mana += DerivedStats.ManaRegenRate;
+            }
+
+
+        }
+        public bool SpendMana(int cost) {
+            if (Mana >= cost) {
+                Mana -= cost;
+                return true;
+            } else { 
+                return false; 
+            }
         }
     }
 }

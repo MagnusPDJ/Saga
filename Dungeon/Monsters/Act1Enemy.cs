@@ -198,7 +198,7 @@ namespace Saga.Dungeon.Monsters
                     int attack = Power;
                     if (AttackDebuff > 0) {
                         attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
-                        Program.CurrentPlayer.Health -= attack;
+                        Program.CurrentPlayer.TakeDamage(attack);
                         AttackDebuff--;
                         if (AttackDebuff == 0) {
                             HUDTools.Print("You are no longer defended!", 5);
@@ -208,7 +208,7 @@ namespace Saga.Dungeon.Monsters
                         if (attack <= 0) {
                             attack = 1;
                         }
-                        Program.CurrentPlayer.Health -= attack;
+                        Program.CurrentPlayer.TakeDamage(attack);
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
@@ -220,14 +220,14 @@ namespace Saga.Dungeon.Monsters
                     int attack = Power;
                     if (AttackDebuff > 0) {
                         attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
-                        Program.CurrentPlayer.Health -= attack;
+                        Program.CurrentPlayer.TakeDamage(attack);
                         AttackDebuff--;
                     } else {
                         attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;
                         if (attack <= 0) {
                             attack = 1;
                         }
-                        Program.CurrentPlayer.Health -= attack;
+                        Program.CurrentPlayer.TakeDamage(attack);
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);

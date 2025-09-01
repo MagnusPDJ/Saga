@@ -45,10 +45,7 @@ namespace Saga.Items
                 int mageBonus = 1 + Program.CurrentPlayer.Level * 2;
                 HUDTools.Print("You use a healing potion amplified by your magic", 10);
                 PotionQuantity--;
-                Program.CurrentPlayer.Health += PotionPotency + mageBonus;
-                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                    Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
-                }
+                Program.CurrentPlayer.RegainHealth(PotionPotency + mageBonus);
                 if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
                     HUDTools.Print("You heal to max health!", 10);
                 } else {
@@ -57,10 +54,7 @@ namespace Saga.Items
             } else {
                 HUDTools.Print("You use a healing potion", 10);
                 PotionQuantity--;
-                Program.CurrentPlayer.Health += PotionPotency;
-                if (Program.CurrentPlayer.Health > Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                    Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
-                }
+                Program.CurrentPlayer.RegainHealth(PotionPotency);
                 if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
                     HUDTools.Print("You heal to max health!", 10);
                 } else {

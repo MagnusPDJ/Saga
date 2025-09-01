@@ -24,7 +24,7 @@ namespace Saga.Character
                 constitution: 1 * levels
                 );
 
-            Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
+            Program.CurrentPlayer.RegenToFull();
 
             HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point and 1 skill point.\u001b[0m", 20);
         }
@@ -40,6 +40,8 @@ namespace Saga.Character
             }
             HealingPotion healingPotion = new();
             healingPotion.Equip();
+            LearnedSkills.Add(new ArcaneMissile());
+            SkillTree.QuickCast = LearnedSkills.Find(skill => skill.Name == "Arcane Missiles") as IActiveSkill;
         }
         public override bool RunAway(Enemy Monster) {
             bool escaped = false;

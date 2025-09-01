@@ -18,6 +18,8 @@ namespace Saga.Character
         public int ElementalResistance { get; private set; }
         [JsonInclude]
         public int MagicalResistance { get; private set; }
+        [JsonInclude]
+        public int ManaRegenRate { get; private set; } = 2;
 
         public DerivedStats(Player player) {
             AttachToPlayer(player);

@@ -14,6 +14,7 @@ namespace Saga.Character.Skills
         public int LevelRequired => 0;
         public bool IsUnlocked { get; set; }
         public (int, int) Tier {  get; set; }
+        public int ManaCost {  get; set; }
         public PhysicalType PhysicalType => PhysicalType.Normal;
         public BasicAttack() {
             Name = "Basic Attack";

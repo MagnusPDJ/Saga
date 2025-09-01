@@ -23,7 +23,7 @@ namespace Saga.Character
                 constitution: 1 * levels
                 );
 
-            Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
+            Program.CurrentPlayer.RegenToFull();
 
             HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point.\u001b[0m", 20);
         }

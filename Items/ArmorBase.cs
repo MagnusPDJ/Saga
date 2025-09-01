@@ -131,7 +131,10 @@ namespace Saga.Items
             Program.CurrentPlayer.Inventory.SetValue(this, index);
             Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, null);
             if (Program.CurrentPlayer.Health > Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                Program.CurrentPlayer.Health = Program.CurrentPlayer.DerivedStats.MaxHealth;
+                Program.CurrentPlayer.SetHealth(Program.CurrentPlayer.DerivedStats.MaxHealth);
+            }
+            if (Program.CurrentPlayer.Mana > Program.CurrentPlayer.DerivedStats.MaxMana) {
+                Program.CurrentPlayer.SetMana(Program.CurrentPlayer.DerivedStats.MaxMana);
             }
             return "Armor piece unequipped!";
         }
