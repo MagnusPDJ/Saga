@@ -155,12 +155,13 @@ namespace Saga.Character
         public abstract bool RunAway(Enemy monster);
 
         public (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {
-            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);
-            modifiedDamage.Item1 = damage.Item1;
+            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);           
             if (CurrentClass == "Warrior" && damage.Item1 is IPhysical) {
+                modifiedDamage.Item1 = damage.Item1;
                 modifiedDamage.Item2 = damage.Item2 + Level;
+                return modifiedDamage;
             }
-            return modifiedDamage;
+            return damage;
         }
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void CheckForDeath(string message) {
