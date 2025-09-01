@@ -30,12 +30,14 @@ namespace Saga.Dungeon
         }
         //Funktion til at tilføje en NPC til campen som kan snakkes med.
         public static void AddNpcToCamp(string name) {
-            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"), Program.Options);
+            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"), Program.Options) ?? [];
             var npcToAdd = allNpcs.FirstOrDefault(x => x.Name.Equals(name));
-            npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
-            Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);
-            UpdateDialogueOptions(name);
-            HUDTools.Print($"\u001b[35m{name} has joined your cause!\u001b[0m", 20);
+            if (npcToAdd != null) {
+                npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
+                Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);
+                UpdateDialogueOptions(name);
+                HUDTools.Print($"\u001b[35m{name} has joined your cause!\u001b[0m", 20);
+            }
         }
         //Metode til at opdatere dialog mulighederne baseret på valg taget igennem spillet.
         public static void UpdateDialogueOptions(string instance) {
@@ -68,10 +70,7 @@ namespace Saga.Dungeon
                 foreach (string question in questions) {
                     HUDTools.Print($"{questions.IndexOf(question) + 1}:\t{question}", 15);
                 }
-                //Quest dialogue options:
-                if (talkto.Name == "Flemsha" && Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
-                    HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mI have your items.\u001b[0m", 15);
-                }
+                //Quest dialogue options:               
                 if (talkto.Name == "Flemsha" && talkto.AvailableQuests.Count == 0 && Program.CurrentPlayer.Level < 15) {
                     talkto.AvailableQuests.Add(Act1Quest.CreateRandomQuest());
                     HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
@@ -79,6 +78,8 @@ namespace Saga.Dungeon
                     //No quests made
                 } else if (talkto.Name == "Flemsha" && talkto.AvailableQuests[0].Accepted == false) {
                     HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mDo you have any work?\u001b[0m", 15);
+                } else if (talkto.Name == "Flemsha" && Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
+                    HUDTools.Print($"{questions.Count + 1}:\t\u001b[96mI have your items.\u001b[0m", 15);
                 }
                 if (talkto.Name == "Gheed" && Program.CurrentPlayer.QuestLog.Exists(quest => quest.Giver == talkto.Name && quest.Completed == true)) {
                     HUDTools.Print($"{questions.Count +1}:\t\u001b[96mI did what you asked.\u001b[0m", 15);
@@ -108,7 +109,10 @@ namespace Saga.Dungeon
                             if (Program.CurrentPlayer.QuestLog.Exists(quest => quest.Name == talkto.AvailableQuests[0].Name && quest.Completed == true)) {
                                 HUDTools.Print($"I have your items.", 0);
                                 HUDTools.Print($"Thanks alot {Program.CurrentPlayer.Name}", 20);
-                                Program.CurrentPlayer.CompleteAndTurnInQuest(Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == talkto.AvailableQuests[0].Name));
+                                var questToAdd = Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == talkto.AvailableQuests[0].Name);
+                                if (questToAdd != null) {
+                                    Program.CurrentPlayer.CompleteAndTurnInQuest(questToAdd);
+                                }
                                 talkto.AvailableQuests.RemoveAt(0);
                                 TextInput.PressToContinue();
                                 HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
@@ -150,7 +154,7 @@ namespace Saga.Dungeon
                             }
                         } else if (talkto.Name == "Gheed") {
                             //Gheed Quest Dialogue:
-                            Quest found;
+                            Quest? found;
                             if ((found = Program.CurrentPlayer.QuestLog.Find(quest => quest.Giver == "Gheed" && quest.Completed == true)) != null) {
                                 HUDTools.Print($"I did what you asked.", 0);
                                 HUDTools.Print($"Magnificent {Program.CurrentPlayer.Name}!", 20);

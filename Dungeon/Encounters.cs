@@ -349,7 +349,7 @@ namespace Saga.Dungeon
             Console.Clear();
             HUDTools.RoomHUD();
             HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 30);
-            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)", 10);
+            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4):", 10);
             HUDTools.Print("   o    <- starting position", 5);
             for (int j = 0; j < 4; j++) {
                 HUDTools.Print(puzzle[j] + "\n", 10);
@@ -362,7 +362,7 @@ namespace Saga.Dungeon
                 HUDTools.RoomHUD();
                 if (i == 0) {
                     HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 0);
-                    HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4)", 0);
+                    HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4):", 0);
                     HUDTools.Print("   o    <- starting position", 0);
                     for (int j = 0; j < 4; j++) {
                         HUDTools.Print(puzzle[j]+"\n", 0);

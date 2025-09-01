@@ -501,8 +501,10 @@ namespace Saga.Assets
             Console.WriteLine("******************** Equipment *****************************");
             foreach (var slot in Program.CurrentPlayer.Equipment.AsEnumerable()) {
                 if (slot.Value is IWeapon weapon) {
-                    if (slot.Value is ITwoHanded) {
-                        Console.WriteLine($" Both hands - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");
+                    if (weapon is ITwoHanded) {
+                        if (slot.Key != "Left_Hand") { 
+                            Console.WriteLine($" Both hands - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg"); 
+                        }                        
                     } else {
                         Console.WriteLine($" {weapon.ItemSlot} - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");
                     }
