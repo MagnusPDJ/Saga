@@ -38,7 +38,9 @@ namespace Saga.Items.Loot
             }
             if (p > 0) {
                 HUDTools.Print($"\u001b[90mYou loot {p} healing potions\u001b[0m", 20);
-                ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).PotionQuantity += p;
+                if (Program.CurrentPlayer.Equipment.Potion is IConsumable consumable) {
+                    consumable.PotionQuantity += p;
+                }
             }
         }
         //Metode til at få loot efter successfuld kamp:
@@ -56,8 +58,8 @@ namespace Saga.Items.Loot
         }
         //Metode til at få loot fra en skattekiste:
         public override void GetTreasureChestLoot() {
-            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"), Program.Options);
-            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"), Program.Options);
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"), Program.Options) ?? [];
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"), Program.Options) ?? [];
             HUDTools.Print("You find Treasure!", 10);
             GetGold(3);
             GetPotions();
@@ -221,8 +223,8 @@ namespace Saga.Items.Loot
             Program.CurrentPlayer.CheckForLevelUp();
         }
         //Metode til at få specifikke quest items i encounters:
-        public override void GetQuestLoot(int findgold, int findpotions, string questname, Enemy enemy=null) {
-            List<IQuestItem> questItems = JsonSerializer.Deserialize<List<IQuestItem>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.QuestLootTable.json"), Program.Options);
+        public override void GetQuestLoot(int findgold, int findpotions, string questname, Enemy? enemy=null) {
+            List<IQuestItem> questItems = JsonSerializer.Deserialize<List<IQuestItem>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.QuestLootTable.json"), Program.Options) ?? [];
             GetGold(findgold);
             if (findpotions != 0) {
                 GetPotions(findpotions);
@@ -232,31 +234,32 @@ namespace Saga.Items.Loot
                 int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                 var questItem = questItems.Find(x => x != null && x.ItemName == "Old Key");
                 Program.CurrentPlayer.Inventory.SetValue(questItem, index);
-                HUDTools.Print($"You gain {questItem.ItemName}", 15);
+                HUDTools.Print($"You gain {questItem?.ItemName}", 15);
             }
             if (enemy != null) {
-                Quest found;
+                Quest? found;
                 if (enemy.Name == "Giant Rat" && (found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed != true)) != null) {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null && i.ItemName == "Rat Tail");
                     var questItem = questItems.Find(x => x != null && x.ItemName == "Rat Tail");
                     if (index != -1) {
                         ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        HUDTools.Print($"You gain {questItem.ItemName}", 15);
+                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
                     }else {
                         index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                         Program.CurrentPlayer.Inventory.SetValue(questItem, index);
-                        HUDTools.Print($"You gain {questItem.ItemName}", 15);
+                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
                     }                   
-                } else if (enemy.Name == "Giant Bat" && (found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed != true)) != null) {
+                } else if (enemy.Name == "Giant Bat" && 
+                    (found = Program.CurrentPlayer.QuestLog.Find(x => x is not null && x.Name == "Collect bat wings" && x.Completed != true)) is not null) {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x != null && x.ItemName == "Bat Wings");
                     var questItem = questItems.Find(x => x != null && x.ItemName == "Bat Wings");
                     if (index != -1) {
                         ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        HUDTools.Print($"You gain {questItem.ItemName}", 15);
+                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
                     } else {
                         index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                         Program.CurrentPlayer.Inventory.SetValue(questItem, index);
-                        HUDTools.Print($"You gain {questItem.ItemName}", 15);
+                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
                     }
                 }
                 if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Quests.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {

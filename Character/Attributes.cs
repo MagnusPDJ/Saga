@@ -1,24 +1,37 @@
-﻿
+﻿using System.Text.Json.Serialization;
+
 namespace Saga.Character
 {
     public class Attributes
     {
-        private readonly Player _player;
+        [JsonIgnore]
+        private Player? _player;
 
         //Primary attributes
+        [JsonInclude]
         public int Strength { get; private set; }
+        [JsonInclude]
         public int Dexterity { get; private set; }
+        [JsonInclude]
         public int Intellect { get; private set; }
-
+        [JsonInclude]
         private int _constitution;
+        [JsonInclude]
         private int _willPower;
+        [JsonInclude]
         private int _awareness;
+        [JsonInclude]
         private int _virtue;
 
+
         //Secondary attributes
+        [JsonInclude]
         public int Constitution { get; private set; }
+        [JsonInclude]
         public int WillPower { get; private set; }
+        [JsonInclude]
         public int Awareness { get; private set; }
+        [JsonInclude]
         public int Virtue { get; private set; }
 
         public event Action? AttributesChanged;
@@ -28,6 +41,13 @@ namespace Saga.Character
             Dexterity = dexterity;
             Intellect = intellect;
 
+            AttachToPlayer(player);
+        }
+
+        // Used by Json Deserialization.
+        [JsonConstructor]
+        private Attributes() { }
+        public void AttachToPlayer(Player player) {
             _player = player;
             _player.PlayerChanged += RecalculateAttributes;
             RecalculateAttributes();

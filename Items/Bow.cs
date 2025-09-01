@@ -7,7 +7,7 @@ namespace Saga.Items
     [Discriminator("bow")]
     public class Bow : ITwoHanded, IPhysical
     {
-        public required string ItemName { get; set; }
+        public string ItemName { get; set; } = string.Empty;
         public int ItemLevel { get; set; }
         public int ItemPrice { get; set; }
         public string ItemDescription { get; init; } = string.Empty;

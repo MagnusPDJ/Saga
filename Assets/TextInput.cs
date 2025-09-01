@@ -26,11 +26,11 @@ namespace Saga.Assets
          ///<returns>Empty string or an exit from the currentRoom.</returns>
         public static string PlayerPrompt(bool inRoom) {
             if (inRoom) {
-                string userInput = Console.ReadLine().ToLower();
+                string userInput = (Console.ReadLine() ?? "").ToLower();
                 if (userInput.Length == 1) {
                     foreach (InputAction action in Program.RoomController.InputRoomActions) {
                         if (action.AbrKeyWord == userInput) {
-                            return action.RespondToInput();
+                            return action.RespondToInput([]);
                         }
                     }
                 }
@@ -47,11 +47,11 @@ namespace Saga.Assets
                 return "";
             }
             else {
-                string userInput = Console.ReadLine().ToLower();
+                string userInput = (Console.ReadLine() ?? "").ToLower();
                 if (userInput.Length == 1) {
                     foreach (InputAction action in Program.RoomController.InputInvActions) {
                         if (action.AbrKeyWord == userInput) {
-                            return action.RespondToInput();
+                            return action.RespondToInput([]);
                         }
                     }
                 }

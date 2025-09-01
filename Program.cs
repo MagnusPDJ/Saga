@@ -162,7 +162,9 @@ namespace Saga
             string[] paths = Directory.GetFiles("saves");
             List<Player> players = [];
             foreach (string path in paths) {
-                Player? save = JsonSerializer.Deserialize<Player>(File.ReadAllText(path), Options);
+                Player save = JsonSerializer.Deserialize<Player>(File.ReadAllText(path), Options) ?? new Warrior("Adventurer");
+                save.Attributes.AttachToPlayer(save);
+                save.DerivedStats.AttachToPlayer(save);
                 if (save != null) {
                     players.Add(save);
                 }

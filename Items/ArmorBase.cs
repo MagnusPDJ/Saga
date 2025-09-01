@@ -6,14 +6,14 @@ namespace Saga.Items
     [Discriminator("armorBase")]
     public class ArmorBase : IArmor
     {
-        public required string ItemName { get; set; }
+        public string ItemName { get; set; } = string.Empty;
         public int ItemLevel { get; set; }
         public int ItemPrice { get; set; }
-        public required string ItemDescription { get; init; }
+        public string ItemDescription { get; init; } = string.Empty;
         public ArmorType ArmorType { get; set; }
         public Slot ItemSlot { get; set; }
-        public PrimaryAttributes PrimaryAttributes { get; set; }
-        public SecondaryAttributes SecondaryAttributes { get; set; }
+        public PrimaryAttributes PrimaryAttributes { get; set; } = new PrimaryAttributes();
+        public SecondaryAttributes SecondaryAttributes { get; set; } = new SecondaryAttributes();
 
         public void SetPrimaryAttributes() => PrimaryAttributes = CalculatePrimaryAttributes(ItemLevel);
         public void SetSecondaryAttributes() => SecondaryAttributes = CalculateSecondaryAttributes(ItemLevel);
@@ -57,6 +57,7 @@ namespace Saga.Items
             int maxMana = 0;
             int armorRating = 1;
             int elementalResistance = 0;
+            int magicalResistance = 0;
 
             //Roll for secondary stats:
             for (int i = 0; i < 4; i++) {
@@ -76,7 +77,7 @@ namespace Saga.Items
                     elementalResistance = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
             }
-            return new SecondaryAttributes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance };
+            return new SecondaryAttributes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance, MagicalResistance = magicalResistance };
         }
         public int CalculateItemPrice() {
             return Convert.ToInt32(

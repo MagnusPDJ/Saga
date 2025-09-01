@@ -498,7 +498,7 @@ namespace Saga.Assets
         public static void InventoryScreen() {
             Console.Clear();
             Console.WriteLine("******************** Equipment *****************************");
-            foreach (var slot in Program.CurrentPlayer.Equipment) {
+            foreach (var slot in Program.CurrentPlayer.Equipment.AsEnumerable()) {
                 if (slot.Value is IWeapon weapon) {
                     if (slot.Value is ITwoHanded) {
                         Console.WriteLine($" Both hands - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");

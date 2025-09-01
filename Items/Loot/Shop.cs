@@ -9,7 +9,7 @@ namespace Saga.Items.Loot
 {
     public class Shop
     {
-        public List<IEquipable> Forsale { get; set; }
+        public List<IEquipable> Forsale { get; set; } = [];
 
         //Metode til at genere ny shop ved tilbagekomst til camp
         public static Shop SetForsale() {
@@ -57,7 +57,7 @@ namespace Saga.Items.Loot
                 //Wait for input
                 string input = TextInput.PlayerPrompt();
                 if (input == "u" || input == "use" || input == "heal") {
-                    ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).Consume();
+                    (Program.CurrentPlayer.Equipment.Potion as IConsumable)?.Consume();
                     TextInput.PressToContinue();
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
@@ -112,7 +112,7 @@ namespace Saga.Items.Loot
                         HUDTools.CharacterScreen();
                         TextInput.PressToContinue();
                     } else if (input1 == "u" || input == "use" || input == "heal") {
-                        ((IConsumable)Program.CurrentPlayer.Equipment[Slot.Potion]).Consume();
+                        (Program.CurrentPlayer.Equipment.Potion as IConsumable)?.Consume();
                         TextInput.PressToContinue();
                     } else if (input1.Any(c => char.IsNumber(c))) {
                         if (input1 == "0") {
@@ -131,7 +131,7 @@ namespace Saga.Items.Loot
         }
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
-            int potionP = Program.CurrentPlayer.Equipment[Slot.Potion].CalculateItemPrice();
+            int potionP = Program.CurrentPlayer.Equipment.Potion?.CalculateItemPrice() ?? 0;
             int sellPotionP = potionP / 2;
             switch (item) {
                 default:
@@ -239,8 +239,8 @@ namespace Saga.Items.Loot
         static void TrySellPotion(string item, int price, Player p) {
             switch (item) {
                 case "potion":
-                if (((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity > 0) {
-                    ((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity--;
+                if ((p.Equipment.Potion is IConsumable consumable) && consumable.PotionQuantity > 0) {
+                    consumable.PotionQuantity--;
                     p.Gold += price;
                     break;
                 } else {
@@ -249,8 +249,8 @@ namespace Saga.Items.Loot
                     break;
                 }
                 case "5x potion":
-                if (((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity >= 5) {
-                    ((IConsumable)p.Equipment[Slot.Potion]).PotionQuantity -= 5;
+                if ((p.Equipment.Potion is IConsumable consumable1) && consumable1.PotionQuantity >= 5) {
+                    consumable1.PotionQuantity -= 5;
                     p.Gold += price;
                     break;
                 } else {

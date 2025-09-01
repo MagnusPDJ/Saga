@@ -34,7 +34,7 @@ namespace Saga.Dungeon
             HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
             HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
             HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
+            HUDTools.Print($"You throw open the door, grabbing a {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
             Program.SoundController.Stop();
             Program.SoundController.Play("taunt");
             Program.SoundController.Play("kamp");
@@ -65,7 +65,7 @@ namespace Saga.Dungeon
             Program.SoundController.Play("shop");
             Program.SoundController.Play("typewriter");
             if (Program.CurrentPlayer.CurrentClass == "Mage") {
-                HUDTools.Print($"After dusting off your {Program.CurrentPlayer.Equipment[Slot.Torso].ItemName} and tucking in your new wand, you find someone else captured.");
+                HUDTools.Print($"After dusting off your {(Program.CurrentPlayer.Equipment.Torso as IItem)?.ItemName} and tucking in your new wand, you find someone else captured.");
             } else if (Program.CurrentPlayer.CurrentClass == "Archer") {
                 HUDTools.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
             } else if (Program.CurrentPlayer.CurrentClass == "Warrior") {
@@ -80,7 +80,7 @@ namespace Saga.Dungeon
             HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             NonPlayableCharacters.AddNpcToCamp("Gheed");
-            HUDTools.Print($"You nod and prepare your {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");     
+            HUDTools.Print($"You nod and prepare your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");     
             TextInput.PressToContinue();
             Program.SoundController.Stop();
         }
@@ -261,7 +261,7 @@ namespace Saga.Dungeon
                     HUDTools.Print("As you touch the frame of the chest, it springs open splashing you with saliva!");
                     Program.SoundController.Play("troldmandskamp");
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
-                    HUDTools.Print($"You ready your {Program.CurrentPlayer.Equipment[Slot.Right_Hand].ItemName}!",15);
+                    HUDTools.Print($"You ready your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}!",15);
                     TextInput.PressToContinue();
                     Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
                         MaxHealth = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),                        

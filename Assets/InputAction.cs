@@ -43,7 +43,7 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
-            var equipped = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            var equipped = Program.CurrentPlayer.Equipment.AsEnumerable().FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
             var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
             if (equipped.Value != null) {
                 if (equipped.Value is IWeapon weapon) {
@@ -102,7 +102,7 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
-            var equipped = Program.CurrentPlayer.Equipment.FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            var equipped = Program.CurrentPlayer.Equipment.AsEnumerable().FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
             if (equipped.Value == null) {
                 Console.WriteLine("\nNo such item equipped...");
             }

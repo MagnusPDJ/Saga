@@ -33,32 +33,35 @@ namespace Saga.Assets
             if (!root.TryGetProperty("Type", out var typeProperty))
                 throw new JsonException("Missing 'Type' property for polymorphic deserialization.");
 
-            var discriminator = typeProperty.GetString();
+            var discriminator = typeProperty.GetString() ?? throw new JsonException("Discriminator property cannot be null.");
 
             if (!_typeMap.TryGetValue(discriminator, out var targetType))
                 throw new JsonException($"Unknown discriminator '{discriminator}' for {typeof(TBase).Name}");
 
-            return (TBase)JsonSerializer.Deserialize(root.GetRawText(), targetType, options);
+            var result = JsonSerializer.Deserialize(root.GetRawText(), targetType, options) ?? throw new JsonException($"Failed to deserialize {targetType.Name}.");
+            return (TBase)result;
         }
 
         public override void Write(Utf8JsonWriter writer, TBase value, JsonSerializerOptions options) {
-            var type = value.GetType();
-            if (!_discriminatorMap.TryGetValue(type, out var discriminator))
-                throw new JsonException($"Type {type.Name} is not registered with a discriminator.");
+            if (value is not null) {
+                var type = value.GetType();
+                if (!_discriminatorMap.TryGetValue(type, out var discriminator))
+                    throw new JsonException($"Type {type.Name} is not registered with a discriminator.");
 
-            // Serialize the object normally
-            var json = JsonSerializer.Serialize(value, type, options);
+                // Serialize the object normally
+                var json = JsonSerializer.Serialize(value, type, options);
 
-            using var doc = JsonDocument.Parse(json);
+                using var doc = JsonDocument.Parse(json);
 
-            writer.WriteStartObject();
-            writer.WriteString("Type", discriminator); // Inject discriminator
+                writer.WriteStartObject();
+                writer.WriteString("Type", discriminator); // Inject discriminator
 
-            foreach (var property in doc.RootElement.EnumerateObject()) {
-                property.WriteTo(writer);
+                foreach (var property in doc.RootElement.EnumerateObject()) {
+                    property.WriteTo(writer);
+                }
+
+                writer.WriteEndObject();
             }
-
-            writer.WriteEndObject();
         }
     }
 
