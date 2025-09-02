@@ -1,9 +1,5 @@
 ﻿using Saga.Assets;
 using Saga.Character;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace Saga.Items.Loot
 {
@@ -57,7 +53,8 @@ namespace Saga.Items.Loot
                 //Wait for input
                 string input = TextInput.PlayerPrompt();
                 if (input == "u" || input == "use" || input == "heal") {
-                    (Program.CurrentPlayer.Equipment.Potion as IConsumable)?.Consume();
+                    var potion = Array.Find(p.Equipment.Potion, po => po is IItem { ItemName: "Healing Potion" });
+                    potion?.Consume();
                     TextInput.PressToContinue();
                 } else if (input == "c" || input == "character" || input == "character screen") {
                     HUDTools.CharacterScreen();
@@ -112,7 +109,8 @@ namespace Saga.Items.Loot
                         HUDTools.CharacterScreen();
                         TextInput.PressToContinue();
                     } else if (input1 == "u" || input == "use" || input == "heal") {
-                        (Program.CurrentPlayer.Equipment.Potion as IConsumable)?.Consume();
+                        var potion = Array.Find(p.Equipment.Potion, po => po is IItem { ItemName: "Healing Potion" });
+                        potion?.Consume();
                         TextInput.PressToContinue();
                     } else if (input1.Any(c => char.IsNumber(c))) {
                         if (input1 == "0") {
@@ -131,7 +129,8 @@ namespace Saga.Items.Loot
         }
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
-            int potionP = Program.CurrentPlayer.Equipment.Potion?.CalculateItemPrice() ?? 0;
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            int potionP = (potion as IItem)?.CalculateItemPrice() ?? 0;
             int sellPotionP = potionP / 2;
             switch (item) {
                 default:
@@ -237,10 +236,11 @@ namespace Saga.Items.Loot
         }
         //Metode til at sælge til shoppen.
         static void TrySellPotion(string item, int price, Player p) {
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
             switch (item) {
                 case "potion":
-                if ((p.Equipment.Potion is IConsumable consumable) && consumable.PotionQuantity > 0) {
-                    consumable.PotionQuantity--;
+                if (potion?.PotionQuantity > 0) {
+                    potion.PotionQuantity--;
                     p.Gold += price;
                     break;
                 } else {
@@ -249,8 +249,8 @@ namespace Saga.Items.Loot
                     break;
                 }
                 case "5x potion":
-                if ((p.Equipment.Potion is IConsumable consumable1) && consumable1.PotionQuantity >= 5) {
-                    consumable1.PotionQuantity -= 5;
+                if (potion?.PotionQuantity >= 5) {
+                    potion.PotionQuantity -= 5;
                     p.Gold += price;
                     break;
                 } else {

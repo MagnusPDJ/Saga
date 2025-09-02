@@ -24,7 +24,7 @@ namespace Saga.Character
         public IEquipable? Finger_2 { get; set; }
         public IEquipable? Crest { get; set; }
         public IEquipable? Trinket { get; set; }
-        public IEquipable? Potion { get; set; }
+        public IConsumable[] Potion { get; set; } = new IConsumable[4];
 
         public event Action? EquipmentChanged;
 
@@ -74,7 +74,6 @@ namespace Saga.Character
             yield return new(nameof(Finger_2), Finger_2);
             yield return new(nameof(Crest), Crest);
             yield return new(nameof(Trinket), Trinket);
-            yield return new(nameof(Potion), Potion);
         }
 
         /// <summary>

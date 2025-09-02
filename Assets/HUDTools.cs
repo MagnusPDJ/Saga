@@ -1,13 +1,14 @@
-﻿using System.Configuration;
-using System.Text;
-using System.Reflection;
-using Saga.Dungeon;
-using Saga.Items;
-using Saga.Character;
-using Saga.Items.Loot;
-using Saga.Dungeon.Quests;
-using Saga.Dungeon.Monsters;
+﻿using Saga.Character;
 using Saga.Character.DmgLogic;
+using Saga.Dungeon;
+using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Quests;
+using Saga.Items;
+using Saga.Items.Loot;
+using System.Configuration;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace Saga.Assets
 {
@@ -105,18 +106,19 @@ namespace Saga.Assets
                         break;
                     case "heal":
                         Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
-                        if (Program.CurrentPlayer.Equipment.Potion is IConsumable potion && potion.PotionQuantity == 0) {
-                            Console.WriteLine($"You tried to drink a potion you didn't have.");
-                        }
-                        else {
-                            if (Program.CurrentPlayer.DerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
-                                Console.WriteLine("You healed to max health by drinking a potion.");
+                        var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                        if (potion != null) {
+                            if (potion.PotionQuantity == 0) {
+                                Console.WriteLine($"You tried to drink a potion you didn't have.");
+                            } else {
+                                if (Program.CurrentPlayer.DerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
+                                    Console.WriteLine("You healed to max health by drinking a potion.");
+                                } else {
+                                    int mageBonus = (Program.CurrentPlayer.CurrentClass == "Mage" ? 1 + Program.CurrentPlayer.Level * 2 : 0);
+                                    Console.WriteLine($"You gained {potion.PotionPotency + mageBonus} health by drinking a potion.");
+                                }
                             }
-                            else {
-                                int mageBonus = (Program.CurrentPlayer.CurrentClass == "Mage"? 1 + Program.CurrentPlayer.Level * 2 : 0);
-                                Console.WriteLine($"You gained {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionPotency + mageBonus} health by drinking a potion.");
-                            }
-                        }
+                        }                       
                         break;
                     case "run":
                         Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
@@ -135,16 +137,17 @@ namespace Saga.Assets
                         Console.WriteLine($"You defended and lowered the next two attacks.");
                         break;
                     case "heal":
-                        if (Program.CurrentPlayer.Equipment.Potion is IConsumable { PotionQuantity: 0 }) {
-                            Console.WriteLine($"You tried to drink a potion you didn't have.");
-                        }
-                        else {
-                            if (Program.CurrentPlayer.DerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
-                                Console.WriteLine("You healed to max health by drinking a potion.");
-                            }
-                            else {
-                                int mageBonus = (Program.CurrentPlayer.CurrentClass == "Mage" ? 1 + Program.CurrentPlayer.Level * 2 : 0);
-                                Console.WriteLine($"You gained {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionPotency+mageBonus} health by drinking a potion.");
+                        var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                        if (potion != null) {
+                            if (potion.PotionQuantity == 0) {
+                                Console.WriteLine($"You tried to drink a potion you didn't have.");
+                            } else {
+                                if (Program.CurrentPlayer.DerivedStats.MaxHealth == Program.CurrentPlayer.Health) {
+                                    Console.WriteLine("You healed to max health by drinking a potion.");
+                                } else {
+                                    int mageBonus = (Program.CurrentPlayer.CurrentClass == "Mage" ? 1 + Program.CurrentPlayer.Level * 2 : 0);
+                                    Console.WriteLine($"You gained {potion.PotionPotency + mageBonus} health by drinking a potion.");
+                                }
                             }
                         }
                         break;
@@ -310,7 +313,7 @@ namespace Saga.Assets
             Console.WriteLine("]");
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($"| Potions:                {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
+            Console.WriteLine($"| Healing Potions:        {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
@@ -385,9 +388,10 @@ namespace Saga.Assets
                     Console.WriteLine($"\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
                 }
             }
-            Console.WriteLine($"|  Sell     (P)otion     $ {Shop.ShopPrice("sellpotion")}");
-            if (Program.CurrentPlayer.Equipment.Potion is IConsumable { PotionQuantity: >= 5 }) {
-                Console.WriteLine($"|  Sell (F)ive Potions   $ {Shop.ShopPrice("sellpotion5")}");
+                Console.WriteLine($"|  Sell Healing (P)otion        $ {Shop.ShopPrice("sellpotion")}");
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            if (potion is not null && potion.PotionQuantity >= 5) {
+                Console.WriteLine($"|  Sell (F)ive Healing Potions  $ {Shop.ShopPrice("sellpotion5")}");
             }
             Console.WriteLine("=======================================================");
             Console.WriteLine(" (S)witch to Buy   (E)xit Shop\n\n");
@@ -400,9 +404,9 @@ namespace Saga.Assets
             Console.WriteLine("]");
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($"| Potions:                {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
+            Console.WriteLine($"| Healing Potions:        {potion?.PotionQuantity}");
             Console.WriteLine("==============================");
-            Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
+            Console.WriteLine(" (U)se Healing Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
             Console.WriteLine("Choose what to sell");
         }
         public static void DisplayStats(Player player) {
@@ -536,7 +540,10 @@ namespace Saga.Assets
             }
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
             Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($" Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}\t\tPotion Strength: +{(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionPotency}  {(Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
+            var hPotion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            var mPotion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Mana Potion" });
+            Console.WriteLine($" Healing Potions: {hPotion?.PotionQuantity ?? 0}\t\t{(hPotion is not null ? $"Potion Strength: +{hPotion.PotionPotency}" : "No healing potion equipped.")}  {(Program.CurrentPlayer.CurrentClass == "Mage" && hPotion is not null ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}");
+            Console.WriteLine($" Mana Potions:    {mPotion?.PotionQuantity ?? 0}\t\t{(mPotion is not null ? $"Potion Strength: +{mPotion.PotionPotency}" : "No mana potion equipped.")}");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
@@ -582,24 +589,24 @@ namespace Saga.Assets
             Console.WriteLine($" Fighting: {Monster.Name}!");
             Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
-                Console.WriteLine("\n------------------------------------");
+                Console.WriteLine("\n-------------------------------------");
                 Console.WriteLine("  You go first!\n");
             } else {
                 Console.WriteLine("\n  The enemy goes first!");
-                Console.WriteLine("------------------------------------\n");
+                  Console.WriteLine("-------------------------------------\n");
             }           
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"  Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
-            Console.WriteLine($"       Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
+            Console.WriteLine($"  Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($"       Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
             Console.WriteLine($"  Level: {Program.CurrentPlayer.Level}\t\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write("  EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine($" ============== Actions =============");
-            Console.WriteLine($" |  (1) Attack     (2) Heal         |");
-            Console.WriteLine($" |  (3) Run        (4) Skills       |");
-            Console.WriteLine($" |  (5) Quick Cast: {Program.CurrentPlayer.SkillTree.QuickCast?.Name ?? "\t\t   "} |");
+            Console.WriteLine($" |  (1) Quick Cast: {Program.CurrentPlayer.SkillTree.QuickCast?.Name ?? "\t\t   "} |");
+            Console.WriteLine($" |  (2) Attack     (3) Heal         |");
+            Console.WriteLine($" |  (4) Run        (5) Skills       |");
             Console.WriteLine($" =============== Info ===============");
             Console.WriteLine($" |  (C)haracter screen              |");
             Console.WriteLine($" |   Combat (L)og                   |");
@@ -611,8 +618,8 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine($" Location:\t{Program.RoomController.currentRoom.roomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
-            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -629,7 +636,7 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine("[][][][][][][][]  Camp   [][][][][][][][]");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {(Program.CurrentPlayer.Equipment.Potion as IConsumable)?.PotionQuantity}");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
             Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
@@ -644,13 +651,13 @@ namespace Saga.Assets
             Console.WriteLine(" 0 S(K)illtree                        0");
             Console.WriteLine(" ======================================");
             Console.WriteLine("   (Q)uit to Main Menu                 ");
-            Console.WriteLine("  Choose an action...\n");
+            Console.WriteLine(" Choose an action...\n");
         }
         public static void QuestLogHUD() {
             Console.Clear();
-            Console.WriteLine($"{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Level: {Program.CurrentPlayer.Level}");
-            Console.Write("EXP  ");
+            Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Level: {Program.CurrentPlayer.Level}");
+            Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
@@ -660,31 +667,31 @@ namespace Saga.Assets
                 if (item is null || item is not IQuestItem) {
                     i++;
                 } else if (item is IQuestItem item1) {
-                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
+                    Console.WriteLine($" \u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
                     continue;
                 }
                 if (i == 10) {
-                    Console.WriteLine("You don't have any quest items...\n");
+                    Console.WriteLine(" You don't have any quest items...\n");
                 }
             }
             Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
             if (Program.CurrentPlayer.QuestLog.Count == 0) {
-                Console.WriteLine("You don't have any active quests...");
+                Console.WriteLine(" You don't have any active quests...\n");
             } else {
                 foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
-                    Console.WriteLine($"\u001b[96m{quest.Name}:\u001b[0m{(quest.QuestType == Dungeon.Quests.Type.Elimination ? $"\t{quest.Amount}/{quest.Requirements[quest.Target]} " : "")}");
+                    Console.WriteLine($" \u001b[96m{quest.Name}:\u001b[0m{(quest.QuestType == Dungeon.Quests.Type.Elimination ? $"\t{quest.Amount}/{quest.Requirements[quest.Target]} " : "")}");
                     if (!quest.Completed) {
                         Console.WriteLine(quest.Objective);
                     } else if (quest.Completed) {
                         Console.WriteLine(quest.TurnIn);
                     }
-                    Console.WriteLine("Rewards:");
+                    Console.WriteLine(" Rewards:");
                     if (quest.Gold > 0 && quest.Potions > 0) {
-                        Console.WriteLine($"{quest.Potions} healing potions, {quest.Gold} gold pieces and {quest.Exp} experience points.");
+                        Console.WriteLine($" {quest.Potions} healing potions, {quest.Gold} gold pieces and {quest.Exp} experience points.");
                     } else if (quest.Gold == 0 && quest.Potions > 0) {
-                        Console.WriteLine($"{quest.Potions} healing potions and {quest.Exp} experience points.");
+                        Console.WriteLine($" {quest.Potions} healing potions and {quest.Exp} experience points.");
                     } else if (quest.Gold > 0 && quest.Potions == -1) {
-                        Console.WriteLine($"{quest.Gold} gold pieces and {quest.Exp} experience points.");
+                        Console.WriteLine($" {quest.Gold} gold pieces and {quest.Exp} experience points.");
                     }                 
                     if (quest.Item != null) {
                         if (((IEquipable)quest.Item).ItemSlot == Slot.Right_Hand) {
@@ -714,7 +721,7 @@ namespace Saga.Assets
                             }
                             Console.WriteLine("");
                         } else if (quest.Item is IQuestItem) {
-                            Console.WriteLine($"\u001b[96m Quest Item - {quest.Item.ItemName}\u001b[0m");
+                            Console.WriteLine($" \u001b[96m Quest Item - {quest.Item.ItemName}\u001b[0m");
                         }
                     }
                 }

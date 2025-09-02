@@ -85,7 +85,7 @@ namespace Saga.Dungeon
             new Go("go"),     
             new Use("use"),
             new Look("look"),
-            new DrinkPotion("heal", "h"),
+            new DrinkHealingPotion("heal", "h"),
             new SeeCharacterScreen("character", "c"),
             new SeeInventory("inventory", "i"),
             new SeeQuestLog("questlog", "l"),

@@ -143,9 +143,10 @@ namespace Saga.Assets
             return "";
         }
     }
-    public class DrinkPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
+    public class DrinkHealingPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
-            (Program.CurrentPlayer.Equipment.Potion as IConsumable)?.Consume();
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            potion?.Consume();
             TextInput.PressToContinue();
             HUDTools.RoomHUD();
             return "";

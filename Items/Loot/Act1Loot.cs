@@ -36,10 +36,11 @@ namespace Saga.Items.Loot
             } else { 
                 p = amount;
             }
-            if (p > 0) {
-                HUDTools.Print($"\u001b[90mYou loot {p} healing potions\u001b[0m", 20);
-                if (Program.CurrentPlayer.Equipment.Potion is IConsumable consumable) {
-                    consumable.PotionQuantity += p;
+            if (p > 0) {                
+                var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                if (potion is not null) {
+                    HUDTools.Print($"\u001b[90mYou loot {p} healing potions\u001b[0m", 20);
+                    potion.PotionQuantity += p;
                 }
             }
         }

@@ -3,8 +3,8 @@ using Saga.Character.DmgLogic;
 
 namespace Saga.Items
 {
-    [Discriminator("healingPotion")]
-    public class HealingPotion : IConsumable, IEquipable, IMagical
+    [Discriminator("manaPotion")]
+    public class ManaPotion : IConsumable, IEquipable, IMagical
     {
         public string ItemName { get; set; }
         public int ItemLevel { get; set; }
@@ -12,15 +12,15 @@ namespace Saga.Items
         public string ItemDescription { get; init; }
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }
-        public PotionType PotionType => PotionType.Healing;
+        public PotionType PotionType => PotionType.Mana;
         public Slot ItemSlot => Slot.Potion;
-        public MagicalType MagicalType => MagicalType.Life;
+        public MagicalType MagicalType => MagicalType.Arcane;
 
-        public HealingPotion() {
+        public ManaPotion() {
             PotionPotency = 5;
             PotionQuantity = 0;
-            ItemName = "Healing Potion";
-            ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur.";
+            ItemName = "Mana Potion";
+            ItemDescription = "They are a bit minty but have a rancid after taste.";
             ItemPrice = CalculateItemPrice();
         }
 
@@ -35,7 +35,7 @@ namespace Saga.Items
         public string UnEquip() {
             int index1 = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(this, index1);
-            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i is IItem { ItemName: "Healing Potion" });
+            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i is IItem { ItemName: "Mana Potion" });
             Program.CurrentPlayer.Equipment.Potion.SetValue(null, index2);
             return "Potion unequipped!";
         }
