@@ -72,6 +72,7 @@ namespace Saga
             Options.Converters.Add(new PolymorphicConverter<IWeapon>());
             Options.Converters.Add(new PolymorphicConverter<IArmor>());
             Options.Converters.Add(new PolymorphicConverter<IQuestItem>());
+            Options.Converters.Add(new PolymorphicConverter<IConsumable>());
             //Skill types til json serializer
             Options.Converters.Add(new PolymorphicConverter<ISkill>());
 

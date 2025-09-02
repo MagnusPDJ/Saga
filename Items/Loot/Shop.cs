@@ -535,7 +535,7 @@ namespace Saga.Items.Loot
                                     name = "Linen Strap";
                                     break;
                                 case 2:
-                                    name = "Elvish Robe";
+                                    name = "Elvish Rope";
                                     break;
                                 case 3:
                                     name = "Sash";

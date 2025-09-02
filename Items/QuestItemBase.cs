@@ -5,15 +5,11 @@ namespace Saga.Items
     [Discriminator("questItem")]
     public class QuestItemBase : IQuestItem
     {
-        public string ItemName { get; set; }
+        public string ItemName { get; set; } = string.Empty;
         public int ItemLevel { get; set; }
         public int ItemPrice { get; set; }
-        public string ItemDescription { get; init; }
+        public string ItemDescription { get; init; } = string.Empty;
         public int Amount { get; set; } = 1;
-
-        public QuestItemBase() {
-            ItemPrice = CalculateItemPrice();
-        }
 
         public int CalculateItemPrice() {
             return 0;

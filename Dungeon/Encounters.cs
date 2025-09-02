@@ -226,6 +226,7 @@ namespace Saga.Dungeon
         public static void WizardEncounter() {
             Console.Clear();
             Program.SoundController.Play("laugh");
+            HUDTools.RoomHUD();
             HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ",20);
             Program.SoundController.Play("troldmandskamp");
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
@@ -237,8 +238,6 @@ namespace Saga.Dungeon
                 Initiative = 5,
             };
             Combat(WizardEncounter);
-            Console.Clear();
-            HUDTools.RoomHUD();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
@@ -277,8 +276,6 @@ namespace Saga.Dungeon
                     HUDTools.ClearLastLine(3);
                 }
             } while (input != "42");
-            Console.Clear();
-            HUDTools.RoomHUD();
         }
         //Encounter der "spawner" en treasure chest.
         public static void TreasureEncounter() {
@@ -311,8 +308,6 @@ namespace Saga.Dungeon
                     HUDTools.ClearLastLine(3);
                 }
             } while (input != "42");
-            Console.Clear();
-            HUDTools.RoomHUD();
         }
         //Encounter der starter en trap med runer hvor den rigtige rune skal vælges for at kunne exit
         public static void PuzzleOneEncounter() {
@@ -495,7 +490,7 @@ namespace Saga.Dungeon
         //Metode til at køre kamp
         public static void Combat(Enemy Monster) {
             var player = Program.CurrentPlayer;
-            int manaRegen = 0;
+            int manaRegen = 1;
             HUDTools.ClearLog();
             //Starter en tur tæller:
             Encounters TurnTimer = new();

@@ -297,9 +297,9 @@ namespace Saga.Character
                     int tempMana = Mana;
                     skill.Activate(this, monster);
                     if (tempMana > Mana) {
-                        turnTimer.UsedMana = true;
+                        turnTimer.TurnTimer++;
                     }
-                    turnTimer.TurnTimer++;
+                    turnTimer.UsedMana = true;
                 } else {
                     HUDTools.Print($"You have no skill selected for quickcast!", 5);
                 }

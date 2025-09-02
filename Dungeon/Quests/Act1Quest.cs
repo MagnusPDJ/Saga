@@ -10,22 +10,26 @@ namespace Saga.Dungeon.Quests
     internal class Act1Quest : Quest
     {
         public static void AddQuest(string questName) {
-            var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Quests.Act1Quests.json"), Program.Options);
+            var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Quests.Act1Quests.json"), Program.Options) ?? [];
             var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
-            if (questToAdd != null && questToAdd.Item?.ItemName == "Random") {
-                var item = Shop.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
-                ((IArmor)item).SetPrimaryAffixes();
-                ((IArmor)item).SetSecondaryAffixes();
-                item.ItemPrice = item.CalculateItemPrice();
-                questToAdd.Item = item;
-            }
-            Program.CurrentPlayer.QuestLog.Add(questToAdd);
-            HUDTools.Print($"\u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
+            if (questToAdd != null) {
+                if (questToAdd.Item?.ItemName == "Random") {
+                    var item = Shop.CreateRandomArmor(0, Program.CurrentPlayer.CurrentClass == "Warrior" || Program.CurrentPlayer.CurrentClass == "Archer" ? 2 : 0);
+                    ((IArmor)item).SetPrimaryAffixes();
+                    ((IArmor)item).SetSecondaryAffixes();
+                    item.ItemPrice = item.CalculateItemPrice();
+                    questToAdd.Item = item;
+                }
+                Program.CurrentPlayer.QuestLog.Add(questToAdd);
+                HUDTools.Print($"\u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
+            } 
         }
         public static void FailQuest(string questName) {
-            var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Quests.Act1Quests.json"), Program.Options);
+            var allQuests = JsonSerializer.Deserialize<List<Act1Quest>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Quests.Act1Quests.json"), Program.Options) ?? [];
             var questToAdd = allQuests.Where(x => x.Name.Equals(questName)).FirstOrDefault();
-            Program.CurrentPlayer.FailedQuests.Add(questToAdd);
+            if (questToAdd != null) {
+                Program.CurrentPlayer.FailedQuests.Add(questToAdd);
+            }
         }
         //Funktion til at lave random collect quests.
         public static Quest CreateRandomQuest() {
@@ -42,8 +46,8 @@ namespace Saga.Dungeon.Quests
                 QuestType = Type.Collect,
                 Target = target,
                 Giver = "Flemsha",
-                Objective = $"Flemsha wants you to collect {amount} {target}",
-                TurnIn = $"You have the {amount} {target}. Return to Flemsha for your reward",
+                Objective = $"Flemsha wants you to collect {amount} {target}.",
+                TurnIn = $"You have the {amount} {target}. Return to Flemsha for your reward.",
                 Gold = reward.Item1,
                 Exp = reward.Item2,
                 Potions = reward.Item3,

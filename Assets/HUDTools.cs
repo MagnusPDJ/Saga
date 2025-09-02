@@ -637,7 +637,7 @@ namespace Saga.Assets
             Console.WriteLine("[][][][][][][][]  Camp   [][][][][][][][]");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
             Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
-            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions: *Not implemented*");
+            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -681,9 +681,9 @@ namespace Saga.Assets
                 foreach (Quest quest in Program.CurrentPlayer.QuestLog) {
                     Console.WriteLine($" \u001b[96m{quest.Name}:\u001b[0m{(quest.QuestType == Dungeon.Quests.Type.Elimination ? $"\t{quest.Amount}/{quest.Requirements[quest.Target]} " : "")}");
                     if (!quest.Completed) {
-                        Console.WriteLine(quest.Objective);
+                        Console.WriteLine($" {quest.Objective}");
                     } else if (quest.Completed) {
-                        Console.WriteLine(quest.TurnIn);
+                        Console.WriteLine($" {quest.TurnIn}");
                     }
                     Console.WriteLine(" Rewards:");
                     if (quest.Gold > 0 && quest.Potions > 0) {

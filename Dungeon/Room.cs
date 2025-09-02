@@ -117,6 +117,7 @@ namespace Saga.Dungeon
                 }
             }
             if (foundRoom) {
+                Program.CurrentPlayer.RegainMana();
                 currentRoom.LoadRoom();
             }
         }
@@ -205,7 +206,7 @@ namespace Saga.Dungeon
             exits = [new Exit() { keyString = "You will never leave", exitDescription = "here alive", valueRoom = null}];
         }
         public override void LoadRoom() {
-            if (Program.CurrentPlayer.CurrentAct == Character.Act.Start) {
+            if (Program.CurrentPlayer.CurrentAct == Act.Start) {
                 Encounters.FirstCamp();
             }
             if (Program.CurrentPlayer.TimesExplored == 1) {
@@ -232,6 +233,7 @@ namespace Saga.Dungeon
         public override void LoadRoom() {
             string exit = "";
             Encounters.PuzzleOneEncounter();
+            HUDTools.RoomHUD();
             while (exit == "") {
                 exit = TextInput.PlayerPrompt(true);
             }
@@ -267,6 +269,7 @@ namespace Saga.Dungeon
                 Program.RoomController.ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
+                HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
                 }
@@ -289,6 +292,7 @@ namespace Saga.Dungeon
                 Program.RoomController.ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
+                HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
                 }
