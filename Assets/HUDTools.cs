@@ -70,7 +70,7 @@ namespace Saga.Assets
         }
 
         // Metode til at skrive en logfil til kamp
-        public static void WriteCombatLog(string action, Encounters TurnTimer, Enemy Monster, int damage=0, int attack = 0) {
+        public static void WriteCombatLog(string action, CombatController combatController, Enemy monster, int damage=0, int attack = 0) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
             }
@@ -96,16 +96,16 @@ namespace Saga.Assets
             Console.Write($"{text}\n");
 
             //Skriver og tilføjer den nye tekst.
-            if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
+            if (Program.CurrentPlayer.DerivedStats.Initiative > monster.Initiative) {
                 switch (action) {
                     case "attack":
-                        Console.WriteLine($"Turn: {TurnTimer.TurnTimer}\nYou attacked and dealt {attack} damage.");
+                        Console.WriteLine($"Turn: {combatController.Turn}\nYou attacked and dealt {attack} damage.");
                         break;
                     case "defend":
-                        Console.WriteLine($"Turn: {TurnTimer.TurnTimer}\nYou defended and lowered the next two attacks.");
+                        Console.WriteLine($"Turn: {combatController.Turn}\nYou defended and lowered the next two attacks.");
                         break;
                     case "heal":
-                        Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
+                        Console.WriteLine($"Turn: {combatController.Turn}");
                         var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
                         if (potion != null) {
                             if (potion.PotionQuantity == 0) {
@@ -121,11 +121,11 @@ namespace Saga.Assets
                         }                       
                         break;
                     case "run":
-                        Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
+                        Console.WriteLine($"Turn: {combatController.Turn}");
                         Console.WriteLine($"You tried to run but was unable to escape this turn.");
                         break;
                     case "enemysecond":
-                        Console.WriteLine($"{Monster.Name} attacked and dealt {damage} damage!");
+                        Console.WriteLine($"{monster.Name} attacked and dealt {damage} damage!");
                         break;
                 }
             } else {
@@ -155,8 +155,8 @@ namespace Saga.Assets
                         Console.WriteLine($"You tried to run but was unable to escape this turn.");
                         break;
                     case "enemyfirst":
-                        Console.WriteLine($"Turn: {TurnTimer.TurnTimer}");
-                        Console.WriteLine($"{Monster.Name} attacked and dealt {damage} damage!");
+                        Console.WriteLine($"Turn: {combatController.Turn}");
+                        Console.WriteLine($"{monster.Name} attacked and dealt {damage} damage!");
                         break;
                 }
             }
@@ -583,9 +583,9 @@ namespace Saga.Assets
             }
             Print($"\nTo equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\nTo examine item write examine Itemname else (b)ack\n", 0);
         }
-        public static void CombatHUD(Enemy Monster, Encounters TurnTimer) {
+        public static void CombatHUD(Enemy Monster, CombatController combatController) {
             Console.Clear();
-            Console.WriteLine($" Turn: {TurnTimer.TurnTimer} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
+            Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
             Console.WriteLine($" Fighting: {Monster.Name}!");
             Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {

@@ -1,6 +1,7 @@
 ﻿using Saga.Items;
 using System.Text.Json.Serialization;
 using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel;
 
 namespace Saga.Character
 {  
@@ -41,6 +42,9 @@ namespace Saga.Character
         public int BonusInitiative { get; private set; }
         public int BonusHealth { get; private set; }
         public int BonusMana { get; private set; }
+        public int BonusManaRegenRate { get; private set; }
+        public int BonusActionPoints { get; private set; }
+        public int BonusAttackSpeed { get; private set; }
 
         public Equipment(Player player) {
             AttachToPlayer(player);
@@ -104,6 +108,7 @@ namespace Saga.Character
         public IEnumerable<KeyValuePair<string, IEquipable?>> GetSlots() => AsEnumerable();
 
         private void RecalculateArmorStats() {
+            //Pri affix
             int bonusStr = 0;
             int bonusDex = 0;
             int bonusInt = 0;
@@ -111,48 +116,65 @@ namespace Saga.Character
             int bonusWP = 0;
             int bonusAwa = 0;
             int bonusVirtue = 0;
+            //Second affix
             int bonusArmorRating = 0;
             int bonusElementRes = 0;
             int bonusMagicRes = 0;
             int bonusInitiative = 0;
             int bonusHealth = 0;
-            int bonusMana = 0;
+            int bonusMana = 0;          
+            int bonusActionPoints = 0;
+            int bonusManaRegenRate = 0;
+            //W affix
+            int bonusAttackSpeed = 0;
+
             foreach (var slot in AsEnumerable()) {
-                if (slot.Value != null && slot.Value is IArmor armor) {
-                    foreach (var paffix in armor.PrimaryAffixes.AsEnumerable()) {
-                        if (paffix.Key == "Strength") {
-                            bonusStr += paffix.Value;
-                        } else if (paffix.Key == "Dexterity") {
-                            bonusDex += paffix.Value;
-                        } else if (paffix.Key == "Intellect") {
-                            bonusInt += paffix.Value;
-                        } else if (paffix.Key == "Constitution") {
-                            bonusCon += paffix.Value;
-                        } else if (paffix.Key == "WillPower") {
-                            bonusWP += paffix.Value;
-                        } else if (paffix.Key == "Awareness") {
-                            bonusAwa += paffix.Value;
-                        } else if (paffix.Key == "Virtue") {
-                            bonusVirtue += paffix.Value;
+                if (slot.Value is not null && slot.Value is IArmor armor) {
+                    foreach (var pAffix in armor.PrimaryAffixes.AsEnumerable()) {
+                        if (pAffix.Key == "Strength") {
+                            bonusStr += pAffix.Value;
+                        } else if (pAffix.Key == "Dexterity") {
+                            bonusDex += pAffix.Value;
+                        } else if (pAffix.Key == "Intellect") {
+                            bonusInt += pAffix.Value;
+                        } else if (pAffix.Key == "Constitution") {
+                            bonusCon += pAffix.Value;
+                        } else if (pAffix.Key == "WillPower") {
+                            bonusWP += pAffix.Value;
+                        } else if (pAffix.Key == "Awareness") {
+                            bonusAwa += pAffix.Value;
+                        } else if (pAffix.Key == "Virtue") {
+                            bonusVirtue += pAffix.Value;
                         } 
                     }
-                    foreach (var saffix in armor.SecondaryAffixes.AsEnumerable()) {
-                        if (saffix.Key == "ArmorRating") {
-                            bonusArmorRating += saffix.Value;
-                        } else if (saffix.Key == "ElementalResistance") {
-                            bonusElementRes += saffix.Value;
-                        } else if (saffix.Key == "MagicalResistance") {
-                            bonusMagicRes += saffix.Value;
-                        } else if (saffix.Key == "Initiative") {
-                            bonusInitiative += saffix.Value;
-                        } else if (saffix.Key == "MaxHealth") {
-                            bonusHealth += saffix.Value;
-                        } else if (saffix.Key == "MaxMana") {
-                            bonusMana += saffix.Value;
+                    foreach (var sAffix in armor.SecondaryAffixes.AsEnumerable()) {
+                        if (sAffix.Key == "ArmorRating") {
+                            bonusArmorRating += sAffix.Value;
+                        } else if (sAffix.Key == "ElementalResistance") {
+                            bonusElementRes += sAffix.Value;
+                        } else if (sAffix.Key == "MagicalResistance") {
+                            bonusMagicRes += sAffix.Value;
+                        } else if (sAffix.Key == "Initiative") {
+                            bonusInitiative += sAffix.Value;
+                        } else if (sAffix.Key == "MaxHealth") {
+                            bonusHealth += sAffix.Value;
+                        } else if (sAffix.Key == "MaxMana") {
+                            bonusMana += sAffix.Value;
+                        } else if (sAffix.Key == "ManaRegenRate") {
+                            bonusManaRegenRate += sAffix.Value;
+                        } else if (sAffix.Key == "ActionPoints") {
+                            bonusActionPoints += sAffix.Value;
+                        }
+                    }
+                } else if (slot.Value is not null && slot.Value is IWeapon weapon) {
+                    foreach (var waffix in weapon.WeaponAttributes.AsEnumerable()) {
+                        if (waffix.Key == "AttackSpeed") {
+                            bonusAttackSpeed += waffix.Value;
                         }
                     }
                 }
             }
+            //Pri affix
             BonusStr = bonusStr;
             BonusDex = bonusDex;
             BonusInt = bonusInt;
@@ -160,12 +182,17 @@ namespace Saga.Character
             BonusWP = bonusWP;
             BonusAwa = bonusAwa;
             BonusVirtue = bonusVirtue;
+            //Second affix
             BonusArmorRating = bonusArmorRating;
             BonusElementRes = bonusElementRes;
             BonusMagicRes = bonusMagicRes;
             BonusInitiative = bonusInitiative;
             BonusHealth = bonusHealth;
             BonusMana = bonusMana;
+            BonusManaRegenRate = bonusManaRegenRate;
+            BonusActionPoints = bonusActionPoints;
+            //W affix
+            BonusAttackSpeed = bonusAttackSpeed;
         }
     }
 }

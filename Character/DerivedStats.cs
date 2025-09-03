@@ -19,7 +19,11 @@ namespace Saga.Character
         [JsonInclude]
         public int MagicalResistance { get; private set; }
         [JsonInclude]
-        public int ManaRegenRate { get; private set; } = 2;
+        public int ManaRegenRate { get; private set; }
+        [JsonInclude]
+        public int ActionPoints {  get; private set; }
+        [JsonInclude]
+        public int AttackSpeed { get; private set; }
 
         public DerivedStats(Player player) {
             AttachToPlayer(player);
@@ -39,6 +43,9 @@ namespace Saga.Character
             Initiative = CalculateInitiative() + _player!.Equipment.BonusInitiative;
             ElementalResistance = CalculateElementalResistance() + _player!.Equipment.BonusElementRes;
             MagicalResistance = CalculateMagicalResistance() + _player!.Equipment.BonusMagicRes;
+            ActionPoints = CalculateActionPoints() + _player!.Equipment.BonusActionPoints;
+            ManaRegenRate = CalculateManaRegenRate() + _player!.Equipment.BonusManaRegenRate;
+            AttackSpeed = CalculateAttackSpeed() + _player!.Equipment.BonusAttackSpeed;
         }
         int CalculateMaxHealth() {
             int baseHealth = 5 + 5 * _player!.Attributes.Constitution;
@@ -63,6 +70,18 @@ namespace Saga.Character
         int CalculateMagicalResistance() {
             int baseMagicalResistance = _player!.Attributes.Intellect;
             return baseMagicalResistance;
+        }
+        int CalculateActionPoints() {
+            int baseActionPoints = _player!.Attributes.Virtue;
+            return baseActionPoints;
+        }
+        int CalculateAttackSpeed() {
+            int baseAttackSpeed = (_player!.Attributes.Awareness + _player.Attributes.WillPower) / 2;
+            return baseAttackSpeed;
+        }
+        int CalculateManaRegenRate() {
+            int baseManaRegenRate = 2 + (_player!.Attributes.Constitution + _player.Attributes.WillPower)/2;
+            return baseManaRegenRate;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Saga.Character.DmgLogic;
+﻿using Saga.Assets;
+using Saga.Character.DmgLogic;
 
 namespace Saga.Dungeon.Monsters
 {
@@ -41,7 +42,7 @@ namespace Saga.Dungeon.Monsters
         public abstract void GetExp();
         public abstract int GetHealth(string name);
         public abstract int GetPower(string name);
-        public abstract void MonsterActions(Encounters TurnTimer);
+        public abstract void EnemyActions(CombatController combatController);
 
         public void TakeDamage((IDamageType, int) amount) {
             Health -= amount.Item2;

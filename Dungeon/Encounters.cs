@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Saga.Assets;
+﻿using Saga.Assets;
 using Saga.Dungeon.Monsters;
 using Saga.Dungeon.Quests;
 using Saga.Items;
@@ -8,11 +6,8 @@ using Saga.Items.Loot;
 
 namespace Saga.Dungeon
 {
-    public class Encounters {
-        public int TurnTimer { get; set; } = 1;
-        public bool Ran { get; set; } = false;
-        public bool UsedMana { get; set; } = false;
-
+    public static class Encounters 
+    {
       //Encounters:
 
         //Tutorial encounters:
@@ -45,7 +40,7 @@ namespace Saga.Dungeon
                 MaxHealth = 5,
                 Power = 2,
             };
-            Combat(FirstEncounter);
+            new CombatController(Program.CurrentPlayer, FirstEncounter).Combat();
         }
         public static void SecondEncounter() {
             Console.Clear();
@@ -58,7 +53,7 @@ namespace Saga.Dungeon
                 MaxHealth = 6,
                 Power = 3,
             };
-            Combat(SecondEncounter);
+            new CombatController(Program.CurrentPlayer, SecondEncounter).Combat();
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
         public static void MeetGheed() {
@@ -220,7 +215,7 @@ namespace Saga.Dungeon
                     break;
             }
             TextInput.PressToContinue();
-            Combat(RandomEnemy);
+            new CombatController(Program.CurrentPlayer, RandomEnemy).Combat();
         }
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
@@ -237,7 +232,7 @@ namespace Saga.Dungeon
                 ExpModifier = 3,
                 Initiative = 5,
             };
-            Combat(WizardEncounter);
+            new CombatController(Program.CurrentPlayer, WizardEncounter).Combat();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
@@ -268,7 +263,7 @@ namespace Saga.Dungeon
                         Power = 5 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 1 : 3),
                         GoldModifier = 3,
                     };
-                    Combat(MimicEncounter); 
+                    new CombatController(Program.CurrentPlayer, MimicEncounter).Combat(); 
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
@@ -488,49 +483,5 @@ namespace Saga.Dungeon
             return choice;
         }
         //Metode til at køre kamp
-        public static void Combat(Enemy Monster) {
-            var player = Program.CurrentPlayer;
-            int manaRegen = 1;
-            HUDTools.ClearLog();
-            //Starter en tur tæller:
-            Encounters TurnTimer = new();
-            //Tjekker hvem starter if(spilleren starter), else (Fjenden starter):
-            if (player.DerivedStats.Initiative > Monster.Initiative) {
-                while (Monster.Health > 0 && TurnTimer.Ran == false) {
-                    HUDTools.CombatHUD(Monster, TurnTimer);
-                    player.CombatActions(Monster, TurnTimer);                   
-                    if (TurnTimer.Ran == false) {
-                        Monster.MonsterActions(TurnTimer);
-                    }                   
-                    player.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
-                    if (manaRegen < TurnTimer.TurnTimer && !TurnTimer.UsedMana) {
-                        player.RegainMana();
-                        manaRegen++;
-                    } else {
-                        TurnTimer.UsedMana = false;
-                    }
-                }
-            }  else {
-                while (Monster.Health > 0 && TurnTimer.Ran == false) {
-                    HUDTools.CombatHUD(Monster, TurnTimer);
-                    Monster.MonsterActions(TurnTimer);
-                    player.CheckForDeath($"As the {Monster.Name} menacingly comes down to strike, you are slain by the mighty {Monster.Name}.");
-                    if (manaRegen < TurnTimer.TurnTimer && !TurnTimer.UsedMana) {
-                        player.RegainMana();
-                        manaRegen++;
-                    } else {
-                        TurnTimer.UsedMana = false;
-                    }
-                        player.CombatActions(Monster, TurnTimer);
-                }
-            }
-            //Tjekker om monstret er besejret:
-            if (Monster.Health <= 0) {
-                Program.SoundController.Stop();
-                HUDTools.ClearLog();
-                Program.SoundController.Play("win");
-                player.Loot.GetCombatLoot(Monster, $"You Won against the {Monster.Name} on turn {TurnTimer.TurnTimer - 1}!");
-            }
-        }
     }
 }

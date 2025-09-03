@@ -265,58 +265,6 @@ namespace Saga.Character
                 HUDTools.Print($"\u001b[35mYou've gained {quest.Item.ItemName}\u001b[0m");
             }
         }
-        //Metode til at vælge mellem klasse skills i kamp.
-        public void CombatActions(Enemy monster, Encounters turnTimer) {            
-            string input = TextInput.PlayerPrompt();
-            if (input == "2" || input == "basic attack") {
-                //Attack
-                if (LearnedSkills.Find(s => s.Name == "Basic Attack") is ITargetedSkill skill) {
-                    skill.Activate(Program.CurrentPlayer, monster);
-                }
-                turnTimer.TurnTimer++;
-            } else if (input == "3" || input == "heal") {
-                //Heal
-                var potion = Array.Find(Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
-                potion?.Consume();
-                HUDTools.WriteCombatLog(action: "heal", TurnTimer: turnTimer, Monster: monster);
-                turnTimer.TurnTimer++;
-            } else if (input == "4" || input == "run") {
-                //Run                   
-                if (RunAway(monster)) {
-                    Program.SoundController.Stop();
-                    HUDTools.ClearLog();
-                    turnTimer.Ran = true;
-                } else {
-                    HUDTools.WriteCombatLog(action: "run", TurnTimer: turnTimer, Monster: monster);
-                    turnTimer.TurnTimer++;
-                }
-            } else if (input == "5" || input == "look at skills") {
-                //
-            } else if (input == "1" || input == "quickcast") {
-                if (SkillTree.QuickCast is ITargetedSkill skill) {
-                    int tempMana = Mana;
-                    skill.Activate(this, monster);
-                    if (tempMana > Mana) {
-                        turnTimer.TurnTimer++;
-                    }
-                    turnTimer.UsedMana = true;
-                } else {
-                    HUDTools.Print($"You have no skill selected for quickcast!", 5);
-                }
-
-            } else if (input == "c" || input == "character screen") {
-                HUDTools.CharacterScreen();
-            } else if (input == "l" || input == "combat log") {
-                Console.Clear();
-                HUDTools.GetLog();
-            } else if (input == "q" || input == "questlog") {
-                HUDTools.QuestLogHUD();
-            } else {
-                HUDTools.Print($"There is no {input} action!", 5);
-            }
-                TextInput.PressToContinue();
-            HUDTools.ClearLastLine(1);
-        }
         public void TakeDamage(int damage) {
             Health -= damage;
         }

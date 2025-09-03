@@ -15,6 +15,8 @@ namespace Saga.Items
         public int ArmorRating { get; set; } = 0;
         public int ElementalResistance { get; set; } = 0;
         public int MagicalResistance { get; set; } = 0;
+        public int ManaRegenRate { get; set; } = 0;
+        public int ActionPoints { get; set; } = 0;
 
         /// <summary>
         /// Enumerates all slots as key/value pairs.
@@ -26,6 +28,8 @@ namespace Saga.Items
             yield return new(nameof(ArmorRating), ArmorRating);
             yield return new(nameof(ElementalResistance), ElementalResistance);
             yield return new(nameof(MagicalResistance), MagicalResistance);
+            yield return new(nameof(ManaRegenRate), ManaRegenRate);
+            yield return new(nameof(ActionPoints), ActionPoints);
         }
 
         /// <summary>

@@ -192,9 +192,9 @@ namespace Saga.Dungeon.Monsters
             return 0;
         }
 
-        public override void MonsterActions(Encounters turnTimer) {
+        public override void EnemyActions(CombatController combatController) {
             if (Program.CurrentPlayer.DerivedStats.Initiative > Initiative) {
-                if (EnemyTurn < turnTimer.TurnTimer && Health > 0) {
+                if (EnemyTurn < combatController.Turn && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
                         attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
@@ -212,11 +212,11 @@ namespace Saga.Dungeon.Monsters
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-                    HUDTools.WriteCombatLog(action: "enemysecond", TurnTimer: turnTimer, Monster: this, damage: attack);
+                    HUDTools.WriteCombatLog(action: "enemysecond", combatController: combatController, monster: this, damage: attack);
                     TextInput.PressToContinue();
                 }
             } else {
-                if (EnemyTurn == turnTimer.TurnTimer && Health > 0) {
+                if (EnemyTurn == combatController.Turn && Health > 0) {
                     int attack = Power;
                     if (AttackDebuff > 0) {
                         attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
@@ -231,7 +231,7 @@ namespace Saga.Dungeon.Monsters
                     }
                     EnemyTurn++;
                     HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-                    HUDTools.WriteCombatLog(action: "enemyfirst", TurnTimer: turnTimer, Monster: this, damage: attack);
+                    HUDTools.WriteCombatLog(action: "enemyfirst", combatController: combatController, monster: this, damage: attack);
                 }
             }
         }
