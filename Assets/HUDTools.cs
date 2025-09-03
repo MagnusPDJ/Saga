@@ -70,7 +70,7 @@ namespace Saga.Assets
         }
 
         // Metode til at skrive en logfil til kamp
-        public static void WriteCombatLog(string action, CombatController combatController, Enemy monster, int damage=0, int attack = 0) {
+        public static void WriteCombatLog(string action, Enemy monster, int damage=0, int attack = 0) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
             }
@@ -99,13 +99,13 @@ namespace Saga.Assets
             if (Program.CurrentPlayer.DerivedStats.Initiative > monster.Initiative) {
                 switch (action) {
                     case "attack":
-                        Console.WriteLine($"Turn: {combatController.Turn}\nYou attacked and dealt {attack} damage.");
+                        Console.WriteLine($"Turn: \nYou attacked and dealt {attack} damage.");
                         break;
                     case "defend":
-                        Console.WriteLine($"Turn: {combatController.Turn}\nYou defended and lowered the next two attacks.");
+                        Console.WriteLine($"Turn: \nYou defended and lowered the next two attacks.");
                         break;
                     case "heal":
-                        Console.WriteLine($"Turn: {combatController.Turn}");
+                        Console.WriteLine($"Turn: ");
                         var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
                         if (potion != null) {
                             if (potion.PotionQuantity == 0) {
@@ -121,7 +121,7 @@ namespace Saga.Assets
                         }                       
                         break;
                     case "run":
-                        Console.WriteLine($"Turn: {combatController.Turn}");
+                        Console.WriteLine($"Turn: ");
                         Console.WriteLine($"You tried to run but was unable to escape this turn.");
                         break;
                     case "enemysecond":
@@ -155,7 +155,7 @@ namespace Saga.Assets
                         Console.WriteLine($"You tried to run but was unable to escape this turn.");
                         break;
                     case "enemyfirst":
-                        Console.WriteLine($"Turn: {combatController.Turn}");
+                        Console.WriteLine($"Turn: ");
                         Console.WriteLine($"{monster.Name} attacked and dealt {damage} damage!");
                         break;
                 }

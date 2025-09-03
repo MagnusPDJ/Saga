@@ -31,18 +31,16 @@ namespace Saga.Dungeon.Monsters
         }
         public int Health { get; private set; }
         public int Power { get; set; }
+        public string PlayerKillDescription { get; set; } = string.Empty;
         public float ExpModifier { get; set; }
         public float GoldModifier { get; set; }
 
 
-        public int EnemyTurn { get; set; } = 1;
-        public int AttackDebuff { get; set; } = 0;
         public int Armor { get; set; } = 0;
         public int Initiative { get; set; } = 0;
         public abstract void GetExp();
         public abstract int GetHealth(string name);
         public abstract int GetPower(string name);
-        public abstract void EnemyActions(CombatController combatController);
 
         public void TakeDamage((IDamageType, int) amount) {
             Health -= amount.Item2;

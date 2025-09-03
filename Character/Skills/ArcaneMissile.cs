@@ -14,6 +14,7 @@ namespace Saga.Character.Skills
         public bool IsUnlocked { get; set; }
         public (int, int) Tier { get; set; }
         public int ManaCost { get; set; }
+        public int ActionPointCost { get; set; } = 1;
         public MagicalType MagicalType => MagicalType.Arcane;
 
         public ArcaneMissile() {
@@ -33,9 +34,13 @@ namespace Saga.Character.Skills
                     HUDTools.Print($"You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
                 } else {
                     HUDTools.Print("Not enough mana!", 10);
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                 }
             } else {
                 HUDTools.Print("No magical weapon equipped!", 10);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
             }            
         }
     }

@@ -80,7 +80,7 @@ namespace Saga.Character
             return baseAttackSpeed;
         }
         int CalculateManaRegenRate() {
-            int baseManaRegenRate = 2 + (_player!.Attributes.Constitution + _player.Attributes.WillPower)/2;
+            int baseManaRegenRate = 1 + (_player!.Attributes.Constitution + _player.Attributes.WillPower)/2;
             return baseManaRegenRate;
         }
     }

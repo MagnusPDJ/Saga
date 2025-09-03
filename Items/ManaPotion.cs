@@ -12,6 +12,7 @@ namespace Saga.Items
         public string ItemDescription { get; init; }
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }
+        public int ActionPointCost { get; set; } = 1;
         public PotionType PotionType => PotionType.Mana;
         public Slot ItemSlot => Slot.Potion;
         public MagicalType MagicalType => MagicalType.Arcane;
@@ -42,24 +43,16 @@ namespace Saga.Items
         public void Consume() {
             if (PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 5);
-            } else if (Program.CurrentPlayer.CurrentClass == "Mage") {
-                int mageBonus = 1 + Program.CurrentPlayer.Level * 2;
-                HUDTools.Print("You use a healing potion amplified by your magic", 10);
-                PotionQuantity--;
-                Program.CurrentPlayer.RegainHealth(PotionPotency + mageBonus);
-                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                    HUDTools.Print("You heal to max health!", 10);
-                } else {
-                    HUDTools.Print($"You gain {PotionPotency + mageBonus} health", 10);
-                }
+            } else if (Program.CurrentPlayer.Mana == Program.CurrentPlayer.DerivedStats.MaxMana) {
+                HUDTools.Print("You are already at max mana...", 5);
             } else {
-                HUDTools.Print("You use a healing potion", 10);
+                HUDTools.Print("You use a mana potion", 10);
                 PotionQuantity--;
-                Program.CurrentPlayer.RegainHealth(PotionPotency);
-                if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                    HUDTools.Print("You heal to max health!", 10);
+                Program.CurrentPlayer.RegainMana(PotionPotency);
+                if (Program.CurrentPlayer.Mana == Program.CurrentPlayer.DerivedStats.MaxMana) {
+                    HUDTools.Print("You go to max mana!", 10);
                 } else {
-                    HUDTools.Print($"You gain {PotionPotency} health", 10);
+                    HUDTools.Print($"You gain {PotionPotency} mana", 10);
                 }
             }
         }

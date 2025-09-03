@@ -12,6 +12,7 @@ namespace Saga.Items
         public string ItemDescription { get; init; }
         public int PotionPotency { get; set; }
         public int PotionQuantity { get; set; }
+        public int ActionPointCost { get; set; } = 1;
         public PotionType PotionType => PotionType.Healing;
         public Slot ItemSlot => Slot.Potion;
         public MagicalType MagicalType => MagicalType.Life;
@@ -42,6 +43,8 @@ namespace Saga.Items
         public void Consume() {
             if (PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 5);
+            } else if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
+                HUDTools.Print("You are already at max health...", 5);
             } else if (Program.CurrentPlayer.CurrentClass == "Mage") {
                 int mageBonus = 1 + Program.CurrentPlayer.Level * 2;
                 HUDTools.Print("You use a healing potion amplified by your magic", 10);

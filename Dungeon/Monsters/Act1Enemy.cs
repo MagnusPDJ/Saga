@@ -24,6 +24,7 @@ namespace Saga.Dungeon.Monsters
         public Act1Enemy(string name, Tribe tribe) {
             Name = name;
             EnemyTribe = tribe;
+            PlayerKillDescription = $"As the {Name} strikes, you are slain!";
             ExpModifier = tribe.GetExpModifier();
             GoldModifier = tribe.GetGoldModifier();
         }
@@ -190,50 +191,6 @@ namespace Saga.Dungeon.Monsters
                     return Program.Rand.Next(lower0, upper0 + 2);
             }
             return 0;
-        }
-
-        public override void EnemyActions(CombatController combatController) {
-            if (Program.CurrentPlayer.DerivedStats.Initiative > Initiative) {
-                if (EnemyTurn < combatController.Turn && Health > 0) {
-                    int attack = Power;
-                    if (AttackDebuff > 0) {
-                        attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
-                        Program.CurrentPlayer.TakeDamage(attack);
-                        AttackDebuff--;
-                        if (AttackDebuff == 0) {
-                            HUDTools.Print("You are no longer defended!", 5);
-                        }
-                    } else {
-                        attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;
-                        if (attack <= 0) {
-                            attack = 1;
-                        }
-                        Program.CurrentPlayer.TakeDamage(attack);
-                    }
-                    EnemyTurn++;
-                    HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-                    HUDTools.WriteCombatLog(action: "enemysecond", combatController: combatController, monster: this, damage: attack);
-                    TextInput.PressToContinue();
-                }
-            } else {
-                if (EnemyTurn == combatController.Turn && Health > 0) {
-                    int attack = Power;
-                    if (AttackDebuff > 0) {
-                        attack /= Math.Max(2, Program.CurrentPlayer.DerivedStats.ArmorRating);
-                        Program.CurrentPlayer.TakeDamage(attack);
-                        AttackDebuff--;
-                    } else {
-                        attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;
-                        if (attack <= 0) {
-                            attack = 1;
-                        }
-                        Program.CurrentPlayer.TakeDamage(attack);
-                    }
-                    EnemyTurn++;
-                    HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-                    HUDTools.WriteCombatLog(action: "enemyfirst", combatController: combatController, monster: this, damage: attack);
-                }
-            }
         }
     }
 }
