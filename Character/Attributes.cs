@@ -69,7 +69,7 @@ namespace Saga.Character
             return _awareness + (Dexterity + Intellect) / 2;
         }
         int CalculateVirtue() {
-            List<int> list = [Strength, Constitution, WillPower];
+            List<int> list = [Awareness, Constitution, WillPower];
             return _virtue + list.Min();
         }
         public void AddValues(int strength = 0, int dexterity = 0, int intellect = 0, int constitution = 0, int willPower = 0, int awareness = 0, int virtue = 0) {

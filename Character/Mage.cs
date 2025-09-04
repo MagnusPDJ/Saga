@@ -41,7 +41,7 @@ namespace Saga.Character
             HealingPotion healingPotion = new();
             healingPotion.Equip();
             LearnedSkills.Add(new ArcaneMissile());
-            SkillTree.QuickCast = LearnedSkills.Find(skill => skill.Name == "Arcane Missiles") as IActiveSkill;
+            SkillTree.QuickCast = "Arcane Missiles";
         }
         public override bool RunAway(Enemy Monster) {
             bool escaped = false;

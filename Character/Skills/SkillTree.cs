@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Saga.Assets;
 using System.Text.Json.Serialization;
 
 namespace Saga.Character.Skills
@@ -9,7 +9,7 @@ namespace Saga.Character.Skills
     public abstract class SkillTree
     {
         public List<ISkill> Skills { get; set; } = [];
-        public IActiveSkill? QuickCast { get; set; }
+        public string QuickCast { get; set; } = string.Empty;
 
         public List<ISkill> GetAvailableSkills(int playerlvl) {
             return Skills.FindAll(skill => !skill.IsUnlocked && skill.LevelRequired <= playerlvl);

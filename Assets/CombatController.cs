@@ -24,11 +24,11 @@ namespace Saga.Assets
             Action[] states = _player.DerivedStats.Initiative >= _enemy.Initiative
                 ? [PlayerTurn, EnemyTurn]
                 : [EnemyTurn, PlayerTurn];
-
+            HUDTools.CombatHUD(_enemy, this);
             while (_enemy.Health > 0 && _player.Health > 0 && Ran == false) {
                 Turn++;
                 Reset();
-                HUDTools.CombatHUD(_enemy, this);                
+                                
                 foreach (var state in states) {
                     state();
                 }
@@ -53,9 +53,10 @@ namespace Saga.Assets
         }
 
         void PlayerTurn() {
-            if (_player.Health > 0 && _enemy.Health > 0) {
+            if (_player.Health > 0 && _enemy.Health > 0) {             
                 RemainingActionPoints = _player.DerivedStats.ActionPoints;
                 while (!EndTurn() && _enemy.Health > 0) {
+                    HUDTools.CombatHUD(_enemy, this);
                     PlayerActions();
                 }
                 if (!UsedMana && _enemy.Health > 0) {
@@ -82,29 +83,30 @@ namespace Saga.Assets
                 default:
                     HUDTools.Print($"There is no {input} action!", 5);
                     TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
                 break;
                 case "1":
-                    if (_player.SkillTree.QuickCast is ITargetedSkill skill) {
-                        if (CanUseAction(skill)) {
-                            bool usedAP = skill.Activate(_player, _enemy);
-                            if (usedAP) {
-                                SpendActionPoints(usedAP, skill);
-                                UsedMana = true;
+                    if (_player.SkillTree.QuickCast != string.Empty) {
+                        ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
+                        if (quickcast is ITargetedSkill skill) {
+                            if (CanUseAction(skill)) {
+                                bool usedAP = skill.Activate(_player, _enemy);
+                                if (usedAP) {
+                                    SpendActionPoints(usedAP, skill);
+                                    UsedMana = true;
+                                }
+                            }
+                        } else if (quickcast is ISelfSkill skill1) {
+                            if (CanUseAction(skill1)) {
+                                bool usedAP = skill1.Activate(_player);
+                                if (usedAP) {
+                                    SpendActionPoints(usedAP, skill1);
+                                    UsedMana = true;
+                                }
                             }
                         }
-                    } else if (_player.SkillTree.QuickCast is ISelfSkill skill1) {
-                        if (CanUseAction(skill1)) {
-                            bool usedAP = skill1.Activate(_player);
-                            if (usedAP) {
-                                SpendActionPoints(usedAP, skill1);
-                                UsedMana = true;                              
-                            }
-                        }
-                    } else {
+                    }  else {
                         HUDTools.Print($"You have no skill selected for quickcast!", 3);
                         TextInput.PressToContinue();
-                        HUDTools.ClearLastLine(3);
                     }
                 break;
                 case "2":
@@ -137,17 +139,14 @@ namespace Saga.Assets
                     //Skill tree logic
                     HUDTools.Print($"*Not implemented*", 3);
                     TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
                     break;
                 case "c":
                     HUDTools.CharacterScreen();
                     TextInput.PressToContinue();
-                    HUDTools.CombatHUD(_enemy, this);
                 break;
                 case "q":
                     HUDTools.QuestLogHUD();
                     TextInput.PressToContinue();
-                    HUDTools.CombatHUD(_enemy, this);
                 break;
                 case "e":
                     Endturn = true;
@@ -169,18 +168,15 @@ namespace Saga.Assets
             if (action.ActionPointCost > RemainingActionPoints) {
                 HUDTools.Print("Not enough AP for that action");
                 TextInput.PressToContinue();
-                HUDTools.ClearLastLine(3);
                 return false;
             } else {
                 if (action is IActiveSkill skill && skill.Name == "Basic Attack" && GetUsedActionCount(skill.Name) == _player.DerivedStats.AttackSpeed) {
                     HUDTools.Print($"You have already attacked this turn. (Times attacked: {GetUsedActionCount(skill.Name)}, AttackSpeed {_player.DerivedStats.AttackSpeed})");
                     TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
                     return false;
                 } else if (action is IActiveSkill skill1 && GetUsedActionCount(skill1.Name) == _player.DerivedStats.CastingSpeed) {
                     HUDTools.Print($"You have already cast spells this turn. (Spells used: {GetUsedActionCount(skill1.Name)}, Casting Speed {_player.DerivedStats.CastingSpeed})");
                     TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
                     return false;
                 } else {
                     return true;
@@ -207,6 +203,9 @@ namespace Saga.Assets
                 return value;
             }
             return 0; 
+        }
+        public int GetRemainingActionPoints() {
+            return RemainingActionPoints;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Saga.Items;
 using System.Text.Json.Serialization;
 using System.Diagnostics.CodeAnalysis;
-using System.ComponentModel;
 
 namespace Saga.Character
 {  

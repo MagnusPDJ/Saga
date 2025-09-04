@@ -35,9 +35,9 @@ namespace Saga.Character
         public int Mana { get; set; }
         public int FreeAttributePoints { get; set; }
         public Attributes Attributes { get; set; }
-        public DerivedStats DerivedStats { get; set; }
+        public DerivedStats DerivedStats { get; set; }       
         public List<ISkill> LearnedSkills { get; set; }
-        public SkillTree SkillTree { get; }
+        public SkillTree SkillTree { get; init; }
         public int SkillPoints { get; set; }
         public Equipment Equipment { get; set; }
         public IItem[] Inventory { get; set; }
@@ -72,16 +72,16 @@ namespace Saga.Character
             LearnedSkills = [new BasicAttack()];
             SkillPoints = 0;
             TimesExplored = 0;
-            Attributes.AttributesChanged += () => PlayerChanged?.Invoke();
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
+            Attributes.AttributesChanged += () => PlayerChanged?.Invoke();         
         }
         public void AttachAfterLoad() {
-            Attributes.AttachToPlayer(this);
             Equipment.AttachToPlayer(this);
+            Attributes.AttachToPlayer(this);
             DerivedStats.AttachToPlayer(this);
-            
-            Attributes.AttributesChanged += () => PlayerChanged?.Invoke();
+
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
+            Attributes.AttributesChanged += () => PlayerChanged?.Invoke();            
         }
         public abstract void LevelUp();
         //Metode til udregning af det exp det koster at level op.
@@ -148,7 +148,7 @@ namespace Saga.Character
                 var skill = availableSkills[skillIndex];
                 skill.IsUnlocked = true;
                 var tier = skill.Tier;
-                tier.Item1 += 1;
+                tier.Min += 1;
                 skill.Tier = tier;
                 LearnedSkills.Add(skill);
                 SkillPoints--;

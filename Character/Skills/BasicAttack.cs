@@ -12,7 +12,7 @@ namespace Saga.Character.Skills
         public string Description { get; set; }
         public int LevelRequired => 0;
         public bool IsUnlocked { get; set; }
-        public (int, int) Tier {  get; set; }
+        public TierRange Tier {  get; set; } = new TierRange(1,1);
         public int ManaCost {  get; set; }
         public int ActionPointCost { get; set; } = 1;
         public PhysicalType PhysicalType => PhysicalType.Normal;
@@ -20,7 +20,6 @@ namespace Saga.Character.Skills
             Name = "Basic Attack";
             Description = "Attack using your equipped weapon.";
             IsUnlocked = true;
-            Tier = (1, 1);
         }
         public bool Activate(Player player, Enemy target) {
             if (player.Equipment.Right_Hand is IWeapon weapon) {

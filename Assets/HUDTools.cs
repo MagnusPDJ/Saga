@@ -6,7 +6,6 @@ using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -410,24 +409,37 @@ namespace Saga.Assets
             Console.WriteLine("Choose what to sell");
         }
         public static void DisplayStats(Player player) {
-            StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~\n");
-
-            stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
-            stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
-            stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
-            stats.AppendFormat($"\n----------------- Primary Attributes -----------------------\n");
-            stats.AppendFormat($" (S)trength:     {player.Attributes.Strength}\n");
-            stats.AppendFormat($" (D)exterity:    {player.Attributes.Dexterity}\n");
-            stats.AppendFormat($" (I)ntellect:    {player.Attributes.Intellect}\n");
-            stats.AppendFormat($" (C)onstitution: {player.Attributes.Constitution}\n");
-            stats.AppendFormat($" (W)illpower:    {player.Attributes.WillPower}\n");
-            stats.AppendFormat($" (A)wareness:    {player.Attributes.Awareness}\n");
-            stats.AppendFormat($"Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n");
-            stats.AppendFormat($"\n---------------- Secondary Attributes ----------------------\n");
-            stats.AppendFormat($" Health: {player.Health} / {player.DerivedStats.MaxHealth}\t\t\tWeapon Damage: {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage} {(Program.CurrentPlayer.CurrentClass == "Warrior" && (Program.CurrentPlayer.Equipment.Right_Hand as IWeapon is IPhysical) ? $"(+{Program.CurrentPlayer.Level} warrior bonus)" : "")}\n");
-            stats.AppendFormat($" Mana: {player.Mana} / {player.DerivedStats.MaxMana}\t\t\tMagical Resistance: {player.DerivedStats.MagicalResistance}\n");
-            stats.AppendFormat($" Armor Rating: {player.DerivedStats.ArmorRating}\t\tElemental Resistance: {player.DerivedStats.ElementalResistance}");
-
+            StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            //                        "                                                                                                    "
+                  stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
+                  stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
+                  stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
+                stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
+                  stats.AppendFormat($" ┌(S)trength ⤵            {player.Attributes.Strength    }\t=> Elemental Resistance:  {player.DerivedStats.ElementalResistance}\n");
+                  stats.AppendFormat($" │      (C)onstitution⤵   {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
+                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Armor Rating:          {player.DerivedStats.ArmorRating}\n");
+                  stats.AppendFormat($" │      (A)wareness ⤵     {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
+                  stats.AppendFormat($" │(I)ntellect ⇵           {player.Attributes.Intellect   }\t=> Magical Resistance:    {player.DerivedStats.MagicalResistance}\n");                 
+                  stats.AppendFormat($" └>     (W)illpower ⤵     {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
+                  stats.AppendFormat($"                 Virtue   {player.Attributes.Virtue      }\t=> Action Points:         {player.DerivedStats.ActionPoints}\n");
+                  stats.AppendFormat($"  Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n\n");
+                  stats.AppendFormat($" Attack Speed:      {player.DerivedStats.AttackSpeed}\t(Constitution and Awareness)\n");
+                  stats.AppendFormat($" Casting Speed:     {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
+                  stats.AppendFormat($" Mana Regen:        {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
+                stats.AppendFormat($"\n----------------------------------------- Equipment Stats ------------------------------------------\n");
+                   stats.AppendFormat(" Weapon Attributes:\n");      
+                  stats.AppendFormat($"  Weapon Damage:  {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-" +
+                                                     $"{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage}" +
+                                                     $"{(Program.CurrentPlayer.CurrentClass == "Warrior" && (Program.CurrentPlayer.Equipment.Right_Hand as IWeapon is IPhysical) ?
+                                                     $"(+{Program.CurrentPlayer.Level} warrior bonus)" :
+                                                     "")},\t+Attack Speed:  {player.Equipment.BonusAttackSpeed},\t+Casting Speed:  {player.Equipment.BonusCastingSpeed}.\n");
+                stats.AppendFormat($"\n Primary Attributes:\n");
+                  stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
+               stats.AppendFormat($"\n Secondary Attributes:\n");
+            stats.AppendFormat($"  +Max Health:  {player.Equipment.BonusHealth     },\t+Max Mana:              {player.Equipment.BonusMana        },\t+Mana Regen:          {player.Equipment.BonusManaRegenRate}.\n");
+            stats.AppendFormat($"  +Initiative:  {player.Equipment.BonusInitiative },\t+Action Points:         {player.Equipment.BonusActionPoints},\n");
+            stats.AppendFormat($"  +Armor:       {player.Equipment.BonusArmorRating},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  },\t+Magical Resistance:  {player.Equipment.BonusMagicRes}.\n");
+            
             Print(stats.ToString(),0);
         }
         public static void CharacterScreen() {
@@ -439,66 +451,66 @@ namespace Saga.Assets
             }       
         }
         public static void ShowSkillTree() {
+            //Console.Clear();
+            //Console.WriteLine("************************************* Skill Tree ***************************************************\n" +
+            //                  "                                    ┌───────────┐\r\n" +
+            //                  "                                    │  [X] ROOT │\r\n" +
+            //                  "             ┌──────────────────────┴─────┬─────┴───────────────────────┐\r\n" +
+            //                  "        ┌────┴────┐                       │                        ┌────┴─────┐\r\n" +
+            //                  "        │[*]Attack│                       │                        │[X]Defense│\r\n" +
+            //                  "        └────┬────┘                       │                        └──────┬───┘\r\n" +
+            //                  "     ┌───────┴────────────┐               │                      ┌────────┴──────┐\r\n" +
+            //                  " ┌───┴────┐           ┌───┴─────┐         │                ┌─────┴─────┐    ┌────┴────┐\r\n" +
+            //                  " │[ ]Sword│           │[ ]Ranged│         │                │ [*]Armor  │    │[*]Shield│\r\n" +
+            //                  " └───┬────┘           └───┬─────┘         │                └─────┬─────┘    └────┬────┘\r\n" +
+            //                  "     │                    │               │                      │               │\r\n" +
+            //                  "┌────┴────┐         ┌─────┴──────┐        │                ┌─────┴────┐      ┌───┴────┐\r\n" +
+            //                  "│ [ ]Slash│         │[ ]Precision│        │                │[ ]Fortify│      │[ ]Block│\r\n" +
+            //                  "└────┬────┘         └─────┬──────┘        │                └─────┬────┘      └───┬────┘\r\n" +
+            //                  "     │                    │               │                      │               │\r\n" +
+            //                  "┌────┴──────┐      ┌──────┴──┐            │               ┌──────┴─────┐     ┌───┴────────┐\r\n" +
+            //                  "│[ ]Critical│      │[ ]Volley│            │               │[ ]Iron Skin│     │[ ]Iron Will│\r\n" +
+            //                  "└───────────┘      └─────────┘            │               └────────────┘     └────────────┘\r\n" +
+            //                  "             ┌────────────────────────────┴────────────────────────────┐\r\n" +
+            //                  "        ┌────┴────┐                                               ┌────┴─────┐\r\n" +
+            //                  "        │[ ]Magic │                                               │[ ]Utility│\r\n" +
+            //                  "        └────┬────┘                                               └────┬─────┘\r\n" +
+            //                  "     ┌───────┴─────────┐                                   ┌───────────┴─────────┐\r\n" +
+            //                  " ┌───┴────┐        ┌───┴────┐                         ┌────┴─────┐         ┌─────┴─────┐\r\n" +
+            //                  " │[ ]Fire │        │[ ]Frost│                         │[ ]Stealth│         │[ ]Crafting│\r\n" +
+            //                  " └───┬────┘        └───┬────┘                         └────┬─────┘         └─────┬─────┘\r\n" +
+            //                  "     │                 │                                   │                     │\r\n" +
+            //                  "┌────┴──────┐      ┌───┴────────┐                   ┌──────┴────┐        ┌───────┴──┐\r\n" +
+            //                  "│[ ]Fireball│      │[ ]Ice Shard│                   │[ ]Backstab│        │[ ]Alchemy│\r\n" +
+            //                  "└────┬──────┘      └───┬────────┘                   └──────┬────┘        └───────┬──┘\r\n" +
+            //                  "     │                 │                                   │                     │\r\n" +
+            //                  "┌────┴─────┐       ┌───┴───────┐                      ┌────┴─────────┐     ┌─────┴────┐\r\n" +
+            //                  "│[ ]Inferno│       │[ ]Blizzard│                      │[ ]Assassinate│     │[ ]Enchant│\r\n" +
+            //                  "└──────────┘       └───────────┘                      └──────────────┘     └──────────┘\r\n" +
+            //                  "****************************************************************************************************\n" +
+            //                  "Legend:\r\n" +
+            //                  "[X] = unlocked skill\r\n" +
+            //                  "[*] = available to learn\r\n" +
+            //                  "[ ] = locked\r\n" +
+            //                  "Commands: \r\n" +
+            //                  "- learn <SkillName>   → Unlock a skill\r\n" +
+            //                  "- info <SkillName>    → View skill details\r\n" +
+            //                  "- (b)ack              → Return");
             Console.Clear();
-            Console.WriteLine("************************************* Skill Tree ***************************************************\n" +
-                              "                                    ┌───────────┐\r\n" +
-                              "                                    │  [X] ROOT │\r\n" +
-                              "             ┌──────────────────────┴─────┬─────┴───────────────────────┐\r\n" +
-                              "        ┌────┴────┐                       │                        ┌────┴─────┐\r\n" +
-                              "        │[*]Attack│                       │                        │[X]Defense│\r\n" +
-                              "        └────┬────┘                       │                        └──────┬───┘\r\n" +
-                              "     ┌───────┴────────────┐               │                      ┌────────┴──────┐\r\n" +
-                              " ┌───┴────┐           ┌───┴─────┐         │                ┌─────┴─────┐    ┌────┴────┐\r\n" +
-                              " │[ ]Sword│           │[ ]Ranged│         │                │ [*]Armor  │    │[*]Shield│\r\n" +
-                              " └───┬────┘           └───┬─────┘         │                └─────┬─────┘    └────┬────┘\r\n" +
-                              "     │                    │               │                      │               │\r\n" +
-                              "┌────┴────┐         ┌─────┴──────┐        │                ┌─────┴────┐      ┌───┴────┐\r\n" +
-                              "│ [ ]Slash│         │[ ]Precision│        │                │[ ]Fortify│      │[ ]Block│\r\n" +
-                              "└────┬────┘         └─────┬──────┘        │                └─────┬────┘      └───┬────┘\r\n" +
-                              "     │                    │               │                      │               │\r\n" +
-                              "┌────┴──────┐      ┌──────┴──┐            │               ┌──────┴─────┐     ┌───┴────────┐\r\n" +
-                              "│[ ]Critical│      │[ ]Volley│            │               │[ ]Iron Skin│     │[ ]Iron Will│\r\n" +
-                              "└───────────┘      └─────────┘            │               └────────────┘     └────────────┘\r\n" +
-                              "             ┌────────────────────────────┴────────────────────────────┐\r\n" +
-                              "        ┌────┴────┐                                               ┌────┴─────┐\r\n" +
-                              "        │[ ]Magic │                                               │[ ]Utility│\r\n" +
-                              "        └────┬────┘                                               └────┬─────┘\r\n" +
-                              "     ┌───────┴─────────┐                                   ┌───────────┴─────────┐\r\n" +
-                              " ┌───┴────┐        ┌───┴────┐                         ┌────┴─────┐         ┌─────┴─────┐\r\n" +
-                              " │[ ]Fire │        │[ ]Frost│                         │[ ]Stealth│         │[ ]Crafting│\r\n" +
-                              " └───┬────┘        └───┬────┘                         └────┬─────┘         └─────┬─────┘\r\n" +
-                              "     │                 │                                   │                     │\r\n" +
-                              "┌────┴──────┐      ┌───┴────────┐                   ┌──────┴────┐        ┌───────┴──┐\r\n" +
-                              "│[ ]Fireball│      │[ ]Ice Shard│                   │[ ]Backstab│        │[ ]Alchemy│\r\n" +
-                              "└────┬──────┘      └───┬────────┘                   └──────┬────┘        └───────┬──┘\r\n" +
-                              "     │                 │                                   │                     │\r\n" +
-                              "┌────┴─────┐       ┌───┴───────┐                      ┌────┴─────────┐     ┌─────┴────┐\r\n" +
-                              "│[ ]Inferno│       │[ ]Blizzard│                      │[ ]Assassinate│     │[ ]Enchant│\r\n" +
-                              "└──────────┘       └───────────┘                      └──────────────┘     └──────────┘\r\n" +
-                              "****************************************************************************************************\n" +
-                              "Legend:\r\n" +
-                              "[X] = unlocked skill\r\n" +
-                              "[*] = available to learn\r\n" +
-                              "[ ] = locked\r\n" +
-                              "Commands: \r\n" +
-                              "- learn <SkillName>   → Unlock a skill\r\n" +
-                              "- info <SkillName>    → View skill details\r\n" +
-                              "- (b)ack              → Return");
-            //Console.Clear();  
-            //Print($"Learned Skills:", 0);
-            //for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
-            //    var s = Program.CurrentPlayer.LearnedSkills[i];
-            //    Print($"{i + 1}: {s.Name} ({s.Tier.Item1}/{s.Tier.Item2}) - {s.Description}", 0);
-            //}
-            //var availableSkills = Program.CurrentPlayer.SkillTree.GetAvailableSkills(Program.CurrentPlayer.Level);
-            //if (availableSkills.Count != 0) {
-            //    Print("Available Skills:", 0);
-            //    for (int i = 0; i < availableSkills.Count; i++) {
-            //        var s = availableSkills[i];
-            //        Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Item1}/{s.Tier.Item2})", 0);
-            //    }
-            //}
-            //Print("\nEnter the number of the skill to unlock, or '(b)ack' to exit.", 10);
+            Print($"Learned Skills:", 0);
+            for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
+                var s = Program.CurrentPlayer.LearnedSkills[i];
+                Print($"{i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - {s.Description}", 0);
+            }
+            var availableSkills = Program.CurrentPlayer.SkillTree.GetAvailableSkills(Program.CurrentPlayer.Level);
+            if (availableSkills.Count != 0) {
+                Print("Available Skills:", 0);
+                for (int i = 0; i < availableSkills.Count; i++) {
+                    var s = availableSkills[i];
+                    Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Min}/{s.Tier.Max})", 0);
+                }
+            }
+            Print("\nEnter the number of the skill to unlock, or '(b)ack' to exit.", 10);
         }
         public static void InventoryScreen() {
             Console.Clear();
@@ -514,23 +526,26 @@ namespace Saga.Assets
                     }
                 } else if (slot.Value is IArmor armor) {
                     Console.Write($" {armor.ItemSlot} - {armor.ItemName}:");
-                    if (((ArmorBase)slot.Value).SecondaryAffixes.ArmorRating > 0) {
+                    if (armor.SecondaryAffixes.ArmorRating > 0) {
                         Console.Write($" +{armor.SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAffixes.Strength > 0) {
+                    if (armor.PrimaryAffixes.Strength > 0) {
                         Console.Write($", +{armor.PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAffixes.Dexterity > 0) {
+                    if (armor.PrimaryAffixes.Dexterity > 0) {
                         Console.Write($", +{armor.PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAffixes.Intellect > 0) {
+                    if (armor.PrimaryAffixes.Intellect > 0) {
                         Console.Write($", +{armor.PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAffixes.Constitution > 0) {
+                    if (armor.PrimaryAffixes.Constitution > 0) {
                         Console.Write($", +{armor.PrimaryAffixes.Constitution} Const");
                     }
-                    if (((ArmorBase)slot.Value).PrimaryAffixes.WillPower > 0) {
+                    if (armor.PrimaryAffixes.WillPower > 0) {
                         Console.Write($", +{armor.PrimaryAffixes.WillPower} Wp");
+                    }
+                    if (armor.PrimaryAffixes.Awareness > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Awareness} Awa");
                     }
                     if (armor.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -550,30 +565,33 @@ namespace Saga.Assets
                 }  else if (item is IQuestItem item1) {
                     Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
                 } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
-                    if (item is ITwoHanded) {
-                        Console.WriteLine($" Both hands - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    if (item is ITwoHanded twoHanded) {
+                        Console.WriteLine($" Both hands - {twoHanded.ItemName}: +{twoHanded.WeaponAttributes.MinDamage}-{twoHanded.WeaponAttributes.MaxDamage} dmg");
                     } else {
                         Console.WriteLine($" {((IEquipable)item).ItemSlot} - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
                     }
-                } else if (item is IArmor) {
-                    Console.Write($" {((IEquipable)item).ItemSlot} - {item.ItemName}:");
-                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
+                } else if (item is IArmor armor) {
+                    Console.Write($" {armor.ItemSlot} - {armor.ItemName}:");
+                    if (armor.SecondaryAffixes.ArmorRating > 0) {
+                        Console.Write($" +{armor.SecondaryAffixes.ArmorRating} Armor Rating");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
+                    if (armor.PrimaryAffixes.Strength > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Strength} Str");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
+                    if (armor.PrimaryAffixes.Dexterity > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Dexterity} Dex");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
+                    if (armor.PrimaryAffixes.Intellect > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Intellect} Int");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
+                    if (armor.PrimaryAffixes.Constitution > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Constitution} Const");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
+                    if (armor.PrimaryAffixes.WillPower > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.WillPower} Wp");
+                    }
+                    if (armor.PrimaryAffixes.Awareness > 0) {
+                        Console.Write($", +{armor.PrimaryAffixes.Awareness} Awa");
                     }
                     if (item.ItemName == "Linen Rags") {
                         Console.Write(" Offers no protection");
@@ -589,29 +607,23 @@ namespace Saga.Assets
             Console.WriteLine($" Fighting: {Monster.Name}!");
             Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
-                Console.WriteLine("\n-------------------------------------");
+                Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");
             } else {
                 Console.WriteLine("\n  The enemy goes first!");
-                  Console.WriteLine("-------------------------------------\n");
+                  Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
-            Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"  Your health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($"       Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($"  Level: {Program.CurrentPlayer.Level}\t\t|| Gold: ${Program.CurrentPlayer.Gold}");
-            Console.Write("  EXP  ");
-            Console.Write("[");
-            ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
-            Console.WriteLine("]");
-            Console.WriteLine($" ============== Actions =============");
-            Console.WriteLine($" |  (1) Quick Cast: {Program.CurrentPlayer.SkillTree.QuickCast?.Name ?? "\t\t   "} |");
-            Console.WriteLine($" |  (2) Attack     (3) Heal         |");
-            Console.WriteLine($" |  (4) Run        (5) Skills       |");
-            Console.WriteLine($" =============== Info ===============");
-            Console.WriteLine($" |  (C)haracter screen              |");
-            Console.WriteLine($" |   Combat (L)og                   |");
-            Console.WriteLine($" |  (Q)uestlog                      |");      
-            Console.WriteLine($" ====================================");
+            Console.WriteLine($"\t{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
+            Console.WriteLine($"\t     Your Health:   {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}  | | Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($"\t          Mana:     {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana    }  | | Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($"\t   Action Points:   {combatController.GetRemainingActionPoints()                             }\t   | | Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($"\tLevel: {Program.CurrentPlayer.Level}");
+                 Console.Write("\tEXP  ");Console.Write("[");ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25);Console.WriteLine("]");
+            Console.WriteLine($"\n ============== Actions ============|=============== Info ==============");
+            Console.WriteLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "\t\t   ")} |  (C)haracter screen              |");
+            Console.WriteLine($" |  (2) Attack     (3) Heal         |   Combat (L)og                   |");
+            Console.WriteLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
+            Console.WriteLine($" =============== Info ==============|===================================");
             Console.WriteLine($"  Choose an action...\n");
         }
         public static void RoomHUD() {

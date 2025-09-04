@@ -3,11 +3,7 @@ using Saga.Character;
 using Saga.Character.Skills;
 using Saga.Dungeon;
 using Saga.Items;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -66,15 +62,7 @@ namespace Saga
             Console.SetWindowSize(100, 45);
             Console.SetBufferSize(100, 45);
             Console.Title = "Saga";
-            //Item types til json serializer
-            Options.Converters.Add(new PolymorphicConverter<IItem>());
-            Options.Converters.Add(new PolymorphicConverter<IEquipable>());
-            Options.Converters.Add(new PolymorphicConverter<IWeapon>());
-            Options.Converters.Add(new PolymorphicConverter<IArmor>());
-            Options.Converters.Add(new PolymorphicConverter<IQuestItem>());
-            Options.Converters.Add(new PolymorphicConverter<IConsumable>());
-            //Skill types til json serializer
-            Options.Converters.Add(new PolymorphicConverter<ISkill>());
+            SetUpJsonConverters(Options);
 
             //Sætter lydniveauet til variablen sat fra configfilen.
             SoundController = new() {
@@ -456,6 +444,20 @@ namespace Saga
                 }
                 configFile.Save(ConfigurationSaveMode.Minimal);
             }
+        }
+        private static void SetUpJsonConverters(JsonSerializerOptions options) {
+            //Item types til json serializer
+            options.Converters.Add(new PolymorphicConverter<IItem>());
+            options.Converters.Add(new PolymorphicConverter<IEquipable>());
+            options.Converters.Add(new PolymorphicConverter<IWeapon>());
+            options.Converters.Add(new PolymorphicConverter<IArmor>());
+            options.Converters.Add(new PolymorphicConverter<IQuestItem>());
+            options.Converters.Add(new PolymorphicConverter<IConsumable>());
+            //Skill types til json serializer
+            options.Converters.Add(new PolymorphicConverter<ISkill>());
+            options.Converters.Add(new PolymorphicConverter<IActiveSkill>());
+            options.Converters.Add(new PolymorphicConverter<ITargetedSkill>());
+            options.Converters.Add(new PolymorphicConverter<ISelfSkill>());
         }
     }
 }
