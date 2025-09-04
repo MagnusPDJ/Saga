@@ -603,9 +603,10 @@ namespace Saga.Assets
         }
         public static void CombatHUD(Enemy Monster, CombatController combatController) {
             Console.Clear();
-            Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
-            Console.WriteLine($" Fighting: {Monster.Name}!");
-            Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
+                  Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                 Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
+                 Console.WriteLine($" Fighting: {Monster.Name}!");
+                 Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
                 Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");

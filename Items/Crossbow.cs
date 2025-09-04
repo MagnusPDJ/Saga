@@ -41,7 +41,9 @@ namespace Saga.Items
                     string input = TextInput.PlayerPrompt();
                     if (input == "y") {
                         valueRight?.UnEquip();
-                        valueLeft?.UnEquip();
+                        if (hasLeft) {
+                            Program.CurrentPlayer.Equipment.SetSlot(Slot.Left_Hand, null);
+                        }
                         Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, this);
                         Program.CurrentPlayer.Equipment.SetSlot(Slot.Left_Hand, new Bow() { ItemName = ItemName, WeaponAttributes = { } });
                         int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
