@@ -3,6 +3,6 @@ namespace Saga.Character.Skills
 {
     public interface ISelfSkill : IActiveSkill
     {
-        void Activate(Player player);
+        bool Activate(Player player);
     }
 }

@@ -7,8 +7,7 @@
     "ItemName": "Rusty Sword",
     "WeaponAttributes": {
       "MinDamage": 1,
-      "MaxDamage": 2,
-      "AttackSpeed": 1
+      "MaxDamage": 2
     }
   },
   {
@@ -19,8 +18,7 @@
     "ItemName": "Cracked Wand",
     "WeaponAttributes": {
       "MinDamage": 1,
-      "MaxDamage": 2,
-      "AttackSpeed": 1
+      "MaxDamage": 2
     }
   },
   {
@@ -31,8 +29,7 @@
     "ItemName": "Flimsy Bow",
     "WeaponAttributes": {
       "MinDamage": 1,
-      "MaxDamage": 3,
-      "AttackSpeed": 1
+      "MaxDamage": 3
     }
   },
   {
@@ -43,8 +40,7 @@
     "ItemName": "Enchanted Wand",
     "WeaponAttributes": {
       "MinDamage": 2,
-      "MaxDamage": 4,
-      "AttackSpeed": 1
+      "MaxDamage": 4
     }
   },
   {
@@ -55,8 +51,7 @@
     "ItemName": "Gnarled staff",
     "WeaponAttributes": {
       "MinDamage": 4,
-      "MaxDamage": 8,
-      "AttackSpeed": 1
+      "MaxDamage": 8
     }
   },
   {
@@ -67,8 +62,7 @@
     "ItemName": "Arcanist's Staff",
     "WeaponAttributes": {
       "MinDamage": 6,
-      "MaxDamage": 16,
-      "AttackSpeed": 1
+      "MaxDamage": 16
     }
   },
   {
@@ -79,8 +73,7 @@
     "ItemName": "Quick Shortbow",
     "WeaponAttributes": {
       "MinDamage": 2,
-      "MaxDamage": 4,
-      "AttackSpeed": 1
+      "MaxDamage": 4
     }
   },
   {
@@ -91,8 +84,7 @@
     "ItemName": "Sturdy Longbow",
     "WeaponAttributes": {
       "MinDamage": 4,
-      "MaxDamage": 8,
-      "AttackSpeed": 1
+      "MaxDamage": 8
     }
   },
   {
@@ -103,8 +95,7 @@
     "ItemName": "Marksman's Recurve",
     "WeaponAttributes": {
       "MinDamage": 6,
-      "MaxDamage": 16,
-      "AttackSpeed": 1
+      "MaxDamage": 16
     }
   },
   {
@@ -115,8 +106,7 @@
     "ItemName": "Steel Sword",
     "WeaponAttributes": {
       "MinDamage": 2,
-      "MaxDamage": 4,
-      "AttackSpeed": 1
+      "MaxDamage": 4
     }
   },
   {
@@ -127,8 +117,7 @@
     "ItemName": "Fine Longsword",
     "WeaponAttributes": {
       "MinDamage": 4,
-      "MaxDamage": 8,
-      "AttackSpeed": 1
+      "MaxDamage": 8
     }
   },
   {
@@ -139,8 +128,7 @@
     "ItemName": "Knight's Greatsword",
     "WeaponAttributes": {
       "MinDamage": 6,
-      "MaxDamage": 16,
-      "AttackSpeed": 1
+      "MaxDamage": 16
     }
   }
 ]

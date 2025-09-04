@@ -40,11 +40,13 @@ namespace Saga.Items
             Program.CurrentPlayer.Equipment.Potion.SetValue(null, index2);
             return "Potion unequipped!";
         }
-        public void Consume() {
+        public bool Consume() {
             if (PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 5);
+                return false;
             } else if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
                 HUDTools.Print("You are already at max health...", 5);
+                return false;
             } else if (Program.CurrentPlayer.CurrentClass == "Mage") {
                 int mageBonus = 1 + Program.CurrentPlayer.Level * 2;
                 HUDTools.Print("You use a healing potion amplified by your magic", 10);
@@ -55,6 +57,7 @@ namespace Saga.Items
                 } else {
                     HUDTools.Print($"You gain {PotionPotency + mageBonus} health", 10);
                 }
+                return true;
             } else {
                 HUDTools.Print("You use a healing potion", 10);
                 PotionQuantity--;
@@ -64,6 +67,7 @@ namespace Saga.Items
                 } else {
                     HUDTools.Print($"You gain {PotionPotency} health", 10);
                 }
+                return true;
             }
         }
     }

@@ -24,7 +24,7 @@ namespace Saga.Character.Skills
             Tier = (1, 5);
             ManaCost = 5;
         }
-        public void Activate(Player player, Enemy target) {
+        public bool Activate(Player player, Enemy target) {
             if (Program.CurrentPlayer.Equipment.Right_Hand is IWeapon weapon && weapon.WeaponCategory == WeaponCategory.Magic) {
                 if (player.SpendMana(ManaCost)) {
                     (IDamageType, int) damage = (this, 5);
@@ -32,15 +32,18 @@ namespace Saga.Character.Skills
                     target.TakeDamage(modifiedDamage);
                     HUDTools.Print($"You shoot an arcane missile from your {weapon.ItemName}", 15);
                     HUDTools.Print($"You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
+                    return true;
                 } else {
                     HUDTools.Print("Not enough mana!", 10);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
+                    return false;
                 }
             } else {
                 HUDTools.Print("No magical weapon equipped!", 10);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
+                return false;
             }            
         }
     }

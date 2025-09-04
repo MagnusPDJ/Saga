@@ -9,12 +9,12 @@ namespace Saga.Assets
 
         //Aflæser pc'ens lydenhed.
         private readonly WaveOutEvent outputDevice;
-        private WaveOutEvent outputDevice1;
-        private WaveOutEvent outputDevice2;
-        private WaveOutEvent outputDevice3;
-        private WaveOutEvent outputDevice4;
-        private WaveOutEvent outputDevice5;
-        private WaveFileReader waveFile;
+        private WaveOutEvent? outputDevice1;
+        private WaveOutEvent? outputDevice2;
+        private WaveOutEvent? outputDevice3;
+        private WaveOutEvent? outputDevice4;
+        private WaveOutEvent? outputDevice5;
+        private WaveFileReader? waveFile;
 
         //Metode til set/get lydniveau.
         public float Volume

@@ -5,20 +5,8 @@
     "ItemLevel": 1,
     "ItemSlot": 1,
     "ArmorType": 0,
-    "PrimaryAffixes": {
-      "Strength": 0,
-      "Dexterity": 0,
-      "Intellect": 0,
-      "Constitution": 0,
-      "WillPower": 0
-    },
-    "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 0,
-      "ElementalResistance": 0
-    },
+    "PrimaryAffixes": {},
+    "SecondaryAffixes": {},
     "ItemDescription": "Clothes that mark you a prisoner but without them, you'd be naked."
   },
   {
@@ -31,15 +19,10 @@
       "Strength": 1,
       "Dexterity": 1,
       "Intellect": 3,
-      "Constitution": 1,
-      "WillPower": 0
+      "Constitution": 1
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 4,
-      "ElementalResistance": 0
+      "ArmorRating": 4
     },
     "ItemDescription": "Soft to the touch and embroidered with golden runes all along the edges."
   },
@@ -53,15 +36,10 @@
       "Strength": 1,
       "Dexterity": 1,
       "Intellect": 5,
-      "Constitution": 2,
-      "WillPower": 0
+      "Constitution": 2
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 8,
-      "ElementalResistance": 0
+      "ArmorRating": 8
     },
     "ItemDescription": "Purple and white robe, it has void black runes that seem to change the more you stare at it."
   },
@@ -75,15 +53,10 @@
       "Strength": 1,
       "Dexterity": 1,
       "Intellect": 7,
-      "Constitution": 3,
-      "WillPower": 0
+      "Constitution": 3
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 12,
-      "ElementalResistance": 0
+      "ArmorRating": 12
     },
     "ItemDescription": "White robe that has a faint glow that constantly shift in the colours of the rainbow."
   },
@@ -97,15 +70,10 @@
       "Strength": 1,
       "Dexterity": 3,
       "Intellect": 1,
-      "Constitution": 1,
-      "WillPower": 0
+      "Constitution": 1
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 4,
-      "ElementalResistance": 0
+      "ArmorRating": 4
     },
     "ItemDescription": "Various hides and pelts have been sewn together to form a protective shirt."
   },
@@ -119,15 +87,10 @@
       "Strength": 1,
       "Dexterity": 5,
       "Intellect": 1,
-      "Constitution": 2,
-      "WillPower": 0
+      "Constitution": 2
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 8,
-      "ElementalResistance": 0
+      "ArmorRating": 8
     },
     "ItemDescription": "Hard leather that has been riveted into a cuirass and decorated with engravings."
   },
@@ -141,15 +104,10 @@
       "Strength": 1,
       "Dexterity": 7,
       "Intellect": 1,
-      "Constitution": 3,
-      "WillPower": 0
+      "Constitution": 3
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 12,
-      "ElementalResistance": 0
+      "ArmorRating": 12
     },
     "ItemDescription": "A nice velvet jacket riveted with metal plates on the inside giving the best protection while\nbeing lightweight."
   },
@@ -163,15 +121,10 @@
       "Strength": 3,
       "Dexterity": 1,
       "Intellect": 1,
-      "Constitution": 1,
-      "WillPower": 0
+      "Constitution": 1
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 4,
-      "ElementalResistance": 0
+      "ArmorRating": 4
     },
     "ItemDescription": "A plain mail shirt, but the steel is unusually black and it feels light."
   },
@@ -185,15 +138,10 @@
       "Strength": 5,
       "Dexterity": 1,
       "Intellect": 1,
-      "Constitution": 2,
-      "WillPower": 0
+      "Constitution": 2
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 8,
-      "ElementalResistance": 0
+      "ArmorRating": 8
     },
     "ItemDescription": "Black and lightweight steel has been rolled into the shape of a person's torso, fortunately\nit fits you quite well."
   },
@@ -207,15 +155,10 @@
       "Strength": 7,
       "Dexterity": 1,
       "Intellect": 1,
-      "Constitution": 3,
-      "WillPower": 0
+      "Constitution": 3
     },
     "SecondaryAffixes": {
-      "MaxHealth": 0,
-      "MaxMana": 0,
-      "Awareness": 0,
-      "ArmorRating": 12,
-      "ElementalResistance": 0
+      "ArmorRating": 12
     },
     "ItemDescription": "Black steel with golden adornments, this was definitely custommade for someone powerful."
   }

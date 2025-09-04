@@ -45,6 +45,7 @@ namespace Saga.Character
         public int BonusManaRegenRate { get; private set; }
         public int BonusActionPoints { get; private set; }
         public int BonusAttackSpeed { get; private set; }
+        public int BonusCastingSpeed { get; private set; }
 
         public Equipment(Player player) {
             AttachToPlayer(player);
@@ -127,6 +128,7 @@ namespace Saga.Character
             int bonusManaRegenRate = 0;
             //W affix
             int bonusAttackSpeed = 0;
+            int bonusCastingSpeed = 0;
 
             foreach (var slot in AsEnumerable()) {
                 if (slot.Value is not null && slot.Value is IArmor armor) {
@@ -170,6 +172,7 @@ namespace Saga.Character
                     foreach (var waffix in weapon.WeaponAttributes.AsEnumerable()) {
                         if (waffix.Key == "AttackSpeed") {
                             bonusAttackSpeed += waffix.Value;
+                            bonusCastingSpeed += waffix.Value;
                         }
                     }
                 }
@@ -193,6 +196,7 @@ namespace Saga.Character
             BonusActionPoints = bonusActionPoints;
             //W affix
             BonusAttackSpeed = bonusAttackSpeed;
+            BonusCastingSpeed = bonusCastingSpeed;
         }
     }
 }

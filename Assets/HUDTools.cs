@@ -251,22 +251,22 @@ namespace Saga.Assets
             Console.Clear();
             var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var settings = configFile.AppSettings.Settings;
-            Console.WriteLine("            Settings       ");
-            Console.WriteLine("==================================\n");
-            Console.WriteLine($"1. Toggle 'Press Enter continue': {settings["toggleReadLine"].Value}");
-            Console.WriteLine($"2. Toggle Slow-printing text:     {settings["toggleSlowPrint"].Value}");
-            Console.WriteLine($"3. Game Volume:                   {settings["volume"].Value}\n");
-            Console.WriteLine($"=======Press Esc to go back=======");
+            Console.WriteLine("               Settings               ");
+            Console.WriteLine("======================================\n");
+            Console.WriteLine($" 1. Toggle automatically ending turn: {settings["toggleAutoEndturn"].Value}");
+            Console.WriteLine($" 2. Toggle slow-printing text:        {settings["toggleSlowPrint"].Value}");
+            Console.WriteLine($" 3. Game Volume:                      {settings["volume"].Value}\n");
+            Console.WriteLine($"======== Press Esc to go back =======");
         }
         public static void LoadSaves(List<Player> players) {
-            Print("Choose a save! ('back' for main menu) ", 0);
+            Print(" Choose a save! ('back' for main menu) ", 0);
             Print("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.", 0);
             Print("#: playername", 0);
             foreach (Player p in players) {
-                Print($"{p.Id}: {p.Name} - Class: {p.CurrentClass} - Level: {p.Level}", 5);
+                Print($" {p.Id}: {p.Name} - Class: {p.CurrentClass} - Level: {p.Level}", 5);
             }
             Print("<><><><><><><><><><><><><><><><>", 0);
-            Print("To load a save write 'id:#' or 'playername'.\nFor new game write 'new game'.\nTo delete a save write 'delete:playername'.\n", 1);
+            Print(" To load a save write 'id:#' or 'playername'.\n For new game write 'new game'.\n To delete a save write 'delete:playername'.\n", 1);
         }
         public static void BuyShopHUD(Shop shop) {
             Console.Clear();

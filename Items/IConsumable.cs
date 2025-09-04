@@ -1,4 +1,5 @@
-﻿
+﻿using Saga.Assets;
+
 namespace Saga.Items
 {
     public enum PotionType
@@ -8,12 +9,11 @@ namespace Saga.Items
         Poison,
         Buff
     }
-    public interface IConsumable
+    public interface IConsumable : IAction
     {
         int PotionPotency { get; set; }
         int PotionQuantity { get; set; }
         PotionType PotionType { get; }
-        int ActionPointCost { get; set; }
-        void Consume();
+        bool Consume();
     }
 }

@@ -7,6 +7,7 @@ namespace Saga.Items
         public int MinDamage { get; set; }
         public int MaxDamage { get; set; }
         public int AttackSpeed { get; set; }
+        public int CastingSpeed { get; set; }
         /// <summary>
         /// Enumerates all slots as key/value pairs.
         /// </summary>
@@ -14,6 +15,7 @@ namespace Saga.Items
             yield return new(nameof(MinDamage), MinDamage);
             yield return new(nameof(MaxDamage), MaxDamage);
             yield return new(nameof(AttackSpeed), AttackSpeed);
+            yield return new(nameof(CastingSpeed), CastingSpeed);
         }
 
         /// <summary>

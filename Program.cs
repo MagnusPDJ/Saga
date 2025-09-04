@@ -409,10 +409,10 @@ namespace Saga
                 HUDTools.Settings();
                 string input = TextInput.PlayerPrompt();
                 if (input == "1") {
-                    if (settings["toggleReadLine"].Value == "true") {
-                        settings["toggleReadLine"].Value = "false";
+                    if (settings["toggleAutoEndturn"].Value == "true") {
+                        settings["toggleAutoEndturn"].Value = "false";
                     } else {
-                        settings["toggleReadLine"].Value = "true";
+                        settings["toggleAutoEndturn"].Value = "true";
                     }
                 } else if (input == "2") {
                     if (settings["toggleSlowPrint"].Value == "true") {

@@ -24,6 +24,8 @@ namespace Saga.Character
         public int ActionPoints {  get; private set; }
         [JsonInclude]
         public int AttackSpeed { get; private set; }
+        [JsonInclude]
+        public int CastingSpeed { get; private set; }
 
         public DerivedStats(Player player) {
             AttachToPlayer(player);
@@ -46,6 +48,7 @@ namespace Saga.Character
             ActionPoints = CalculateActionPoints() + _player!.Equipment.BonusActionPoints;
             ManaRegenRate = CalculateManaRegenRate() + _player!.Equipment.BonusManaRegenRate;
             AttackSpeed = CalculateAttackSpeed() + _player!.Equipment.BonusAttackSpeed;
+            CastingSpeed = CalculateCastingSpeed() + _player!.Equipment.BonusCastingSpeed;
         }
         int CalculateMaxHealth() {
             int baseHealth = 5 + 5 * _player!.Attributes.Constitution;
@@ -76,12 +79,16 @@ namespace Saga.Character
             return baseActionPoints;
         }
         int CalculateAttackSpeed() {
-            int baseAttackSpeed = (_player!.Attributes.Awareness + _player.Attributes.WillPower) / 2;
+            int baseAttackSpeed = (_player!.Attributes.Awareness + _player.Attributes.Constitution) / 2;
             return baseAttackSpeed;
         }
         int CalculateManaRegenRate() {
             int baseManaRegenRate = 1 + (_player!.Attributes.Constitution + _player.Attributes.WillPower)/2;
             return baseManaRegenRate;
+        }
+        int CalculateCastingSpeed() {
+            int baseCastingSpeed = (_player!.Attributes.Awareness + _player.Attributes.WillPower) / 2;
+            return baseCastingSpeed;
         }
     }
 }

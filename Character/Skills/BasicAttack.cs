@@ -2,7 +2,6 @@
 using Saga.Character.DmgLogic;
 using Saga.Dungeon.Monsters;
 using Saga.Items;
-using System.Threading;
 
 namespace Saga.Character.Skills
 {
@@ -23,18 +22,20 @@ namespace Saga.Character.Skills
             IsUnlocked = true;
             Tier = (1, 1);
         }
-        public void Activate(Player player, Enemy target) {
+        public bool Activate(Player player, Enemy target) {
             if (player.Equipment.Right_Hand is IWeapon weapon) {
                 (IDamageType, int) damage = weapon.Attack(target);
                 (IDamageType, int) modifiedDamage = player.CalculateDamageModifiers(damage);
                 target.TakeDamage(modifiedDamage);
                 HUDTools.Print($"You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
+                return true;
             } else {
                 HUDTools.Print($"You punch the {target.Name}!", 15);
                 (IDamageType, int) damage = (this, 1);
                 damage = player.CalculateDamageModifiers(damage);
                 target.TakeDamage(damage);
                 HUDTools.Print($"You deal {1} damage to {target.Name}.", 10);
+                return true;
             }
         }
     }
