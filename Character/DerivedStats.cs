@@ -41,6 +41,8 @@ namespace Saga.Character
             RecalculateDerivedStats();
         }
         private void RecalculateDerivedStats() {
+            int temp_MaxHealth = MaxHealth;
+            int temp_MaxMana = MaxMana;
             ArmorRating = _player!.Equipment.ArmorRating;
             MaxHealth = CalculateMaxHealth() + _player!.Equipment.BonusHealth;
             MaxMana = CalculateMaxMana() + _player!.Equipment.BonusMana;
@@ -52,6 +54,12 @@ namespace Saga.Character
             ManaRegenRate = CalculateManaRegenRate() + _player!.Equipment.BonusManaRegenRate;
             AttackSpeed = CalculateAttackSpeed() + _player!.Equipment.BonusAttackSpeed;
             CastingSpeed = CalculateCastingSpeed() + _player!.Equipment.BonusCastingSpeed;
+            if (temp_MaxHealth < MaxHealth) {
+                _player.SetHealth(MaxHealth);
+            }
+            if (temp_MaxMana < MaxMana) {
+                _player.SetMana(MaxMana);              
+            }
         }
         int CalculateMaxHealth() {
             int baseHealth = 5;

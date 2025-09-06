@@ -31,6 +31,8 @@ namespace Saga.Character.Skills
                     target.TakeDamage(modifiedDamage);
                     HUDTools.Print($"You shoot an arcane missile from your {weapon.ItemName}", 15);
                     HUDTools.Print($"You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(4);
                     return true;
                 } else {
                     HUDTools.Print("Not enough mana!", 10);

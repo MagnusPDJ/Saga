@@ -27,6 +27,8 @@ namespace Saga.Character.Skills
                 (IDamageType, int) modifiedDamage = player.CalculateDamageModifiers(damage);
                 target.TakeDamage(modifiedDamage);
                 HUDTools.Print($"You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
                 return true;
             } else {
                 HUDTools.Print($"You punch the {target.Name}!", 15);
@@ -34,6 +36,8 @@ namespace Saga.Character.Skills
                 damage = player.CalculateDamageModifiers(damage);
                 target.TakeDamage(damage);
                 HUDTools.Print($"You deal {1} damage to {target.Name}.", 10);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(4);
                 return true;
             }
         }

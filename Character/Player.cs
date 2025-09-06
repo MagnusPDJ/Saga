@@ -30,6 +30,7 @@ namespace Saga.Character
         public int Id { get; set; }
         public int Level { get; set; }
         public int Exp { get; set; }
+        private int LevelUpValue { get; set; } = 265;
         public int Gold { get; set; }
         public int Health { get; private set; }
         public int Mana { get; set; }
@@ -87,24 +88,29 @@ namespace Saga.Character
             int levels = 0;
             Program.SoundController.Play("levelup");
             while (CanLevelUp()) {
-                Program.CurrentPlayer.Exp -= GetLevelUpValue();
+                Program.CurrentPlayer.Exp -= LevelUpValue;
                 Program.CurrentPlayer.Level++;
                 Program.CurrentPlayer.FreeAttributePoints += 6;
                 Program.CurrentPlayer.SkillPoints++;
                 levels++;
             }
-
+            SetLevelUpValue();
             Program.CurrentPlayer.RegenToFull();
 
-            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point and 1 skill point.\u001b[0m", 20);
+            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 6 attribute point and 1 skill point.\u001b[0m", 20);
         }
         //Metode til udregning af det exp det koster at level op.
+        public void SetLevelUpValue() {
+            int temp_lvlupvalue = LevelUpValue;
+            temp_lvlupvalue += 5 * Level * Level + 230;
+            LevelUpValue = temp_lvlupvalue;
+        }
         public int GetLevelUpValue() {
-            return Convert.ToInt32(5000000 / (1 + 10000 * Math.Pow(1.2, 1 - Level)));
+            return LevelUpValue;
         }
         //Metode til at tjekke om lvl op er muligt.
         public bool CanLevelUp() {
-            if (Exp >= GetLevelUpValue()) {
+            if (Exp >= LevelUpValue) {
                 return true;
             } else {
                 return false;
@@ -118,7 +124,7 @@ namespace Saga.Character
         }
         public int SpendAttributePoint(int i) {
             if (FreeAttributePoints > 0 && i != 0) {
-                HUDTools.Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o", 1);
+                HUDTools.Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o", 0);
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "s" || input == "strength") {
@@ -211,7 +217,6 @@ namespace Saga.Character
                 //Heal
                 var potion = Array.Find(Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
                 potion?.Consume();
-                TextInput.PressToContinue();
             } else if (input == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();
                 TextInput.PressToContinue();

@@ -10,8 +10,7 @@ namespace Saga.Assets
     {
         private readonly Player _player = player;
         private readonly Enemy _enemy = enemy;
-        private readonly Dictionary<string, int> _counts = [];
-        private static bool AutoEndturn => Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleAutoEndturn"));
+        public static bool AutoEndturn => Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleAutoEndturn"));
         public int Turn { get; private set; } = 0;
         private bool Ran { get; set; } = false;
         private bool UsedMana { get; set; } = false;
@@ -60,9 +59,11 @@ namespace Saga.Assets
                 } else {
                     UsedMana = false;
                 }
-                HUDTools.Print("Your turn ended.", 5);
-                TextInput.PressToContinue();
-                HUDTools.ClearLastLine(1);
+                if (_enemy.Health > 0) {
+                    HUDTools.Print("Your turn ended.", 5);
+                }               
+                //TextInput.PressToContinue();
+                //HUDTools.ClearLastLine(1);
                 Endturn = false;
             }
         }
@@ -79,7 +80,8 @@ namespace Saga.Assets
                 default:
                     HUDTools.Print($"There is no {input} action!", 5);
                     TextInput.PressToContinue();
-                break;
+                    HUDTools.ClearLastLine(1);
+                    break;
                 case "1":
                     if (_player.SkillTree.QuickCast != string.Empty) {
                         ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
@@ -103,6 +105,7 @@ namespace Saga.Assets
                     }  else {
                         HUDTools.Print($"You have no skill selected for quickcast!", 3);
                         TextInput.PressToContinue();
+                        HUDTools.ClearLastLine(1);
                     }
                 break;
                 case "2":
@@ -121,7 +124,6 @@ namespace Saga.Assets
                         if (CanUseAction(potion)) {
                             bool usedAP = potion.Consume();
                             SpendActionPoints(usedAP, potion);
-                            TextInput.PressToContinue();
                         }
                     }
                 break;
@@ -136,6 +138,7 @@ namespace Saga.Assets
                     //Skill tree logic
                     HUDTools.Print($"*Not implemented*", 3);
                     TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                     break;
                 case "c":
                     HUDTools.CharacterScreen();
@@ -159,7 +162,8 @@ namespace Saga.Assets
             }
             Program.CurrentPlayer.TakeDamage(attack);
             HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
-            TextInput.PressToContinue();                               
+            TextInput.PressToContinue();
+            HUDTools.ClearLastLine(3);
         }
         bool CanUseAction(IAction action) {
             if (action is IActiveSkill skill && skill.Name == "Basic Attack") {
@@ -168,6 +172,7 @@ namespace Saga.Assets
                 } else {
                     HUDTools.Print("Not enough Action Points to use your weapon", 10);
                     TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                     return false;
                 }
             } else if (action is IActiveSkill skill1) {
@@ -176,6 +181,7 @@ namespace Saga.Assets
                 } else {
                     HUDTools.Print("Not enough Action Points to use that skill", 10);
                     TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                     return false;
                 }             
             } else if (action is IConsumable potion) {
@@ -184,6 +190,7 @@ namespace Saga.Assets
                 } else {
                     HUDTools.Print("Not enough Action Points to drink that potion", 10);
                     TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                     return false;
                 }
             }

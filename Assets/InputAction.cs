@@ -1,8 +1,6 @@
 ﻿using Saga.Character.DmgLogic;
 using Saga.Dungeon;
 using Saga.Items;
-using System;
-using System.Linq;
 
 namespace Saga.Assets
 {
@@ -146,7 +144,6 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {
             var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
             potion?.Consume();
-            TextInput.PressToContinue();
             HUDTools.RoomHUD();
             return "";
         }

@@ -43,9 +43,13 @@ namespace Saga.Items
         public bool Consume() {
             if (PotionQuantity == 0) {
                 HUDTools.Print("No potions left!", 5);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
                 return false;
             } else if (Program.CurrentPlayer.Mana == Program.CurrentPlayer.DerivedStats.MaxMana) {
                 HUDTools.Print("You are already at max mana...", 5);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
                 return false;
             } else {
                 HUDTools.Print("You use a mana potion", 10);
@@ -56,6 +60,8 @@ namespace Saga.Items
                 } else {
                     HUDTools.Print($"You gain {PotionPotency} mana", 10);
                 }
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(4);
                 return true;
             }
         }

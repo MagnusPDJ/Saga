@@ -417,7 +417,7 @@ namespace Saga.Assets
                 stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
                   stats.AppendFormat($" ┌(S)trength ⤵            {player.Attributes.Strength    }\t=> Elemental Resistance:  {player.DerivedStats.ElementalResistance}\n");
                   stats.AppendFormat($" │      (C)onstitution⤵   {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
-                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Damage Reduction:          {player.DerivedStats.DamageReduction}\n");
+                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Damage Reduction:      {player.DerivedStats.DamageReduction}\n");
                   stats.AppendFormat($" │      (A)wareness ⤵     {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
                   stats.AppendFormat($" │(I)ntellect ⇵           {player.Attributes.Intellect   }\t=> Magical Resistance:    {player.DerivedStats.MagicalResistance}\n");                 
                   stats.AppendFormat($" └>     (W)illpower ⤵     {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
@@ -427,7 +427,8 @@ namespace Saga.Assets
                   stats.AppendFormat($" Casting Speed:     {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
                   stats.AppendFormat($" Mana Regen:        {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
                 stats.AppendFormat($"\n----------------------------------------- Equipment Stats ------------------------------------------\n");
-                   stats.AppendFormat(" Weapon Attributes:\n");      
+                  stats.AppendFormat($" Armor Rating:  {player.Equipment.ArmorRating}\n");
+                   stats.AppendFormat("\n Weapon Attributes:\n");      
                   stats.AppendFormat($"  Weapon Damage:  {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-" +
                                                      $"{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage}" +
                                                      $"{(Program.CurrentPlayer.CurrentClass == "Warrior" && (Program.CurrentPlayer.Equipment.Right_Hand as IWeapon is IPhysical) ?
@@ -437,8 +438,8 @@ namespace Saga.Assets
                   stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
                stats.AppendFormat($"\n Secondary Attributes:\n");
             stats.AppendFormat($"  +Max Health:       {player.Equipment.BonusHealth         },\t+Max Mana:              {player.Equipment.BonusMana        },\t+Mana Regen:          {player.Equipment.BonusManaRegenRate}.\n");
-            stats.AppendFormat($"  +Initiative:       {player.Equipment.BonusInitiative     },\t+Action Points:         {player.Equipment.BonusActionPoints},\tArmor Rating:         {player.Equipment.ArmorRating}\n");
-            stats.AppendFormat($"  +Damage Reduction: {player.Equipment.BonusDamageReduction},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  },\t+Magical Resistance:  {player.Equipment.BonusMagicRes}.\n");
+            stats.AppendFormat($"  +Initiative:       {player.Equipment.BonusInitiative     },\t+Action Points:         {player.Equipment.BonusActionPoints},\t+Magical Resistance:  {player.Equipment.BonusMagicRes},\n");
+            stats.AppendFormat($"  +Damage Reduction: {player.Equipment.BonusDamageReduction},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  }.\n");
             
             Print(stats.ToString(),0);
         }
@@ -615,16 +616,17 @@ namespace Saga.Assets
                   Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
             Console.WriteLine($"\t{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"\t     Your Health:   {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}  | | Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($"\t          Mana:     {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana    }  | | Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($"\t   Action Points:   {combatController.GetRemainingActionPoints()                             }\t   | | Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($"\t     Your Health:   {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth                  }  | | Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($"\t          Mana:     {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana                      }  | | Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($"\t   Action Points:   {combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}  | | Gold: ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"\tLevel: {Program.CurrentPlayer.Level}");
                  Console.Write("\tEXP  ");Console.Write("[");ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25);Console.WriteLine("]");
             Console.WriteLine($"\n ============== Actions ============|=============== Info ==============");
             Console.WriteLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "\t\t   ")} |  (C)haracter screen              |");
             Console.WriteLine($" |  (2) Attack     (3) Heal         |   Combat (L)og                   |");
             Console.WriteLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
-            Console.WriteLine($" =============== Info ==============|===================================");
+            Console.WriteLine($" ===================================|===================================");
+            Console.WriteLine($" {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");
             Console.WriteLine($"  Choose an action...\n");
         }
         public static void RoomHUD() {

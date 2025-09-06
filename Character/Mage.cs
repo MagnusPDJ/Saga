@@ -17,6 +17,7 @@ namespace Saga.Character
             if (armors.Find(a => a.ItemName == "Linen Rags") is IEquipable armor) {
                 armor.Equip();
             }
+            SetLevelUpValue();
             HealingPotion healingPotion = new();
             healingPotion.Equip();
             LearnedSkills.Add(new ArcaneMissile());
