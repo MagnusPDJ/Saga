@@ -83,7 +83,21 @@ namespace Saga.Character
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
             Attributes.AttributesChanged += () => PlayerChanged?.Invoke();            
         }
-        public abstract void LevelUp();
+        public void LevelUp() {
+            int levels = 0;
+            Program.SoundController.Play("levelup");
+            while (CanLevelUp()) {
+                Program.CurrentPlayer.Exp -= GetLevelUpValue();
+                Program.CurrentPlayer.Level++;
+                Program.CurrentPlayer.FreeAttributePoints += 6;
+                Program.CurrentPlayer.SkillPoints++;
+                levels++;
+            }
+
+            Program.CurrentPlayer.RegenToFull();
+
+            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 1 attribute point and 1 skill point.\u001b[0m", 20);
+        }
         //Metode til udregning af det exp det koster at level op.
         public int GetLevelUpValue() {
             return Convert.ToInt32(5000000 / (1 + 10000 * Math.Pow(1.2, 1 - Level)));

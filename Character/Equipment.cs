@@ -35,7 +35,7 @@ namespace Saga.Character
         public int BonusWP { get; private set; }
         public int BonusAwa { get; private set; }
         public int BonusVirtue { get; private set; }
-        public int BonusArmorRating { get; private set; }
+        public int BonusDamageReduction { get; private set; }
         public int BonusElementRes { get; private set; }
         public int BonusMagicRes { get; private set; }
         public int BonusInitiative { get; private set; }
@@ -45,6 +45,7 @@ namespace Saga.Character
         public int BonusActionPoints { get; private set; }
         public int BonusAttackSpeed { get; private set; }
         public int BonusCastingSpeed { get; private set; }
+        public int ArmorRating { get; private set; }
 
         public Equipment(Player player) {
             AttachToPlayer(player);
@@ -117,7 +118,8 @@ namespace Saga.Character
             int bonusAwa = 0;
             int bonusVirtue = 0;
             //Second affix
-            int bonusArmorRating = 0;
+            int armorRating = 0;
+            int bonusDamageReduction = 0;
             int bonusElementRes = 0;
             int bonusMagicRes = 0;
             int bonusInitiative = 0;
@@ -149,8 +151,8 @@ namespace Saga.Character
                         } 
                     }
                     foreach (var sAffix in armor.SecondaryAffixes.AsEnumerable()) {
-                        if (sAffix.Key == "ArmorRating") {
-                            bonusArmorRating += sAffix.Value;
+                        if (sAffix.Key == "DamageReduction") {
+                            bonusDamageReduction += sAffix.Value;
                         } else if (sAffix.Key == "ElementalResistance") {
                             bonusElementRes += sAffix.Value;
                         } else if (sAffix.Key == "MagicalResistance") {
@@ -165,6 +167,8 @@ namespace Saga.Character
                             bonusManaRegenRate += sAffix.Value;
                         } else if (sAffix.Key == "ActionPoints") {
                             bonusActionPoints += sAffix.Value;
+                        } else if (sAffix.Key == "ArmorRating") {
+                            armorRating += sAffix.Value;
                         }
                     }
                 } else if (slot.Value is not null && slot.Value is IWeapon weapon) {
@@ -185,7 +189,7 @@ namespace Saga.Character
             BonusAwa = bonusAwa;
             BonusVirtue = bonusVirtue;
             //Second affix
-            BonusArmorRating = bonusArmorRating;
+            BonusDamageReduction = bonusDamageReduction;
             BonusElementRes = bonusElementRes;
             BonusMagicRes = bonusMagicRes;
             BonusInitiative = bonusInitiative;
@@ -193,6 +197,7 @@ namespace Saga.Character
             BonusMana = bonusMana;
             BonusManaRegenRate = bonusManaRegenRate;
             BonusActionPoints = bonusActionPoints;
+            ArmorRating = armorRating;
             //W affix
             BonusAttackSpeed = bonusAttackSpeed;
             BonusCastingSpeed = bonusCastingSpeed;

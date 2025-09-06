@@ -15,6 +15,7 @@ namespace Saga.Items
         public int ArmorRating { get; set; } = 0;
         public int ElementalResistance { get; set; } = 0;
         public int MagicalResistance { get; set; } = 0;
+        public int DamageReduction { get; set; } = 0;
         public int ManaRegenRate { get; set; } = 0;
         public int ActionPoints { get; set; } = 0;
 
@@ -30,6 +31,7 @@ namespace Saga.Items
             yield return new(nameof(MagicalResistance), MagicalResistance);
             yield return new(nameof(ManaRegenRate), ManaRegenRate);
             yield return new(nameof(ActionPoints), ActionPoints);
+            yield return new(nameof(DamageReduction), DamageReduction);
         }
 
         /// <summary>

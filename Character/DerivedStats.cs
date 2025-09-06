@@ -11,7 +11,7 @@ namespace Saga.Character
         [JsonInclude]
         public int MaxMana { get; private set; }
         [JsonInclude]
-        public int ArmorRating { get; private set; }
+        public int DamageReduction { get; private set; }
         [JsonInclude]
         public int Initiative { get; private set; }
         [JsonInclude]
@@ -26,6 +26,8 @@ namespace Saga.Character
         public int AttackSpeed { get; private set; }
         [JsonInclude]
         public int CastingSpeed { get; private set; }
+        [JsonInclude]
+        public int ArmorRating { get; private set; }
 
         public DerivedStats(Player player) {
             AttachToPlayer(player);
@@ -39,9 +41,10 @@ namespace Saga.Character
             RecalculateDerivedStats();
         }
         private void RecalculateDerivedStats() {
+            ArmorRating = _player!.Equipment.ArmorRating;
             MaxHealth = CalculateMaxHealth() + _player!.Equipment.BonusHealth;
             MaxMana = CalculateMaxMana() + _player!.Equipment.BonusMana;
-            ArmorRating = CalculateArmorRating() + _player!.Equipment.BonusArmorRating;
+            DamageReduction = CalculateDamageReduction() + _player!.Equipment.BonusDamageReduction;
             Initiative = CalculateInitiative() + _player!.Equipment.BonusInitiative;
             ElementalResistance = CalculateElementalResistance() + _player!.Equipment.BonusElementRes;
             MagicalResistance = CalculateMagicalResistance() + _player!.Equipment.BonusMagicRes;
@@ -51,43 +54,49 @@ namespace Saga.Character
             CastingSpeed = CalculateCastingSpeed() + _player!.Equipment.BonusCastingSpeed;
         }
         int CalculateMaxHealth() {
-            int baseHealth = 5 + 5 * _player!.Attributes.Constitution;
+            int baseHealth = 5;
+            if (_player!.CurrentClass == "Warrior") baseHealth += 6 * _player!.Attributes.Constitution;
+            if (_player!.CurrentClass == "Mage") baseHealth += 4 * _player!.Attributes.Constitution;
+            if (_player!.CurrentClass == "Archer") baseHealth += 5 * _player!.Attributes.Constitution;
             return baseHealth;
         }
         int CalculateMaxMana() {
-            int baseMana = 5 + 5 * _player!.Attributes.WillPower;
+            int baseMana = 5;
+            if (_player!.CurrentClass == "Warrior") baseMana += 4 * _player!.Attributes.WillPower;
+            if (_player!.CurrentClass == "Mage") baseMana += 6 * _player!.Attributes.WillPower;
+            if (_player!.CurrentClass == "Archer") baseMana += 5 * _player!.Attributes.WillPower;
             return baseMana;
         }
-        int CalculateArmorRating() {
-            int baseArmorRating = _player!.Attributes.Dexterity;
+        int CalculateDamageReduction() {
+            int baseArmorRating = _player!.Attributes.Dexterity / 2;
             return baseArmorRating;
         }
         int CalculateInitiative() {
-            int baseInitiative = _player!.Attributes.Awareness;
+            int baseInitiative = _player!.Attributes.Awareness / 2;
             return baseInitiative;
         }
         int CalculateElementalResistance() {
-            int baseElementalResistance = _player!.Attributes.Strength;
+            int baseElementalResistance = _player!.Attributes.Strength / 2;
             return baseElementalResistance;
         }
         int CalculateMagicalResistance() {
-            int baseMagicalResistance = _player!.Attributes.Intellect;
+            int baseMagicalResistance = _player!.Attributes.Intellect / 2;
             return baseMagicalResistance;
         }
         int CalculateActionPoints() {
-            int baseActionPoints = _player!.Attributes.Virtue;
+            int baseActionPoints = 10 + _player!.Attributes.Virtue / 20;
             return baseActionPoints;
         }
         int CalculateAttackSpeed() {
-            int baseAttackSpeed = (_player!.Attributes.Awareness + _player.Attributes.Constitution) / 2;
+            int baseAttackSpeed = 1 + (_player!.Attributes.Awareness + _player.Attributes.Constitution) / 50;
             return baseAttackSpeed;
         }
         int CalculateManaRegenRate() {
-            int baseManaRegenRate = 1 + (_player!.Attributes.Constitution + _player.Attributes.WillPower)/2;
+            int baseManaRegenRate = 2 + (_player!.Attributes.Constitution + _player.Attributes.WillPower) / 4;
             return baseManaRegenRate;
         }
         int CalculateCastingSpeed() {
-            int baseCastingSpeed = (_player!.Attributes.Awareness + _player.Attributes.WillPower) / 2;
+            int baseCastingSpeed = 1 + (_player!.Attributes.Awareness + _player.Attributes.WillPower) / 50;
             return baseCastingSpeed;
         }
     }

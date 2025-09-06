@@ -417,7 +417,7 @@ namespace Saga.Assets
                 stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
                   stats.AppendFormat($" ┌(S)trength ⤵            {player.Attributes.Strength    }\t=> Elemental Resistance:  {player.DerivedStats.ElementalResistance}\n");
                   stats.AppendFormat($" │      (C)onstitution⤵   {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
-                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Armor Rating:          {player.DerivedStats.ArmorRating}\n");
+                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Damage Reduction:          {player.DerivedStats.DamageReduction}\n");
                   stats.AppendFormat($" │      (A)wareness ⤵     {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
                   stats.AppendFormat($" │(I)ntellect ⇵           {player.Attributes.Intellect   }\t=> Magical Resistance:    {player.DerivedStats.MagicalResistance}\n");                 
                   stats.AppendFormat($" └>     (W)illpower ⤵     {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
@@ -436,9 +436,9 @@ namespace Saga.Assets
                 stats.AppendFormat($"\n Primary Attributes:\n");
                   stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
                stats.AppendFormat($"\n Secondary Attributes:\n");
-            stats.AppendFormat($"  +Max Health:  {player.Equipment.BonusHealth     },\t+Max Mana:              {player.Equipment.BonusMana        },\t+Mana Regen:          {player.Equipment.BonusManaRegenRate}.\n");
-            stats.AppendFormat($"  +Initiative:  {player.Equipment.BonusInitiative },\t+Action Points:         {player.Equipment.BonusActionPoints},\n");
-            stats.AppendFormat($"  +Armor:       {player.Equipment.BonusArmorRating},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  },\t+Magical Resistance:  {player.Equipment.BonusMagicRes}.\n");
+            stats.AppendFormat($"  +Max Health:       {player.Equipment.BonusHealth         },\t+Max Mana:              {player.Equipment.BonusMana        },\t+Mana Regen:          {player.Equipment.BonusManaRegenRate}.\n");
+            stats.AppendFormat($"  +Initiative:       {player.Equipment.BonusInitiative     },\t+Action Points:         {player.Equipment.BonusActionPoints},\tArmor Rating:         {player.Equipment.ArmorRating}\n");
+            stats.AppendFormat($"  +Damage Reduction: {player.Equipment.BonusDamageReduction},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  },\t+Magical Resistance:  {player.Equipment.BonusMagicRes}.\n");
             
             Print(stats.ToString(),0);
         }

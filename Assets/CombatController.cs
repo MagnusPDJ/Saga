@@ -3,8 +3,6 @@ using Saga.Character.Skills;
 using Saga.Dungeon.Monsters;
 using Saga.Items;
 using System.Configuration;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Saga.Assets
 {
@@ -26,9 +24,7 @@ namespace Saga.Assets
                 : [EnemyTurn, PlayerTurn];
             HUDTools.CombatHUD(_enemy, this);
             while (_enemy.Health > 0 && _player.Health > 0 && Ran == false) {
-                Turn++;
-                Reset();
-                                
+                Turn++;         
                 foreach (var state in states) {
                     state();
                 }
@@ -125,6 +121,7 @@ namespace Saga.Assets
                         if (CanUseAction(potion)) {
                             bool usedAP = potion.Consume();
                             SpendActionPoints(usedAP, potion);
+                            TextInput.PressToContinue();
                         }
                     }
                 break;
@@ -165,44 +162,43 @@ namespace Saga.Assets
             TextInput.PressToContinue();                               
         }
         bool CanUseAction(IAction action) {
-            if (action.ActionPointCost > RemainingActionPoints) {
-                HUDTools.Print("Not enough AP for that action");
-                TextInput.PressToContinue();
-                return false;
-            } else {
-                if (action is IActiveSkill skill && skill.Name == "Basic Attack" && GetUsedActionCount(skill.Name) == _player.DerivedStats.AttackSpeed) {
-                    HUDTools.Print($"You have already attacked this turn. (Times attacked: {GetUsedActionCount(skill.Name)}, AttackSpeed {_player.DerivedStats.AttackSpeed})");
-                    TextInput.PressToContinue();
-                    return false;
-                } else if (action is IActiveSkill skill1 && GetUsedActionCount(skill1.Name) == _player.DerivedStats.CastingSpeed) {
-                    HUDTools.Print($"You have already cast spells this turn. (Spells used: {GetUsedActionCount(skill1.Name)}, Casting Speed {_player.DerivedStats.CastingSpeed})");
-                    TextInput.PressToContinue();
-                    return false;
-                } else {
+            if (action is IActiveSkill skill && skill.Name == "Basic Attack") {
+                if (skill.ActionPointCost / _player.DerivedStats.AttackSpeed <= RemainingActionPoints) {
                     return true;
-                }                  
+                } else {
+                    HUDTools.Print("Not enough Action Points to use your weapon", 10);
+                    TextInput.PressToContinue();
+                    return false;
+                }
+            } else if (action is IActiveSkill skill1) {
+                if (skill1.ActionPointCost / _player.DerivedStats.CastingSpeed <= RemainingActionPoints) {
+                    return true;
+                } else {
+                    HUDTools.Print("Not enough Action Points to use that skill", 10);
+                    TextInput.PressToContinue();
+                    return false;
+                }             
+            } else if (action is IConsumable potion) {
+                if (potion.ActionPointCost <= RemainingActionPoints) {
+                    return true;
+                } else {
+                    HUDTools.Print("Not enough Action Points to drink that potion", 10);
+                    TextInput.PressToContinue();
+                    return false;
+                }
             }
+            return false;
         }
         void SpendActionPoints(bool usedAP, IAction action) {
             if (usedAP) {
-                RemainingActionPoints -= action.ActionPointCost;
-                if (action is IItem item) {
-                    CountUsedAction(item.ItemName);
-                } else if (action is ISkill skill) {
-                    CountUsedAction(skill.Name);
-                }           
+                if (action is IActiveSkill skill && skill.Name == "Basic Attack") {
+                    RemainingActionPoints -= skill.ActionPointCost / _player.DerivedStats.AttackSpeed;
+                } else if (action is IActiveSkill skill1) {
+                    RemainingActionPoints -= skill1.ActionPointCost / _player.DerivedStats.CastingSpeed;
+                } else if (action is IConsumable potion) {
+                    RemainingActionPoints -= potion.ActionPointCost;
+                }                       
             }          
-        }
-        void Reset() => _counts.Clear();
-        void CountUsedAction(string name) {
-            // Count call
-            _counts[name] = _counts.GetValueOrDefault(name) + 1;
-        }
-        int GetUsedActionCount(string name) {
-            if (_counts.TryGetValue(name, out int value)) {
-                return value;
-            }
-            return 0; 
         }
         public int GetRemainingActionPoints() {
             return RemainingActionPoints;
