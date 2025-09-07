@@ -8,7 +8,17 @@ namespace Saga.Dungeon
 {
     public static class Encounters 
     {
-      //Encounters:
+        public enum Act
+        {
+            Start,
+            Act1,
+            Act2,
+            Act3,
+            Act4,
+            Act5
+        }
+
+        //Encounters:
 
         //Tutorial encounters:
 
@@ -91,7 +101,7 @@ namespace Saga.Dungeon
             Program.SoundController.Stop();
             Program.SoundController.Play("campfire");
             HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The shadows retract and\nyou feel at ease again. Although you are not out of danger, you can stay for a while and rest.");
-            Program.CurrentPlayer.CurrentAct = Character.Act.Act1;
+            Program.CurrentPlayer.CurrentAct = Act.Act1;
             TextInput.PressToContinue();
         }
         //Encounter som køres første gang en spiller vender tilbage til Camp for at introducerer roguelike
@@ -132,7 +142,7 @@ namespace Saga.Dungeon
                     if (input == "1" && !examined) {
                         examined = true;
                         HUDTools.Print("You rummage through dusty documents and moldy records illegible or in unknown languages,\nbut in a drawer you find some gold and a key.", 20);
-                        Program.CurrentPlayer.Loot.GetQuestLoot(1,0,"MeetFlemsha");                          
+                        LootSystem.GetQuestLoot(1,0,"MeetFlemsha");                          
                         TextInput.PressToContinue();
                         break;
                     } else if (input == "2" && !searched) {
@@ -295,7 +305,7 @@ namespace Saga.Dungeon
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(1);
                     Program.SoundController.Play("win");
-                    Program.CurrentPlayer.Loot.GetTreasureChestLoot();
+                    LootSystem.GetTreasureChestLoot();
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
@@ -401,7 +411,7 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(1);
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
-            Program.CurrentPlayer.Loot.GetExp(2, 50*Program.CurrentPlayer.Level);
+            LootSystem.GetExp(2, 50*Program.CurrentPlayer.Level);
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(16);
         }

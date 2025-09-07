@@ -6,8 +6,9 @@ namespace Saga.Items
     [Discriminator("healingPotion")]
     public class HealingPotion : IConsumable, IEquipable, IMagical
     {
+        public string ItemId { get; init; }
         public string ItemName { get; set; }
-        public int ItemLevel { get; set; }
+        public int ItemLevel { get; init; }
         public int ItemPrice { get; set; }
         public string ItemDescription { get; init; }
         public int PotionPotency { get; set; }
@@ -20,6 +21,7 @@ namespace Saga.Items
         public HealingPotion() {
             PotionPotency = 5;
             PotionQuantity = 0;
+            ItemId = "healingpotion";
             ItemName = "Healing Potion";
             ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur.";
             ItemPrice = CalculateItemPrice();

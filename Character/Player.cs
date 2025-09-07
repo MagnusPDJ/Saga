@@ -10,22 +10,12 @@ using System.Text.Json.Serialization;
 
 namespace Saga.Character
 {
-    public enum Act {
-        Start,
-        Act1,
-        Act2,
-        Act3,
-        Act4,
-        Act5
-    }
-
     [JsonDerivedType(typeof(Warrior), typeDiscriminator: "warrior")]
     [JsonDerivedType(typeof(Archer), typeDiscriminator: "archer")]
     [JsonDerivedType(typeof(Mage), typeDiscriminator: "mage")]
     public abstract class Player {
         public string CurrentClass { get; }
-        public Act CurrentAct { get; set; }
-        public Loot Loot { get; set; }
+        public Encounters.Act CurrentAct { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
         public int Level { get; set; }
@@ -55,8 +45,7 @@ namespace Saga.Character
             CurrentClass = currentClass;
             SkillTree = skillTree;
             Level = 1;
-            CurrentAct = Act.Start;
-            Loot = new Act1Loot();
+            CurrentAct = Encounters.Act.Start;
             Equipment = new Equipment(this);
             Inventory = new IItem[10];
             QuestLog = [];
@@ -275,9 +264,9 @@ namespace Saga.Character
             CompletedQuests.Add(quest);
             Program.SoundController.Play("win");
             HUDTools.Print($"\u001b[96mYou've completed the quest: {quest.Name}!\u001b[0m", 15);
-            Program.CurrentPlayer.Loot.GetFixedGold(quest.Gold);
-            Program.CurrentPlayer.Loot.GetPotions(quest.Potions);
-            Program.CurrentPlayer.Loot.GetExp(0, quest.Exp);
+            LootSystem.GetFixedGold(quest.Gold);
+            LootSystem.GetPotions(quest.Potions);
+            LootSystem.GetExp(0, quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
                 Inventory.SetValue(quest.Item, index);

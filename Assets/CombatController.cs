@@ -2,6 +2,7 @@
 using Saga.Character.Skills;
 using Saga.Dungeon.Monsters;
 using Saga.Items;
+using Saga.Items.Loot;
 using System.Configuration;
 
 namespace Saga.Assets
@@ -33,7 +34,7 @@ namespace Saga.Assets
                 HUDTools.CombatHUD(_enemy, this);
                 Program.SoundController.Stop();
                 Program.SoundController.Play("win");
-                _player.Loot.GetCombatLoot(_enemy, $"You Won against the {_enemy.Name} on turn {Turn}!");
+                LootSystem.GetCombatLoot(_enemy, $"You Won against the {_enemy.Name} on turn {Turn}!");
             }
             _player.CheckForDeath(_enemy.PlayerKillDescription);
         }

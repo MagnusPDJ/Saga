@@ -1,16 +1,19 @@
 ﻿[
   {
     "Type": "questItem",
+    "ItemId": "oldkey",
     "ItemName": "Old Key",
     "ItemDescription": "An old key, with two sturdy bits, akin to those used for prison cells."
   },
   {
     "Type": "questItem",
+    "ItemId": "rattail",
     "ItemName": "Rat Tail",
     "ItemDescription": "This tail was cut from a large rat, gross."
   },
   {
     "Type": "questItem",
+    "ItemId": "batwings",
     "ItemName": "Bat Wings",
     "ItemDescription": "Wings from a huge bat, they smell quite fragrant."
   }

@@ -8,8 +8,9 @@ namespace Saga.Items
     [Discriminator("oneHandedSword")]
     public class OneHandedSword : IWeapon, IPhysical
     {
+        public string ItemId { get; init; } = string.Empty;
         public string ItemName { get; set; } = string.Empty;
-        public int ItemLevel { get; set; }
+        public int ItemLevel { get; init; }
         public int ItemPrice { get; set; }
         public string ItemDescription { get; init; } = string.Empty;
         public WeaponCategory WeaponCategory => WeaponCategory.Melee;

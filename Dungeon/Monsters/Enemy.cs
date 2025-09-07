@@ -1,5 +1,4 @@
-﻿using Saga.Assets;
-using Saga.Character.DmgLogic;
+﻿using Saga.Character.DmgLogic;
 
 namespace Saga.Dungeon.Monsters
 {

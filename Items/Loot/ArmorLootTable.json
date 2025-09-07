@@ -1,6 +1,7 @@
 ﻿[
   {
     "Type": "armorBase",
+    "ItemId":  "linenrags",
     "ItemName": "Linen Rags",
     "ItemLevel": 1,
     "ItemSlot": 1,
@@ -11,6 +12,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "runedsimplerobe",
     "ItemName": "Runed Simple Robe",
     "ItemLevel": 2,
     "ItemSlot": 1,
@@ -28,6 +30,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "enchantedelegantrobe",
     "ItemName": "Enchanted Elegant Robe",
     "ItemLevel": 5,
     "ItemSlot": 1,
@@ -45,6 +48,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "arcanistsrobe",
     "ItemName": "Arcanist's Robe",
     "ItemLevel": 8,
     "ItemSlot": 1,
@@ -62,6 +66,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "hidearmor",
     "ItemName": "Hide Armor",
     "ItemLevel": 2,
     "ItemSlot": 1,
@@ -79,6 +84,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "hunterscuirass",
     "ItemName": "Hunter's Cuirass",
     "ItemLevel": 5,
     "ItemSlot": 1,
@@ -96,6 +102,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "marksmansbrigandine",
     "ItemName": "Marksman's Brigandine",
     "ItemLevel": 8,
     "ItemSlot": 1,
@@ -113,6 +120,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "steelmailshirt",
     "ItemName": "Steel Mail Shirt",
     "ItemLevel": 2,
     "ItemSlot": 1,
@@ -130,6 +138,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "steelbreastplate",
     "ItemName": "Steel Breastplate",
     "ItemLevel": 5,
     "ItemSlot": 1,
@@ -147,6 +156,7 @@
   },
   {
     "Type": "armorBase",
+    "ItemId": "knightsplatearmor",
     "ItemName": "Knight's Plate Armor",
     "ItemLevel": 8,
     "ItemSlot": 1,

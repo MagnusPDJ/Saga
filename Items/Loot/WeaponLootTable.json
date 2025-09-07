@@ -1,6 +1,7 @@
 ﻿[
   {
     "Type": "oneHandedSword",
+    "ItemId": "warriorstarterweapon",
     "AttackDescription": "You swing your rusty sword.",
     "ItemDescription": "Old and fragile but it is yours... You looted it yourself!",
     "ItemLevel": 1,
@@ -12,6 +13,7 @@
   },
   {
     "Type": "wand",
+    "ItemId": "magestarterweapon",
     "AttackDescription": "You poke with your cracked wand.",
     "ItemDescription": "It may be cracked, but nothing some duct tape couldn't fix!",
     "ItemLevel": 1,
@@ -23,6 +25,7 @@
   },
   {
     "Type": "bow",
+    "ItemId": "archerstarterweapon",
     "AttackDescription": "You fire an arrow from your flimsy bow.",
     "ItemDescription": "If you pull it too hard, it would probably snap. On the positive side, you'd have a nunchuck.",
     "ItemLevel": 1,
@@ -34,6 +37,7 @@
   },
   {
     "Type": "wand",
+    "ItemId": "enchantedwand",
     "AttackDescription": "poke with your enchanted wand.",
     "ItemDescription": "A wand made from flexible yew making it more durable and less likely to crack.",
     "ItemLevel": 2,
@@ -45,6 +49,7 @@
   },
   {
     "Type": "staff",
+    "ItemId": "gnarledstaff",
     "AttackDescription": "You swing your gnarled staff.",
     "ItemDescription": "Long staff made of aspen wood that has twisted along the shaft.",
     "ItemLevel": 4,
@@ -56,6 +61,7 @@
   },
   {
     "Type": "staff",
+    "ItemId": "arcanistsstaff",
     "AttackDescription": "You swing your arcanist's staff.",
     "ItemDescription": "Long staff made of black wood with a white, egg-shaped gem embedded on the top.",
     "ItemLevel": 7,
@@ -67,6 +73,7 @@
   },
   {
     "Type": "bow",
+    "ItemId": "quickshortbow",
     "AttackDescription": "You fire an arrow from your quick shortbow.",
     "ItemDescription": "Small and flexible perfect for hunting where speed is more important than power.",
     "ItemLevel": 2,
@@ -78,6 +85,7 @@
   },
   {
     "Type": "bow",
+    "ItemId": "sturdylongbow",
     "AttackDescription": "You fire an arrow from your sturdy longbow.",
     "ItemDescription": "As tall as you are and very firm, this is made to penetrate armor.",
     "ItemLevel": 4,
@@ -89,6 +97,7 @@
   },
   {
     "Type": "bow",
+    "ItemId": "marksmansrecurve",
     "AttackDescription": "You fire an arrow from your marksman's recurve.",
     "ItemDescription": "This bow bends away from the holder making it easier to draw therefore giving the wielder\nmore precision.",
     "ItemLevel": 7,
@@ -100,6 +109,7 @@
   },
   {
     "Type": "oneHandedSword",
+    "ItemId": "steelsword",
     "AttackDescription": "You swing your steel sword.",
     "ItemDescription": "A plain sword but the steel is unusually black and it feels light.",
     "ItemLevel": 2,
@@ -111,6 +121,7 @@
   },
   {
     "Type": "twoHandedSword",
+    "ItemId": "finelongsword",
     "AttackDescription": "You swing your fine longsword.",
     "ItemDescription": "A black double-edged sword that feels quite light.",
     "ItemLevel": 4,
@@ -122,6 +133,7 @@
   },
   {
     "Type": "twoHandedSword",
+    "ItemId": "knightsgreatsword",
     "AttackDescription": "You swing your knight's greatsword.",
     "ItemDescription": "Black steel with golden adornments, this was definitely custommade for someone powerful.",
     "ItemLevel": 7,

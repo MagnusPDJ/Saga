@@ -1,6 +1,7 @@
 ﻿using Saga.Assets;
+using Saga.Dungeon.Monsters;
 
-namespace Saga.Dungeon.Monsters
+namespace Saga
 {
     public static class Act1EnemyExtensions
     {
@@ -19,7 +20,7 @@ namespace Saga.Dungeon.Monsters
         }
     }
 
-    public class Act1Enemy : Enemy
+    public class Act1Enemy
     {
         public Act1Enemy(string name, Tribe tribe) {
             Name = name;

@@ -109,7 +109,7 @@ namespace Saga
             CurrentPlayer = Load(out bool newP);
             NewStart(newP);
             if (CurrentPlayer != null) {
-                if (CurrentPlayer.CurrentAct == Act.Act1) {                       
+                if (CurrentPlayer.CurrentAct == Encounters.Act.Act1) {                       
                     SoundController.Stop();                       
                     RoomController.ChangeRoom("", Rooms.Camp);
                 }

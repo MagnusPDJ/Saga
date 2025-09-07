@@ -206,7 +206,7 @@ namespace Saga.Dungeon
             exits = [new Exit() { keyString = "You will never leave", exitDescription = "here alive", valueRoom = null}];
         }
         public override void LoadRoom() {
-            if (Program.CurrentPlayer.CurrentAct == Act.Start) {
+            if (Program.CurrentPlayer.CurrentAct == Encounters.Act.Start) {
                 Encounters.FirstCamp();
             }
             if (Program.CurrentPlayer.TimesExplored == 1) {
