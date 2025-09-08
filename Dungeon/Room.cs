@@ -76,6 +76,8 @@ namespace Saga.Dungeon
 
     public class DungeonTemplate
     {
+        public int Level { get; set; } = 1; // optional: use this if using formulas by dungeon level
+        public double DifficultyMultiplier { get; set; } = 1.0;
         public List<Room> rooms = [];
     }
 

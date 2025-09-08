@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Saga.Assets
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

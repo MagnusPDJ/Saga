@@ -417,7 +417,7 @@ namespace Saga.Assets
                 stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
                   stats.AppendFormat($" ┌(S)trength ⤵            {player.Attributes.Strength    }\t=> Elemental Resistance:  {player.DerivedStats.ElementalResistance}\n");
                   stats.AppendFormat($" │      (C)onstitution⤵   {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
-                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Damage Reduction:      {player.DerivedStats.DamageReduction}\n");
+                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Damage Reduction:      {player.DerivedStats.PhysicalResistance}\n");
                   stats.AppendFormat($" │      (A)wareness ⤵     {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
                   stats.AppendFormat($" │(I)ntellect ⇵           {player.Attributes.Intellect   }\t=> Magical Resistance:    {player.DerivedStats.MagicalResistance}\n");                 
                   stats.AppendFormat($" └>     (W)illpower ⤵     {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
@@ -439,7 +439,7 @@ namespace Saga.Assets
                stats.AppendFormat($"\n Secondary Attributes:\n");
             stats.AppendFormat($"  +Max Health:       {player.Equipment.BonusHealth         },\t+Max Mana:              {player.Equipment.BonusMana        },\t+Mana Regen:          {player.Equipment.BonusManaRegenRate}.\n");
             stats.AppendFormat($"  +Initiative:       {player.Equipment.BonusInitiative     },\t+Action Points:         {player.Equipment.BonusActionPoints},\t+Magical Resistance:  {player.Equipment.BonusMagicRes},\n");
-            stats.AppendFormat($"  +Damage Reduction: {player.Equipment.BonusDamageReduction},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  }.\n");
+            stats.AppendFormat($"  +Damage Reduction: {player.Equipment.BonusPhysicalRes},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  }.\n");
             
             Print(stats.ToString(),0);
         }
@@ -607,7 +607,7 @@ namespace Saga.Assets
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                  Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
                  Console.WriteLine($" Fighting: {Monster.Name}!");
-                 Console.WriteLine($" Strength: {Monster.Power} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
+                 Console.WriteLine($" Strength: {Monster.Attack} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
                 Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");

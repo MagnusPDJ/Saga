@@ -156,7 +156,7 @@ namespace Saga.Assets
         }
 
         void EnemyActions() {
-            int attack = _enemy.Power;
+            int attack = _enemy.Attack;
             attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;
             if (attack <= 0) {
                 attack = 1;

@@ -168,25 +168,18 @@ namespace Saga.Character
         }
         //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();
-        public abstract bool RunAway(Enemy monster);
-
-        public (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {
-            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);
-            if (CurrentClass == "Warrior" && damage.Item1 is IPhysical) {
-                modifiedDamage.Item1 = damage.Item1;
-                modifiedDamage.Item2 = damage.Item2 + Level + Attributes.Strength / 3;
-                return modifiedDamage;
-            } else if (CurrentClass == "Mage" && damage.Item1 is IMagical) {
-                modifiedDamage.Item1 = damage.Item1;
-                modifiedDamage.Item2 = damage.Item2 + Attributes.Intellect / 3;
-                return modifiedDamage;
-            } else if (CurrentClass == "Archer" && damage.Item1 is IPhysical) {
-                modifiedDamage.Item1 = damage.Item1;
-                modifiedDamage.Item2 = damage.Item2 + Attributes.Dexterity / 3;
-                return modifiedDamage;
+        public virtual bool RunAway(Enemy Monster) {
+            bool escaped = false;
+            if (Program.Rand.Next(0, 3) == 0 || Monster.Name == "Human captor") {
+                HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
+            } else {
+                HUDTools.Print($"You barely manage to shake off the {Monster.Name} and you successfully escape.", 20);
+                escaped = true;
+                Program.RoomController.ran = true;
             }
-                return damage;
+            return escaped;
         }
+        public abstract (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage);
         //Metode til at checke for om spilleren dør som kan kaldes hver gang spilleren tager skade.
         public void CheckForDeath(string message) {
             if (Health <= 0) {

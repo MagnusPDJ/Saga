@@ -1,0 +1,155 @@
+﻿[
+  {
+    "Type": "discriminator",
+    "Name": "Template",
+    "PlayerKillDescription": "How the monster kill a player",
+    "MaxHealth": 0,
+    "Attack": 0,
+    "Initiative": 0,
+    "Armor": 0,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Monster Tags" ],
+    "Scaling": {
+      "HealthMultiplier": 1.0,
+      "AttackMultiplier": 1.0,
+      "ArmorMultiplier": 1.0,
+      "PhysicalResistancesMultiplier": 1.0,
+      "ElementalResistancesMultiplier": 1.0,
+      "MagicalResistancesMultiplier": 1.0,
+      "FlatHealthBonus": 0,
+      "FlatAttackBonus": 0,
+      "FlatArmorBonus": 0,
+      "FlatPhysicalResistanceBonus": 0,
+      "FlatElementalResistanceBonus": 0,
+      "FlatMagicalResistanceBonus": 0,
+      "HealthPerLevel": 0,
+      "AttackPerLevel": 0,
+      "ArmorPerLevel": 0,
+      "PhysicalResistancesPerLevel": 0,
+      "ElementalResistancesPerLevel": 0,
+      "MagicalResistancesPerLevel": 0
+    },
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "item id",
+          "DropChance": 1
+        }
+      ]
+    },
+    "SpawnWeight": 0,
+    "ExpGain": 0,
+    "GoldModifier": 0
+  },
+  {
+    "Type": "mimic",
+    "Name": "Mimic",
+    "PlayerKillDescription": "The Mimic grabs you with its big tongue and swallows you. You are dead...",
+    "MaxHealth": 10,
+    "Attack": 5,
+    "Initiative": 1,
+    "Armor": 3,
+    "Tags": [ "Mythical" ],
+    "Scaling": {
+      "HealthPerLevel": 8,
+      "AttackPerLevel": 3,
+      "ArmorPerLevel": 1
+    },
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "runedsimplerobe",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "enchantedelegantrobe",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "arcanistsrobe",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "hidearmor",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "hunterscuirass",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "marksmansbrigandine",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "steelmailshirt",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "steelbreastplate",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "knightsplatearmor",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "enchantedwand",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "gnarledstaff",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "arcanistsstaff",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "quickshortbow",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "sturdylongbow",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "marksmansrecurve",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "steelsword",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "finelongsword",
+          "DropChance": 0.02
+        },
+        {
+          "ItemId": "knightsgreatsword",
+          "DropChance": 0.02
+        }
+      ]
+    },
+    "ExpGain": 500,
+    "GoldModifier": 3
+  }
+]

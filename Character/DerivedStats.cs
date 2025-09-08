@@ -1,4 +1,5 @@
 ﻿
+using Saga.Character.DmgLogic;
 using System.Text.Json.Serialization;
 
 namespace Saga.Character
@@ -11,13 +12,29 @@ namespace Saga.Character
         [JsonInclude]
         public int MaxMana { get; private set; }
         [JsonInclude]
-        public int DamageReduction { get; private set; }
-        [JsonInclude]
         public int Initiative { get; private set; }
         [JsonInclude]
-        public int ElementalResistance { get; private set; }
+        public Dictionary<PhysicalType, int> PhysicalResistance { get; private set; } = new() {
+            { PhysicalType.Normal, 0 },
+            { PhysicalType.Piercing, 0 },
+            { PhysicalType.Crushing, 0 }
+        };
         [JsonInclude]
-        public int MagicalResistance { get; private set; }
+        public Dictionary<ElementalType, int> ElementalResistance { get; private set; } = new() { 
+            { ElementalType.Frost, 0 }, 
+            { ElementalType.Fire, 0 }, 
+            { ElementalType.Poison, 0 }, 
+            { ElementalType.Lightning, 0 } 
+        };
+        [JsonInclude]
+        public Dictionary<MagicalType, int> MagicalResistance { get; private set; } = new() {
+            { MagicalType.Arcane, 0 },
+            { MagicalType.Chaos, 0 },
+            { MagicalType.Void, 0 },
+            { MagicalType.Nature, 0 },
+            { MagicalType.Life, 0 },      
+            { MagicalType.Death, 0 }
+        };
         [JsonInclude]
         public int ManaRegenRate { get; private set; }
         [JsonInclude]
@@ -46,10 +63,35 @@ namespace Saga.Character
             ArmorRating = _player!.Equipment.ArmorRating;
             MaxHealth = CalculateMaxHealth() + _player!.Equipment.BonusHealth;
             MaxMana = CalculateMaxMana() + _player!.Equipment.BonusMana;
-            DamageReduction = CalculateDamageReduction() + _player!.Equipment.BonusDamageReduction;
             Initiative = CalculateInitiative() + _player!.Equipment.BonusInitiative;
-            ElementalResistance = CalculateElementalResistance() + _player!.Equipment.BonusElementRes;
-            MagicalResistance = CalculateMagicalResistance() + _player!.Equipment.BonusMagicRes;
+
+            Dictionary<PhysicalType, int> resultPRes = new(CalculatePhysicalResistance());
+            foreach (var kv in _player!.Equipment.BonusPhysicalRes) {
+                if (resultPRes.ContainsKey(kv.Key))
+                    resultPRes[kv.Key] += kv.Value;
+                else
+                    resultPRes[kv.Key] = kv.Value;
+            }
+            PhysicalResistance = resultPRes;
+
+            Dictionary<ElementalType, int> resultERes = new(CalculateElementalResistance());
+            foreach (var kv in _player!.Equipment.BonusElementRes) {
+                if (resultERes.ContainsKey(kv.Key))
+                    resultERes[kv.Key] += kv.Value;
+                else
+                    resultERes[kv.Key] = kv.Value;
+            }
+            ElementalResistance =  resultERes;
+
+            Dictionary<MagicalType, int> resultMRes = new(CalculateMagicalResistance());
+            foreach (var kv in _player!.Equipment.BonusMagicRes) {
+                if (resultMRes.ContainsKey(kv.Key))
+                    resultMRes[kv.Key] += kv.Value;
+                else
+                    resultMRes[kv.Key] = kv.Value;
+            }
+            MagicalResistance = resultMRes;
+
             ActionPoints = CalculateActionPoints() + _player!.Equipment.BonusActionPoints;
             ManaRegenRate = CalculateManaRegenRate() + _player!.Equipment.BonusManaRegenRate;
             AttackSpeed = CalculateAttackSpeed() + _player!.Equipment.BonusAttackSpeed;
@@ -75,7 +117,7 @@ namespace Saga.Character
             if (_player!.CurrentClass == "Archer") baseMana += 5 * _player!.Attributes.WillPower;
             return baseMana;
         }
-        int CalculateDamageReduction() {
+        int CalculatePhysicalResistance() {
             int baseArmorRating = _player!.Attributes.Dexterity / 2;
             return baseArmorRating;
         }
@@ -83,9 +125,15 @@ namespace Saga.Character
             int baseInitiative = _player!.Attributes.Awareness / 2;
             return baseInitiative;
         }
-        int CalculateElementalResistance() {
+        Dictionary<ElementalType, int> CalculateElementalResistance() {
             int baseElementalResistance = _player!.Attributes.Strength / 2;
-            return baseElementalResistance;
+            Dictionary<ElementalType, int> baseElementalResistances = new() {
+            {ElementalType.Frost, baseElementalResistance },
+            { ElementalType.Fire, baseElementalResistance },
+            { ElementalType.Poison, baseElementalResistance },
+            { ElementalType.Lightning, baseElementalResistance }
+        };
+            return baseElementalResistances;
         }
         int CalculateMagicalResistance() {
             int baseMagicalResistance = _player!.Attributes.Intellect / 2;

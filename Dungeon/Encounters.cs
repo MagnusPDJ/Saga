@@ -46,10 +46,13 @@ namespace Saga.Dungeon
             Program.SoundController.Play("kamp");
             HUDTools.Print("He turns...");
             TextInput.PressToContinue();
-            Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
-                MaxHealth = 5,
-                Power = 2,
-            };
+
+            //Insert Monster Loading + spawning
+
+            //Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
+            //    MaxHealth = 5,
+            //    Power = 2,
+            //};
             new CombatController(Program.CurrentPlayer, FirstEncounter).Combat();
         }
         public static void SecondEncounter() {
@@ -59,10 +62,11 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(1);
             HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
-            Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
-                MaxHealth = 6,
-                Power = 3,
-            };
+            //Insert Monster Loading + spawning
+            //Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
+            //    MaxHealth = 6,
+            //    Power = 3,
+            //};
             new CombatController(Program.CurrentPlayer, SecondEncounter).Combat();
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
@@ -213,7 +217,9 @@ namespace Saga.Dungeon
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
             Program.SoundController.Play("kamp");
-            Act1Enemy RandomEnemy = Act1Enemy.CreateRandomAct1Enemy();
+            
+            //Insert spawn logic
+
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0,2)) {
@@ -236,12 +242,13 @@ namespace Saga.Dungeon
             Program.SoundController.Play("troldmandskamp");
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
             TextInput.PressToContinue();
-            Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
-                MaxHealth = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
-                Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
-                ExpModifier = 3,
-                Initiative = 5,
-            };
+            //Insert Monster Loading + spawning
+            //Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
+            //    MaxHealth = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
+            //    Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
+            //    ExpModifier = 3,
+            //    Initiative = 5,
+            //};
             new CombatController(Program.CurrentPlayer, WizardEncounter).Combat();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
@@ -268,11 +275,8 @@ namespace Saga.Dungeon
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
                     HUDTools.Print($"You ready your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}!",15);
                     TextInput.PressToContinue();
-                    Enemy MimicEncounter = new Act1Enemy("Mimic", Tribe.Mythical) {
-                        MaxHealth = 10 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 3 : 6),                        
-                        Power = 5 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 1 : 3),
-                        GoldModifier = 3,
-                    };
+                    //Insert Monster Loading + spawning
+
                     new CombatController(Program.CurrentPlayer, MimicEncounter).Combat(); 
                     break;
                 } else {

@@ -1,4 +1,5 @@
 ﻿using Saga.Assets;
+using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
 using Saga.Dungeon.Monsters;
 using Saga.Items;
@@ -9,8 +10,8 @@ namespace Saga.Character
     public class Mage(string name) : Player(name, "Mage", new MageSkillTree(), 1, 1, 2)
     {
         public override void SetStartingGear() {
-            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponLootTable.json"), Program.Options) ?? [];
-            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorLootTable.json"), Program.Options) ?? [];
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDataBase.json"), Program.Options) ?? [];
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDataBase.json"), Program.Options) ?? [];
             if (weapons.Find(w => w.ItemName == "Cracked Wand") is IEquipable weapon) {
                 weapon.Equip();
             }            
@@ -23,16 +24,11 @@ namespace Saga.Character
             LearnedSkills.Add(new ArcaneMissile());
             SkillTree.QuickCast = "Arcane Missiles";
         }
-        public override bool RunAway(Enemy Monster) {
-            bool escaped = false;
-            if (Program.Rand.Next(0, 3) == 0 || Monster.Name == "Human captor") {
-                HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
-            } else {
-                HUDTools.Print($"You barely manage to shake off the {Monster.Name} and you successfully escape.", 15);
-                escaped = true;
-                Program.RoomController.ran = true;
-            }
-            return escaped;
+        public override (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {          
+            (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);
+            modifiedDamage.Item1 = damage.Item1;
+            modifiedDamage.Item2 = damage.Item2 + Attributes.Intellect / 3;
+            return modifiedDamage;          
         }
     }
 }

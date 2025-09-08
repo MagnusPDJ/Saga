@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Saga.Character.DmgLogic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Saga.Items
 {
@@ -13,9 +9,25 @@ namespace Saga.Items
         public int MaxMana { get; set; } = 0;
         public int Initiative { get; set; } = 0;
         public int ArmorRating { get; set; } = 0;
-        public int ElementalResistance { get; set; } = 0;
-        public int MagicalResistance { get; set; } = 0;
-        public int DamageReduction { get; set; } = 0;
+        public Dictionary<ElementalType, int> ElementalResistance { get; set; } = new() {
+            { ElementalType.Frost, 0 },
+            { ElementalType.Fire, 0 },
+            { ElementalType.Poison, 0 },
+            { ElementalType.Lightning, 0 }
+        };
+        public Dictionary<MagicalType, int> MagicalResistance { get; set; } = new() {
+            { MagicalType.Arcane, 0 },
+            { MagicalType.Chaos, 0 },
+            { MagicalType.Void, 0 },
+            { MagicalType.Nature, 0 },
+            { MagicalType.Life, 0 },
+            { MagicalType.Death, 0 }
+        };
+        public Dictionary<PhysicalType, int> PhysicalResistance { get; set; } = new() {
+            { PhysicalType.Normal, 0 },
+            { PhysicalType.Piercing, 0 },
+            { PhysicalType.Crushing, 0 }
+        };
         public int ManaRegenRate { get; set; } = 0;
         public int ActionPoints { get; set; } = 0;
 
@@ -27,11 +39,8 @@ namespace Saga.Items
             yield return new(nameof(MaxMana), MaxMana);
             yield return new(nameof(Initiative), Initiative);
             yield return new(nameof(ArmorRating), ArmorRating);
-            yield return new(nameof(ElementalResistance), ElementalResistance);
-            yield return new(nameof(MagicalResistance), MagicalResistance);
             yield return new(nameof(ManaRegenRate), ManaRegenRate);
             yield return new(nameof(ActionPoints), ActionPoints);
-            yield return new(nameof(DamageReduction), DamageReduction);
         }
 
         /// <summary>

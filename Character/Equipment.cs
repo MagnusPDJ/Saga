@@ -1,6 +1,7 @@
 ﻿using Saga.Items;
 using System.Text.Json.Serialization;
 using System.Diagnostics.CodeAnalysis;
+using Saga.Character.DmgLogic;
 
 namespace Saga.Character
 {  
@@ -35,9 +36,25 @@ namespace Saga.Character
         public int BonusWP { get; private set; }
         public int BonusAwa { get; private set; }
         public int BonusVirtue { get; private set; }
-        public int BonusDamageReduction { get; private set; }
-        public int BonusElementRes { get; private set; }
-        public int BonusMagicRes { get; private set; }
+        public Dictionary<PhysicalType, int> BonusPhysicalRes { get; private set; } = new() {
+            { PhysicalType.Normal, 0 },
+            { PhysicalType.Piercing, 0 },
+            { PhysicalType.Crushing, 0 }
+        };
+        public Dictionary<ElementalType, int> BonusElementRes { get; private set; } = new() {
+            { ElementalType.Frost, 0 },
+            { ElementalType.Fire, 0 },
+            { ElementalType.Poison, 0 },
+            { ElementalType.Lightning, 0 }
+        };
+        public Dictionary<MagicalType, int> BonusMagicRes { get; private set; } = new() {
+            { MagicalType.Arcane, 0 },
+            { MagicalType.Chaos, 0 },
+            { MagicalType.Void, 0 },
+            { MagicalType.Nature, 0 },
+            { MagicalType.Life, 0 },      
+            { MagicalType.Death, 0 }
+        };
         public int BonusInitiative { get; private set; }
         public int BonusHealth { get; private set; }
         public int BonusMana { get; private set; }
@@ -119,9 +136,25 @@ namespace Saga.Character
             int bonusVirtue = 0;
             //Second affix
             int armorRating = 0;
-            int bonusDamageReduction = 0;
-            int bonusElementRes = 0;
-            int bonusMagicRes = 0;
+            Dictionary<PhysicalType, int> bonusPhysicalRes = new() {
+            { PhysicalType.Normal, 0 },
+            { PhysicalType.Piercing, 0 },
+            { PhysicalType.Crushing, 0 }
+            };
+            Dictionary<ElementalType, int> bonusElementRes = new() {
+            { ElementalType.Frost, 0 },
+            { ElementalType.Fire, 0 },
+            { ElementalType.Poison, 0 },
+            { ElementalType.Lightning, 0 }
+            };
+            Dictionary<MagicalType, int> bonusMagicRes = new() {
+            { MagicalType.Arcane, 0 },
+            { MagicalType.Chaos, 0 },
+            { MagicalType.Void, 0 },
+            { MagicalType.Nature, 0 },
+            { MagicalType.Life, 0 },
+            { MagicalType.Death, 0 }
+            };
             int bonusInitiative = 0;
             int bonusHealth = 0;
             int bonusMana = 0;          
@@ -134,48 +167,79 @@ namespace Saga.Character
             foreach (var slot in AsEnumerable()) {
                 if (slot.Value is not null && slot.Value is IArmor armor) {
                     foreach (var pAffix in armor.PrimaryAffixes.AsEnumerable()) {
-                        if (pAffix.Key == "Strength") {
-                            bonusStr += pAffix.Value;
-                        } else if (pAffix.Key == "Dexterity") {
-                            bonusDex += pAffix.Value;
-                        } else if (pAffix.Key == "Intellect") {
-                            bonusInt += pAffix.Value;
-                        } else if (pAffix.Key == "Constitution") {
-                            bonusCon += pAffix.Value;
-                        } else if (pAffix.Key == "WillPower") {
-                            bonusWP += pAffix.Value;
-                        } else if (pAffix.Key == "Awareness") {
-                            bonusAwa += pAffix.Value;
-                        } else if (pAffix.Key == "Virtue") {
-                            bonusVirtue += pAffix.Value;
-                        } 
+                        switch (pAffix.Key) {
+                            case "Strength":
+                                bonusStr += pAffix.Value;
+                                break;
+                            case "Dexterity":
+                                bonusDex += pAffix.Value;
+                                break;
+                            case "Intellect":
+                                bonusInt += pAffix.Value;
+                                break;
+                            case "Constitution":
+                                bonusCon += pAffix.Value;
+                                break;
+                            case "WillPower":
+                                bonusWP += pAffix.Value;
+                                break;
+                            case "Awareness":
+                                bonusAwa += pAffix.Value;
+                                break;
+                            case "Virtue":
+                                bonusVirtue += pAffix.Value;
+                                break;
+                        }
                     }
                     foreach (var sAffix in armor.SecondaryAffixes.AsEnumerable()) {
-                        if (sAffix.Key == "DamageReduction") {
-                            bonusDamageReduction += sAffix.Value;
-                        } else if (sAffix.Key == "ElementalResistance") {
-                            bonusElementRes += sAffix.Value;
-                        } else if (sAffix.Key == "MagicalResistance") {
-                            bonusMagicRes += sAffix.Value;
-                        } else if (sAffix.Key == "Initiative") {
-                            bonusInitiative += sAffix.Value;
-                        } else if (sAffix.Key == "MaxHealth") {
-                            bonusHealth += sAffix.Value;
-                        } else if (sAffix.Key == "MaxMana") {
-                            bonusMana += sAffix.Value;
-                        } else if (sAffix.Key == "ManaRegenRate") {
-                            bonusManaRegenRate += sAffix.Value;
-                        } else if (sAffix.Key == "ActionPoints") {
-                            bonusActionPoints += sAffix.Value;
-                        } else if (sAffix.Key == "ArmorRating") {
-                            armorRating += sAffix.Value;
+                        switch (sAffix.Key) {
+                            case "Initiative":
+                                bonusInitiative += sAffix.Value;
+                                break;
+                            case "MaxHealth":
+                                bonusHealth += sAffix.Value;
+                                break;
+                            case "MaxMana":
+                                bonusMana += sAffix.Value;
+                                break;
+                            case "ManaRegenRate":
+                                bonusManaRegenRate += sAffix.Value;
+                                break;
+                            case "ActionPoints":
+                                bonusActionPoints += sAffix.Value;
+                                break;
+                            case "ArmorRating":
+                                armorRating += sAffix.Value;
+                                break;
                         }
+                    }
+                    foreach (var kv in armor.SecondaryAffixes.PhysicalResistance) {
+                        if (bonusPhysicalRes.ContainsKey(kv.Key))
+                            bonusPhysicalRes[kv.Key] += kv.Value;
+                        else
+                            bonusPhysicalRes[kv.Key] = kv.Value;                    
+                    }
+                    foreach (var kv in armor.SecondaryAffixes.ElementalResistance) {
+                        if (bonusElementRes.ContainsKey(kv.Key))
+                            bonusElementRes[kv.Key] += kv.Value;
+                        else
+                            bonusElementRes[kv.Key] = kv.Value;
+                    }
+                    foreach (var kv in armor.SecondaryAffixes.MagicalResistance) {
+                        if (bonusMagicRes.ContainsKey(kv.Key))
+                            bonusMagicRes[kv.Key] += kv.Value;
+                        else
+                            bonusMagicRes[kv.Key] = kv.Value;
                     }
                 } else if (slot.Value is not null && slot.Value is IWeapon weapon) {
                     foreach (var waffix in weapon.WeaponAttributes.AsEnumerable()) {
-                        if (waffix.Key == "AttackSpeed") {
-                            bonusAttackSpeed += waffix.Value;
-                            bonusCastingSpeed += waffix.Value;
+                        switch (waffix.Key) {
+                            case "AttackSpeed":
+                                bonusAttackSpeed += waffix.Value;
+                                break;
+                            case "CastingSpeed":
+                                bonusCastingSpeed += waffix.Value;
+                                break;
                         }
                     }
                 }
@@ -189,7 +253,7 @@ namespace Saga.Character
             BonusAwa = bonusAwa;
             BonusVirtue = bonusVirtue;
             //Second affix
-            BonusDamageReduction = bonusDamageReduction;
+            BonusPhysicalRes = bonusPhysicalRes;
             BonusElementRes = bonusElementRes;
             BonusMagicRes = bonusMagicRes;
             BonusInitiative = bonusInitiative;

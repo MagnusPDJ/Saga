@@ -27,6 +27,10 @@
     <StartupObject>Saga.Program</StartupObject>
     <ApplicationIcon>Assets\Textures\SAGA-removedbg.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Dungeon\Monsters\EnemyDatabase.json" />
+  </ItemGroup>
   
   <!-- Auto-generated designer for resources -->
   <ItemGroup>
@@ -39,14 +43,15 @@
 
   <!-- Embedded resources -->
   <ItemGroup>
+    <EmbeddedResource Include="Dungeon\Monsters\EnemyDatabase.json" />
     <EmbeddedResource Include="Dungeon\Quests\Act1Quests.json" />
     <EmbeddedResource Include="Dungeon\Npcs.json" />
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
     <EmbeddedResource Include="Dungeon\RoomExits.txt" />
     <EmbeddedResource Include="Dungeon\RoomNames.txt" />
-    <EmbeddedResource Include="Items\Loot\QuestLootTable.json" />
-    <EmbeddedResource Include="Items\Loot\ArmorLootTable.json" />
-    <EmbeddedResource Include="Items\Loot\WeaponLootTable.json" />
+    <EmbeddedResource Include="Items\Loot\QuestItemDataBase.json" />
+    <EmbeddedResource Include="Items\Loot\ArmorDataBase.json" />
+    <EmbeddedResource Include="Items\Loot\WeaponDataBase.json" />
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

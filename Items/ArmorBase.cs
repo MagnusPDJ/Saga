@@ -29,24 +29,24 @@ namespace Saga.Items
             //Roll for primary stats:
             for (int i = 0; i < 6; i++) {
 
-                int roll = Program.Rand.Next(1, 100 + 1);
+                double roll = Program.Rand.NextDouble();
 
-                if (i == 0 && roll <= 10) {
+                if (i == 0 && roll <= 0.1) {
                     constitution = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 1 && roll <= 10) {
+                if (i == 1 && roll <= 0.1) {
                     strength = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 2 && roll <= 10) {
+                if (i == 2 && roll <= 0.1) {
                     dexterity = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 3 && roll <= 10) {
+                if (i == 3 && roll <= 0.1) {
                     intellect = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 4 && roll <= 10) {
+                if (i == 4 && roll <= 0.1) {
                     willpower = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 5 && roll <= 10) {
+                if (i == 5 && roll <= 0.1) {
                     awareness = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
 
@@ -57,13 +57,11 @@ namespace Saga.Items
             int maxHealth = 0;
             int maxMana = 0;
             int armorRating = 1;
-            int elementalResistance = 0;
-            int magicalResistance = 0;
 
             //Roll for secondary stats:
             for (int i = 0; i < 4; i++) {
 
-                int roll = Program.Rand.Next(1, 100 + 1);
+                double roll = Program.Rand.NextDouble();
 
                 if (i == 0 && roll <= -1) {
                     maxHealth = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
@@ -71,14 +69,11 @@ namespace Saga.Items
                 if (i == 1 && roll <= -1) {
                     maxMana = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 2 && roll <= 10) {
+                if (i == 2 && roll <= 0.1) {
                     armorRating = Program.Rand.Next(Program.CurrentPlayer.Level / 2, 2 + Math.Max(3, Program.CurrentPlayer.Level + level));
                 }
-                if (i == 3 && roll <= -1) {
-                    elementalResistance = Program.Rand.Next(Math.Max(1, Program.CurrentPlayer.Level + level));
-                }
             }
-            return new SecondaryAffixes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating, ElementalResistance = elementalResistance, MagicalResistance = magicalResistance };
+            return new SecondaryAffixes() { MaxHealth = maxHealth, MaxMana = maxMana, ArmorRating = armorRating };
         }
         public int CalculateItemPrice() {
             return Convert.ToInt32(
