@@ -1,16 +1,16 @@
 ﻿using Saga.Character;
 using Saga.Character.Skills;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;
 
 namespace Saga.Assets
 {
-    public class CombatController(Player player, Enemy enemy)
+    public class CombatController(Player player, EnemyBase enemy)
     {
         private readonly Player _player = player;
-        private readonly Enemy _enemy = enemy;
+        private readonly EnemyBase _enemy = enemy;
         public static bool AutoEndturn => Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleAutoEndturn"));
         public int Turn { get; private set; } = 0;
         private bool Ran { get; set; } = false;

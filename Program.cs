@@ -2,11 +2,13 @@
 using Saga.Character;
 using Saga.Character.Skills;
 using Saga.Dungeon;
+using Saga.Dungeon.Enemies;
 using Saga.Items;
 using System.Configuration;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace Saga
 {
@@ -73,6 +75,11 @@ namespace Saga
             if (!Directory.Exists("saves")) {
                 Directory.CreateDirectory("saves");
             }
+
+            //Load from databases:
+            EnemyDatabase.LoadFromFile("Saga.Dungeon.Enemies.EnemyDatabase.json", Options);
+
+
             //Kalder MainMenu metoden.
             MainMenu();
         }

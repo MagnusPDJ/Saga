@@ -2,7 +2,7 @@
 using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
 using Saga.Dungeon;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
@@ -168,7 +168,7 @@ namespace Saga.Character
         }
         //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();
-        public virtual bool RunAway(Enemy Monster) {
+        public virtual bool RunAway(EnemyBase Monster) {
             bool escaped = false;
             if (Program.Rand.Next(0, 3) == 0 || Monster.Name == "Human captor") {
                 HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
@@ -184,9 +184,7 @@ namespace Saga.Character
         public void CheckForDeath(string message) {
             if (Health <= 0) {
                 Program.SoundController.Stop();
-                HUDTools.ClearLog();
                 Program.SoundController.Play("gameover");
-                HUDTools.ClearLastLine(1);
                 HUDTools.Print($"\u001b[31m{message}\u001b[0m", 20);
                 TextInput.PressToContinue();
                 Program.CurrentPlayer = new Warrior("Adventurer");

@@ -1,5 +1,5 @@
 ﻿using Saga.Character.DmgLogic;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 
 namespace Saga.Items
 {
@@ -16,6 +16,6 @@ namespace Saga.Items
         string AttackDescription { get; set; }
         WeaponAttributes CalculateWeaponAttributes(int level);
         void SetWeaponAttributes();
-        (IDamageType, int) Attack(Enemy Monster);
+        (IDamageType, int) Attack(EnemyBase Monster);
     }
 }

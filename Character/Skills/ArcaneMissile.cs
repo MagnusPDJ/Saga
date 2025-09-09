@@ -1,6 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Character.DmgLogic;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using Saga.Items;
 
 namespace Saga.Character.Skills
@@ -23,7 +23,7 @@ namespace Saga.Character.Skills
             IsUnlocked = true;
             ManaCost = 5;
         }
-        public bool Activate(Player player, Enemy target) {
+        public bool Activate(Player player, EnemyBase target) {
             if (Program.CurrentPlayer.Equipment.Right_Hand is IWeapon weapon && weapon.WeaponCategory == WeaponCategory.Magic) {
                 if (player.SpendMana(ManaCost)) {
                     (IDamageType, int) damage = (this, 5);

@@ -1,6 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Character.DmgLogic;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using System;
 
 namespace Saga.Items
@@ -80,7 +80,7 @@ namespace Saga.Items
             }
             return "Weapon unequipped!";
         }
-        public (IDamageType, int) Attack(Enemy monster) {
+        public (IDamageType, int) Attack(EnemyBase monster) {
             HUDTools.Print($"{AttackDescription}", 15);
             (IDamageType, int) attack = (this, Program.Rand.Next(WeaponAttributes.MinDamage, WeaponAttributes.MaxDamage + 1));
             return attack;

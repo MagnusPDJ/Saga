@@ -1,7 +1,7 @@
 ﻿using Saga.Assets;
 using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using Saga.Items;
 using System.Text.Json;
 
@@ -22,7 +22,7 @@ namespace Saga.Character
             HealingPotion healingPotion = new();
             healingPotion.Equip();
         }
-        public override bool RunAway(Enemy Monster) {
+        public override bool RunAway(EnemyBase Monster) {
             bool escaped = false;
             if (Monster.Name == "Human captor") {
                 HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);

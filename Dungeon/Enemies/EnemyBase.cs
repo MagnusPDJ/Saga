@@ -1,29 +1,28 @@
 ﻿using Saga.Character.DmgLogic;
-using Saga.Items.Loot;
 
-namespace Saga.Dungeon.Monsters
+namespace Saga.Dungeon.Enemies
 {
-    public class Enemy
+    public class EnemyBase
     {
-        public string Name { get; set; } = string.Empty;
-        public string PlayerKillDescription { get; set; } = string.Empty;
-        public int MaxHealth { get; set; }
-        public int Health { get; set; }
-        public int Attack { get; set; }        
-        public int Initiative { get; set; }
-        public int Armor { get; set; }
-        public Dictionary<PhysicalType, int> PhysicalResistance { get; set; } = new() {
+        public virtual string Name { get; set; } = string.Empty;
+        public virtual string PlayerKillDescription { get; set; } = string.Empty;
+        public virtual int MaxHealth { get; set; }
+        public virtual int Health { get; set; }
+        public virtual int Attack { get; set; }        
+        public virtual int Initiative { get; set; }
+        public virtual int Armor { get; set; }
+        public virtual Dictionary<PhysicalType, int> PhysicalResistance { get; set; } = new() {
             { PhysicalType.Normal, 0 },
             { PhysicalType.Piercing, 0 },
             { PhysicalType.Crushing, 0 }
         };
-        public Dictionary<ElementalType, int> ElementalResistance { get; set; } = new() {
+        public virtual Dictionary<ElementalType, int> ElementalResistance { get; set; } = new() {
             { ElementalType.Frost, 0 },
             { ElementalType.Fire, 0 },
             { ElementalType.Poison, 0 },
             { ElementalType.Lightning, 0 }
         };
-        public Dictionary<MagicalType, int> MagicalResistance { get; set; } = new() {
+        public virtual Dictionary<MagicalType, int> MagicalResistance { get; set; } = new() {
             { MagicalType.Arcane, 0 },
             { MagicalType.Chaos, 0 },
             { MagicalType.Void, 0 },
@@ -31,12 +30,9 @@ namespace Saga.Dungeon.Monsters
             { MagicalType.Life, 0 },
             { MagicalType.Death, 0 }
         };
-        public List<string> Tags { get; set; } = [];
-        public LootTable LootTable { get; set; } = new();
-        public MonsterScaling? Scaling { get; set; }
-        public int SpawnWeight { get; set; } = 1; // optional weighted spawning
-        public float ExpGain { get; set; }
-        public float GoldModifier { get; set; }
+        public virtual List<string> Tags { get; set; } = [];
+        public virtual int ExpGain { get; set; }
+        public virtual float GoldModifier { get; set; }
 
         public virtual void TakeDamage((IDamageType, int) amount) {
             Health -= amount.Item2;

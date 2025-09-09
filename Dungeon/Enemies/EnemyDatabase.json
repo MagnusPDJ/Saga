@@ -1,0 +1,157 @@
+﻿[
+  {
+    "Name": "Skeleton Warrior",
+    "PlayerKillDescription": "You are torn apart by rattling bones...",
+    "MaxHealth": 50,
+    "Health": 50,
+    "Attack": 10,
+    "Initiative": 5,
+    "Armor": 2,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": -10,
+      "Crushing": 10
+    },
+    "ElementalResistance": {
+      "Frost": 20,
+      "Fire": -20,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": -50,
+      "Death": 50
+    },
+    "Tags": [ "Undead" ],
+    "ExpGain": 15,
+    "GoldModifier": 1.0
+  },
+  {
+    "Name": "Ancient Lich",
+    "PlayerKillDescription": "Your soul is ripped from your body by dark magic.",
+    "MaxHealth": 300,
+    "Health": 300,
+    "Attack": 25,
+    "Initiative": 8,
+    "Armor": 5,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": -10,
+      "Crushing": 10
+    },
+    "ElementalResistance": {
+      "Frost": 50,
+      "Fire": -20,
+      "Poison": 10,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 50,
+      "Chaos": 30,
+      "Void": 20,
+      "Nature": 0,
+      "Life": -50,
+      "Death": 100
+    },
+    "Tags": [ "Undead", "Boss" ],
+    "ExpGain": 200,
+    "GoldModifier": 3.0
+  },
+  {
+    "Name": "Goblin Raider",
+    "PlayerKillDescription": "The goblin collapses, cursing you as it dies.",
+    "MaxHealth": 35,
+    "Health": 35,
+    "Attack": 8,
+    "Initiative": 7,
+    "Armor": 1,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": -10,
+      "Poison": 5,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Greenskin" ],
+    "ExpGain": 10,
+    "GoldModifier": 0.5
+  },
+  {
+    "Name": "Orc Warrior",
+    "PlayerKillDescription": "The orc falls heavily, but snarls with its last breath.",
+    "MaxHealth": 80,
+    "Health": 80,
+    "Attack": 15,
+    "Initiative": 6,
+    "Armor": 4,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 5,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Greenskin" ],
+    "ExpGain": 25,
+    "GoldModifier": 1.5
+  },
+  {
+    "Name": "Fire Elemental",
+    "PlayerKillDescription": "The elemental dissipates into smoke and embers.",
+    "MaxHealth": 120,
+    "Health": 120,
+    "Attack": 20,
+    "Initiative": 10,
+    "Armor": 3,
+    "PhysicalResistance": {
+      "Normal": -10,
+      "Piercing": -10,
+      "Crushing": -10
+    },
+    "ElementalResistance": {
+      "Frost": -50,
+      "Fire": 100,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 20,
+      "Chaos": 10,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Elemental", "Boss" ],
+    "ExpGain": 150,
+    "GoldModifier": 2.0
+  }
+]

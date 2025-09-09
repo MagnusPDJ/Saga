@@ -1,5 +1,6 @@
 ﻿using Saga.Assets;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
+using Saga.Dungeon.Enemies.Interfaces;
 using Saga.Dungeon.Quests;
 using System.Text.Json;
 
@@ -21,7 +22,7 @@ namespace Saga.Items.Loot
         // OLD methods
 
         //Metode til at få loot efter successfuld kamp:
-        public static void GetCombatLoot(Enemy monster, string message) {
+        public static void GetCombatLoot(EnemyBase monster, string message) {
             HUDTools.Print(message, 15);
             GetGold(monster.GoldModifier);
             if (monster.Name == "Human Captor") {
@@ -189,7 +190,7 @@ namespace Saga.Items.Loot
             TextInput.PressToContinue();
         }
         //Metode til at få specifikke quest items i encounters:
-        public static void GetQuestLoot(int findgold, int findpotions, string questname, Enemy? enemy = null) {
+        public static void GetQuestLoot(int findgold, int findpotions, string questname, EnemyBase? enemy = null) {
             List<IQuestItem> questItems = JsonSerializer.Deserialize<List<IQuestItem>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.QuestItemDatabase.json"), Program.Options) ?? [];
             GetGold(findgold);
             if (findpotions != 0) {

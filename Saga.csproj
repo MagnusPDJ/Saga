@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Dungeon\Monsters\EnemyDatabase.json" />
+    <None Remove="Dungeon\Enemies\EnemyDatabase.json" />
   </ItemGroup>
   
   <!-- Auto-generated designer for resources -->
@@ -43,7 +43,7 @@
 
   <!-- Embedded resources -->
   <ItemGroup>
-    <EmbeddedResource Include="Dungeon\Monsters\EnemyDatabase.json" />
+    <EmbeddedResource Include="Dungeon\Enemies\EnemyDatabase.json" />
     <EmbeddedResource Include="Dungeon\Quests\Act1Quests.json" />
     <EmbeddedResource Include="Dungeon\Npcs.json" />
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />

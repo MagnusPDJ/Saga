@@ -1,7 +1,7 @@
 ﻿using Saga.Character;
 using Saga.Character.DmgLogic;
 using Saga.Dungeon;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
@@ -69,7 +69,7 @@ namespace Saga.Assets
         }
 
         // Metode til at skrive en logfil til kamp
-        public static void WriteCombatLog(string action, Enemy monster, int damage=0, int attack = 0) {
+        public static void WriteCombatLog(string action, EnemyBase monster, int damage=0, int attack = 0) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
             }
@@ -602,7 +602,7 @@ namespace Saga.Assets
             }
             Print($"\nTo equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\nTo examine item write examine Itemname else (b)ack\n", 0);
         }
-        public static void CombatHUD(Enemy Monster, CombatController combatController) {
+        public static void CombatHUD(EnemyBase Monster, CombatController combatController) {
             Console.Clear();
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                  Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");

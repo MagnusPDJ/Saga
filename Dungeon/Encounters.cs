@@ -1,5 +1,5 @@
 ﻿using Saga.Assets;
-using Saga.Dungeon.Monsters;
+using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
@@ -47,13 +47,13 @@ namespace Saga.Dungeon
             HUDTools.Print("He turns...");
             TextInput.PressToContinue();
 
-            //Insert Monster Loading + spawning
+            EnemyBase lich = EnemyFactory.CreateByName("Ancient Lich");
 
             //Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
             //    MaxHealth = 5,
             //    Power = 2,
             //};
-            new CombatController(Program.CurrentPlayer, FirstEncounter).Combat();
+            new CombatController(Program.CurrentPlayer, lich).Combat();
         }
         public static void SecondEncounter() {
             Console.Clear();
@@ -62,12 +62,14 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(1);
             HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
-            //Insert Monster Loading + spawning
+
+
+            EnemyBase lich = EnemyFactory.CreateByName("Ancient Lich");
             //Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
             //    MaxHealth = 6,
             //    Power = 3,
             //};
-            new CombatController(Program.CurrentPlayer, SecondEncounter).Combat();
+            new CombatController(Program.CurrentPlayer, lich).Combat();
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
         public static void MeetGheed() {
@@ -217,21 +219,21 @@ namespace Saga.Dungeon
         public static void RandomBasicCombatEncounter() {
             Console.Clear();
             Program.SoundController.Play("kamp");
-            
-            //Insert spawn logic
+
+            EnemyBase random = EnemyFactory.CreateRandom();
 
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0,2)) {
                 case int x when (x == 0):
-                    HUDTools.Print($"You turn a corner and there you see a {RandomEnemy.Name}...", 10);
+                    HUDTools.Print($"You turn a corner and there you see a {random.Name}...", 10);
                     break;
                 case int x when (x == 1):
-                    HUDTools.Print($"You break down a door and find a {RandomEnemy.Name} inside!", 10);
+                    HUDTools.Print($"You break down a door and find a {random.Name} inside!", 10);
                     break;
             }
             TextInput.PressToContinue();
-            new CombatController(Program.CurrentPlayer, RandomEnemy).Combat();
+            new CombatController(Program.CurrentPlayer, random).Combat();
         }
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
@@ -242,14 +244,15 @@ namespace Saga.Dungeon
             Program.SoundController.Play("troldmandskamp");
             HUDTools.Print("long beard and pointy hat, looking at a large tome.",20);
             TextInput.PressToContinue();
-            //Insert Monster Loading + spawning
+
+            EnemyBase lich = EnemyFactory.CreateByName("Ancient Lich");
             //Enemy WizardEncounter = new Act1Enemy("Dark Wizard", Tribe.Human) {
             //    MaxHealth = 3 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 5 ? 2 : 4),
             //    Power = 6 + Program.CurrentPlayer.Level * (Program.CurrentPlayer.Level < 10 ? 2 : 4),
             //    ExpModifier = 3,
             //    Initiative = 5,
             //};
-            new CombatController(Program.CurrentPlayer, WizardEncounter).Combat();
+            new CombatController(Program.CurrentPlayer, lich).Combat();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public static void MimicEncounter() {
@@ -260,7 +263,7 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(1);
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
-            do {
+            while(true) {
                 input = TextInput.PlayerPrompt();
                 if (input == "n") {
                     Program.SoundController.Play("doorclose");
@@ -275,16 +278,17 @@ namespace Saga.Dungeon
                     HUDTools.Print("Inside are multiple rows of sharp teeth and a swirling tongue that reaches for you.",15);
                     HUDTools.Print($"You ready your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}!",15);
                     TextInput.PressToContinue();
-                    //Insert Monster Loading + spawning
 
-                    new CombatController(Program.CurrentPlayer, MimicEncounter).Combat(); 
+                    EnemyBase lich = EnemyFactory.CreateByName("Ancient Lich");
+                    new CombatController(Program.CurrentPlayer, lich).Combat();
+
                     break;
                 } else {
                     HUDTools.Print("Invalid input");
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                 }
-            } while (input != "42");
+            }
         }
         //Encounter der "spawner" en treasure chest.
         public static void TreasureEncounter() {
