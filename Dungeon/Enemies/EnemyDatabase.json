@@ -1,5 +1,67 @@
 ﻿[
   {
+    "Name": "Human captor",
+    "PlayerKillDescription": "Your captor hits you in the stomach - as he pulls out is weapon your intestines pour on the floor.",
+    "MaxHealth": 6,
+    "Health": 6,
+    "Attack": 2,
+    "Initiative": 1,
+    "Armor": 1,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Human" ],
+    "ExpGain": 15,
+    "GoldModifier": 1.0
+  },
+  {
+    "Name": "Feral dog",
+    "PlayerKillDescription": "The dog clamps onto your throat, ripping it open and drowning your scream in a wet gurgle.",
+    "MaxHealth": 8,
+    "Health": 8,
+    "Attack": 2,
+    "Initiative": 1,
+    "Armor": 0,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Beast" ],
+    "ExpGain": 30,
+    "GoldModifier": 0.0
+  },
+  {
     "Name": "Skeleton Warrior",
     "PlayerKillDescription": "You are torn apart by rattling bones...",
     "MaxHealth": 50,

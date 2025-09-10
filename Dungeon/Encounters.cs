@@ -47,13 +47,8 @@ namespace Saga.Dungeon
             HUDTools.Print("He turns...");
             TextInput.PressToContinue();
 
-            EnemyBase lich = EnemyFactory.CreateByName("Ancient Lich");
-
-            //Enemy FirstEncounter = new Act1Enemy("Human Captor", Tribe.Human) { 
-            //    MaxHealth = 5,
-            //    Power = 2,
-            //};
-            new CombatController(Program.CurrentPlayer, lich).Combat();
+            EnemyBase captor = EnemyFactory.CreateByName("Human captor");
+            new CombatController(Program.CurrentPlayer, captor).Combat();
         }
         public static void SecondEncounter() {
             Console.Clear();
@@ -64,12 +59,8 @@ namespace Saga.Dungeon
             TextInput.PressToContinue();
 
 
-            EnemyBase lich = EnemyFactory.CreateByName("Ancient Lich");
-            //Enemy SecondEncounter = new Act1Enemy("Feral Dog", Tribe.Beast) { 
-            //    MaxHealth = 6,
-            //    Power = 3,
-            //};
-            new CombatController(Program.CurrentPlayer, lich).Combat();
+            EnemyBase dog = EnemyFactory.CreateByName("Feral dog");
+            new CombatController(Program.CurrentPlayer, dog).Combat();
         }
         //Encounter som køres for at introducere shopkeeperen Gheed.
         public static void MeetGheed() {

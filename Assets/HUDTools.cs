@@ -228,6 +228,27 @@ namespace Saga.Assets
             Console.WriteLine(String.Format("{0," + ((Console.WindowWidth / 2) + (input.Length / 2)) + "}", input));
         }
 
+        // Formats a dictionary into wrapped inline text (safe under 100 width)
+        public static string FormatDictionary<TKey>(Dictionary<TKey, int> dict, int maxLineWidth = 40, int indent = 58)
+            where TKey : notnull {
+            var sb = new StringBuilder();
+            int currentWidth = 0;
+            string indentSpaces = new(' ', indent);
+
+            foreach (var kvp in dict) {
+                string text = $"{kvp.Key}: {kvp.Value}%, ";
+                if (currentWidth + text.Length > maxLineWidth) {
+                    sb.AppendLine();
+                    sb.Append(indentSpaces);
+                    currentWidth = 0;
+                }
+                sb.Append(text);
+                currentWidth += text.Length;
+            }
+
+            return sb.ToString().Trim().TrimEnd(',');
+        }
+
         //HUDS
         public static void MainMenu() {
             Console.Clear();
@@ -409,40 +430,37 @@ namespace Saga.Assets
             Console.WriteLine("Choose what to sell");
         }
         public static void DisplayStats(Player player) {
-            StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-            //                        "                                                                                                    "
-                  stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
-                  stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
-                  stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25)}] {Program.CurrentPlayer.Exp}/{Program.CurrentPlayer.GetLevelUpValue()}\n");
-                stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
-                  stats.AppendFormat($" ┌(S)trength ⤵            {player.Attributes.Strength    }\t=> Elemental Resistance:  {player.DerivedStats.ElementalResistance}\n");
-                  stats.AppendFormat($" │      (C)onstitution⤵   {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
-                  stats.AppendFormat($" │(D)exterity ⇵           {player.Attributes.Dexterity   }\t=> Damage Reduction:      {player.DerivedStats.PhysicalResistance}\n");
-                  stats.AppendFormat($" │      (A)wareness ⤵     {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
-                  stats.AppendFormat($" │(I)ntellect ⇵           {player.Attributes.Intellect   }\t=> Magical Resistance:    {player.DerivedStats.MagicalResistance}\n");                 
-                  stats.AppendFormat($" └>     (W)illpower ⤵     {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
-                  stats.AppendFormat($"                 Virtue   {player.Attributes.Virtue      }\t=> Action Points:         {player.DerivedStats.ActionPoints}\n");
-                  stats.AppendFormat($"  Attribute points to spend: {Program.CurrentPlayer.FreeAttributePoints}\n\n");
-                  stats.AppendFormat($" Attack Speed:      {player.DerivedStats.AttackSpeed}\t(Constitution and Awareness)\n");
-                  stats.AppendFormat($" Casting Speed:     {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
-                  stats.AppendFormat($" Mana Regen:        {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
-                stats.AppendFormat($"\n----------------------------------------- Equipment Stats ------------------------------------------\n");
-                  stats.AppendFormat($" Armor Rating:  {player.Equipment.ArmorRating}\n");
-                   stats.AppendFormat("\n Weapon Attributes:\n");      
-                  stats.AppendFormat($"  Weapon Damage:  {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-" +
-                                                     $"{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage}" +
-                                                     $"{(Program.CurrentPlayer.CurrentClass == "Warrior" && (Program.CurrentPlayer.Equipment.Right_Hand as IWeapon is IPhysical) ?
-                                                     $"(+{Program.CurrentPlayer.Level} warrior bonus)" :
-                                                     "")},\t+Attack Speed:  {player.Equipment.BonusAttackSpeed},\t+Casting Speed:  {player.Equipment.BonusCastingSpeed}.\n");
-                stats.AppendFormat($"\n Primary Attributes:\n");
-                  stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
-               stats.AppendFormat($"\n Secondary Attributes:\n");
-            stats.AppendFormat($"  +Max Health:       {player.Equipment.BonusHealth         },\t+Max Mana:              {player.Equipment.BonusMana        },\t+Mana Regen:          {player.Equipment.BonusManaRegenRate}.\n");
-            stats.AppendFormat($"  +Initiative:       {player.Equipment.BonusInitiative     },\t+Action Points:         {player.Equipment.BonusActionPoints},\t+Magical Resistance:  {player.Equipment.BonusMagicRes},\n");
-            stats.AppendFormat($"  +Damage Reduction: {player.Equipment.BonusPhysicalRes},\t+Elemental Resistance:  {player.Equipment.BonusElementRes  }.\n");
-            
-            Print(stats.ToString(),0);
-        }
+          StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
+                stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
+                stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ",(decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25)}] {player.Exp}/{player.GetLevelUpValue()}\n");
+              stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
+                stats.AppendFormat($" ┌(S)trength ⤵           {player.Attributes.Strength    }\t=> Elemental Resistance:  {FormatDictionary(player.DerivedStats.ElementalResistance)}\n");
+                stats.AppendFormat($" │      (C)onstitution⤵  {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
+                stats.AppendFormat($" │(D)exterity ⇵          {player.Attributes.Dexterity   }\t=> Physical Resistance:   {FormatDictionary(player.DerivedStats.PhysicalResistance)}\n");
+                stats.AppendFormat($" │      (A)wareness ⤵    {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
+                stats.AppendFormat($" │(I)ntellect ⇵          {player.Attributes.Intellect   }\t=> Magical Resistance:    {FormatDictionary(player.DerivedStats.MagicalResistance)}\n");
+                stats.AppendFormat($" └>     (W)illpower ⤵    {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
+                stats.AppendFormat($"                 Virtue  {player.Attributes.Virtue      }\t=> Action Points:         {player.DerivedStats.ActionPoints}\n");
+                stats.AppendFormat($"  Attribute points to spend: {player.FreeAttributePoints}\n\n");
+                stats.AppendFormat($" Attack Speed:   {player.DerivedStats.AttackSpeed}\t(Constitution and Awareness)\n");
+                stats.AppendFormat($" Casting Speed:  {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
+                stats.AppendFormat($" Mana Regen:     {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
+              stats.AppendFormat($"\n----------------------------------------- Equipment Stats ------------------------------------------\n");
+                stats.AppendFormat($" Armor Rating:  {player.Equipment.ArmorRating}\n");
+              stats.AppendFormat($"\n Weapon Attributes:\n");
+                stats.AppendFormat($"  Weapon Damage:  {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage} {(player.CurrentClass == "Warrior" && (player.Equipment.Right_Hand as IWeapon is IPhysical) ? $"(+{player.Level} warrior bonus)" : "")},\t+Attack Speed:  {player.Equipment.BonusAttackSpeed},\t+Casting Speed:  {player.Equipment.BonusCastingSpeed}.\n");
+              stats.AppendFormat($"\n Primary Attributes:\n");
+                stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
+              stats.AppendFormat($"\n Secondary Attributes:\n");
+                stats.AppendFormat($"  +Max Health:  {player.Equipment.BonusHealth    },\t+Max Mana:       {player.Equipment.BonusMana},\t+Mana Regen:  {player.Equipment.BonusManaRegenRate},\n");
+                stats.AppendFormat($"  +Initiative:  {player.Equipment.BonusInitiative},\t+Action Points:  {player.Equipment.BonusActionPoints}\n");
+                stats.AppendFormat($"  +Physical Resistance:  {FormatDictionary(player.Equipment.BonusPhysicalRes, indent: 22)}\n");
+                stats.AppendFormat($"  +Elemental Resistance: {FormatDictionary(player.Equipment.BonusElementRes, indent: 22)}\n");
+                stats.AppendFormat($"  +Magical Resistance:   {FormatDictionary(player.Equipment.BonusMagicRes, indent: 22)}\n");
+
+        Print(stats.ToString(), 0);
+    }
         public static void CharacterScreen() {
             //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
             for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0 ; i--) {
@@ -608,7 +626,7 @@ namespace Saga.Assets
                  Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
                  Console.WriteLine($" Fighting: {Monster.Name}!");
                  Console.WriteLine($" Strength: {Monster.Attack} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
-            if (Program.CurrentPlayer.DerivedStats.Initiative > Monster.Initiative) {
+            if (Program.CurrentPlayer.DerivedStats.Initiative >= Monster.Initiative) {
                 Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");
             } else {

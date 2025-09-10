@@ -118,11 +118,11 @@ namespace Saga.Character
             return baseMana;
         }
         int CalculatePhysicalResistance() {
-            int baseArmorRating = _player!.Attributes.Dexterity / 2;
-            return baseArmorRating;
+            int basePhysicalResistance = _player!.Attributes.Dexterity / 2;
+            return basePhysicalResistance;
         }
         int CalculateInitiative() {
-            int baseInitiative = _player!.Attributes.Awareness / 2;
+            int baseInitiative = 1 + _player!.Attributes.Awareness / 2;
             return baseInitiative;
         }
         Dictionary<ElementalType, int> CalculateElementalResistance() {

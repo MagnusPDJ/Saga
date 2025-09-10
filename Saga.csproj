@@ -49,9 +49,9 @@
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
     <EmbeddedResource Include="Dungeon\RoomExits.txt" />
     <EmbeddedResource Include="Dungeon\RoomNames.txt" />
-    <EmbeddedResource Include="Items\Loot\QuestItemDataBase.json" />
-    <EmbeddedResource Include="Items\Loot\ArmorDataBase.json" />
-    <EmbeddedResource Include="Items\Loot\WeaponDataBase.json" />
+    <EmbeddedResource Include="Items\Loot\QuestItemDatabase.json" />
+    <EmbeddedResource Include="Items\Loot\ArmorDatabase.json" />
+    <EmbeddedResource Include="Items\Loot\WeaponDatabase.json" />
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

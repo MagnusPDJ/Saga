@@ -25,7 +25,7 @@ namespace Saga.Items.Loot
         public static void GetCombatLoot(EnemyBase monster, string message) {
             HUDTools.Print(message, 15);
             GetGold(monster.GoldModifier);
-            if (monster.Name == "Human Captor") {
+            if (monster.Name == "Human captor") {
                 GetPotions(Program.Rand.Next(5, 8));
             } else if (monster is not IBeast) {
                 GetPotions();
@@ -36,8 +36,8 @@ namespace Saga.Items.Loot
         }
         //Metode til at få loot fra en skattekiste:
         public static void GetTreasureChestLoot() {
-            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDataBase.json"), Program.Options) ?? [];
-            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDataBase.json"), Program.Options) ?? [];
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDatabase.json"), Program.Options) ?? [];
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDatabase.json"), Program.Options) ?? [];
             HUDTools.Print("You find Treasure!", 10);
             GetGold(3);
             GetPotions();

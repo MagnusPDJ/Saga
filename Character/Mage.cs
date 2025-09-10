@@ -9,8 +9,8 @@ namespace Saga.Character
     public class Mage(string name) : Player(name, "Mage", new MageSkillTree(), 1, 1, 2)
     {
         public override void SetStartingGear() {
-            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDataBase.json"), Program.Options) ?? [];
-            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDataBase.json"), Program.Options) ?? [];
+            List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDatabase.json"), Program.Options) ?? [];
+            List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDatabase.json"), Program.Options) ?? [];
             if (weapons.Find(w => w.ItemName == "Cracked Wand") is IEquipable weapon) {
                 weapon.Equip();
             }            
