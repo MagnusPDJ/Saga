@@ -211,7 +211,7 @@ namespace Saga.Dungeon
             Console.Clear();
             Program.SoundController.Play("kamp");
 
-            EnemyBase random = EnemyFactory.CreateRandom();
+            EnemyBase random = EnemyFactory.CreateRandomByTag("Beast");
 
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
@@ -290,7 +290,7 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(1);
             HUDTools.Print("You open a door and find a treasure chest inside!");
             HUDTools.Print("Do you want to try and open it?\n(Y/N)");
-            do {
+            while(true) {
                 input = TextInput.PlayerPrompt();
                 if (input == "n") {
                     Program.SoundController.Play("doorclose");
@@ -311,7 +311,7 @@ namespace Saga.Dungeon
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                 }
-            } while (input != "42");
+            }
         }
         //Encounter der starter en trap med runer hvor den rigtige rune skal vælges for at kunne exit
         public static void PuzzleOneEncounter() {
@@ -410,7 +410,7 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(1);
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
-            LootSystem.GetExp(2, 50*Program.CurrentPlayer.Level);
+            LootSystem.GetFixedExp(75*Program.CurrentPlayer.Level);
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(16);
         }

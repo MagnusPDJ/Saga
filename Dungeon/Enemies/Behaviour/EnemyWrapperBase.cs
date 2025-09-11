@@ -1,4 +1,5 @@
 ﻿using Saga.Character.DmgLogic;
+using Saga.Items.Loot;
 
 namespace Saga.Dungeon.Enemies.Behaviour
 {
@@ -7,6 +8,7 @@ namespace Saga.Dungeon.Enemies.Behaviour
         protected readonly EnemyBase inner = inner;
 
         public override string Name { get => inner.Name; set => inner.Name = value; }
+        public override int Power { get => inner.Power; set => inner.Power = value; }
         public override string PlayerKillDescription { get => inner.PlayerKillDescription; set => inner.PlayerKillDescription = value; }
         public override int MaxHealth { get => inner.MaxHealth; set => inner.MaxHealth = value; }
         public override int Health { get => inner.Health; set => inner.Health = value; }
@@ -21,5 +23,6 @@ namespace Saga.Dungeon.Enemies.Behaviour
         public override List<string> Tags { get => inner.Tags; set => inner.Tags = value; }
         public override int ExpGain { get => inner.ExpGain; set => inner.ExpGain = value; }
         public override float GoldModifier { get => inner.GoldModifier; set => inner.GoldModifier = value; }
+        public override LootTable LootTable { get => inner.LootTable; set => inner.LootTable = value; }
     }
 }

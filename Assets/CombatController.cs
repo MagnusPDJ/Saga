@@ -1,6 +1,7 @@
 ﻿using Saga.Character;
 using Saga.Character.Skills;
 using Saga.Dungeon.Enemies;
+using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;
@@ -35,6 +36,7 @@ namespace Saga.Assets
                 Program.SoundController.Stop();
                 Program.SoundController.Play("win");
                 LootSystem.GetCombatLoot(_enemy, $"You Won against the {_enemy.Name} on turn {Turn}!");
+                Act1Quest.GainQuestProgress(_enemy);
             }
             _player.CheckForDeath(_enemy.PlayerKillDescription);
         }

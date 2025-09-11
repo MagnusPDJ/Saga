@@ -1,10 +1,12 @@
 ﻿using Saga.Character.DmgLogic;
+using Saga.Items.Loot;
 
 namespace Saga.Dungeon.Enemies
 {
     public class EnemyBase
     {
         public virtual string Name { get; set; } = string.Empty;
+        public virtual int Power { get; set; }
         public virtual string PlayerKillDescription { get; set; } = string.Empty;
         public virtual int MaxHealth { get; set; }
         public virtual int Health { get; set; }
@@ -33,7 +35,7 @@ namespace Saga.Dungeon.Enemies
         public virtual List<string> Tags { get; set; } = [];
         public virtual int ExpGain { get; set; }
         public virtual float GoldModifier { get; set; }
-
+        public virtual LootTable LootTable { get; set; } = new();
         public virtual void TakeDamage((IDamageType, int) amount) {
             Health -= amount.Item2;
             if (Health < 0) Health = 0;

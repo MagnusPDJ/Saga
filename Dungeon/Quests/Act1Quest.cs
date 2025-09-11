@@ -1,9 +1,8 @@
 ﻿using Saga.Assets;
 using Saga.Items.Loot;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Linq;
 using Saga.Items;
+using Saga.Dungeon.Enemies;
+using System.Text.Json;
 
 namespace Saga.Dungeon.Quests
 {
@@ -37,14 +36,13 @@ namespace Saga.Dungeon.Quests
             string target = "";
             string name = "";
             (int,int,int) reward = (0,0,-1);
-            if (roll == 0) { target = "Rat Tail"; name = "Collect rat tails"; reward = (50*Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
-            else if (roll == 1) { target = "Bat Wings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3+Program.CurrentPlayer.Level); }
+            if (roll == 0) { target = "rattail"; name = "Collect rat tails"; reward = (50*Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
+            else if (roll == 1) { target = "batwings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3+Program.CurrentPlayer.Level); }
             int amount = 3 + Program.CurrentPlayer.Level/2;
 
             Quest quest = new Act1Quest() {
                 Name = name,
-                QuestType = Type.Collect,
-                Target = target,
+                QuestType = Type.Collect,              
                 Giver = "Flemsha",
                 Objective = $"Flemsha wants you to collect {amount} {target}.",
                 TurnIn = $"You have the {amount} {target}. Return to Flemsha for your reward.",
@@ -55,5 +53,14 @@ namespace Saga.Dungeon.Quests
             };
             return quest;
         }
+        public static void GainQuestProgress(EnemyBase enemy) {
+            if (enemy != null) {
+                Quest? found;
+                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Quests.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
+                    found.Amount++;
+                }
+            }
+            Program.CurrentPlayer.UpdateQuestLog();
+        } 
     }
 }

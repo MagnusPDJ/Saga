@@ -2,14 +2,13 @@
   {
     "Name": "Free Flemsha",
     "QuestType": 2,
-    "Target": "Old Key",
     "Giver": "Flemsha",
-    "Objective": "You've met a prisoner who calls himself Flemsha. He claims if you free him,\nhe will offer his alchemical expertise to your cause.",
-    "TurnIn": "You have found an old key, it is likely a prison key.\nYou should return to Flemsha's cell.",
+    "Objective": "You've met a prisoner who calls himself Flemsha. He claims if you free him,\n he will offer his alchemical expertise to your cause.",
+    "TurnIn": "You have found an old key, it is likely a prison key.\n You should return to Flemsha's cell.",
     "Gold": 100,
     "Exp": 100,
     "Requirements": {
-      "Old Key": 1
+      "oldkey": 1
     }
   },
   {
@@ -17,7 +16,7 @@
     "QuestType": 0,
     "Target": "Enemy",
     "Giver": "Gheed",
-    "Objective": "You have freed another prisoner named Gheed, who suggested you start clearing rooms.\nYou think killing 5 monsters would make a good impression.",
+    "Objective": "You have freed another prisoner named Gheed, who suggested you start clearing rooms.\n You think killing 5 monsters would make a good impression.",
     "TurnIn": "You have killed 5 monsters and should return to Gheed.",
     "Exp": 100,
     "Item": {

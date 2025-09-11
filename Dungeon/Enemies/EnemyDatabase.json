@@ -1,6 +1,7 @@
 ﻿[
   {
     "Name": "Human captor",
+    "Power": 1,
     "PlayerKillDescription": "Your captor hits you in the stomach - as he pulls out is weapon your intestines pour on the floor.",
     "MaxHealth": 6,
     "Health": 6,
@@ -27,11 +28,12 @@
       "Death": 0
     },
     "Tags": [ "Human" ],
-    "ExpGain": 15,
+    "ExpGain": 20,
     "GoldModifier": 1.0
   },
   {
     "Name": "Feral dog",
+    "Power": 1,
     "PlayerKillDescription": "The dog clamps onto your throat, ripping it open and drowning your scream in a wet gurgle.",
     "MaxHealth": 8,
     "Health": 8,
@@ -58,11 +60,92 @@
       "Death": 0
     },
     "Tags": [ "Beast" ],
-    "ExpGain": 30,
+    "ExpGain": 35,
     "GoldModifier": 0.0
   },
   {
+    "Name": "Huge Rat",
+    "Power": 1,
+    "PlayerKillDescription": "The rat tackles you. In an instant, hundreds swarm your body, gnawing and devouring you alive.",
+    "MaxHealth": 9,
+    "Health": 9,
+    "Attack": 2,
+    "Initiative": 1,
+    "Armor": 0,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Beast" ],
+    "ExpGain": 40,
+    "GoldModifier": 0.0,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "rattail",
+          "DropChance": 1.0
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Giant Bat",
+    "Power": 1,
+    "PlayerKillDescription": "The rat tackles you. In an instant, hundreds swarm your body, gnawing and devouring you alive.",
+    "MaxHealth": 6,
+    "Health": 6,
+    "Attack": 4,
+    "Initiative": 1,
+    "Armor": 0,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Beast" ],
+    "ExpGain": 40,
+    "GoldModifier": 0.0,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "batwings",
+          "DropChance": 1.0
+        }
+      ]
+    }
+  },
+  {
     "Name": "Skeleton Warrior",
+    "Power": 5,
     "PlayerKillDescription": "You are torn apart by rattling bones...",
     "MaxHealth": 50,
     "Health": 50,
@@ -94,6 +177,7 @@
   },
   {
     "Name": "Ancient Lich",
+    "Power": 30,
     "PlayerKillDescription": "Your soul is ripped from your body by dark magic.",
     "MaxHealth": 300,
     "Health": 300,
@@ -125,6 +209,7 @@
   },
   {
     "Name": "Goblin Raider",
+    "Power": 3,
     "PlayerKillDescription": "The goblin collapses, cursing you as it dies.",
     "MaxHealth": 35,
     "Health": 35,
@@ -156,6 +241,7 @@
   },
   {
     "Name": "Orc Warrior",
+    "Power": 3,
     "PlayerKillDescription": "The orc falls heavily, but snarls with its last breath.",
     "MaxHealth": 80,
     "Health": 80,
@@ -187,6 +273,7 @@
   },
   {
     "Name": "Fire Elemental",
+    "Power": 10,
     "PlayerKillDescription": "The elemental dissipates into smoke and embers.",
     "MaxHealth": 120,
     "Health": 120,

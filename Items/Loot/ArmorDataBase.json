@@ -1,7 +1,7 @@
 ﻿[
   {
     "Type": "armorBase",
-    "ItemId":  "linenrags",
+    "ItemId":  "starterarmor",
     "ItemName": "Linen Rags",
     "ItemLevel": 1,
     "ItemSlot": 1,

@@ -7,9 +7,9 @@ namespace Saga.Dungeon.Enemies
     {
         private static readonly Dictionary<string, EnemyBase> _monsters = new(StringComparer.OrdinalIgnoreCase);
 
-        public static void LoadFromFile(string path, JsonSerializerOptions options) {
+        public static void LoadFromFile(string path) {
             string json = HUDTools.ReadAllResourceText(path);
-            var monsters = JsonSerializer.Deserialize<List<EnemyBase>>(json, options)
+            var monsters = JsonSerializer.Deserialize<List<EnemyBase>>(json, Program.Options)
                            ?? throw new InvalidOperationException("Failed to deserialize monsters.");
 
             foreach (var m in monsters) {

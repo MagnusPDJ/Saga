@@ -1,6 +1,4 @@
-﻿using Saga.Assets;
-using Saga.Items;
-using System.Collections.Generic;
+﻿using Saga.Items;
 using System.Text.Json.Serialization;
 
 namespace Saga.Dungeon.Quests
@@ -16,20 +14,20 @@ namespace Saga.Dungeon.Quests
 
     [JsonDerivedType(typeof(Act1Quest), typeDiscriminator: "act1Quest")]
     public abstract class Quest {
-        public string Name { get; set; }
-        public string Objective { get; set; }
-        public string TurnIn { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Objective { get; set; } = string.Empty;
+        public string TurnIn { get; set; } = string.Empty;
         public Type QuestType { get; set; }
-        public string Giver { get; set; }
+        public string Giver { get; set; } = string.Empty;
         public int Gold { get; set; }
         public int Exp { get; set; }
         public int Potions { get; set; } = -1;
-        public IItem Item { get; set; }
+        public IItem? Item { get; set; }
         public bool Accepted { get; set; } = false;
         public bool Completed { get; set; } = false;
-        public string Target { get; set; }
+        public string Target { get; set; } = string.Empty;
         public int Amount { get; set; } = 0;
-        public Dictionary<string, int> Requirements { get; set; }
+        public Dictionary<string, int> Requirements { get; set; } = [];
         public bool CheckRequirements() {
             if (QuestType == Type.Collect || QuestType == Type.Find) {
                 foreach (IItem item in Program.CurrentPlayer.Inventory) {
@@ -37,7 +35,7 @@ namespace Saga.Dungeon.Quests
                         continue;
                     }
                     foreach (string target in Requirements.Keys) {
-                        if (item is IQuestItem item1 && item.ItemName == target) {
+                        if (item is IQuestItem item1 && item.ItemId == target) {
                             if (item1.Amount == Requirements[target]) {
                                 return true;
                             }

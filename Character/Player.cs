@@ -257,7 +257,7 @@ namespace Saga.Character
             HUDTools.Print($"\u001b[96mYou've completed the quest: {quest.Name}!\u001b[0m", 15);
             LootSystem.GetFixedGold(quest.Gold);
             LootSystem.GetPotions(quest.Potions);
-            LootSystem.GetExp(0, quest.Exp);
+            LootSystem.GetFixedExp(quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
                 Inventory.SetValue(quest.Item, index);

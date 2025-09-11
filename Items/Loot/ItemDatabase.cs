@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Saga.Assets;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Saga.Items.Loot
 {
     public static class ItemDatabase
     {
-        private static Dictionary<string, IItem> _items = [];
+        private static readonly Dictionary<string, IItem> _items = new(StringComparer.OrdinalIgnoreCase);
 
-        public static void LoadItems(string path) {
-            var json = File.ReadAllText(path);
-            var list = JsonSerializer.Deserialize<List<IItem>>(json, Program.Options)
-                       ?? [];
-            _items = list.ToDictionary(i => i.ItemId, i => i, StringComparer.OrdinalIgnoreCase);
+        public static void LoadFromFile(string path) {
+            var json = HUDTools.ReadAllResourceText(path);
+            var items = JsonSerializer.Deserialize<List<IItem>>(json, Program.Options)
+                       ?? throw new InvalidOperationException("Failed to deserialize items.");
+            foreach (var item in items) {
+                _items[item.ItemId] = item;
+            }
         }
 
-        public static IItem? GetItem(string itemId)
-            => _items.TryGetValue(itemId, out var item) ? item : null;
+        public static IItem? GetByItemId(string itemId) => 
+            _items.TryGetValue(itemId, out var item) ? item : null;
     }
 }

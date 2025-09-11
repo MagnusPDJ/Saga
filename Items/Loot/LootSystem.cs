@@ -2,7 +2,11 @@
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Enemies.Interfaces;
 using Saga.Dungeon.Quests;
+using System;
+using System.Reflection;
 using System.Text.Json;
+using System.Xml.Serialization;
+using Windows.UI.Composition;
 
 namespace Saga.Items.Loot
 {
@@ -12,7 +16,7 @@ namespace Saga.Items.Loot
             var drops = new List<IItem>();
             foreach (var loot in table.Items) {
                 if (Program.Rand.NextDouble() <= loot.DropChance) {
-                    var item = ItemDatabase.GetItem(loot.ItemId);
+                    var item = ItemDatabase.GetByItemId(loot.ItemId);
                     if (item != null) drops.Add(item);
                 }
             }
@@ -27,11 +31,39 @@ namespace Saga.Items.Loot
             GetGold(monster.GoldModifier);
             if (monster.Name == "Human captor") {
                 GetPotions(Program.Rand.Next(5, 8));
-            } else if (monster is not IBeast) {
+            } else if (monster is IHuman || monster is IGreenskin || monster.Name == "Mimic") {
                 GetPotions();
             }
-            GetQuestLoot(0, 0, "", monster);
-            GetExp(monster.ExpGain);
+            List<IItem> drops = RollLoot(monster.LootTable);
+            foreach (var item in drops) {
+                Quest? found;
+                if (item.ItemName == "Rat tail"){
+                    if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed is not true)) is not null) {
+                        int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i is not null && i.ItemName == "Rat tail");
+                        if (index != -1) {
+                            ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
+                        } else {
+                            index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                            Program.CurrentPlayer.Inventory.SetValue(item, index);
+                        }
+                    }
+                } else if (item.ItemName == "Bat wings"){
+                    if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed is not true)) is not null) {
+                        int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x is not null && x.ItemName == "Bat wings");
+                        if (index != -1) {
+                            ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
+                        } else {
+                            index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                            Program.CurrentPlayer.Inventory.SetValue(item, index);
+                        }
+                    }
+                } else {
+                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                    Program.CurrentPlayer.Inventory.SetValue(item, index);                  
+                }
+                HUDTools.Print($"You gain {item?.ItemName}", 15);
+            }
+            GetExp(monster.Power, monster.ExpGain);
             TextInput.PressToContinue();
         }
         //Metode til at få loot fra en skattekiste:
@@ -190,8 +222,7 @@ namespace Saga.Items.Loot
             TextInput.PressToContinue();
         }
         //Metode til at få specifikke quest items i encounters:
-        public static void GetQuestLoot(int findgold, int findpotions, string questname, EnemyBase? enemy = null) {
-            List<IQuestItem> questItems = JsonSerializer.Deserialize<List<IQuestItem>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.QuestItemDatabase.json"), Program.Options) ?? [];
+        public static void GetQuestLoot(int findgold, int findpotions, string questname) {
             GetGold(findgold);
             if (findpotions != 0) {
                 GetPotions(findpotions);
@@ -199,47 +230,17 @@ namespace Saga.Items.Loot
             Console.ForegroundColor = ConsoleColor.Cyan;
             if (questname == "MeetFlemsha") {
                 int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                var questItem = questItems.Find(x => x != null && x.ItemName == "Old Key");
+                var questItem = ItemDatabase.GetByItemId("oldkey");
                 Program.CurrentPlayer.Inventory.SetValue(questItem, index);
                 HUDTools.Print($"You gain {questItem?.ItemName}", 15);
-            }
-            if (enemy != null) {
-                Quest? found;
-                if (enemy.Name == "Giant Rat" && (found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed != true)) != null) {
-                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i != null && i.ItemName == "Rat Tail");
-                    var questItem = questItems.Find(x => x != null && x.ItemName == "Rat Tail");
-                    if (index != -1) {
-                        ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
-                    } else {
-                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                        Program.CurrentPlayer.Inventory.SetValue(questItem, index);
-                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
-                    }
-                } else if (enemy.Name == "Giant Bat" &&
-                    (found = Program.CurrentPlayer.QuestLog.Find(x => x is not null && x.Name == "Collect bat wings" && x.Completed != true)) is not null) {
-                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x != null && x.ItemName == "Bat Wings");
-                    var questItem = questItems.Find(x => x != null && x.ItemName == "Bat Wings");
-                    if (index != -1) {
-                        ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
-                    } else {
-                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                        Program.CurrentPlayer.Inventory.SetValue(questItem, index);
-                        HUDTools.Print($"You gain {questItem?.ItemName}", 15);
-                    }
-                }
-                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Quests.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
-                    found.Amount++;
-                }
             }
             Console.ResetColor();
             Program.CurrentPlayer.UpdateQuestLog();
         }
         //Metode til at få en tilfældig mængde guld:
         public static void GetGold(float modifier = 1) {
-            int upper = (26 * Program.CurrentPlayer.Level + 61);
-            int lower = (5 * Program.CurrentPlayer.Level);
+            int upper = 26 * Program.CurrentPlayer.Level + 61;
+            int lower = 5 * Program.CurrentPlayer.Level;
             int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
             if (g > 0) {
                 HUDTools.Print($"\u001b[33mYou loot {g} gold coins.\u001b[0m", 15);
@@ -272,13 +273,38 @@ namespace Saga.Items.Loot
             }
         }
         //Metode til at få en tilfældig mængde exp eller en bestemt mængde:
-        public static void GetExp(float expModifier, int flatExp = 0) {
-            int upper = (20 * Program.CurrentPlayer.Level + 21);
-            int lower = (2 * Program.CurrentPlayer.Level);
-            int x = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * expModifier) + flatExp;
-            if (x > 0) {
-                HUDTools.Print($"\u001b[32mYou've gained {x} experience points!\u001b[0m", 10);
-                Program.CurrentPlayer.Exp += x;
+        public static void GetExp(int monsterPower, int monsterExp = 0) {
+            int powerDifference = monsterPower - Program.CurrentPlayer.Level;
+            int xpGain;
+            if (powerDifference >= 0) {
+                xpGain = powerDifference switch {
+                    0 => monsterExp,
+                    1 => (int)(monsterExp * 1.1),
+                    2 => (int)(monsterExp * 1.25),
+                    3 => (int)(monsterExp * 1.5),
+                    4 => (int)(monsterExp * 1.9),
+                    5 => (int)(monsterExp * 2.5),
+                    _ => (int)(monsterExp * 0.5 * powerDifference),
+                };
+            } else {
+                xpGain = powerDifference switch {
+                    -1 => (int)(monsterExp * 0.9),
+                    -2 => (int)(monsterExp * 0.75),
+                    -3 => (int)(monsterExp * 0.5),
+                    -4 => (int)(monsterExp * 0.1),
+                    _ => monsterExp * 0,
+                };
+            }
+            if (xpGain > 0) {
+                HUDTools.Print($"\u001b[32mYou've gained {xpGain} experience points!\u001b[0m", 10);
+                Program.CurrentPlayer.Exp += xpGain;
+            }
+            Program.CurrentPlayer.CheckForLevelUp();
+        }
+        public static void GetFixedExp(int expGain) {
+            if (expGain > 0) {
+                HUDTools.Print($"\u001b[32mYou've gained {expGain} experience points!\u001b[0m", 10);
+                Program.CurrentPlayer.Exp += expGain;
             }
             Program.CurrentPlayer.CheckForLevelUp();
         }
