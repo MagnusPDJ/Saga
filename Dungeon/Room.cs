@@ -265,11 +265,7 @@ namespace Saga.Dungeon
         public void RandomBasicCombatEncounter() {
             Console.Clear();
             Program.SoundController.Play("kamp");
-
-            
-
             EnemyBase random = SpawnManager.SpawnEnemyInRoom(Program.CurrentPlayer, roomName);
-
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0, 2)) {

@@ -204,9 +204,7 @@ namespace Saga.Dungeon
         }
 
 
-        //Random Encounters:
-
-        //Encounter der "spawner" en random fjende som skal dræbes.
+        //Bestemte Encounters:
 
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
@@ -473,6 +471,5 @@ namespace Saga.Dungeon
             }
             return choice;
         }
-        //Metode til at køre kamp
     }
 }
