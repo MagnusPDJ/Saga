@@ -1,6 +1,8 @@
 ﻿using Saga.Assets;
 using Saga.Character;
+using Saga.Dungeon.Enemies;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Saga.Dungeon
 {
@@ -76,7 +78,7 @@ namespace Saga.Dungeon
 
     public class DungeonTemplate
     {
-        public int Level { get; set; } = 1; // optional: use this if using formulas by dungeon level
+        public int Level { get; set; } = 1;
         public double DifficultyMultiplier { get; set; } = 1.0;
         public List<Room> rooms = [];
     }
@@ -248,7 +250,7 @@ namespace Saga.Dungeon
     {
         public override void LoadRoom() {
             string exit = "";
-            Encounters.RandomBasicCombatEncounter();
+            RandomBasicCombatEncounter();
             if (Program.RoomController.ran == true) {
                 Program.RoomController.ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
@@ -259,6 +261,27 @@ namespace Saga.Dungeon
                 }
                 Program.RoomController.ChangeRoom(exit);
             }
+        }
+        public void RandomBasicCombatEncounter() {
+            Console.Clear();
+            Program.SoundController.Play("kamp");
+
+            
+
+            EnemyBase random = SpawnManager.SpawnEnemyInRoom(Program.CurrentPlayer, roomName);
+
+            HUDTools.RoomHUD();
+            HUDTools.ClearLastLine(1);
+            switch (Program.Rand.Next(0, 2)) {
+                case int x when (x == 0):
+                    HUDTools.Print($"You turn a corner and there you see a {random.Name}...", 10);
+                    break;
+                case int x when (x == 1):
+                    HUDTools.Print($"You break down a door and find a {random.Name} inside!", 10);
+                    break;
+            }
+            TextInput.PressToContinue();
+            new CombatController(Program.CurrentPlayer, random).Combat();
         }
     }
     //Rum til et tilfældigt encounter.

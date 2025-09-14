@@ -79,6 +79,7 @@ namespace Saga
 
             //Load from databases:
             EnemyDatabase.LoadFromFile("Saga.Dungeon.Enemies.EnemyDatabase.json");
+            SpawnRulesDatabase.LoadFromFile("Saga.Dungeon.Enemies.SpawnRulesDatabase.json");
             ItemDatabase.LoadFromFile("Saga.Items.Loot.ArmorDatabase.json");
             ItemDatabase.LoadFromFile("Saga.Items.Loot.QuestItemDatabase.json");
             ItemDatabase.LoadFromFile("Saga.Items.Loot.WeaponDatabase.json");

@@ -31,7 +31,7 @@ namespace Saga.Dungeon.Enemies
 
         public static EnemyBase CreateByName(string name) {
             var template = EnemyDatabase.GetByName(name)
-                           ?? throw new ArgumentException($"Monster '{name}' not found.");
+                           ?? throw new ArgumentException($"Enemy '{name}' not found.");
 
             return Create(template);
         }
@@ -47,7 +47,7 @@ namespace Saga.Dungeon.Enemies
             var candidates = all.Where(m => m.Tags.Contains(tag, StringComparer.OrdinalIgnoreCase)).ToList();
 
             if (candidates.Count == 0)
-                throw new InvalidOperationException($"No monsters found with tag '{tag}'.");
+                throw new InvalidOperationException($"No enemies found with tag '{tag}'.");
 
             var chosen = candidates[_rng.Next(candidates.Count)];
             return Create(chosen);

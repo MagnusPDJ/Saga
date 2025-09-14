@@ -207,25 +207,7 @@ namespace Saga.Dungeon
         //Random Encounters:
 
         //Encounter der "spawner" en random fjende som skal dræbes.
-        public static void RandomBasicCombatEncounter() {
-            Console.Clear();
-            Program.SoundController.Play("kamp");
 
-            EnemyBase random = EnemyFactory.CreateRandomByTag("Beast");
-
-            HUDTools.RoomHUD();
-            HUDTools.ClearLastLine(1);
-            switch (Program.Rand.Next(0,2)) {
-                case int x when (x == 0):
-                    HUDTools.Print($"You turn a corner and there you see a {random.Name}...", 10);
-                    break;
-                case int x when (x == 1):
-                    HUDTools.Print($"You break down a door and find a {random.Name} inside!", 10);
-                    break;
-            }
-            TextInput.PressToContinue();
-            new CombatController(Program.CurrentPlayer, random).Combat();
-        }
         //Encounter der "spawner" en Dark Wizard som skal dræbes.
         public static void WizardEncounter() {
             Console.Clear();
