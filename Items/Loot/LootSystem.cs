@@ -2,11 +2,7 @@
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Enemies.Interfaces;
 using Saga.Dungeon.Quests;
-using System;
-using System.Reflection;
 using System.Text.Json;
-using System.Xml.Serialization;
-using Windows.UI.Composition;
 
 namespace Saga.Items.Loot
 {
@@ -46,6 +42,8 @@ namespace Saga.Items.Loot
                             index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                             Program.CurrentPlayer.Inventory.SetValue(item, index);
                         }
+                    } else {
+                        continue;
                     }
                 } else if (item.ItemName == "Bat wings"){
                     if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed is not true)) is not null) {
@@ -56,6 +54,8 @@ namespace Saga.Items.Loot
                             index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                             Program.CurrentPlayer.Inventory.SetValue(item, index);
                         }
+                    } else {
+                        continue;
                     }
                 } else {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);

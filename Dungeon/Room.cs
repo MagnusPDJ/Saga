@@ -1,8 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Character;
 using Saga.Dungeon.Enemies;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace Saga.Dungeon
 {
