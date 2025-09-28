@@ -56,7 +56,7 @@ namespace Saga.Dungeon.Quests
         public static void GainQuestProgress(EnemyBase enemy) {
             if (enemy != null) {
                 Quest? found;
-                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Dungeon.Quests.Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
+                if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.QuestType == Type.Elimination && x.Target == "Enemy" && x.Completed != true)) != null) {
                     found.Amount++;
                 }
             }

@@ -4,77 +4,59 @@ using Saga.Dungeon.Enemies;
 
 namespace Saga.Dungeon
 {
-    public class Exit
+    public interface IExit
+    {
+        string ExitTemplateDescription { get; set; }
+    }
+
+    public class Exit : IExit
     {
         public string keyString = "";
         public string exitDescription = "";
-        public Room? valueRoom;
+        public required Room valueRoom;
+        public bool hasPreviousRoom = false;
+        public string ExitTemplateDescription { get; set; } = "";
     }
 
     public abstract class Room
     {
         public string description = "";
         public string roomName = "";
-        public Exit[] exits = [];
-        public abstract void LoadRoom();
+        public List<Exit> exits = [];
+        public bool Visited = false;
 
-        public static Room CreateRandomBasicCombatRoom(Room[] rooms, int i) {
-            (string, string) roomNameAndDescription = CreateRoomNameAndDescription();
-            if (i == 0) {
-                Room room = new RandomBasicCombatRoom()
-                {
-                    roomName = roomNameAndDescription.Item1,
-                    description = roomNameAndDescription.Item2,
-                    exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }],
-                };
-                return room;
-            } else {
-                (string, string) exit = CreateExit();
-                Room room = new RandomBasicCombatRoom()
-                {
-                    roomName = roomNameAndDescription.Item1,
-                    description = roomNameAndDescription.Item2,
-                    exits = [new Exit() { keyString = $"{exit.Item1}", exitDescription = $"{exit.Item2}", valueRoom = rooms[i - 1]}],
-                };
-                return room;
+        public EnemyBase? enemy = null;
+        public bool MonsterSpawned = false;
+        public bool Cleared = false;
+        public string corpseDescription = "";
+
+        public abstract void LoadRoom();
+    }
+
+    // Simple generic dungeon room used by the generator:
+    public class DungeonRoom : Room
+    {
+        public DungeonRoom(string name, string desc)
+        {
+            roomName = name;
+            description = desc;
+            exits = [];
+        }
+
+        public override void LoadRoom()
+        {
+            if (!Visited) Visited = true;
+            string exit = "";
+            HUDTools.RoomHUD();
+            while (exit == "")
+            {
+                exit = TextInput.PlayerPrompt(true);
             }
-        }
-        public static Room CreateRandomEncounterRoom(Room[] rooms, int i) {
-            (string, string) roomNameAndDescription = CreateRoomNameAndDescription();
-            if (i == 0) {
-                Room room = new RandomEncounterRoom()
-                {
-                    roomName = roomNameAndDescription.Item1,
-                    description = roomNameAndDescription.Item2,
-                    exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = Rooms.Camp }]
-                };
-                return room;
-            } else {
-                (string, string) exit = CreateExit();
-                Room room = new RandomEncounterRoom()
-                {
-                    roomName = roomNameAndDescription.Item1,
-                    description = roomNameAndDescription.Item2,
-                    exits = [new Exit() { keyString = $"{exit.Item1}", exitDescription = $"{exit.Item2}", valueRoom = rooms[i-1]}]
-                };
-                return room;
-            }
-        }
-        public static (string, string) CreateRoomNameAndDescription() {
-            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomNames.txt");
-            lines.RemoveAt(0);
-            int picked = Program.Rand.Next(lines.Count);
-            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1].Replace("\\n", "\n"));
-        }
-        public static (string, string) CreateExit() {
-            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.RoomExits.txt");
-            lines.RemoveAt(0);
-            int picked = Program.Rand.Next(lines.Count);
-            return (lines[picked].Split(';')[0], lines[picked].Split(';')[1].Replace("%", "\u001b[96m").Replace("¤", "\u001b[0m"));
+            Program.RoomController.ChangeRoom(exit);
         }
     }
 
-    public class DungeonTemplate
+    public class DungeonInstance
     {
         public int Level { get; set; } = 1;
         public double DifficultyMultiplier { get; set; } = 1.0;
@@ -92,65 +74,63 @@ namespace Saga.Dungeon
             new SeeInventory("inventory", "i"),
             new SeeQuestLog("questlog", "l"),
             new SeeSkillTree("skilltree", "k")
-            ];
+        ];
         public InputAction[] InputInvActions = [
             new Examine("examine"),
             new Equip("equip"),
             new UnEquip("unequip"),
             new Back("back", "b"),
-            ];
+        ];
         public Room currentRoom = Rooms.Camp;
-        public DungeonTemplate currentDungeonInstance = new();
+        public DungeonInstance currentDungeonInstance = new();
         public bool ran = false;
 
         public void ChangeRoom(string keystring, Room? room = null) {
             bool foundRoom = false;
-            if (room != null) { 
+            Room previousRoom = new DungeonRoom("", "");
+            if (room != null) {
                 currentRoom = room;
-                foundRoom = true;              
+                foundRoom = true;
             }
-            foreach (Exit exit in currentRoom.exits) {
-                if (exit.keyString == keystring) {
-                    if (exit.valueRoom != null) {
+            if (keystring == "home") {
+                currentRoom = Rooms.Camp;
+                foundRoom = true;
+            }
+            if (!foundRoom) {
+                previousRoom = currentRoom;
+                foreach (Exit exit in currentRoom.exits) {
+                    if (exit.keyString == keystring) {
                         currentRoom = exit.valueRoom;
+                        foundRoom = true;
+                        break;
                     }
-                    foundRoom = true;
-                    break;
                 }
             }
             if (foundRoom) {
                 Program.CurrentPlayer.RegainMana();
+
+                //Update exit descriptions for all exits in current room
+                foreach (var ex in currentRoom.exits) {
+                    if (ex.valueRoom != null && ex.ExitTemplateDescription != null) {
+                        if (ex.valueRoom == previousRoom) {
+                            string destName = ex.valueRoom.roomName;
+                            ex.exitDescription = $"[\u001b[96mback\u001b[0m] {ex.ExitTemplateDescription.Replace("{0}", destName)}";
+                            ex.hasPreviousRoom = true;
+                        } else {
+                            string destName = ex.valueRoom.Visited ? ex.valueRoom.roomName : "UNKNOWN";
+                            ex.exitDescription = $"[\u001b[96m{ex.keyString}\u001b[0m] {ex.ExitTemplateDescription.Replace("{0}", destName)}";
+                        }
+                    }
+                }
+
                 currentRoom.LoadRoom();
             }
         }
+
         public void ExploreDungeon() {
-            Program.RoomController.currentDungeonInstance = GenerateDungeon();
+            Program.RoomController.currentDungeonInstance = DungeonGenerator.GenerateDungeon();
             Program.CurrentPlayer.TimesExplored++;
-            ChangeRoom("", currentDungeonInstance.rooms[^1]);
-        }
-        public static DungeonTemplate GenerateDungeon() {
-            var dungeon = new DungeonTemplate()
-            {
-                rooms = GenerateRooms()
-            };
-
-            return dungeon;
-        }
-        public static List<Room> GenerateRooms() {
-            
-            int dybde = Program.Rand.Next(1, 5 + 1);
-            Room[] rooms = new Room[dybde];
-            for (int i = 0; i < dybde; i++) {
-                rooms[i] = Program.Rand.Next(0, 100) switch
-                {
-                    int x when 55 <= x && x < 80 && i == 0 =>                           Encounters.ProgressTheStory(rooms, i),
-                    int x when 80 <= x && x < 90 && i != 0 =>                           new HallwayRoom(rooms, i),
-                    int x when 90 <= x && x < 100 && Program.CurrentPlayer.Level > 1 => Room.CreateRandomEncounterRoom(rooms, i),
-                    _ =>                                                                Room.CreateRandomBasicCombatRoom(rooms, i),
-                };
-            }
-
-            return [.. rooms];
+            ChangeRoom("", currentDungeonInstance.rooms[0]);
         }
     }
 
@@ -205,7 +185,6 @@ namespace Saga.Dungeon
         public CampRoom() {
             roomName = "Camp";
             description = "";
-            exits = [new Exit() { keyString = "You will never leave", exitDescription = "here alive", valueRoom = null}];
         }
         public override void LoadRoom() {
             if (Program.CurrentPlayer.CurrentAct == Encounters.Act.Start) {

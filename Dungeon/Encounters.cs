@@ -418,9 +418,11 @@ namespace Saga.Dungeon
             if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                 return new MeetFlemshaRoom();
             } else {
-                return Room.CreateRandomBasicCombatRoom(rooms, i);
+                return new DungeonRoom("","");
+                    //CreateRandomBasicCombatRoom(rooms, i);
             }
         }
+
         //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
         public static string Camp() {
             bool leave = false;

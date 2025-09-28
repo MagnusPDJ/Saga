@@ -20,14 +20,45 @@ namespace Saga.Assets
                 HUDTools.ClearLastLine(3);
                 return "";
             }
+
+            // Universal "go home" support
+            if (separatedInputWords[1].Equals("home", StringComparison.OrdinalIgnoreCase)) {
+                HUDTools.Print("Are you sure you want to return? (Y/N)", 10);
+                string confirm = TextInput.PlayerPrompt();
+                if (confirm == "y") {
+                    HUDTools.Print("You return to your camp.", 10);
+                    TextInput.PressToContinue();
+                    return "home";
+                } else {
+                    HUDTools.Print("You decide to stay.", 10);
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(5);
+                    return "";
+                }
+            }
+
             bool foundRoom = false;
-            foreach (Exit exit in Program.RoomController.currentRoom.exits) {
+            for (int i = 0; i < Program.RoomController.currentRoom.exits.Count; i++) {
+                var exit = Program.RoomController.currentRoom.exits[i];
+                if (separatedInputWords[1] == "back" && exit.hasPreviousRoom) {
+                    exit.hasPreviousRoom = false;
+                    foundRoom = true;
+                    separatedInputWords.SetValue(exit.keyString, 1);
+                    break;
+                }
                 if (exit.keyString == separatedInputWords[1]) {
-                    foundRoom = true;                  
+                    foundRoom = true;
                     break;
                 }
             }
             if (foundRoom) {
+
+                // Update exit descriptions using the original template
+                foreach (var exit in Program.RoomController.currentRoom.exits) {
+                    string destName = exit.valueRoom.Visited ? exit.valueRoom.roomName : "UNKNOWN";
+                    exit.exitDescription = $"[{exit.keyString}] {exit.ExitTemplateDescription.Replace("{0}", destName)}";                   
+                }
+
                 return separatedInputWords[1];
             } else {
                 HUDTools.Print($"You cannot go {separatedInputWords[1]}, \u001b[96mlook around\u001b[0m to find places to go.", 10);
