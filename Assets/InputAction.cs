@@ -159,6 +159,7 @@ namespace Saga.Assets
             (int, int) startCursorPosition = Console.GetCursorPosition();
             if (separatedInputWords[1] == "around") {
                 HUDTools.Print(Program.RoomController.currentRoom.description, 10);
+                HUDTools.Print(Program.RoomController.currentRoom.corpseDescription, 10);
                 foreach (Exit exit in Program.RoomController.currentRoom.exits) {
                     HUDTools.Print(exit.exitDescription, 10);
                 }

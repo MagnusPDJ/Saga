@@ -75,5 +75,57 @@
         }
       }
     ]
+  },
+  {
+    "DungeonKey": "Undercroft",
+    "LevelRanges": [
+      {
+        "MinLevel": 1,
+        "MaxLevel": 5,
+        "Enemies": {
+          "Huge Rat": 1,
+          "Giant Bat": 1
+        }
+      }
+    ]
+  },
+  {
+    "DungeonKey": "Mine",
+    "LevelRanges": [
+      {
+        "MinLevel": 1,
+        "MaxLevel": 5,
+        "Enemies": {
+          "Huge Rat": 1,
+          "Giant Bat": 1
+        }
+      }
+    ]
+  },
+  {
+    "DungeonKey": "Sewers",
+    "LevelRanges": [
+      {
+        "MinLevel": 1,
+        "MaxLevel": 5,
+        "Enemies": {
+          "Huge Rat": 1,
+          "Giant Bat": 1
+        }
+      }
+    ]
+  },
+  {
+    "DungeonKey": "Natural Cave",
+    "LevelRanges": [
+      {
+        "MinLevel": 1,
+        "MaxLevel": 5,
+        "Enemies": {
+          "Huge Rat": 1,
+          "Giant Bat": 1
+        }
+      }
+    ]
   }
 ]

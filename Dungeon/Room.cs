@@ -15,6 +15,7 @@ namespace Saga.Dungeon
         public string exitDescription = "";
         public required Room valueRoom;
         public bool hasPreviousRoom = false;
+        public bool IsOneWay = false;
         public string ExitTemplateDescription { get; set; } = "";
     }
 
@@ -26,7 +27,7 @@ namespace Saga.Dungeon
         public bool Visited = false;
 
         public EnemyBase? enemy = null;
-        public bool MonsterSpawned = false;
+        public bool EnemySpawned = false;
         public bool Cleared = false;
         public string corpseDescription = "";
 
@@ -36,6 +37,7 @@ namespace Saga.Dungeon
     // Simple generic dungeon room used by the generator:
     public class DungeonRoom : Room
     {
+        private const double DefaultSpawnChance = 0.75;
         public DungeonRoom(string name, string desc)
         {
             roomName = name;
@@ -43,9 +45,39 @@ namespace Saga.Dungeon
             exits = [];
         }
 
-        public override void LoadRoom()
-        {
+        public override void LoadRoom() {
             if (!Visited) Visited = true;
+
+            //Spawn Enemy
+            if (!EnemySpawned && !Cleared) {
+                EnemySpawned = true;
+                if (Program.Rand.NextDouble() < DefaultSpawnChance && enemy == null) {
+                    RandomBasicCombatEncounter();
+                    if (Program.RoomController.ran == true) {
+                        Program.RoomController.ran = false;
+                        Program.RoomController.ChangeRoom(exits[0].keyString);
+                    } else {
+                        Cleared = true;
+                        corpseDescription = $"Here is a description of the monster that was slain.";
+                        enemy = null;
+                    }
+                } else if (enemy != null) {
+                    HUDTools.RoomHUD();
+                    HUDTools.ClearLastLine(1);
+                    HUDTools.Print($"You return to the room where you left the {enemy.Name}...", 10);
+                    TextInput.PressToContinue();
+                    new CombatController(Program.CurrentPlayer, enemy).Combat();
+                    if (Program.RoomController.ran == true) {
+                        Program.RoomController.ran = false;
+                        Program.RoomController.ChangeRoom(exits[0].keyString);
+                    } else {
+                        Cleared = true;
+                        corpseDescription = $"Here is a description of the monster that was slain.";
+                        enemy = null;
+                    }
+                }
+            }
+
             string exit = "";
             HUDTools.RoomHUD();
             while (exit == "")
@@ -54,13 +86,30 @@ namespace Saga.Dungeon
             }
             Program.RoomController.ChangeRoom(exit);
         }
+        public void RandomBasicCombatEncounter() {
+            Program.SoundController.Play("kamp");
+            enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.currentDungeonInstance.DungeonName);
+            HUDTools.RoomHUD();
+            HUDTools.ClearLastLine(1);
+            switch (Program.Rand.Next(0, 2)) {
+                case int x when (x == 0):
+                    HUDTools.Print($"You turn a corner and there you see a {enemy.Name}...", 10);
+                    break;
+                case int x when (x == 1):
+                    HUDTools.Print($"You break down a door and find a {enemy.Name} inside!", 10);
+                    break;
+            }
+            TextInput.PressToContinue();
+            new CombatController(Program.CurrentPlayer, enemy).Combat();
+        }
     }
 
     public class DungeonInstance
     {
+        public string DungeonName { get; set; } = "";
         public int Level { get; set; } = 1;
         public double DifficultyMultiplier { get; set; } = 1.0;
-        public List<Room> rooms = [];
+        public List<Room> Rooms { get; set; } = [];
     }
 
     public class RoomController 
@@ -130,7 +179,7 @@ namespace Saga.Dungeon
         public void ExploreDungeon() {
             Program.RoomController.currentDungeonInstance = DungeonGenerator.GenerateDungeon();
             Program.CurrentPlayer.TimesExplored++;
-            ChangeRoom("", currentDungeonInstance.rooms[0]);
+            ChangeRoom("", currentDungeonInstance.Rooms[0]);
         }
     }
 
@@ -227,7 +276,7 @@ namespace Saga.Dungeon
     {
         public override void LoadRoom() {
             string exit = "";
-            RandomBasicCombatEncounter();
+            // RandomBasicCombatEncounter();
             if (Program.RoomController.ran == true) {
                 Program.RoomController.ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
@@ -239,23 +288,7 @@ namespace Saga.Dungeon
                 Program.RoomController.ChangeRoom(exit);
             }
         }
-        public void RandomBasicCombatEncounter() {
-            Console.Clear();
-            Program.SoundController.Play("kamp");
-            EnemyBase random = SpawnManager.SpawnEnemyInRoom(Program.CurrentPlayer, roomName);
-            HUDTools.RoomHUD();
-            HUDTools.ClearLastLine(1);
-            switch (Program.Rand.Next(0, 2)) {
-                case int x when (x == 0):
-                    HUDTools.Print($"You turn a corner and there you see a {random.Name}...", 10);
-                    break;
-                case int x when (x == 1):
-                    HUDTools.Print($"You break down a door and find a {random.Name} inside!", 10);
-                    break;
-            }
-            TextInput.PressToContinue();
-            new CombatController(Program.CurrentPlayer, random).Combat();
-        }
+
     }
     //Rum til et tilfældigt encounter.
     public class RandomEncounterRoom : Room 

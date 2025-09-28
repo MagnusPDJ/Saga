@@ -414,7 +414,7 @@ namespace Saga.Dungeon
             }
         }
         //Metode til at vælge imellem story/NPC encounters, den bruges efter et sæt af randomencounters under Camp().
-        public static Room ProgressTheStory(Room[] rooms, int i) {
+        public static Room ProgressTheStory() {
             if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                 return new MeetFlemshaRoom();
             } else {

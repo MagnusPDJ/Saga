@@ -152,6 +152,11 @@ namespace Saga.Assets
                     TextInput.PressToContinue();
                 break;
                 case "e":
+                    if (RemainingActionPoints >= _player.DerivedStats.ActionPoints) {
+                        HUDTools.Print($"No Action Points spent, are you sure, you want to end turn? (Y/N)", 3);
+                        string input1 = TextInput.PlayerPrompt();
+                        if (input1 != "y") break;
+                    }
                     Endturn = true;
                 break;
             }

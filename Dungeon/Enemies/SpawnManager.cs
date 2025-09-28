@@ -4,8 +4,8 @@ namespace Saga.Dungeon.Enemies
 {
     public static class SpawnManager
     {
-        public static EnemyBase SpawnEnemyInRoom(Player player, string room) {
-            SpawnRules? rules = SpawnRulesDatabase.GetByName(room);
+        public static EnemyBase SpawnEnemyInDungeon(Player player, string dungeonName) {
+            SpawnRules? rules = SpawnRulesDatabase.GetByName(dungeonName);
 
             if (rules is not null) {
                 foreach (var levelRange in rules.LevelRanges) {

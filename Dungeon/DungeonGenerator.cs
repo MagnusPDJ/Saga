@@ -6,7 +6,7 @@ namespace Saga.Dungeon
         private static readonly Dictionary<string, List<string>[]> Dungeons = new()
         {
             { "Undercroft", new List<string>[] { ["Crypt of Whispers", ""], ["Bone Sanctum", ""], ["Forsaken Altar", ""], ["Candlelit Vault", ""], ["Tomb Corridor", ""] } },
-            { "Sewer", new List<string>[] { ["Overflowing Cistern", ""], ["Rotten Bath", ""], ["Mossy Well", ""], ["Sewage Junction", ""], ["Submerged Passage", ""] } },
+            { "Sewers", new List<string>[] { ["Overflowing Cistern", ""], ["Rotten Bath", ""], ["Mossy Well", ""], ["Sewage Junction", ""], ["Submerged Passage", ""] } },
             { "Mine", new List<string>[] { ["Collapsing Mineshaft", ""], ["Ore Storer", ""], ["Old Stope", ""], ["Dim Cartway", ""], ["Rusty Hoist", ""] } },
             { "Natural Cave", new List<string>[] { ["Gloom Grotto", ""], ["Dripstone Lair", ""], ["Bear Den", ""], ["Echoing Chamber", ""], ["Crystal Hollow", ""] } }
         };
@@ -14,7 +14,7 @@ namespace Saga.Dungeon
         private static readonly Dictionary<string, string[]> Exits = new()
         {
             { "Undercroft", new[] { "A narrow arch leads to the {0}.", "A cold corridor opens towards the {0}.", "A stairwell descends toward the {0}." } },
-            { "Sewer", new[] { "A slimy tunnel runs to the {0}.", "A pipe-strewn passage heads to the {0}.", "A wet ramp slopes down to the {0}." } },
+            { "Sewers", new[] { "A slimy tunnel runs to the {0}.", "A pipe-strewn passage heads to the {0}.", "A wet ramp slopes down to the {0}." } },
             { "Mine", new[] { "A wooden doorway leads to the {0}.", "A blasted tunnel continues to the {0}.", "A rickety ladder drops toward the {0}." } },
             { "Natural Cave", new[] { "A winding opening goes to the {0}.", "A narrow crevice connects to the {0}.", "A rocky path leads to the {0}." } },
         };
@@ -59,6 +59,33 @@ namespace Saga.Dungeon
                 }
             }
 
+            // Add one-way exits between rooms with less than 3 exits
+            int countToAdd = Program.Rand.Next(3);
+            int numberAdded = 0;
+                for (int a = 0; a < rooms.Count; a++) {
+                    if (countToAdd == numberAdded) break;
+                    if (rooms[a].exits.Count >= 3) continue;
+                    for (int b = 0; b < rooms.Count; b++) {
+                        if (a == b) continue;
+                        if (rooms[b].exits.Count >= 3) continue;
+                        // Skip if already connected in either direction
+                        if (rooms[a].exits.Any(x => x.valueRoom == rooms[b])) continue;
+                        if (rooms[b].exits.Any(x => x.valueRoom == rooms[a])) continue;
+
+                        // Add a one-way exit from a to b
+                        var exits = Exits[dungeonName];
+                        string exitTemplate = exits[Program.Rand.Next(exits.Length)];
+                        rooms[a].exits.Add(new Exit {
+                            valueRoom = rooms[b],
+                            ExitTemplateDescription = exitTemplate,
+                            IsOneWay = true
+                        });
+                        numberAdded++;
+                        // breaking so it only adds one per room
+                        if (rooms[a].exits.Count >= 3) break;
+                        
+                    }
+                }           
             // Add "[camp]" exit to the first room (always visible, not numbered)
             rooms[0].exits.Add(new Exit
             {
@@ -85,7 +112,8 @@ namespace Saga.Dungeon
 
             var dungeon = new DungeonInstance
             {
-                rooms = rooms
+                DungeonName = dungeonName,
+                Rooms = rooms
             };
 
             return dungeon;
