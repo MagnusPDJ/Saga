@@ -83,6 +83,7 @@ namespace Saga
             ItemDatabase.LoadFromFile("Saga.Items.Loot.ArmorDatabase.json");
             ItemDatabase.LoadFromFile("Saga.Items.Loot.QuestItemDatabase.json");
             ItemDatabase.LoadFromFile("Saga.Items.Loot.WeaponDatabase.json");
+            DungeonDatabase.LoadFromFile("Saga.Dungeon.DungeonDatabase.json");
 
 
             //Kalder MainMenu metoden.

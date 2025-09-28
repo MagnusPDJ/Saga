@@ -29,6 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Dungeon\DungeonDatabase.json" />
     <None Remove="Dungeon\Enemies\EnemyDatabase.json" />
     <None Remove="Dungeon\Enemies\SpawnRulesDatabase.json" />
   </ItemGroup>
@@ -44,13 +45,12 @@
 
   <!-- Embedded resources -->
   <ItemGroup>
+    <EmbeddedResource Include="Dungeon\DungeonDatabase.json" />
     <EmbeddedResource Include="Dungeon\Enemies\EnemyDatabase.json" />
     <EmbeddedResource Include="Dungeon\Enemies\SpawnRulesDatabase.json" />
     <EmbeddedResource Include="Dungeon\Quests\Act1Quests.json" />
     <EmbeddedResource Include="Dungeon\Npcs.json" />
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
-    <EmbeddedResource Include="Dungeon\RoomExits.txt" />
-    <EmbeddedResource Include="Dungeon\RoomNames.txt" />
     <EmbeddedResource Include="Items\Loot\QuestItemDatabase.json" />
     <EmbeddedResource Include="Items\Loot\ArmorDatabase.json" />
     <EmbeddedResource Include="Items\Loot\WeaponDatabase.json" />

@@ -3,33 +3,17 @@ namespace Saga.Dungeon
 {
     public static class DungeonGenerator
     {
-        private static readonly Dictionary<string, List<string>[]> Dungeons = new()
-        {
-            { "Undercroft", new List<string>[] { ["Crypt of Whispers", ""], ["Bone Sanctum", ""], ["Forsaken Altar", ""], ["Candlelit Vault", ""], ["Tomb Corridor", ""] } },
-            { "Sewers", new List<string>[] { ["Overflowing Cistern", ""], ["Rotten Bath", ""], ["Mossy Well", ""], ["Sewage Junction", ""], ["Submerged Passage", ""] } },
-            { "Mine", new List<string>[] { ["Collapsing Mineshaft", ""], ["Ore Storer", ""], ["Old Stope", ""], ["Dim Cartway", ""], ["Rusty Hoist", ""] } },
-            { "Natural Cave", new List<string>[] { ["Gloom Grotto", ""], ["Dripstone Lair", ""], ["Bear Den", ""], ["Echoing Chamber", ""], ["Crystal Hollow", ""] } }
-        };
-
-        private static readonly Dictionary<string, string[]> Exits = new()
-        {
-            { "Undercroft", new[] { "A narrow arch leads to the {0}.", "A cold corridor opens towards the {0}.", "A stairwell descends toward the {0}." } },
-            { "Sewers", new[] { "A slimy tunnel runs to the {0}.", "A pipe-strewn passage heads to the {0}.", "A wet ramp slopes down to the {0}." } },
-            { "Mine", new[] { "A wooden doorway leads to the {0}.", "A blasted tunnel continues to the {0}.", "A rickety ladder drops toward the {0}." } },
-            { "Natural Cave", new[] { "A winding opening goes to the {0}.", "A narrow crevice connects to the {0}.", "A rocky path leads to the {0}." } },
-        };
-
         public static DungeonInstance GenerateDungeon(int minRooms = 6, int maxRooms = 10)
         {
             // Pick the dungeon:
-            List<string> dungeonNames = [.. Dungeons.Keys];
+            List<string> dungeonNames = [.. DungeonDatabase.GetDungeons().Keys];
             string dungeonName = dungeonNames[Program.Rand.Next(dungeonNames.Count)];
             
             // Pick number of rooms
             int roomCount = Program.Rand.Next(minRooms, maxRooms + 1);
 
             // Give each room a name and description:
-            var roomNamesAndDesc = Dungeons[dungeonName];
+            var roomNamesAndDesc = DungeonDatabase.GetDungeons()[dungeonName];
             var rooms = new List<Room>(roomCount);
             for (int i = 0; i < roomCount; i++)
             {
@@ -73,17 +57,10 @@ namespace Saga.Dungeon
                         if (rooms[b].exits.Any(x => x.valueRoom == rooms[a])) continue;
 
                         // Add a one-way exit from a to b
-                        var exits = Exits[dungeonName];
-                        string exitTemplate = exits[Program.Rand.Next(exits.Length)];
-                        rooms[a].exits.Add(new Exit {
-                            valueRoom = rooms[b],
-                            ExitTemplateDescription = exitTemplate,
-                            IsOneWay = true
-                        });
+                        ConnectRoomsOneDirectional(rooms[a], rooms[b], dungeonName);
                         numberAdded++;
                         // breaking so it only adds one per room
-                        if (rooms[a].exits.Count >= 3) break;
-                        
+                        if (rooms[a].exits.Count >= 3) break;                        
                     }
                 }           
             // Add "[camp]" exit to the first room (always visible, not numbered)
@@ -121,7 +98,7 @@ namespace Saga.Dungeon
 
         private static void ConnectRoomsBidirectional(Room a, Room b, string dungeonName)
         {
-            var exits = Exits[dungeonName];
+            var exits = DungeonDatabase.GetExits()[dungeonName];
             string exitA = exits[Program.Rand.Next(exits.Length)];
             string exitB = exits[Program.Rand.Next(exits.Length)];
             
@@ -129,6 +106,13 @@ namespace Saga.Dungeon
         
             string backExitTemplate = exitB;
             b.exits.Add(new Exit() { valueRoom = a, ExitTemplateDescription = backExitTemplate });
+        }
+        private static void ConnectRoomsOneDirectional(Room a, Room b, string dungeonName) {
+            var exits = DungeonDatabase.GetExits()[dungeonName];
+            string exitTemplate = exits[Program.Rand.Next(exits.Length)];
+            a.exits.Add(new Exit { valueRoom = b, ExitTemplateDescription = exitTemplate,
+                IsOneWay = true
+            });
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿[
+  {
+    "Dungeons": {
+      "Undercroft": [
+        [ "Crypt", " Torches along the wall burn with a blue-green flame, casting flickering light over a row of\n sarcophagi — one of which appears broken from the inside, sending chills down your spine." ],
+        [ "Ossuary", " Skulls are stacked against the walls, while ribs and femurs knot together to shape the arches\n overhead — the hollow gazes from the skulls seem to follow your every step." ],
+        [ "Sacristy", " A large altar and ornate chests line the walls, though all have been desecrated and looted.\n Faint runes — written in what you can only assume is blood — crawl across the surfaces, their\n meaning unknowable yet deeply unsettling." ],
+        [ "Candlelit Vault", " Every surface - tables, cupboards, even the floor - is filled with lit candles, their flames\n swaying gently yet never diminishing, distorting your perception of time until hours and days\n bleed into a single, unending moment." ],
+        [ "Tomb Corridor", " Long and dark corridor with sarcophagi on both sides each descecrated - or ordained? - with\n demonic scripture" ],
+        [ "Torture room", " Racks, pillories, and an iron maiden fill the room, their surfaces stained and worn—either\n recently used, or perhaps it’s just this horrid place that preserves such horrors." ],
+        [ "Prison cell", " Rusted chains cling to the wall, and following their length, you come upon the crumpled remains\n of a skeleton — an unfortunate soul, long forgotten in this accursed place." ]
+      ],
+      "Sewers": [
+        [ "Cistern", " A huge room with angle-high water, cold and damp, with constant dripping from the ceiling\nthat forms stalactites and hints at the place’s ancient age." ],
+        [ "Rotten Bath", "" ],
+        [ "Mossy Well", "" ],
+        [ "Sewage Junction", "" ],
+        [ "Submerged Passage", "" ]
+      ],
+      "Mine": [
+        [ "Collapsing Mineshaft", "" ],
+        [ "Ore Storer", "" ],
+        [ "Old Stope", "" ],
+        [ "Dim Cartway", "" ],
+        [ "Rusty Hoist", "" ]
+      ],
+      "Natural Cave": [
+        [ "Gloom Grotto", "" ],
+        [ "Dripstone Lair", "" ],
+        [ "Bear Den", "" ],
+        [ "Echoing Chamber", "" ],
+        [ "Crystal Hollow", "" ]
+      ]
+    }
+  },
+  {
+    "Exits": {
+      "Undercroft": [ "A narrow arch leads to the {0}.", "A cold corridor opens towards the {0}.", "A stairwell descends toward the {0}." ],
+      "Sewers": [ "A slimy tunnel runs to the {0}.", "A pipe-strewn passage heads to the {0}.", "A wet ramp slopes down to the {0}." ],
+      "Mine": [ "A wooden doorway leads to the {0}.", "A blasted tunnel continues to the {0}.", "A rickety ladder drops toward the {0}." ],
+      "Natural Cave": [ "A winding opening goes to the {0}.", "A narrow crevice connects to the {0}.", "A rocky path leads to the {0}." ]
+    }
+  }
+]

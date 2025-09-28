@@ -1,6 +1,0 @@
-﻿Name;Description
-Cistern;A huge room with angle-high water, cold and damp, with constant dripping from the ceiling\nthat forms stalactites and hints at the place’s ancient age.
-Prison cell;Rusted chains cling to the wall, and following their length, you come upon the crumpled remains\nof a skeleton — an unfortunate soul, long forgotten in this accursed place.
-Crypt;Torches along the wall burn with a blue-green flame, casting flickering light over a row of\nsarcophagi — one of which appears broken from the inside, sending chills down your spine.
-Torture room;Racks, pillories, and an iron maiden fill the room, their surfaces stained and worn—either\nrecently used, or perhaps it’s just this horrid place that preserves such horrors.
-Sacristy;A large altar and ornate chests line the walls, though all have been desecrated and looted.\nFaint runes — written in what you can only assume is blood — crawl across the surfaces, their\nmeaning unknowable yet deeply unsettling.
