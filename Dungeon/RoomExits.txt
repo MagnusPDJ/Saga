@@ -1,9 +1,0 @@
-﻿Keystring;Description
-door;Before you lies a big wooden %door¤ with rusted hinges.
-door;Before you lies a %door¤ with dents and scratches.
-door;You see a big reinforced %door¤.
-door;You see a %door¤ with rusted hinges.
-door;There is a small %door¤.
-door;There is a %door¤ with a rusted latch.
-door;Your eyes fall upon a small cracked %door¤.
-door;Your eyes fall upon a wooden %door¤.

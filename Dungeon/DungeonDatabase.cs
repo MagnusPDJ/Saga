@@ -6,7 +6,7 @@ namespace Saga.Dungeon
     public static class DungeonDatabase
     {
         private static readonly Dictionary<string, List<string>[]> _dungeons = new(StringComparer.OrdinalIgnoreCase);
-        private static readonly Dictionary<string, string[]> _exits = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, List<string>[]> _exits = new(StringComparer.OrdinalIgnoreCase);
 
         public static void LoadFromFile(string path) {
             string json = HUDTools.ReadAllResourceText(path);
@@ -29,7 +29,7 @@ namespace Saga.Dungeon
                 _dungeons[dungeon.Key] = dungeon.Value;
             }
 
-            var exitsDict = JsonSerializer.Deserialize<Dictionary<string, string[]>>(exitsJson, Program.Options)
+            var exitsDict = JsonSerializer.Deserialize<Dictionary<string, List<string>[]>>(exitsJson, Program.Options)
                            ?? throw new InvalidOperationException("Failed to deserialize exits.");
             foreach (var exit in exitsDict) {
                 _exits[exit.Key] = exit.Value;
@@ -37,6 +37,6 @@ namespace Saga.Dungeon
         }
 
         public static IReadOnlyDictionary<string, List<string>[]> GetDungeons() => _dungeons;
-        public static IReadOnlyDictionary<string, string[]> GetExits() => _exits;
+        public static IReadOnlyDictionary<string, List<string>[]> GetExits() => _exits;
     }
 }

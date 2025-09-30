@@ -11,11 +11,12 @@
         [ "Prison cell", " Rusted chains cling to the wall, and following their length, you come upon the crumpled remains\n of a skeleton — an unfortunate soul, long forgotten in this accursed place." ]
       ],
       "Sewers": [
-        [ "Cistern", " A huge room with angle-high water, cold and damp, with constant dripping from the ceiling\nthat forms stalactites and hints at the place’s ancient age." ],
-        [ "Rotten Bath", "" ],
-        [ "Mossy Well", "" ],
-        [ "Sewage Junction", "" ],
-        [ "Submerged Passage", "" ]
+        [ "Cistern", " A huge room with angle-high water, cold and damp, with constant dripping from the ceiling\n that forms stalactites and hints at the place’s ancient age." ],
+        [ "Old Baths", " A room with small pools that are almost dried out and the sides are covered in slime." ],
+        [ "Mossy Well", " You see in the middle of the room a well with a pulley and bucket for hoisting water from the\n underground." ],
+        [ "Sewage Junction", " Here multiple tunnels meet and collects the water in a huge basin, with walkways along the edges\n of the room." ],
+        [ "Sewage Passage", " A large passage that collects the waste water from small holes and tunnels and leads it further down." ],
+        [ "Storage room", " The room has broken shelves and dusty crates scattered about. All are rotten and useless."]
       ],
       "Mine": [
         [ "Collapsing Mineshaft", "" ],
@@ -35,10 +36,52 @@
   },
   {
     "Exits": {
-      "Undercroft": [ "A narrow arch leads to the {0}.", "A cold corridor opens towards the {0}.", "A stairwell descends toward the {0}." ],
-      "Sewers": [ "A slimy tunnel runs to the {0}.", "A pipe-strewn passage heads to the {0}.", "A wet ramp slopes down to the {0}." ],
-      "Mine": [ "A wooden doorway leads to the {0}.", "A blasted tunnel continues to the {0}.", "A rickety ladder drops toward the {0}." ],
-      "Natural Cave": [ "A winding opening goes to the {0}.", "A narrow crevice connects to the {0}.", "A rocky path leads to the {0}." ]
+      "Undercroft": [
+        [
+          "A narrow arch leads to the {0}.",
+          "A cold corridor opens towards the {0}.",
+          "A stairwell descends toward the {0}.",
+          "A big wooden door with rusted hinges leads to the {0}.",
+          "There is a small door that leads to the {0}."
+        ],
+        [
+          "A lever reveals a secret passage. It can only be opened from this side."
+        ]
+      ],
+      "Sewers": [
+        [
+          "A slimy tunnel runs to the {0}.",
+          "A big sewage pipe leads to the {0}.",
+          "A wet ramp slopes down to the {0}.",
+          "A big reninforced door leads to the {0}.",
+          "A door with rusted hinges leads to the {0}."
+        ],
+        [
+          "A steep ramp you could slide down into the dark."
+        ]
+      ],
+      "Mine": [
+        [
+          "A wooden doorway leads to the {0}.",
+          "A dark tunnel continues to the {0}.",
+          "A rickety ladder drops toward the {0}.",
+          "A door with dents and scrathes leads to the {0}.",
+          "There is a door with a rusted latch that leads to the {0}."
+        ],
+        [
+          "A broken elevator shaft. You can see water at the bottom, that you reckon would be deep enough to\n break your fall."
+        ]
+      ],
+      "Natural Cave": [
+        [
+          "A winding opening goes to the {0}.",
+          "A narrow crevice connects to the {0}.",
+          "A rocky path leads to the {0}."
+        ],
+        [
+          "There is a hole that connects to some other part of the cave."
+        ]
+      ]
     }
   }
 ]

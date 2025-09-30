@@ -99,8 +99,8 @@ namespace Saga.Dungeon
         private static void ConnectRoomsBidirectional(Room a, Room b, string dungeonName)
         {
             var exits = DungeonDatabase.GetExits()[dungeonName];
-            string exitA = exits[Program.Rand.Next(exits.Length)];
-            string exitB = exits[Program.Rand.Next(exits.Length)];
+            string exitA = exits[0][Program.Rand.Next(exits[0].Count)];
+            string exitB = exits[0][Program.Rand.Next(exits[0].Count)];
             
             a.exits.Add(new Exit() { valueRoom = b, ExitTemplateDescription = exitA });
         
@@ -109,7 +109,7 @@ namespace Saga.Dungeon
         }
         private static void ConnectRoomsOneDirectional(Room a, Room b, string dungeonName) {
             var exits = DungeonDatabase.GetExits()[dungeonName];
-            string exitTemplate = exits[Program.Rand.Next(exits.Length)];
+            string exitTemplate = exits[1][Program.Rand.Next(exits[1].Count)];
             a.exits.Add(new Exit { valueRoom = b, ExitTemplateDescription = exitTemplate,
                 IsOneWay = true
             });
