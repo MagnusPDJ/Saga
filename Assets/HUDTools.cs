@@ -337,9 +337,11 @@ namespace Saga.Assets
             Console.WriteLine($"| Items in inventory:");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
-                } else if (item is IQuestItem item1) {
-                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
-                } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
+                } else if (item is IQuestItem qItem) {
+                    Console.WriteLine($"| \u001b[96mQuest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
+                } else if (item is ICraftingItem cItem) {
+                    Console.WriteLine($"| Crafting Item - {cItem.ItemName} #{cItem.Amount}");
+                } else if ((item is IEquipable eItem) && eItem.ItemSlot == Slot.Right_Hand) {
                     Console.WriteLine($"| {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
                 } else if (item is IArmor) {
                     Console.Write($"| {item.ItemName}:");
@@ -378,9 +380,11 @@ namespace Saga.Assets
             Console.WriteLine($"| Items in inventory:");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
-                } else if (item is IQuestItem item1) {
-                    Console.WriteLine($"| \u001b[96mQuest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
-                } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
+                } else if (item is IQuestItem qItem) {
+                    Console.WriteLine($"| \u001b[96mQuest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
+                } else if (item is ICraftingItem cItem) {
+                    Console.WriteLine($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) Crafting Item - {cItem.ItemName} #{cItem.Amount} per item $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, cItem)).ToString())}");
+                } else if ((item is IEquipable eItem) && eItem.ItemSlot == Slot.Right_Hand) {
                     Console.WriteLine($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg,\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
                 } else if (item is IArmor) {
                     Console.Write($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: ");
@@ -581,8 +585,10 @@ namespace Saga.Assets
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
-                }  else if (item is IQuestItem item1) {
-                    Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
+                } else if (item is IQuestItem qItem) {
+                    Console.WriteLine($"\u001b[96m Quest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
+                } else if (item is ICraftingItem cItem) {
+                    Console.WriteLine($" Crafting Item - {cItem.ItemName} #{cItem.Amount}");
                 } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
                     if (item is ITwoHanded twoHanded) {
                         Console.WriteLine($" Both hands - {twoHanded.ItemName}: +{twoHanded.WeaponAttributes.MinDamage}-{twoHanded.WeaponAttributes.MaxDamage} dmg");

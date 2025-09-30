@@ -12,79 +12,13 @@
     ]
   },
   {
-    "DungeonKey": "Cistern",
-    "LevelRanges": [
-      {
-        "MinLevel": 1,
-        "MaxLevel": 5,
-        "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
-        }
-      }
-    ]
-  },
-  {
-    "DungeonKey": "Prison cell",
-    "LevelRanges": [
-      {
-        "MinLevel": 1,
-        "MaxLevel": 5,
-        "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
-        }
-      }
-    ]
-  },
-  {
-    "DungeonKey": "Crypt",
-    "LevelRanges": [
-      {
-        "MinLevel": 1,
-        "MaxLevel": 5,
-        "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
-        }
-      }
-    ]
-  },
-  {
-    "DungeonKey": "Torture room",
-    "LevelRanges": [
-      {
-        "MinLevel": 1,
-        "MaxLevel": 5,
-        "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
-        }
-      }
-    ]
-  },
-  {
-    "DungeonKey": "Sacristy",
-    "LevelRanges": [
-      {
-        "MinLevel": 1,
-        "MaxLevel": 5,
-        "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
-        }
-      }
-    ]
-  },
-  {
     "DungeonKey": "Undercroft",
     "LevelRanges": [
       {
         "MinLevel": 1,
         "MaxLevel": 5,
         "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
+          "Huge Rat": 1
         }
       }
     ]
@@ -96,8 +30,7 @@
         "MinLevel": 1,
         "MaxLevel": 5,
         "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
+          "Kobold": 1
         }
       }
     ]
@@ -109,8 +42,7 @@
         "MinLevel": 1,
         "MaxLevel": 5,
         "Enemies": {
-          "Huge Rat": 1,
-          "Giant Bat": 1
+          "Big Slime": 1
         }
       }
     ]
@@ -122,7 +54,6 @@
         "MinLevel": 1,
         "MaxLevel": 5,
         "Enemies": {
-          "Huge Rat": 1,
           "Giant Bat": 1
         }
       }

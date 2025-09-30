@@ -9,7 +9,8 @@ namespace Saga.Dungeon.Enemies.Behaviour
 
         public override string Name { get => inner.Name; set => inner.Name = value; }
         public override int Power { get => inner.Power; set => inner.Power = value; }
-        public override string PlayerKillDescription { get => inner.PlayerKillDescription; set => inner.PlayerKillDescription = value; }
+        public override string PlayerDeathDescription { get => inner.PlayerDeathDescription; set => inner.PlayerDeathDescription = value; }
+        public override string EnemyCorpseDescription { get => inner.EnemyCorpseDescription; set => inner.EnemyCorpseDescription = value; }
         public override int MaxHealth { get => inner.MaxHealth; set => inner.MaxHealth = value; }
         public override int Health { get => inner.Health; set => inner.Health = value; }
         public override int Attack { get => inner.Attack; set => inner.Attack = value; }

@@ -32,6 +32,7 @@
     <None Remove="Dungeon\DungeonDatabase.json" />
     <None Remove="Dungeon\Enemies\EnemyDatabase.json" />
     <None Remove="Dungeon\Enemies\SpawnRulesDatabase.json" />
+    <None Remove="Items\Loot\CraftingItemDatabase.json" />
   </ItemGroup>
   
   <!-- Auto-generated designer for resources -->
@@ -51,6 +52,7 @@
     <EmbeddedResource Include="Dungeon\Quests\Act1Quests.json" />
     <EmbeddedResource Include="Dungeon\Npcs.json" />
     <EmbeddedResource Include="Dungeon\Dialogue.txt" />
+    <EmbeddedResource Include="Items\Loot\CraftingItemDatabase.json" />
     <EmbeddedResource Include="Items\Loot\QuestItemDatabase.json" />
     <EmbeddedResource Include="Items\Loot\ArmorDatabase.json" />
     <EmbeddedResource Include="Items\Loot\WeaponDatabase.json" />

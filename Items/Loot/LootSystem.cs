@@ -32,35 +32,19 @@ namespace Saga.Items.Loot
             }
             List<IItem> drops = RollLoot(monster.LootTable);
             foreach (var item in drops) {
-                Quest? found;
-                if (item.ItemName == "Rat tail"){
-                    if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect rat tails" && x.Completed is not true)) is not null) {
-                        int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i is not null && i.ItemName == "Rat tail");
-                        if (index != -1) {
-                            ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        } else {
-                            index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                            Program.CurrentPlayer.Inventory.SetValue(item, index);
-                        }
+                if (item is ICraftingItem cItem) {
+                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i is not null && i.ItemName == cItem.ItemName);
+                    if (index != -1) {
+                        cItem.Amount++;
                     } else {
-                        continue;
-                    }
-                } else if (item.ItemName == "Bat wings"){
-                    if ((found = Program.CurrentPlayer.QuestLog.Find(x => x.Name == "Collect bat wings" && x.Completed is not true)) is not null) {
-                        int index = Array.FindIndex(Program.CurrentPlayer.Inventory, x => x is not null && x.ItemName == "Bat wings");
-                        if (index != -1) {
-                            ((IQuestItem)Program.CurrentPlayer.Inventory[index]).Amount++;
-                        } else {
-                            index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                            Program.CurrentPlayer.Inventory.SetValue(item, index);
-                        }
-                    } else {
-                        continue;
+                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                        Program.CurrentPlayer.Inventory.SetValue(item, index);
                     }
                 } else {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                    Program.CurrentPlayer.Inventory.SetValue(item, index);                  
+                    Program.CurrentPlayer.Inventory.SetValue(item, index);
                 }
+              
                 HUDTools.Print($"You gain {item?.ItemName}", 15);
             }
             GetExp(monster.Power, monster.ExpGain);

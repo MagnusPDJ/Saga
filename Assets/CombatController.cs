@@ -38,7 +38,7 @@ namespace Saga.Assets
                 LootSystem.GetCombatLoot(_enemy, $"You Won against the {_enemy.Name} on turn {Turn}!");
                 Act1Quest.GainQuestProgress(_enemy);
             }
-            _player.CheckForDeath(_enemy.PlayerKillDescription);
+            _player.CheckForDeath(_enemy.PlayerDeathDescription);
         }
 
         bool EndTurn() {

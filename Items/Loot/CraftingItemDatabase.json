@@ -1,0 +1,30 @@
+﻿[
+  {
+    "Type": "craftingItem",
+    "ItemId": "rattail",
+    "ItemName": "Rat tail",
+    "ItemDescription": " This tail was cut from a large rat, gross.",
+    "ItemPrice": 20
+  },
+  {
+    "Type": "craftingItem",
+    "ItemId": "batwings",
+    "ItemName": "Bat wings",
+    "ItemDescription": " Wings from a huge bat, they smell quite fragrant.",
+    "ItemPrice": 20
+  },
+  {
+    "Type": "craftingItem",
+    "ItemId": "candle",
+    "ItemName": "Wax candle",
+    "ItemDescription": " A small candle used to light up mines. Brutally robbed from innocent kobolds.",
+    "ItemPrice": 20
+  },
+  {
+    "Type": "craftingItem",
+    "ItemId": "greenslime",
+    "ItemName": "Green Slime",
+    "ItemDescription": " Non-corrosive, gelatinous lump carved from a dead slime.",
+    "ItemPrice": 20
+  }
+]

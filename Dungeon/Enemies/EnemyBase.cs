@@ -7,7 +7,8 @@ namespace Saga.Dungeon.Enemies
     {
         public virtual string Name { get; set; } = string.Empty;
         public virtual int Power { get; set; }
-        public virtual string PlayerKillDescription { get; set; } = string.Empty;
+        public virtual string PlayerDeathDescription { get; set; } = string.Empty;
+        public virtual string EnemyCorpseDescription {  get; set; } = string.Empty;
         public virtual int MaxHealth { get; set; }
         public virtual int Health { get; set; }
         public virtual int Attack { get; set; }        

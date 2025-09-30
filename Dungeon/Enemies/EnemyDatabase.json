@@ -2,7 +2,7 @@
   {
     "Name": "Human captor",
     "Power": 1,
-    "PlayerKillDescription": "Your captor hits you in the stomach - as he pulls out is weapon your intestines pour on the floor.",
+    "PlayerDeathDescription": "Your captor hits you in the stomach - as he pulls out is weapon your intestines pour on the floor.",
     "MaxHealth": 6,
     "Health": 6,
     "Attack": 2,
@@ -34,7 +34,7 @@
   {
     "Name": "Feral dog",
     "Power": 1,
-    "PlayerKillDescription": "The dog clamps onto your throat, ripping it open and drowning your scream in a wet gurgle.",
+    "PlayerDeathDescription": "The dog clamps onto your throat, ripping it open and drowning your scream in a wet gurgle.",
     "MaxHealth": 8,
     "Health": 8,
     "Attack": 2,
@@ -66,7 +66,8 @@
   {
     "Name": "Huge Rat",
     "Power": 1,
-    "PlayerKillDescription": "The rat tackles you. In an instant, hundreds swarm your body, gnawing and devouring you alive.",
+    "PlayerDeathDescription": "The rat tackles you. In an instant, hundreds swarm your body, gnawing and devouring you alive.",
+    "EnemyCorpseDescription": " The huge rat is dead laying in a pool of its own blood.",
     "MaxHealth": 9,
     "Health": 9,
     "Attack": 2,
@@ -106,7 +107,8 @@
   {
     "Name": "Giant Bat",
     "Power": 1,
-    "PlayerKillDescription": "The rat tackles you. In an instant, hundreds swarm your body, gnawing and devouring you alive.",
+    "PlayerDeathDescription": "The bat overpowers you and bites into your neck slowly draining your blood of every drop.",
+    "EnemyCorpseDesciption": " The bat lies still on the cold floor, guts ripped open. It is starting to smell foul.",
     "MaxHealth": 6,
     "Health": 6,
     "Attack": 4,
@@ -144,9 +146,91 @@
     }
   },
   {
+    "Name": "Big slime",
+    "Power": 1,
+    "PlayerDeathDescription": " The slime engulfs you whole, all your gear, hair and skin starts to corrode away - the acid burns while you suffocate.",
+    "EnemyCorpseDescription": " There is a slimy pool slowly melting the floor creating unbearable fumes.",
+    "MaxHealth": 15,
+    "Health": 15,
+    "Attack": 2,
+    "Initiative": 1,
+    "Armor": 0,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Mythical" ],
+    "ExpGain": 40,
+    "GoldModifier": 0.0,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "greenslime",
+          "DropChance": 1.0
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Kobold",
+    "Power": 1,
+    "PlayerDeathDescription": " .",
+    "EnemyCorpseDescription": " .",
+    "MaxHealth": 7,
+    "Health": 7,
+    "Attack": 3,
+    "Initiative": 1,
+    "Armor": 1,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": 0,
+      "Crushing": 0
+    },
+    "ElementalResistance": {
+      "Frost": 0,
+      "Fire": 0,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": 0,
+      "Death": 0
+    },
+    "Tags": [ "Troll" ],
+    "ExpGain": 40,
+    "GoldModifier": 0.0,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "candle",
+          "DropChance": 1.0
+        }
+      ]
+    }
+  },
+  {
     "Name": "Skeleton Warrior",
     "Power": 5,
-    "PlayerKillDescription": "You are torn apart by rattling bones...",
+    "PlayerDeathDescription": "You are torn apart by rattling bones...",
     "MaxHealth": 50,
     "Health": 50,
     "Attack": 10,
@@ -178,7 +262,7 @@
   {
     "Name": "Ancient Lich",
     "Power": 30,
-    "PlayerKillDescription": "Your soul is ripped from your body by dark magic.",
+    "PlayerDeathDescription": "Your soul is ripped from your body by dark magic.",
     "MaxHealth": 300,
     "Health": 300,
     "Attack": 25,
@@ -210,7 +294,7 @@
   {
     "Name": "Goblin Raider",
     "Power": 3,
-    "PlayerKillDescription": "The goblin collapses, cursing you as it dies.",
+    "PlayerDeathDescription": "The goblin collapses, cursing you as it dies.",
     "MaxHealth": 35,
     "Health": 35,
     "Attack": 8,
@@ -242,7 +326,7 @@
   {
     "Name": "Orc Warrior",
     "Power": 3,
-    "PlayerKillDescription": "The orc falls heavily, but snarls with its last breath.",
+    "PlayerDeathDescription": "The orc falls heavily, but snarls with its last breath.",
     "MaxHealth": 80,
     "Health": 80,
     "Attack": 15,
@@ -274,7 +358,7 @@
   {
     "Name": "Fire Elemental",
     "Power": 10,
-    "PlayerKillDescription": "The elemental dissipates into smoke and embers.",
+    "PlayerDeathDescription": "The elemental dissipates into smoke and embers.",
     "MaxHealth": 120,
     "Health": 120,
     "Attack": 20,

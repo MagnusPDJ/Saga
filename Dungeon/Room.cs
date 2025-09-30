@@ -58,7 +58,7 @@ namespace Saga.Dungeon
                         Program.RoomController.ChangeRoom(exits[0].keyString);
                     } else {
                         Cleared = true;
-                        corpseDescription = $"Here is a description of the monster that was slain.";
+                        corpseDescription = enemy!.EnemyCorpseDescription;
                         enemy = null;
                     }
                 } else if (enemy != null) {
@@ -72,7 +72,7 @@ namespace Saga.Dungeon
                         Program.RoomController.ChangeRoom(exits[0].keyString);
                     } else {
                         Cleared = true;
-                        corpseDescription = $"Here is a description of the monster that was slain.";
+                        corpseDescription = enemy!.EnemyCorpseDescription;
                         enemy = null;
                     }
                 }

@@ -272,7 +272,16 @@ namespace Saga.Items.Loot
                 }                   
             }
             else {
-                p.Inventory.SetValue(null, index);
+                var item = p.Inventory[index];
+                if (item is ICraftingItem cItem) {
+                    if (cItem.Amount > 1) {
+                        cItem.Amount--;
+                    } else {
+                        p.Inventory.SetValue(null, index);
+                    }
+                } else {
+                    p.Inventory.SetValue(null, index);
+                }                 
                 p.Gold += price;
                 HUDTools.Print("Item sold!", 3);
             }
