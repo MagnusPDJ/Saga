@@ -1,6 +1,7 @@
 ﻿using Saga.Assets;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
+using Saga.Dungeon.Rooms;
 using Saga.Items;
 using Saga.Items.Loot;
 
@@ -17,104 +18,6 @@ namespace Saga.Dungeon
             Act4,
             Act5
         }
-
-        //Encounters:
-
-        //Tutorial encounters:
-
-        //To Encounters som køres når en ny karakter startes for at introducere kamp.
-        public static void FirstEncounter() {
-            Console.Clear();
-            Program.SoundController.Play("typewriter");
-            HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
-            HUDTools.Print("anything about your past.");
-            if (string.IsNullOrWhiteSpace(Program.CurrentPlayer.Name) == true) {
-                HUDTools.Print("You can't even remember your own name...");
-                Program.CurrentPlayer.Name = "Adventurer";
-            }
-            else {
-                HUDTools.Print($"You know your name is {Program.CurrentPlayer.Name}.");
-            }
-            TextInput.PressToContinue();
-            HUDTools.ClearLastLine(1);
-            HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
-            HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
-            HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
-            Program.SoundController.Stop();
-            Program.SoundController.Play("taunt");
-            Program.SoundController.Play("kamp");
-            HUDTools.Print("He turns...");
-            TextInput.PressToContinue();
-
-            EnemyBase captor = EnemyFactory.CreateByName("Human captor");
-            new CombatController(Program.CurrentPlayer, captor).Combat();
-        }
-        public static void SecondEncounter() {
-            Console.Clear();
-            Program.SoundController.Play("kamp");
-            HUDTools.RoomHUD();
-            HUDTools.ClearLastLine(1);
-            HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
-            TextInput.PressToContinue();
-
-
-            EnemyBase dog = EnemyFactory.CreateByName("Feral dog");
-            new CombatController(Program.CurrentPlayer, dog).Combat();
-        }
-        //Encounter som køres for at introducere shopkeeperen Gheed.
-        public static void MeetGheed() {
-            Console.Clear();
-            Program.SoundController.Play("shop");
-            Program.SoundController.Play("typewriter");
-            if (Program.CurrentPlayer.CurrentClass == "Mage") {
-                HUDTools.Print($"After dusting off your {(Program.CurrentPlayer.Equipment.Torso as IItem)?.ItemName} and tucking in your new wand, you find someone else captured.");
-            } else if (Program.CurrentPlayer.CurrentClass == "Archer") {
-                HUDTools.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
-            } else if (Program.CurrentPlayer.CurrentClass == "Warrior") {
-                HUDTools.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
-            }
-            HUDTools.Print("Freeing him from his shackles, he thanks you and gets up.");
-            HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
-            TextInput.PressToContinue();
-            HUDTools.ClearLastLine(1);
-            HUDTools.Print("'If you \u001b[96mgo\u001b[0m and clear some of the other rooms, I will look for my wares in these crates.'");
-            Act1Quest.AddQuest("Clear some rooms");
-            HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
-            HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
-            NonPlayableCharacters.AddNpcToCamp("Gheed");
-            HUDTools.Print($"You nod and prepare your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");     
-            TextInput.PressToContinue();
-            Program.SoundController.Stop();
-        }
-        //Encounter som køres for at introducere Camp
-        public static void FirstCamp() {
-            Console.Clear();
-            Program.SoundController.Play("typewriter");
-            HUDTools.Print("You venture deeper and deeper, but while you explore your surroundings, you get queasy.");
-            HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
-            TextInput.PressToContinue();
-            HUDTools.ClearLastLine(1);
-            Program.SoundController.Stop();
-            Program.SoundController.Play("campfire");
-            HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The shadows retract and\nyou feel at ease again. Although you are not out of danger, you can stay for a while and rest.");
-            Program.CurrentPlayer.CurrentAct = Act.Act1;
-            TextInput.PressToContinue();
-        }
-        //Encounter som køres første gang en spiller vender tilbage til Camp for at introducerer roguelike
-        public static void FirstReturn() {
-            Console.Clear();
-            Program.SoundController.Play("typewriter");
-            Program.SoundController.Play("labyrinthchange");
-            HUDTools.Print($"As you enter the camp and close the door behind you, everything shakes and there are loud\nsounds of stone grinding against each other. Sand and pebbles fall from the ceiling and you\ncollapse to the floor from the vibrations.");
-            HUDTools.Print($"After a few moments, you regain your composure and you check on Gheed.");
-            TextInput.PressToContinue();
-            HUDTools.ClearLastLine(1);
-            HUDTools.Print($"'What was that?', you ask, 'it sounded like an earthquake'.\n'Indeed', Gheed answers, 'Although, I suspect it wasn't destructive in nature. That is what makes\nthis labyrinth a prison for those who enter. When you open that door again, you will find that\nall the rooms have changed.'");
-            TextInput.PressToContinue();
-            Program.SoundController.Stop();
-        }
-
 
         //Story or NPC Encounters:
 
@@ -412,66 +315,6 @@ namespace Saga.Dungeon
                     TreasureEncounter();
                     break;
             }
-        }
-        //Metode til at vælge imellem story/NPC encounters, den bruges efter et sæt af randomencounters under Camp().
-        public static Room ProgressTheStory() {
-            if (!Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
-                return new MeetFlemshaRoom();
-            } else {
-                return new DungeonRoom("","");
-                    //CreateRandomBasicCombatRoom(rooms, i);
-            }
-        }
-
-        //Metode til at køre Camp hvor spilleren kan reste/shoppe/heale
-        public static string Camp() {
-            bool leave = false;
-            string choice = "";
-            Program.SoundController.Play("campfire");
-            Program.SoundController.Play("campmusic");
-            //Hver gang spilleren returnere til Camp refresher shoppen:
-            Shop shop = Shop.SetForsale();
-            HUDTools.FullCampHUD();
-            while (leave == false) {              
-                string input = TextInput.PlayerPrompt();
-                //Explore, måden man progresser sin karakter:
-                if (input == "e" || input == "explore") {
-                    leave = true;
-                    choice = "explore";
-                }
-                //Gemmer spillet:
-                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
-                    Program.Save();
-                    HUDTools.Print("Game saved!");
-                    TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
-                }
-                //Gheed's shop:
-                else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {             
-                    Program.SoundController.Stop();
-                    Shop.Loadshop(Program.CurrentPlayer, shop);
-                    Program.SoundController.Play("campfire");
-                    Program.SoundController.Play("campmusic");
-                    HUDTools.FullCampHUD();
-                }
-                //Quit and/or save the game:
-                else if (input == "q" || input == "quit") {
-                    if (Program.Quit() == "quit") {
-                        leave = true;
-                        choice = "quit";
-                    }       
-                }
-                //Tale med NPC'er mens man er tilbage i campen.
-                else if (input == "t" || input == "talk") {
-                    NonPlayableCharacters.TalkToNpc();
-                    HUDTools.FullCampHUD();
-                }
-                //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
-                else {
-                    Program.CurrentPlayer.BasicActions(input);
-                }
-            }
-            return choice;
         }
     }
 }

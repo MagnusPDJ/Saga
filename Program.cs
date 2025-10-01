@@ -125,7 +125,7 @@ namespace Saga
             if (CurrentPlayer != null) {
                 if (CurrentPlayer.CurrentAct == Encounters.Act.Act1) {                       
                     SoundController.Stop();                       
-                    RoomController.ChangeRoom("", Rooms.Camp);
+                    RoomController.ChangeRoom("", RoomController.Camp);
                 }
             }
             {
@@ -145,7 +145,7 @@ namespace Saga
         public static void NewStart(bool newP) {
             if (newP) {
                 CurrentPlayer.SetStartingGear();
-                RoomController.ChangeRoom("", Rooms.StartRoom);
+                RoomController.ChangeRoom("", RoomController.StartRoom);
             }
         }
 

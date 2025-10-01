@@ -1,0 +1,81 @@
+﻿using Saga.Dungeon;
+using Saga.Dungeon.Rooms;
+
+namespace Saga.Assets
+{
+    public class RoomController
+    {
+        public static readonly CampRoom Camp = new();
+        public static readonly StartRoom StartRoom = new();
+        public static readonly SecondRoom SecondRoom = new();
+
+        public InputAction[] InputRoomActions = [
+            new Go("go"),
+            new Use("use"),
+            new Look("look"),
+            new DrinkHealingPotion("heal", "h"),
+            new SeeCharacterScreen("character", "c"),
+            new SeeInventory("inventory", "i"),
+            new SeeQuestLog("questlog", "l"),
+            new SeeSkillTree("skilltree", "k")
+        ];
+        public InputAction[] InputInvActions = [
+            new Examine("examine"),
+            new Equip("equip"),
+            new UnEquip("unequip"),
+            new Back("back", "b"),
+        ];
+        public RoomBase currentRoom = Camp;
+        public DungeonInstance currentDungeonInstance = new();
+        public bool ran = false;
+        
+
+        public void ChangeRoom(string keystring, RoomBase? room = null) {
+            bool foundRoom = false;
+            RoomBase previousRoom = new DungeonRoom("", "");
+            if (room != null) {
+                currentRoom = room;
+                foundRoom = true;
+            }
+            if (keystring == "home") {
+                currentRoom = Camp;
+                foundRoom = true;
+            }
+            if (!foundRoom) {
+                previousRoom = currentRoom;
+                foreach (Exit exit in currentRoom.exits) {
+                    if (exit.keyString == keystring) {
+                        currentRoom = exit.valueRoom;
+                        foundRoom = true;
+                        break;
+                    }
+                }
+            }
+            if (foundRoom) {
+                Program.CurrentPlayer.RegainMana();
+
+                //Update exit descriptions for all exits in current room
+                foreach (var ex in currentRoom.exits) {
+                    if (ex.valueRoom != null && ex.ExitTemplateDescription != null) {
+                        if (ex.valueRoom == previousRoom) {
+                            string destName = ex.valueRoom.roomName;
+                            ex.exitDescription = $"[\u001b[96mback\u001b[0m] {ex.ExitTemplateDescription.Replace("{0}", destName)}";
+                            ex.hasPreviousRoom = true;
+                        } else {
+                            string destName = ex.valueRoom.Visited ? ex.valueRoom.roomName : "UNKNOWN";
+                            ex.exitDescription = $"[\u001b[96m{ex.keyString}\u001b[0m] {ex.ExitTemplateDescription.Replace("{0}", destName)}";
+                        }
+                    }
+                }
+
+                currentRoom.LoadRoom();
+            }
+        }
+
+        public void ExploreDungeon() {
+            Program.RoomController.currentDungeonInstance = DungeonGenerator.GenerateDungeon();
+            Program.CurrentPlayer.TimesExplored++;
+            ChangeRoom("", currentDungeonInstance.Rooms[0]);
+        }
+    }
+}

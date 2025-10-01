@@ -1,4 +1,7 @@
 
+using Saga.Assets;
+using Saga.Dungeon.Rooms;
+
 namespace Saga.Dungeon
 {
     public static class DungeonGenerator
@@ -14,7 +17,7 @@ namespace Saga.Dungeon
 
             // Give each room a name and description:
             var roomNamesAndDesc = DungeonDatabase.GetDungeons()[dungeonName];
-            var rooms = new List<Room>(roomCount);
+            var rooms = new List<RoomBase>(roomCount);
             for (int i = 0; i < roomCount; i++)
             {
                 int index = Program.Rand.Next(roomNamesAndDesc.Length);
@@ -68,7 +71,7 @@ namespace Saga.Dungeon
             {
                 keyString = "camp",
                 exitDescription = "[camp] A passage leads back to camp.",
-                valueRoom = Rooms.Camp,
+                valueRoom = RoomController.Camp,
                 ExitTemplateDescription = "A passage leads back to camp."
             });
 
@@ -96,7 +99,7 @@ namespace Saga.Dungeon
             return dungeon;
         }
 
-        private static void ConnectRoomsBidirectional(Room a, Room b, string dungeonName)
+        private static void ConnectRoomsBidirectional(RoomBase a, RoomBase b, string dungeonName)
         {
             var exits = DungeonDatabase.GetExits()[dungeonName];
             string exitA = exits[0][Program.Rand.Next(exits[0].Count)];
@@ -107,7 +110,7 @@ namespace Saga.Dungeon
             string backExitTemplate = exitB;
             b.exits.Add(new Exit() { valueRoom = a, ExitTemplateDescription = backExitTemplate });
         }
-        private static void ConnectRoomsOneDirectional(Room a, Room b, string dungeonName) {
+        private static void ConnectRoomsOneDirectional(RoomBase a, RoomBase b, string dungeonName) {
             var exits = DungeonDatabase.GetExits()[dungeonName];
             string exitTemplate = exits[1][Program.Rand.Next(exits[1].Count)];
             a.exits.Add(new Exit { valueRoom = b, ExitTemplateDescription = exitTemplate,

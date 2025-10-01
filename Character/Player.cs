@@ -227,7 +227,7 @@ namespace Saga.Character
                 HUDTools.ClearLastLine(3);
                 return;
             }
-            if (Program.RoomController.currentRoom == Rooms.Camp) {
+            if (Program.RoomController.currentRoom == RoomController.Camp) {
                 HUDTools.FullCampHUD();
             }
         }
