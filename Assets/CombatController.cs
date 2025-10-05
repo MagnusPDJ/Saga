@@ -62,11 +62,9 @@ namespace Saga.Assets
                 } else {
                     UsedMana = false;
                 }
-                if (_enemy.Health > 0) {
+                if (_enemy.Health > 0 && !Ran) {
                     HUDTools.Print("Your turn ended.", 5);
                 }               
-                //TextInput.PressToContinue();
-                //HUDTools.ClearLastLine(1);
                 Endturn = false;
             }
         }
@@ -135,6 +133,9 @@ namespace Saga.Assets
                     if (_player.RunAway(_enemy)) {
                         Program.SoundController.Stop();
                         Ran = true;
+                        Program.RoomController.Ran = true;
+                        Endturn = true;
+                        TextInput.PressToContinue();
                     }
                 break;
                 case "5":

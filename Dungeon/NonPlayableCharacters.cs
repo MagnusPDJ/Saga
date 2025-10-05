@@ -36,7 +36,7 @@ namespace Saga.Dungeon
                 npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
                 Program.CurrentPlayer.NpcsInCamp.Add(npcToAdd);
                 UpdateDialogueOptions(name);
-                HUDTools.Print($"\u001b[35m{name} has joined your cause!\u001b[0m", 20);
+                HUDTools.Print($" \u001b[35m{name} has joined your cause!\u001b[0m", 20);
             }
         }
         //Metode til at opdatere dialog mulighederne baseret på valg taget igennem spillet.

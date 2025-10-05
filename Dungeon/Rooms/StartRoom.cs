@@ -9,21 +9,23 @@ namespace Saga.Dungeon.Rooms
     {
         public StartRoom() {
             roomName = "Jail cells";
-            description = "You look around and see Gheed rummage through big wooden crates. You hear him counting.";
-            exits = [new Exit() { keyString = "door", exitDescription = $"You see a big wooden \u001b[96mdoor\u001b[0m with rusted hinges and reinforced with iron plating", valueRoom = RoomController.SecondRoom }];
+            description = " You look around and see Gheed rummage through big wooden crates. You hear him counting.";
+            exits = [new Exit() { keyString = "1", ExitTemplateDescription = "You see a big wooden door with rusted hinges leading into the {0}.", valueRoom = new SecondRoom() }];
         }
         public override void LoadRoom() {
             string exit = "";
             FirstEncounter();
             MeetGheed();
+            Cleared = true;        
+            corpseDescription = enemy!.EnemyCorpseDescription;
+            enemy = null;
             HUDTools.RoomHUD();
             while (exit == "") {
                 exit = TextInput.PlayerPrompt(true);
             }
             Program.RoomController.ChangeRoom(exit);
-
         }
-        public static void FirstEncounter() {
+        public void FirstEncounter() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
             HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
@@ -46,30 +48,30 @@ namespace Saga.Dungeon.Rooms
             HUDTools.Print("He turns...");
             TextInput.PressToContinue();
 
-            EnemyBase captor = EnemyFactory.CreateByName("Human captor");
-            new CombatController(Program.CurrentPlayer, captor).Combat();
+            enemy = EnemyFactory.CreateByName("Human captor");
+            new CombatController(Program.CurrentPlayer, enemy).Combat();
         }
         public static void MeetGheed() {
             Console.Clear();
             Program.SoundController.Play("shop");
             Program.SoundController.Play("typewriter");
             if (Program.CurrentPlayer.CurrentClass == "Mage") {
-                HUDTools.Print($"After dusting off your {(Program.CurrentPlayer.Equipment.Torso as IItem)?.ItemName} and tucking in your new wand, you find someone else captured.");
+                HUDTools.Print($" After dusting off your {(Program.CurrentPlayer.Equipment.Torso as IItem)?.ItemName} and tucking in your new wand, you find someone else captured.");
             } else if (Program.CurrentPlayer.CurrentClass == "Archer") {
-                HUDTools.Print("After retrieving the last arrow from your captor's corpse, you find someone else captured.");
+                HUDTools.Print(" After retrieving the last arrow from your captor's corpse, you find someone else captured.");
             } else if (Program.CurrentPlayer.CurrentClass == "Warrior") {
-                HUDTools.Print("After cleaning the blood from your captor off your new sword, you find someone else captured.");
+                HUDTools.Print(" After cleaning the blood from your captor off your new sword, you find someone else captured.");
             }
-            HUDTools.Print("Freeing him from his shackles, he thanks you and gets up.");
-            HUDTools.Print("'Gheed is the name and trade is my game', he gives a wink.");
+            HUDTools.Print(" Freeing him from his shackles, he thanks you and gets up.");
+            HUDTools.Print(" 'Gheed is the name and trade is my game', he gives a wink.");
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
-            HUDTools.Print("'If you \u001b[96mgo\u001b[0m and clear some of the other rooms, I will look for my wares in these crates.'");
+            HUDTools.Print(" 'If you \u001b[96mgo\u001b[0m and clear some of the other rooms, I will look for my wares in these crates.'");
             Act1Quest.AddQuest("Clear some rooms");
-            HUDTools.Print("'Then come back to me, I will then have been able to set up a shop where you can spend ");
-            HUDTools.Print("some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
+            HUDTools.Print(" 'Then come back to me, I will then have been able to set up a shop where you can spend ");
+            HUDTools.Print(" some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             NonPlayableCharacters.AddNpcToCamp("Gheed");
-            HUDTools.Print($"You nod and prepare your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");
+            HUDTools.Print($" You nod and prepare your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");
             TextInput.PressToContinue();
             Program.SoundController.Stop();
         }

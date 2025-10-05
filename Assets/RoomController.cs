@@ -7,7 +7,6 @@ namespace Saga.Assets
     {
         public static readonly CampRoom Camp = new();
         public static readonly StartRoom StartRoom = new();
-        public static readonly SecondRoom SecondRoom = new();
 
         public InputAction[] InputRoomActions = [
             new Go("go"),
@@ -25,27 +24,27 @@ namespace Saga.Assets
             new UnEquip("unequip"),
             new Back("back", "b"),
         ];
-        public RoomBase currentRoom = Camp;
-        public DungeonInstance currentDungeonInstance = new();
-        public bool ran = false;
+        public RoomBase CurrentRoom { get; set; } = Camp;
+        public DungeonInstance CurrentDungeonInstance { get; set; } = new();
+        public bool Ran { get; set; } = false;
         
 
         public void ChangeRoom(string keystring, RoomBase? room = null) {
             bool foundRoom = false;
             RoomBase previousRoom = new DungeonRoom("", "");
             if (room != null) {
-                currentRoom = room;
+                CurrentRoom = room;
                 foundRoom = true;
             }
             if (keystring == "home") {
-                currentRoom = Camp;
+                CurrentRoom = Camp;
                 foundRoom = true;
             }
             if (!foundRoom) {
-                previousRoom = currentRoom;
-                foreach (Exit exit in currentRoom.exits) {
+                previousRoom = CurrentRoom;
+                foreach (Exit exit in CurrentRoom.exits) {
                     if (exit.keyString == keystring) {
-                        currentRoom = exit.valueRoom;
+                        CurrentRoom = exit.valueRoom;
                         foundRoom = true;
                         break;
                     }
@@ -55,7 +54,7 @@ namespace Saga.Assets
                 Program.CurrentPlayer.RegainMana();
 
                 //Update exit descriptions for all exits in current room
-                foreach (var ex in currentRoom.exits) {
+                foreach (var ex in CurrentRoom.exits) {
                     if (ex.valueRoom != null && ex.ExitTemplateDescription != null) {
                         if (ex.valueRoom == previousRoom) {
                             string destName = ex.valueRoom.roomName;
@@ -68,14 +67,14 @@ namespace Saga.Assets
                     }
                 }
 
-                currentRoom.LoadRoom();
+                CurrentRoom.LoadRoom();
             }
         }
 
         public void ExploreDungeon() {
-            Program.RoomController.currentDungeonInstance = DungeonGenerator.GenerateDungeon();
+            Program.RoomController.CurrentDungeonInstance = DungeonGenerator.GenerateDungeon();
             Program.CurrentPlayer.TimesExplored++;
-            ChangeRoom("", currentDungeonInstance.Rooms[0]);
+            ChangeRoom("", CurrentDungeonInstance.Rooms[0]);
         }
     }
 }

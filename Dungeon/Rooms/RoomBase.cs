@@ -45,8 +45,8 @@ namespace Saga.Dungeon.Rooms
         public override void LoadRoom() {
             string exit = "";
             // RandomBasicCombatEncounter();
-            if (Program.RoomController.ran == true) {
-                Program.RoomController.ran = false;
+            if (Program.RoomController.Ran == true) {
+                Program.RoomController.Ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
                 HUDTools.RoomHUD();
@@ -64,8 +64,8 @@ namespace Saga.Dungeon.Rooms
         public override void LoadRoom() {
             string exit = "";
             Encounters.RandomEncounter();
-            if (Program.RoomController.ran == true) {
-                Program.RoomController.ran = false;
+            if (Program.RoomController.Ran == true) {
+                Program.RoomController.Ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
                 HUDTools.RoomHUD();
@@ -89,8 +89,8 @@ namespace Saga.Dungeon.Rooms
         public override void LoadRoom() {
             string exit = "";
             Encounters.MeetFlemsha();
-            if (Program.RoomController.ran == true) {
-                Program.RoomController.ran = false;
+            if (Program.RoomController.Ran == true) {
+                Program.RoomController.Ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
                 HUDTools.RoomHUD();

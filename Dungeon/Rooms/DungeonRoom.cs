@@ -20,8 +20,8 @@ namespace Saga.Dungeon.Rooms
                 EnemySpawned = true;
                 if (Program.Rand.NextDouble() < DefaultSpawnChance && enemy == null) {
                     RandomBasicCombatEncounter();
-                    if (Program.RoomController.ran == true) {
-                        Program.RoomController.ran = false;
+                    if (Program.RoomController.Ran == true) {
+                        Program.RoomController.Ran = false;
                         Program.RoomController.ChangeRoom(exits[0].keyString);
                     } else {
                         Cleared = true;
@@ -34,8 +34,8 @@ namespace Saga.Dungeon.Rooms
                     HUDTools.Print($"You return to the room where you left the {enemy.Name}...", 10);
                     TextInput.PressToContinue();
                     new CombatController(Program.CurrentPlayer, enemy).Combat();
-                    if (Program.RoomController.ran == true) {
-                        Program.RoomController.ran = false;
+                    if (Program.RoomController.Ran == true) {
+                        Program.RoomController.Ran = false;
                         Program.RoomController.ChangeRoom(exits[0].keyString);
                     } else {
                         Cleared = true;
@@ -54,7 +54,7 @@ namespace Saga.Dungeon.Rooms
         }
         public void RandomBasicCombatEncounter() {
             Program.SoundController.Play("kamp");
-            enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.currentDungeonInstance.DungeonName);
+            enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.CurrentDungeonInstance.DungeonName);
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0, 2)) {

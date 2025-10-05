@@ -4,7 +4,6 @@ using Saga.Character.Skills;
 using Saga.Dungeon.Enemies;
 using Saga.Items;
 using Saga.Items.Loot;
-using System.Text.Json;
 
 namespace Saga.Character
 {
@@ -20,12 +19,11 @@ namespace Saga.Character
         public override bool RunAway(EnemyBase Monster) {
             bool escaped = false;
             if (Monster.Name == "Human captor") {
-                HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
+                HUDTools.Print($" You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
             }
             else {
-                HUDTools.Print($"You use your crazy ninja moves to evade the {Monster.Name} and you successfully escape!", 20);
+                HUDTools.Print($" You outmanoeuvre the {Monster.Name} and you successfully escape!", 20);
                 escaped = true;
-                Program.RoomController.ran = true;
             }
             return escaped;
         }

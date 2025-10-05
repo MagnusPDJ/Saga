@@ -85,7 +85,7 @@ namespace Saga.Dungeon
                     HUDTools.ClearLastLine(1);
                     HUDTools.Print("You close the door to the prison ward and continue on, never to see the prisoner again.");
                     TextInput.PressToContinue();
-                    Program.RoomController.ran = true;
+                    Program.RoomController.Ran = true;
                     break;
                 }
 
@@ -143,7 +143,7 @@ namespace Saga.Dungeon
                     Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...", 20);
                     TextInput.PressToContinue();
-                    Program.RoomController.ran = true;
+                    Program.RoomController.Ran = true;
                     break;
                 } else if (input == "y") {
                     Program.SoundController.Play("mimic");
@@ -179,7 +179,7 @@ namespace Saga.Dungeon
                     Program.SoundController.Play("doorclose");
                     HUDTools.Print("You slowly back out of the room and continue...",20);
                     TextInput.PressToContinue();
-                    Program.RoomController.ran = true;
+                    Program.RoomController.Ran = true;
                     break;
                 } else if (input == "y") {
                     Program.SoundController.Play("treasure");

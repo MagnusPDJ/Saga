@@ -20,7 +20,7 @@ namespace Saga.Dungeon.Quests
                     questToAdd.Item = item;
                 }
                 Program.CurrentPlayer.QuestLog.Add(questToAdd);
-                HUDTools.Print($"\u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
+                HUDTools.Print($" \u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
             } 
         }
         public static void FailQuest(string questName) {

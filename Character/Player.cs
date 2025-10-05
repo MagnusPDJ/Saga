@@ -86,7 +86,7 @@ namespace Saga.Character
             SetLevelUpValue();
             Program.CurrentPlayer.RegenToFull();
 
-            HUDTools.Print($"\u001b[34mCongratulations! You are now level {Level}! You've gained 6 attribute point and 1 skill point.\u001b[0m", 20);
+            HUDTools.Print($"\u001b[34m Congratulations! You are now level {Level}! You've gained 6 attribute point and 1 skill point.\u001b[0m", 20);
         }
         //Metode til udregning af det exp det koster at level op.
         public void SetLevelUpValue() {
@@ -113,7 +113,7 @@ namespace Saga.Character
         }
         public int SpendAttributePoint(int i) {
             if (FreeAttributePoints > 0 && i != 0) {
-                HUDTools.Print("Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o", 0);
+                HUDTools.Print(" Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o", 0);
                 while (true) {
                     string input = TextInput.PlayerPrompt();
                     if (input == "s" || input == "strength") {
@@ -171,11 +171,10 @@ namespace Saga.Character
         public virtual bool RunAway(EnemyBase Monster) {
             bool escaped = false;
             if (Program.Rand.Next(0, 3) == 0 || Monster.Name == "Human captor") {
-                HUDTools.Print($"You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
+                HUDTools.Print($" You try to run from the {Monster.Name}, but it knocks you down. You are unable to escape this turn", 15);
             } else {
-                HUDTools.Print($"You barely manage to shake off the {Monster.Name} and you successfully escape.", 20);
+                HUDTools.Print($" You barely manage to shake off the {Monster.Name} and you successfully escape.", 20);
                 escaped = true;
-                Program.RoomController.ran = true;
             }
             return escaped;
         }
@@ -227,7 +226,7 @@ namespace Saga.Character
                 HUDTools.ClearLastLine(3);
                 return;
             }
-            if (Program.RoomController.currentRoom == RoomController.Camp) {
+            if (Program.RoomController.CurrentRoom == RoomController.Camp) {
                 HUDTools.FullCampHUD();
             }
         }
@@ -254,14 +253,14 @@ namespace Saga.Character
             QuestLog.Remove(quest);
             CompletedQuests.Add(quest);
             Program.SoundController.Play("win");
-            HUDTools.Print($"\u001b[96mYou've completed the quest: {quest.Name}!\u001b[0m", 15);
+            HUDTools.Print($"\u001b[96m You've completed the quest: {quest.Name}!\u001b[0m", 15);
             LootSystem.GetFixedGold(quest.Gold);
             LootSystem.GetPotions(quest.Potions);
             LootSystem.GetFixedExp(quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
                 Inventory.SetValue(quest.Item, index);
-                HUDTools.Print($"\u001b[35mYou've gained {quest.Item.ItemName}\u001b[0m");
+                HUDTools.Print($"\u001b[35m You've gained {quest.Item.ItemName}\u001b[0m");
             }
         }
         public void TakeDamage(int damage) {

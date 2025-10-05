@@ -8,15 +8,19 @@ namespace Saga.Dungeon.Rooms
         public SecondRoom() {
             roomName = "Hallway";
             description = "";
-            exits = [new Exit() { keyString = "deeper", exitDescription = $"The hallway continues \u001b[96mdeeper\u001b[0m into the dark", valueRoom = RoomController.Camp }];
+            exits = [new Exit() { keyString = "1", ExitTemplateDescription = "The hallway continues deeper into the {0}.", valueRoom = RoomController.Camp }];
         }
         public override void LoadRoom() {
             string exit = "";
+            EnemySpawned = true;
             SecondEncounter();
-            if (Program.RoomController.ran == true) {
-                Program.RoomController.ran = false;
+            if (Program.RoomController.Ran == true) {
+                Program.RoomController.Ran = false;
                 Program.RoomController.ChangeRoom(exits[0].keyString);
             } else {
+                Cleared = true;
+                corpseDescription = enemy!.EnemyCorpseDescription;
+                enemy = null;
                 HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
@@ -24,17 +28,16 @@ namespace Saga.Dungeon.Rooms
                 Program.RoomController.ChangeRoom(exit);
             }
         }
-        public static void SecondEncounter() {
+        public void SecondEncounter() {
             Console.Clear();
             Program.SoundController.Play("kamp");
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
-            HUDTools.Print($"The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\nin the darkness, but before you could react the beastly dog engages you.");
+            HUDTools.Print($" The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\n in the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
 
-
-            EnemyBase dog = EnemyFactory.CreateByName("Feral dog");
-            new CombatController(Program.CurrentPlayer, dog).Combat();
+            enemy = EnemyFactory.CreateByName("Feral dog");          
+            new CombatController(Program.CurrentPlayer, enemy).Combat();
         }
 
     }

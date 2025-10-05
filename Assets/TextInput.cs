@@ -7,7 +7,7 @@ namespace Saga.Assets
         /// 'Pauses' the game and prompts the player to press any button to continue.
         /// </summary>
         public static void PressToContinue() {
-            HUDTools.Print($"\u001b[90mPress to continue...\u001b[0m", 3);
+            HUDTools.Print($"\u001b[90m Press to continue...\u001b[0m", 3);
             Console.ReadKey(true);
         }
         /// <summary>

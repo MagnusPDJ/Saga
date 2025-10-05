@@ -629,7 +629,7 @@ namespace Saga.Assets
         public static void CombatHUD(EnemyBase Monster, CombatController combatController) {
             Console.Clear();
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-                 Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.currentRoom.roomName}\n");
+                 Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.CurrentRoom.roomName}\n");
                  Console.WriteLine($" Fighting: {Monster.Name}!");
                  Console.WriteLine($" Strength: {Monster.Attack} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative >= Monster.Initiative) {
@@ -655,7 +655,7 @@ namespace Saga.Assets
         }
         public static void RoomHUD() {
             Console.Clear();
-            Console.WriteLine($" Location:\t{Program.RoomController.currentRoom.roomName}");
+            Console.WriteLine($" Location:\t{Program.RoomController.CurrentRoom.roomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
             Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
             Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");

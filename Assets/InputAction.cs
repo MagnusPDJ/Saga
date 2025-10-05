@@ -38,8 +38,8 @@ namespace Saga.Assets
             }
 
             bool foundRoom = false;
-            for (int i = 0; i < Program.RoomController.currentRoom.exits.Count; i++) {
-                var exit = Program.RoomController.currentRoom.exits[i];
+            for (int i = 0; i < Program.RoomController.CurrentRoom.exits.Count; i++) {
+                var exit = Program.RoomController.CurrentRoom.exits[i];
                 if (separatedInputWords[1] == "back" && exit.hasPreviousRoom) {
                     exit.hasPreviousRoom = false;
                     foundRoom = true;
@@ -52,13 +52,6 @@ namespace Saga.Assets
                 }
             }
             if (foundRoom) {
-
-                // Update exit descriptions using the original template
-                foreach (var exit in Program.RoomController.currentRoom.exits) {
-                    string destName = exit.valueRoom.Visited ? exit.valueRoom.roomName : "UNKNOWN";
-                    exit.exitDescription = $"[{exit.keyString}] {exit.ExitTemplateDescription.Replace("{0}", destName)}";                   
-                }
-
                 return separatedInputWords[1];
             } else {
                 HUDTools.Print($"You cannot go {separatedInputWords[1]}, \u001b[96mlook around\u001b[0m to find places to go.", 10);
@@ -158,9 +151,9 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {
             (int, int) startCursorPosition = Console.GetCursorPosition();
             if (separatedInputWords[1] == "around") {
-                HUDTools.Print(Program.RoomController.currentRoom.description, 10);
-                HUDTools.Print(Program.RoomController.currentRoom.corpseDescription, 10);
-                foreach (Exit exit in Program.RoomController.currentRoom.exits) {
+                HUDTools.Print(Program.RoomController.CurrentRoom.description, 10);
+                HUDTools.Print(Program.RoomController.CurrentRoom.corpseDescription, 10);
+                foreach (Exit exit in Program.RoomController.CurrentRoom.exits) {
                     HUDTools.Print(exit.exitDescription, 10);
                 }
             } else {
