@@ -76,29 +76,4 @@ namespace Saga.Dungeon.Rooms
             }
         }
     }
-
-
-    //Rum hvor spilleren møder Flemsha
-    public class MeetFlemshaRoom : RoomBase
-    {
-        public MeetFlemshaRoom() {
-            roomName = "Old jail cells";
-            description = "You look around the old jail. There is nothing of value. Flemsha seems to want you to leave first.";
-            exits = [new Exit() { keyString = "home", exitDescription = $"This room is a dead end. You should \u001b[96mgo home\u001b[0m to your camp.", valueRoom = RoomController.Camp }];
-        }
-        public override void LoadRoom() {
-            string exit = "";
-            Encounters.MeetFlemsha();
-            if (Program.RoomController.Ran == true) {
-                Program.RoomController.Ran = false;
-                Program.RoomController.ChangeRoom(exits[0].keyString);
-            } else {
-                HUDTools.RoomHUD();
-                while (exit == "") {
-                    exit = TextInput.PlayerPrompt(true);
-                }
-                Program.RoomController.ChangeRoom(exit);
-            }
-        }
-    }
 }

@@ -21,7 +21,11 @@ namespace Saga.Dungeon
             for (int i = 0; i < roomCount; i++)
             {
                 int index = Program.Rand.Next(roomNamesAndDesc.Length);
-                rooms.Add(new DungeonRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                if (i == roomCount - 1 && !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
+                    rooms.Add(new OldJailCells());
+                } else {
+                    rooms.Add(new DungeonRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                }
             }
 
             // Spanning tree: connect each new node to a random connected node, respecting max 3 exits

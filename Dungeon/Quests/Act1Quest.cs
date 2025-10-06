@@ -20,7 +20,7 @@ namespace Saga.Dungeon.Quests
                     questToAdd.Item = item;
                 }
                 Program.CurrentPlayer.QuestLog.Add(questToAdd);
-                HUDTools.Print($" \u001b[96mYou've gained a quest: {questToAdd.Name}!\u001b[0m");
+                HUDTools.Print($"\u001b[96m You've gained a quest: {questToAdd.Name}!\u001b[0m");
             } 
         }
         public static void FailQuest(string questName) {
@@ -36,8 +36,8 @@ namespace Saga.Dungeon.Quests
             string target = "";
             string name = "";
             (int,int,int) reward = (0,0,-1);
-            if (roll == 0) { target = "rattail"; name = "Collect rat tails"; reward = (50*Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
-            else if (roll == 1) { target = "batwings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3+Program.CurrentPlayer.Level); }
+            if (roll == 0) { target = "rattail"; name = "Collect rat tails"; reward = (50 * Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
+            else if (roll == 1) { target = "batwings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3 + Program.CurrentPlayer.Level); }
             int amount = 3 + Program.CurrentPlayer.Level/2;
 
             Quest quest = new Act1Quest() {

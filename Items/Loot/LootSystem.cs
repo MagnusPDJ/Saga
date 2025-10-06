@@ -45,7 +45,7 @@ namespace Saga.Items.Loot
                     Program.CurrentPlayer.Inventory.SetValue(item, index);
                 }
               
-                HUDTools.Print($"You gain {item?.ItemName}", 15);
+                HUDTools.Print($" You gain {item?.ItemName}", 15);
             }
             GetExp(monster.Power, monster.ExpGain);
             TextInput.PressToContinue();
@@ -54,7 +54,7 @@ namespace Saga.Items.Loot
         public static void GetTreasureChestLoot() {
             List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDatabase.json"), Program.Options) ?? [];
             List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDatabase.json"), Program.Options) ?? [];
-            HUDTools.Print("You find Treasure!", 10);
+            HUDTools.Print(" You find Treasure!", 10);
             GetGold(3);
             GetPotions();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -216,7 +216,7 @@ namespace Saga.Items.Loot
                 int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                 var questItem = ItemDatabase.GetByItemId("oldkey");
                 Program.CurrentPlayer.Inventory.SetValue(questItem, index);
-                HUDTools.Print($"You gain {questItem?.ItemName}", 15);
+                HUDTools.Print($" You gain {questItem?.ItemName}", 15);
             }
             Console.ResetColor();
             Program.CurrentPlayer.UpdateQuestLog();
@@ -227,14 +227,14 @@ namespace Saga.Items.Loot
             int lower = 5 * Program.CurrentPlayer.Level;
             int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
             if (g > 0) {
-                HUDTools.Print($"\u001b[33mYou loot {g} gold coins.\u001b[0m", 15);
+                HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
                 Program.CurrentPlayer.Gold += g;
             }
         }
         //Metode til at få en bestemt mængde guld:
         public static void GetFixedGold(int g) {
             if (g > 0) {
-                HUDTools.Print($"\u001b[33mYou loot {g} gold coins.\u001b[0m", 15);
+                HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
                 Program.CurrentPlayer.Gold += g;
             }
         }
@@ -251,7 +251,7 @@ namespace Saga.Items.Loot
             if (p > 0) {
                 var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
                 if (potion is not null) {
-                    HUDTools.Print($"\u001b[90mYou loot {p} healing potions\u001b[0m", 20);
+                    HUDTools.Print($"\u001b[90m You loot {p} healing potions\u001b[0m", 20);
                     potion.PotionQuantity += p;
                 }
             }
@@ -280,14 +280,14 @@ namespace Saga.Items.Loot
                 };
             }
             if (xpGain > 0) {
-                HUDTools.Print($"\u001b[32mYou've gained {xpGain} experience points!\u001b[0m", 10);
+                HUDTools.Print($"\u001b[32m You've gained {xpGain} experience points!\u001b[0m", 10);
                 Program.CurrentPlayer.Exp += xpGain;
             }
             Program.CurrentPlayer.CheckForLevelUp();
         }
         public static void GetFixedExp(int expGain) {
             if (expGain > 0) {
-                HUDTools.Print($"\u001b[32mYou've gained {expGain} experience points!\u001b[0m", 10);
+                HUDTools.Print($"\u001b[32m You've gained {expGain} experience points!\u001b[0m", 10);
                 Program.CurrentPlayer.Exp += expGain;
             }
             Program.CurrentPlayer.CheckForLevelUp();

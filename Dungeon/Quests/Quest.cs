@@ -35,7 +35,7 @@ namespace Saga.Dungeon.Quests
                         continue;
                     }
                     foreach (string target in Requirements.Keys) {
-                        if (item is IQuestItem item1 && item.ItemId == target) {
+                        if (item is ICraftingItem item1 && item.ItemId == target) {
                             if (item1.Amount == Requirements[target]) {
                                 return true;
                             }
