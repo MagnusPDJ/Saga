@@ -10,5 +10,29 @@
     "Greeting": "Thanks again playername, how can I be of assistance?",
     "AvailableQuests": [],
     "Dialogue": {}
+  },
+  {
+    "Name": "Henfram",
+    "Greeting": "Hail playername!",
+    "AvailableQuests": [],
+    "Dialogue": {}
+  },
+  {
+    "Name": "Freja",
+    "Greeting": "Ready to train playername?",
+    "AvailableQuests": [],
+    "Dialogue": {}
+  },
+  {
+    "Name": "Lynnea",
+    "Greeting": "Greetings, how fare you?",
+    "AvailableQuests": [],
+    "Dialogue": {}
+  },
+  {
+    "Name": "Ashlyn",
+    "Greeting": "How much longer in this forsaken place?",
+    "AvailableQuests": [],
+    "Dialogue": {}
   }
 ]

@@ -7,9 +7,9 @@ namespace Saga.Dungeon.Rooms
     {
         private const double DefaultSpawnChance = 0.75;
         public DungeonRoom(string name, string desc) {
-            roomName = name;
-            description = desc;
-            exits = [];
+            RoomName = name;
+            Description = desc;
+            Exits = [];
         }
 
         public override void LoadRoom() {
@@ -18,29 +18,29 @@ namespace Saga.Dungeon.Rooms
             //Spawn Enemy
             if (!EnemySpawned && !Cleared) {
                 EnemySpawned = true;
-                if (Program.Rand.NextDouble() < DefaultSpawnChance && enemy == null) {
+                if (Program.Rand.NextDouble() < DefaultSpawnChance && Enemy == null) {
                     RandomBasicCombatEncounter();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
-                        Program.RoomController.ChangeRoom(exits[0].keyString);
+                        Program.RoomController.ChangeRoom(Exits[0].keyString);
                     } else {
                         Cleared = true;
-                        corpseDescription = enemy!.EnemyCorpseDescription;
-                        enemy = null;
+                        CorpseDescription = Enemy!.EnemyCorpseDescription;
+                        Enemy = null;
                     }
-                } else if (enemy != null) {
+                } else if (Enemy != null) {
                     HUDTools.RoomHUD();
                     HUDTools.ClearLastLine(1);
-                    HUDTools.Print($"You return to the room where you left the {enemy.Name}...", 10);
+                    HUDTools.Print($"You return to the room where you left the {Enemy.Name}...", 10);
                     TextInput.PressToContinue();
-                    new CombatController(Program.CurrentPlayer, enemy).Combat();
+                    new CombatController(Program.CurrentPlayer, Enemy).Combat();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
-                        Program.RoomController.ChangeRoom(exits[0].keyString);
+                        Program.RoomController.ChangeRoom(Exits[0].keyString);
                     } else {
                         Cleared = true;
-                        corpseDescription = enemy!.EnemyCorpseDescription;
-                        enemy = null;
+                        CorpseDescription = Enemy!.EnemyCorpseDescription;
+                        Enemy = null;
                     }
                 }
             }
@@ -54,19 +54,19 @@ namespace Saga.Dungeon.Rooms
         }
         public void RandomBasicCombatEncounter() {
             Program.SoundController.Play("kamp");
-            enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.CurrentDungeonInstance.DungeonName);
+            Enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.CurrentDungeonInstance.DungeonName);
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
             switch (Program.Rand.Next(0, 2)) {
                 case int x when x == 0:
-                    HUDTools.Print($"You turn a corner and there you see a {enemy.Name}...", 10);
+                    HUDTools.Print($"You turn a corner and there you see a {Enemy.Name}...", 10);
                     break;
                 case int x when x == 1:
-                    HUDTools.Print($"You break down a door and find a {enemy.Name} inside!", 10);
+                    HUDTools.Print($"You break down a door and find a {Enemy.Name} inside!", 10);
                     break;
             }
             TextInput.PressToContinue();
-            new CombatController(Program.CurrentPlayer, enemy).Combat();
+            new CombatController(Program.CurrentPlayer, Enemy).Combat();
         }
     }
 }

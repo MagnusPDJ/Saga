@@ -38,8 +38,8 @@ namespace Saga.Assets
             }
 
             bool foundRoom = false;
-            for (int i = 0; i < Program.RoomController.CurrentRoom.exits.Count; i++) {
-                var exit = Program.RoomController.CurrentRoom.exits[i];
+            for (int i = 0; i < Program.RoomController.CurrentRoom.Exits.Count; i++) {
+                var exit = Program.RoomController.CurrentRoom.Exits[i];
                 if (separatedInputWords[1] == "back" && exit.hasPreviousRoom) {
                     exit.hasPreviousRoom = false;
                     foundRoom = true;
@@ -151,9 +151,9 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {
             (int, int) startCursorPosition = Console.GetCursorPosition();
             if (separatedInputWords[1] == "around") {
-                HUDTools.Print(Program.RoomController.CurrentRoom.description, 10);
-                HUDTools.Print(Program.RoomController.CurrentRoom.corpseDescription, 10);
-                foreach (Exit exit in Program.RoomController.CurrentRoom.exits) {
+                HUDTools.Print(Program.RoomController.CurrentRoom.Description, 10);
+                HUDTools.Print(Program.RoomController.CurrentRoom.CorpseDescription, 10);
+                foreach (Exit exit in Program.RoomController.CurrentRoom.Exits) {
                     HUDTools.Print(exit.exitDescription, 10);
                 }
             } else {

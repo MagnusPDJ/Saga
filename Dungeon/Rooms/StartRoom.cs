@@ -8,17 +8,17 @@ namespace Saga.Dungeon.Rooms
     public class StartRoom : RoomBase
     {
         public StartRoom() {
-            roomName = "Jail cells";
-            description = " You look around and see Gheed rummage through big wooden crates. You hear him counting.";
-            exits = [new Exit() { keyString = "1", ExitTemplateDescription = "You see a big wooden door with rusted hinges leading into the {0}.", valueRoom = new SecondRoom() }];
+            RoomName = "Jail cells";
+            Description = " You look around and see Gheed rummage through big wooden crates. You hear him counting.";
+            Exits = [new Exit() { keyString = "1", ExitTemplateDescription = "You see a big wooden door with rusted hinges leading into the {0}.", valueRoom = new SecondRoom() }];
         }
         public override void LoadRoom() {
             string exit = "";
             FirstEncounter();
             MeetGheed();
             Cleared = true;        
-            corpseDescription = enemy!.EnemyCorpseDescription;
-            enemy = null;
+            CorpseDescription = Enemy!.EnemyCorpseDescription;
+            Enemy = null;
             HUDTools.RoomHUD();
             while (exit == "") {
                 exit = TextInput.PlayerPrompt(true);
@@ -48,8 +48,8 @@ namespace Saga.Dungeon.Rooms
             HUDTools.Print("He turns...");
             TextInput.PressToContinue();
 
-            enemy = EnemyFactory.CreateByName("Human captor");
-            new CombatController(Program.CurrentPlayer, enemy).Combat();
+            Enemy = EnemyFactory.CreateByName("Human captor");
+            new CombatController(Program.CurrentPlayer, Enemy).Combat();
         }
         public static void MeetGheed() {
             Console.Clear();

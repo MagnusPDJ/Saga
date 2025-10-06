@@ -6,9 +6,9 @@ namespace Saga.Dungeon.Rooms
     public class SecondRoom : RoomBase
     {
         public SecondRoom() {
-            roomName = "Hallway";
-            description = "";
-            exits = [new Exit() { keyString = "1", ExitTemplateDescription = "The hallway continues deeper into the {0}.", valueRoom = RoomController.Camp }];
+            RoomName = "Hallway";
+            Description = "";
+            Exits = [new Exit() { keyString = "1", ExitTemplateDescription = "The hallway continues deeper into the {0}.", valueRoom = RoomController.Camp }];
         }
         public override void LoadRoom() {
             string exit = "";
@@ -16,11 +16,11 @@ namespace Saga.Dungeon.Rooms
             SecondEncounter();
             if (Program.RoomController.Ran == true) {
                 Program.RoomController.Ran = false;
-                Program.RoomController.ChangeRoom(exits[0].keyString);
+                Program.RoomController.ChangeRoom(Exits[0].keyString);
             } else {
                 Cleared = true;
-                corpseDescription = enemy!.EnemyCorpseDescription;
-                enemy = null;
+                CorpseDescription = Enemy!.EnemyCorpseDescription;
+                Enemy = null;
                 HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
@@ -36,8 +36,8 @@ namespace Saga.Dungeon.Rooms
             HUDTools.Print($" The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\n in the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
 
-            enemy = EnemyFactory.CreateByName("Feral dog");          
-            new CombatController(Program.CurrentPlayer, enemy).Combat();
+            Enemy = EnemyFactory.CreateByName("Feral dog");          
+            new CombatController(Program.CurrentPlayer, Enemy).Combat();
         }
 
     }

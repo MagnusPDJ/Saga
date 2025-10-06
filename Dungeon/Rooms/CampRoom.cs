@@ -8,8 +8,8 @@ namespace Saga.Dungeon.Rooms
     public class CampRoom : RoomBase
     {
         public CampRoom() {
-            roomName = "Camp";
-            description = "";
+            RoomName = "Camp";
+            Description = "";
         }
         public override void LoadRoom() {
             if (Program.CurrentPlayer.CurrentAct == Encounters.Act.Start) {

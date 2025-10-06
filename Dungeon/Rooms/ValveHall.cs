@@ -1,0 +1,14 @@
+﻿
+namespace Saga.Dungeon.Rooms
+{
+    public class ValveHall : RoomBase
+    {
+        public ValveHall() {
+            RoomName = "Valve Hall";
+            Description = " Massive wheels and rusted levers line the walls, probably used to control the waterflows in the\n sewer. The air tastes of old metal and oil, and when the silence breaks, it's inly from the slow\n drip of water echoing through the gears of forgotten machinery.";
+        }
+        public override void LoadRoom() {
+            throw new NotImplementedException();
+        }
+    }
+}

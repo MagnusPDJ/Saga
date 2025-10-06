@@ -21,10 +21,38 @@ namespace Saga.Dungeon
             for (int i = 0; i < roomCount; i++)
             {
                 int index = Program.Rand.Next(roomNamesAndDesc.Length);
-                if (i == roomCount - 1 && !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") && !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
+                if (dungeonName == "Undercroft" &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                     rooms.Add(new OldJailCells());
+                } else if (dungeonName == "Sewers" &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                    rooms.Add(new ValveHall());
+                } else if (dungeonName == "Mine" &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                    rooms.Add(new BlacksmithRoom());
+                } else if (dungeonName == "Natural Cave" &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                    rooms.Add(new UndergroundLake());
                 } else {
-                    rooms.Add(new DungeonRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+
+                    switch (Program.Rand.Next(1, 100 + 1)) {
+                        default:
+                            rooms.Add(new DungeonRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                            break;
+                        case int n when n <= 10 && Program.CurrentPlayer.Level > 1:
+                            WizardEncounter();
+                            rooms.Add(new WizardRoom());
+                            break;
+                        case int n when 10 < n && n <= 30 && Program.CurrentPlayer.Level > 1:
+                            MimicEncounter();
+                            TreasureEncounter();
+                            rooms.Add(new ChestRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                            break;
+                    }                           
                 }
             }
 
@@ -35,10 +63,10 @@ namespace Saga.Dungeon
             while (remaining.Count > 0)
             {
                 int idx = remaining[Program.Rand.Next(remaining.Count)];
-                var candidates = connected.Where(c => rooms[c].exits.Count < 3).ToList();
+                var candidates = connected.Where(c => rooms[c].Exits.Count < 3).ToList();
                 if (candidates.Count == 0) break;
                 int connectTo = candidates[Program.Rand.Next(candidates.Count)];
-                if (rooms[idx].exits.Count < 3)
+                if (rooms[idx].Exits.Count < 3)
                 {
                     ConnectRoomsBidirectional(rooms[idx], rooms[connectTo], dungeonName);
                     connected.Add(idx);
@@ -55,23 +83,23 @@ namespace Saga.Dungeon
             int numberAdded = 0;
                 for (int a = 0; a < rooms.Count; a++) {
                     if (countToAdd == numberAdded) break;
-                    if (rooms[a].exits.Count >= 3) continue;
+                    if (rooms[a].Exits.Count >= 3) continue;
                     for (int b = 0; b < rooms.Count; b++) {
                         if (a == b) continue;
-                        if (rooms[b].exits.Count >= 3) continue;
+                        if (rooms[b].Exits.Count >= 3) continue;
                         // Skip if already connected in either direction
-                        if (rooms[a].exits.Any(x => x.valueRoom == rooms[b])) continue;
-                        if (rooms[b].exits.Any(x => x.valueRoom == rooms[a])) continue;
+                        if (rooms[a].Exits.Any(x => x.valueRoom == rooms[b])) continue;
+                        if (rooms[b].Exits.Any(x => x.valueRoom == rooms[a])) continue;
 
                         // Add a one-way exit from a to b
                         ConnectRoomsOneDirectional(rooms[a], rooms[b], dungeonName);
                         numberAdded++;
                         // breaking so it only adds one per room
-                        if (rooms[a].exits.Count >= 3) break;                        
+                        if (rooms[a].Exits.Count >= 3) break;                        
                     }
                 }           
             // Add "[camp]" exit to the first room (always visible, not numbered)
-            rooms[0].exits.Add(new Exit
+            rooms[0].Exits.Add(new Exit
             {
                 keyString = "camp",
                 exitDescription = "[camp] A passage leads back to camp.",
@@ -83,12 +111,12 @@ namespace Saga.Dungeon
             foreach (var room in rooms)
             {
                 int idx = 1;
-                foreach (var exit in room.exits)
+                foreach (var exit in room.Exits)
                 {
                     if (exit.keyString != "camp")
                     {
                         exit.keyString = idx.ToString();
-                        exit.exitDescription = $"[{exit.keyString}] {exit.ExitTemplateDescription.Replace("{0}", exit.valueRoom.roomName)}";
+                        exit.exitDescription = $"[{exit.keyString}] {exit.ExitTemplateDescription.Replace("{0}", exit.valueRoom.RoomName)}";
                         idx++;
                     }
                 }
@@ -109,15 +137,15 @@ namespace Saga.Dungeon
             string exitA = exits[0][Program.Rand.Next(exits[0].Count)];
             string exitB = exits[0][Program.Rand.Next(exits[0].Count)];
             
-            a.exits.Add(new Exit() { valueRoom = b, ExitTemplateDescription = exitA });
+            a.Exits.Add(new Exit() { valueRoom = b, ExitTemplateDescription = exitA });
         
             string backExitTemplate = exitB;
-            b.exits.Add(new Exit() { valueRoom = a, ExitTemplateDescription = backExitTemplate });
+            b.Exits.Add(new Exit() { valueRoom = a, ExitTemplateDescription = backExitTemplate });
         }
         private static void ConnectRoomsOneDirectional(RoomBase a, RoomBase b, string dungeonName) {
             var exits = DungeonDatabase.GetExits()[dungeonName];
             string exitTemplate = exits[1][Program.Rand.Next(exits[1].Count)];
-            a.exits.Add(new Exit { valueRoom = b, ExitTemplateDescription = exitTemplate,
+            a.Exits.Add(new Exit { valueRoom = b, ExitTemplateDescription = exitTemplate,
                 IsOneWay = true
             });
         }

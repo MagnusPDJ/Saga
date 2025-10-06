@@ -7,8 +7,8 @@ namespace Saga.Dungeon.Rooms
     public class OldJailCells : RoomBase
     {
         public OldJailCells() {
-            roomName = "Old jail cells";
-            description = " You look around the old jail. There is nothing of value. Flemsha seems to want you to leave first.";
+            RoomName = "Old jail cells";
+            Description = " You look around the old jail. There is nothing of value. Flemsha seems to want you to leave first.";
         }
         public override void LoadRoom() {
             string exit = "";
@@ -18,13 +18,13 @@ namespace Saga.Dungeon.Rooms
             
             if (Program.RoomController.Ran == true) {
                 Program.RoomController.Ran = false;
-                Program.RoomController.ChangeRoom(exits[0].keyString);
+                Program.RoomController.ChangeRoom(Exits[0].keyString);
             } else {
                 HUDTools.RoomHUD();
                 while (exit == "") {
                     exit = TextInput.PlayerPrompt(true);
                 }
-                description = " You look around the old jail. There is nothing of value.";
+                Description = " You look around the old jail. There is nothing of value.";
                 Program.RoomController.ChangeRoom(exit);
             }
         }
@@ -91,7 +91,7 @@ namespace Saga.Dungeon.Rooms
                     HUDTools.ClearLastLine(1);
                     HUDTools.Print(" You close the door to the prison ward and continue on, never to see the prisoner again.");
                     TextInput.PressToContinue();
-                    description = " You look around the old jail. There is nothing of value. The rambling man has vanished without a\n trace.";
+                    Description = " You look around the old jail. There is nothing of value. The rambling man has vanished without a\n trace.";
                     Program.RoomController.Ran = true;
                     Cleared = true;
                     break;

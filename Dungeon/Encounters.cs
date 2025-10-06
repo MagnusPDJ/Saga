@@ -210,23 +210,5 @@ namespace Saga.Dungeon
             HUDTools.ClearLastLine(16);
         }
 
-
-      //Encounter Tools:
-
-        //Metode til at vælge tilfældigt mellem encounters.
-        public static void RandomEncounter() {
-            //1, 30+1
-            switch (Program.Rand.Next(1, 30+1)) {
-                case int n when n <= 10 && Program.CurrentPlayer.Level > 1:
-                    WizardEncounter();
-                    break;
-                case int n when 10 < n && n <=20 && Program.CurrentPlayer.Level > 1:
-                    MimicEncounter();
-                    break;
-                case int n when 20 < n && n <=30 && Program.CurrentPlayer.Level > 1:
-                    TreasureEncounter();
-                    break;
-            }
-        }
     }
 }

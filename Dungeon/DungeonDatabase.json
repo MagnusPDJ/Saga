@@ -5,32 +5,33 @@
         [ "Crypt", " Torches along the wall burn with a blue-green flame, casting flickering light over a row of\n sarcophagi — one of which appears broken from the inside, sending chills down your spine." ],
         [ "Ossuary", " Skulls are stacked against the walls, while ribs and femurs knot together to shape the arches\n overhead — the hollow gazes from the skulls seem to follow your every step." ],
         [ "Sacristy", " A large altar and ornate chests line the walls, though all have been desecrated and looted.\n Faint runes — written in what you can only assume is blood — crawl across the surfaces, their\n meaning unknowable yet deeply unsettling." ],
-        [ "Candlelit Vault", " Every surface - tables, cupboards, even the floor - is filled with lit candles, their flames\n swaying gently yet never diminishing, distorting your perception of time until hours and days\n bleed into a single, unending moment." ],
-        [ "Tomb Corridor", " Long and dark corridor with sarcophagi on both sides each descecrated - or ordained? - with\n demonic scripture" ],
+        [ "Candlelit vault", " Every surface - tables, cupboards, even the floor - is filled with lit candles, their flames\n swaying gently yet never diminishing, distorting your perception of time until hours and days\n bleed into a single, unending moment." ],
+        [ "Tomb corridor", " Long and dark corridor with sarcophagi on both sides each descecrated - or ordained? - with\n demonic scripture" ],
         [ "Torture room", " Racks, pillories, and an iron maiden fill the room, their surfaces stained and worn—either\n recently used, or perhaps it’s just this horrid place that preserves such horrors." ],
         [ "Prison cell", " Rusted chains cling to the wall, and following their length, you come upon the crumpled remains\n of a skeleton — an unfortunate soul, long forgotten in this accursed place." ]
       ],
       "Sewers": [
         [ "Cistern", " A huge room with angle-high water, cold and damp, with constant dripping from the ceiling\n that forms stalactites and hints at the place’s ancient age." ],
-        [ "Old Baths", " A room with small pools that are almost dried out and the sides are covered in slime." ],
-        [ "Mossy Well", " You see in the middle of the room a well with a pulley and bucket for hoisting water from the\n underground." ],
-        [ "Sewage Junction", " Here multiple tunnels meet and collects the water in a huge basin, with walkways along the edges\n of the room." ],
-        [ "Sewage Passage", " A large passage that collects the waste water from small holes and tunnels and leads it further\n down." ],
-        [ "Storage room", " The room has broken shelves and dusty crates scattered about. All are rotten and useless."]
+        [ "Old baths", " A room with small pools that are almost dried out and the sides are covered in slime." ],
+        [ "Mossy well", " You see in the middle of the room a well with a pulley and bucket for hoisting water from the\n underground." ],
+        [ "Sewage junction", " Here multiple tunnels meet and collects the water in a huge basin, with walkways along the edges\n of the room." ],
+        [ "Sewage passage", " A large passage that collects the waste water from small holes and tunnels and leads it further\n down." ],
+        [ "Storage room", " The room has broken shelves and dusty crates scattered about. All are rotten and useless." ],
+        [ "Overflow reservoir", " A vast hollow chamber strethces into shadow, its walls marked by dark, wabering stains that show\n where the flood once reached. Massive sluice doors loom at the far end, chained shut, as if to\n hold back something worse than water."]
       ],
       "Mine": [
-        [ "Collapsing Mineshaft", "" ],
-        [ "Ore Storer", "" ],
-        [ "Old Stope", "" ],
-        [ "Dim Cartway", "" ],
-        [ "Rusty Hoist", "" ]
+        [ "Collapsing mineshaft", "" ],
+        [ "Ore storer", "" ],
+        [ "Old stope", "" ],
+        [ "Dim cartway", "" ],
+        [ "Rusty hoist", "" ]
       ],
       "Natural Cave": [
-        [ "Gloom Grotto", "" ],
-        [ "Dripstone Lair", "" ],
-        [ "Bear Den", "" ],
-        [ "Echoing Chamber", "" ],
-        [ "Crystal Hollow", "" ]
+        [ "Gloom grotto", "" ],
+        [ "Dripstone lair", "" ],
+        [ "Bear den", "" ],
+        [ "Echoing chamber", "" ],
+        [ "Crystal hollow", "" ]
       ]
     }
   },

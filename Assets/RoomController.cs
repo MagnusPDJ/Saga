@@ -42,7 +42,7 @@ namespace Saga.Assets
             }
             if (!foundRoom) {
                 previousRoom = CurrentRoom;
-                foreach (Exit exit in CurrentRoom.exits) {
+                foreach (Exit exit in CurrentRoom.Exits) {
                     if (exit.keyString == keystring) {
                         CurrentRoom = exit.valueRoom;
                         foundRoom = true;
@@ -54,14 +54,14 @@ namespace Saga.Assets
                 Program.CurrentPlayer.RegainMana();
 
                 //Update exit descriptions for all exits in current room
-                foreach (var ex in CurrentRoom.exits) {
+                foreach (var ex in CurrentRoom.Exits) {
                     if (ex.valueRoom != null && ex.ExitTemplateDescription != null) {
                         if (ex.valueRoom == previousRoom) {
-                            string destName = ex.valueRoom.roomName;
+                            string destName = ex.valueRoom.RoomName;
                             ex.exitDescription = $"[\u001b[96mback\u001b[0m] {ex.ExitTemplateDescription.Replace("{0}", destName)}";
                             ex.hasPreviousRoom = true;
                         } else {
-                            string destName = ex.valueRoom.Visited ? ex.valueRoom.roomName : "UNKNOWN";
+                            string destName = ex.valueRoom.Visited ? ex.valueRoom.RoomName : "UNKNOWN";
                             ex.exitDescription = $"[\u001b[96m{ex.keyString}\u001b[0m] {ex.ExitTemplateDescription.Replace("{0}", destName)}";
                         }
                     }
