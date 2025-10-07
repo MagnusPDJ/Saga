@@ -9,6 +9,7 @@ namespace Saga.Dungeon.Rooms
         public OldJailCells() {
             RoomName = "Old jail cells";
             Description = " You look around the old jail. There is nothing of value. Flemsha seems to want you to leave first.";
+            MaxExits = 1;
         }
         public override void LoadRoom() {
             string exit = "";

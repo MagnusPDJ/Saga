@@ -3,22 +3,20 @@ using Saga.Dungeon.Enemies;
 
 namespace Saga.Dungeon.Rooms
 {
-    public class DungeonRoom : RoomBase
+    public class WizardRoom : RoomBase
     {
-        private const double DefaultSpawnChance = 0.75;
-        public DungeonRoom(string name, string desc) {
-            RoomName = name;
-            Description = desc;
+        public WizardRoom() {
+            RoomName = "Black library";
+            Description = " There are vast amount of black tomes on tall shelves. Every book is written in pictograms and\n scribbles sharing no secrets. The whole room is emitting a fell aura.";
+            MaxExits = 1;
         }
-
         public override void LoadRoom() {
             if (!Visited) Visited = true;
 
-            //Spawn Enemy
             if (!EnemySpawned && !Cleared) {
                 EnemySpawned = true;
-                if (Program.Rand.NextDouble() < DefaultSpawnChance && Enemy == null) {
-                    RandomBasicCombatEncounter();
+                if (Enemy == null) {
+                    WizardEncounter();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
                         Program.RoomController.ChangeRoom(Exits[0].keyString);
@@ -51,20 +49,16 @@ namespace Saga.Dungeon.Rooms
             }
             Program.RoomController.ChangeRoom(exit);
         }
-        public void RandomBasicCombatEncounter() {
-            Program.SoundController.Play("kamp");
-            Enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.CurrentDungeonInstance.DungeonName);
+        public void WizardEncounter() {
+            Console.Clear();
+            Program.SoundController.Play("laugh");
             HUDTools.RoomHUD();
-            HUDTools.ClearLastLine(1);
-            switch (Program.Rand.Next(0, 2)) {
-                case int x when x == 0:
-                    HUDTools.Print($"You turn a corner and there you see a {Enemy.Name}...", 10);
-                    break;
-                case int x when x == 1:
-                    HUDTools.Print($"You break down a door and find a {Enemy.Name} inside!", 10);
-                    break;
-            }
+            HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ", 20);
+            Program.SoundController.Play("troldmandskamp");
+            HUDTools.Print("long beard and pointy hat, looking at a large tome.", 20);
             TextInput.PressToContinue();
+
+            Enemy = EnemyFactory.CreateByName("Dark Wizard");
             new CombatController(Program.CurrentPlayer, Enemy).Combat();
         }
     }

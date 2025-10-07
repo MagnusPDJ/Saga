@@ -1,4 +1,3 @@
-
 using Saga.Assets;
 using Saga.Dungeon.Rooms;
 
@@ -21,22 +20,22 @@ namespace Saga.Dungeon
             for (int i = 0; i < roomCount; i++)
             {
                 int index = Program.Rand.Next(roomNamesAndDesc.Length);
-                if (dungeonName == "Undercroft" &&
+                if (dungeonName == "Undercroft" && !rooms.Contains(new OldJailCells())  &&
                     !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") &&
                     !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                     rooms.Add(new OldJailCells());
-                } else if (dungeonName == "Sewers" &&
-                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
-                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
-                    rooms.Add(new ValveHall());
-                } else if (dungeonName == "Mine" &&
-                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
-                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
-                    rooms.Add(new BlacksmithRoom());
-                } else if (dungeonName == "Natural Cave" &&
-                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
-                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
-                    rooms.Add(new UndergroundLake());
+                //} else if (dungeonName == "Sewers" &&
+                  //  !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                  //  !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                  //  rooms.Add(new ValveHall());
+                //} else if (dungeonName == "Mine" &&
+                  //  !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                  //  !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                  //  rooms.Add(new BlacksmithRoom());
+                //} else if (dungeonName == "Natural Cave" &&
+                  //  !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                  //  !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                  //  rooms.Add(new UndergroundLake());
                 } else {
 
                     switch (Program.Rand.Next(1, 100 + 1)) {
@@ -44,17 +43,25 @@ namespace Saga.Dungeon
                             rooms.Add(new DungeonRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
                             break;
                         case int n when n <= 10 && Program.CurrentPlayer.Level > 1:
-                            WizardEncounter();
                             rooms.Add(new WizardRoom());
                             break;
-                        case int n when 10 < n && n <= 30 && Program.CurrentPlayer.Level > 1:
-                            MimicEncounter();
-                            TreasureEncounter();
+                        case int n when 10 < n && n <= 20 && Program.CurrentPlayer.Level > 1:
                             rooms.Add(new ChestRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                            break;
+                        case int n when 20 < n && n <= 40:
+                            rooms.Add(new HallwayRoom());
                             break;
                     }                           
                 }
             }
+
+            // Add "[camp]" exit to the first room (always visible, not numbered)
+            rooms[0].Exits.Add(new Exit {
+                keyString = "camp",
+                exitDescription = "[camp] A passage leads back to camp.",
+                valueRoom = RoomController.Camp,
+                ExitTemplateDescription = "A passage leads back to camp."
+            });
 
             // Spanning tree: connect each new node to a random connected node, respecting max 3 exits
             var connected = new HashSet<int> { 0 };
@@ -63,10 +70,10 @@ namespace Saga.Dungeon
             while (remaining.Count > 0)
             {
                 int idx = remaining[Program.Rand.Next(remaining.Count)];
-                var candidates = connected.Where(c => rooms[c].Exits.Count < 3).ToList();
+                var candidates = connected.Where(c => rooms[c].Exits.Count < rooms[c].MaxExits).ToList();
                 if (candidates.Count == 0) break;
                 int connectTo = candidates[Program.Rand.Next(candidates.Count)];
-                if (rooms[idx].Exits.Count < 3)
+                if (rooms[idx].Exits.Count < rooms[idx].MaxExits)
                 {
                     ConnectRoomsBidirectional(rooms[idx], rooms[connectTo], dungeonName);
                     connected.Add(idx);
@@ -83,10 +90,10 @@ namespace Saga.Dungeon
             int numberAdded = 0;
                 for (int a = 0; a < rooms.Count; a++) {
                     if (countToAdd == numberAdded) break;
-                    if (rooms[a].Exits.Count >= 3) continue;
+                    if (rooms[a].Exits.Count >= rooms[a].MaxExits) continue;
                     for (int b = 0; b < rooms.Count; b++) {
                         if (a == b) continue;
-                        if (rooms[b].Exits.Count >= 3) continue;
+                        if (rooms[b].Exits.Count >= rooms[b].MaxExits) continue;
                         // Skip if already connected in either direction
                         if (rooms[a].Exits.Any(x => x.valueRoom == rooms[b])) continue;
                         if (rooms[b].Exits.Any(x => x.valueRoom == rooms[a])) continue;
@@ -98,14 +105,6 @@ namespace Saga.Dungeon
                         if (rooms[a].Exits.Count >= 3) break;                        
                     }
                 }           
-            // Add "[camp]" exit to the first room (always visible, not numbered)
-            rooms[0].Exits.Add(new Exit
-            {
-                keyString = "camp",
-                exitDescription = "[camp] A passage leads back to camp.",
-                valueRoom = RoomController.Camp,
-                ExitTemplateDescription = "A passage leads back to camp."
-            });
 
             // Assign numeric keys and format exit descriptions (skip camp exit)
             foreach (var room in rooms)

@@ -1,7 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Enemies.Interfaces;
-using Saga.Dungeon.Quests;
 using System.Text.Json;
 
 namespace Saga.Items.Loot
@@ -11,6 +10,7 @@ namespace Saga.Items.Loot
         public static List<IItem> RollLoot(LootTable table) {
             var drops = new List<IItem>();
             foreach (var loot in table.Items) {
+                if ((loot.Class != string.Empty && loot.Class != Program.CurrentPlayer.CurrentClass) || drops.Count == table.Drops) continue;
                 if (Program.Rand.NextDouble() <= loot.DropChance) {
                     var item = ItemDatabase.GetByItemId(loot.ItemId);
                     if (item != null) drops.Add(item);

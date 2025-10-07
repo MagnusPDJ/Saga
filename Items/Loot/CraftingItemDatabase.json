@@ -26,5 +26,12 @@
     "ItemName": "Green Slime",
     "ItemDescription": " Non-corrosive, gelatinous lump carved from a dead slime.",
     "ItemPrice": 20
+  },
+  {
+    "Type": "craftingItem",
+    "ItemId": "greypowder",
+    "ItemName": "Grey Powder",
+    "ItemDescription": " A grey dust collected from the robes of the dark wizard.",
+    "ItemPrice": 300
   }
 ]

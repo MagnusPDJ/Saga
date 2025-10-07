@@ -28,7 +28,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Human" ],
+    "Tags": [ "Human", "Living" ],
     "ExpGain": 20,
     "GoldModifier": 1.0
   },
@@ -61,7 +61,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Beast" ],
+    "Tags": [ "Beast", "Living" ],
     "ExpGain": 35,
     "GoldModifier": 0.0
   },
@@ -94,7 +94,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Beast" ],
+    "Tags": [ "Beast", "Living" ],
     "ExpGain": 40,
     "GoldModifier": 0.0,
     "LootTable": {
@@ -110,7 +110,7 @@
     "Name": "Giant Bat",
     "Power": 1,
     "PlayerDeathDescription": "The bat overpowers you and bites into your neck slowly draining your blood of every drop.",
-    "EnemyCorpseDesciption": " The bat lies still on the cold floor, guts ripped open. It is starting to smell foul.",
+    "EnemyCorpseDescription": " The bat lies still on the cold floor, guts ripped open. It is starting to smell foul.",
     "MaxHealth": 6,
     "Health": 6,
     "Attack": 4,
@@ -135,7 +135,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Beast" ],
+    "Tags": [ "Beast", "Living" ],
     "ExpGain": 40,
     "GoldModifier": 0.0,
     "LootTable": {
@@ -176,7 +176,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Mythical" ],
+    "Tags": [ "Mythical", "Living" ],
     "ExpGain": 40,
     "GoldModifier": 0.0,
     "LootTable": {
@@ -191,8 +191,8 @@
   {
     "Name": "Kobold",
     "Power": 1,
-    "PlayerDeathDescription": " .",
-    "EnemyCorpseDescription": " .",
+    "PlayerDeathDescription": " The kobold hits your shin making you fall over. Then the kobold manages to finish you off with its weapon.",
+    "EnemyCorpseDescription": " The kobold lies dead, murdered, candle brutally taken.",
     "MaxHealth": 7,
     "Health": 7,
     "Attack": 3,
@@ -217,7 +217,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Troll" ],
+    "Tags": [ "Troll", "Living" ],
     "ExpGain": 40,
     "GoldModifier": 0.0,
     "LootTable": {
@@ -230,36 +230,172 @@
     }
   },
   {
-    "Name": "Skeleton Warrior",
+    "Name": "Mimic",
     "Power": 5,
-    "PlayerDeathDescription": "You are torn apart by rattling bones...",
+    "PlayerDeathDescription": "The mimics tongue grabs you and you are devoured whole.",
+    "EnemyCorpseDescription": " The dead mimic has turned into a regular lifeless chest.",
     "MaxHealth": 50,
     "Health": 50,
     "Attack": 10,
-    "Initiative": 5,
-    "Armor": 2,
+    "Initiative": 3,
+    "Armor": 5,
     "PhysicalResistance": {
       "Normal": 0,
       "Piercing": -10,
       "Crushing": 10
     },
     "ElementalResistance": {
-      "Frost": 20,
+      "Frost": 50,
       "Fire": -20,
-      "Poison": 0,
+      "Poison": 10,
       "Lightning": 0
     },
     "MagicalResistance": {
-      "Arcane": 0,
-      "Chaos": 0,
-      "Void": 0,
+      "Arcane": 50,
+      "Chaos": 30,
+      "Void": 20,
       "Nature": 0,
       "Life": -50,
-      "Death": 50
+      "Death": 100
     },
-    "Tags": [ "Undead" ],
-    "ExpGain": 15,
-    "GoldModifier": 1.0
+    "Tags": [ "Mythical", "Living" ],
+    "ExpGain": 200,
+    "GoldModifier": 4.0,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "enchantedwand",
+          "DropChance": 0.5,
+          "Class": "Mage"  
+        },
+        {
+          "ItemId": "gnarledstaff",
+          "DropChance": 0.25,
+          "Class": "Mage"
+        },
+        {
+          "ItemId": "arcanistsstaff",
+          "DropChance": 0.125,
+          "Class": "Mage"
+        },
+        {
+          "ItemId": "quickshortbow",
+          "DropChance": 0.5,
+          "Class": "Archer"
+        },
+        {
+          "ItemId": "sturdylongbow",
+          "DropChance": 0.25,
+          "Class": "Archer"
+        },
+        {
+          "ItemId": "marksmansrecurve",
+          "DropChance": 0.125,
+          "Class": "Archer"
+        },
+        {
+          "ItemId": "steelsword",
+          "DropChance": 0.5,
+          "Class": "Warrior"
+        },
+        {
+          "ItemId": "finelongsword",
+          "DropChance": 0.25,
+          "Class": "Warrior"
+        },
+        {
+          "ItemId": "knightsgreatsword",
+          "DropChance": 0.125,
+          "Class": "Warrior"
+        },
+        {
+          "ItemId": "runedsimplerobe",
+          "DropChance": 0.5,
+          "Class": "Mage"
+        },
+        {
+          "ItemId": "enchantedelegantrobe",
+          "DropChance": 0.25,
+          "Class": "Mage"
+        },
+        {
+          "ItemId": "arcanistsrobe",
+          "DropChance": 0.125,
+          "Class": "Mage"
+        },
+        {
+          "ItemId": "hidearmor",
+          "DropChance": 0.5,
+          "Class": "Archer"
+        },
+        {
+          "ItemId": "hunterscuirass",
+          "DropChance": 0.25,
+          "Class": "Archer"
+        },
+        {
+          "ItemId": "marksmansbrigandine",
+          "DropChance": 0.125,
+          "Class": "Archer"
+        },
+        {
+          "ItemId": "steelmailshirt",
+          "DropChance": 0.5,
+          "Class": "Warrior"
+        },
+        {
+          "ItemId": "steelbreastplate",
+          "DropChance": 0.25,
+          "Class": "Warrior"
+        },
+        {
+          "ItemId": "knightsplatearmor",
+          "DropChance": 0.125,
+          "Class": "Warrior"
+        }
+      ]
+    }
+  },
+  {
+    "Name": "Dark Wizard",
+    "Power": 10,
+    "PlayerDeathDescription": "Your soul is ripped from your body by dark magic.",
+    "EnemyCorpseDescription": " The dark wizard has evaporated and only his clothes lie in stack on the floor.",
+    "MaxHealth": 100,
+    "Health": 100,
+    "Attack": 20,
+    "Initiative": 5,
+    "Armor": 5,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": -10,
+      "Crushing": 10
+    },
+    "ElementalResistance": {
+      "Frost": 50,
+      "Fire": -20,
+      "Poison": 10,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 50,
+      "Chaos": 30,
+      "Void": 20,
+      "Nature": 0,
+      "Life": -50,
+      "Death": 100
+    },
+    "Tags": [ "Human", "Boss", "Living" ],
+    "ExpGain": 500,
+    "GoldModifier": 3.0,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "greypowder",
+          "DropChance": 1.0
+        }
+      ]
+    }
   },
   {
     "Name": "Ancient Lich",
@@ -294,6 +430,38 @@
     "GoldModifier": 3.0
   },
   {
+    "Name": "Skeleton Warrior",
+    "Power": 5,
+    "PlayerDeathDescription": "You are torn apart by rattling bones...",
+    "MaxHealth": 50,
+    "Health": 50,
+    "Attack": 10,
+    "Initiative": 5,
+    "Armor": 2,
+    "PhysicalResistance": {
+      "Normal": 0,
+      "Piercing": -10,
+      "Crushing": 10
+    },
+    "ElementalResistance": {
+      "Frost": 20,
+      "Fire": -20,
+      "Poison": 0,
+      "Lightning": 0
+    },
+    "MagicalResistance": {
+      "Arcane": 0,
+      "Chaos": 0,
+      "Void": 0,
+      "Nature": 0,
+      "Life": -50,
+      "Death": 50
+    },
+    "Tags": [ "Undead" ],
+    "ExpGain": 15,
+    "GoldModifier": 1.0
+  },
+  {
     "Name": "Goblin Raider",
     "Power": 3,
     "PlayerDeathDescription": "The goblin collapses, cursing you as it dies.",
@@ -321,7 +489,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Greenskin" ],
+    "Tags": [ "Greenskin", "Living" ],
     "ExpGain": 10,
     "GoldModifier": 0.5
   },
@@ -353,7 +521,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Greenskin" ],
+    "Tags": [ "Greenskin", "Living" ],
     "ExpGain": 25,
     "GoldModifier": 1.5
   },
@@ -385,7 +553,7 @@
       "Life": 0,
       "Death": 0
     },
-    "Tags": [ "Elemental", "Boss" ],
+    "Tags": [ "Mythical", "Boss" ],
     "ExpGain": 150,
     "GoldModifier": 2.0
   }
