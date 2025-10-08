@@ -20,22 +20,22 @@ namespace Saga.Dungeon
             for (int i = 0; i < roomCount; i++)
             {
                 int index = Program.Rand.Next(roomNamesAndDesc.Length);
-                if (dungeonName == "Undercroft" && !rooms.Contains(new OldJailCells())  &&
+                if (dungeonName == "Undercroft" && i !=0 && !rooms.Exists(room => room.RoomName == "Old jail cells")  &&
                     !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") &&
                     !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
                     rooms.Add(new OldJailCells());
-                //} else if (dungeonName == "Sewers" &&
-                  //  !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
-                  //  !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
-                  //  rooms.Add(new ValveHall());
-                //} else if (dungeonName == "Mine" &&
-                  //  !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
-                  //  !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
-                  //  rooms.Add(new BlacksmithRoom());
-                //} else if (dungeonName == "Natural Cave" &&
-                  //  !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
-                  //  !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
-                  //  rooms.Add(new UndergroundLake());
+                } else if (dungeonName == "Sewers" && i != 0 && !rooms.Exists(room => room.RoomName == "Valve hall") &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                    rooms.Add(new ValveHall());
+                } else if (dungeonName == "Mine" && i != 0 && !rooms.Exists(room => room.RoomName == "Mine blacksmith") &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                    rooms.Add(new BlacksmithRoom());
+                } else if (dungeonName == "Natural Cave" && i != 0 && !rooms.Exists(room => room.RoomName == "Underground lake") &&
+                    !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "") &&
+                    !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "")) {
+                    rooms.Add(new UndergroundLake());
                 } else {
 
                     switch (Program.Rand.Next(1, 100 + 1)) {

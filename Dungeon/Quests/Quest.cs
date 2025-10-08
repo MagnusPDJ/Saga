@@ -33,12 +33,14 @@ namespace Saga.Dungeon.Quests
                 foreach (IItem item in Program.CurrentPlayer.Inventory) {
                     if (item == null) {
                         continue;
-                    }
+                    }                   
                     foreach (string target in Requirements.Keys) {
                         if (item is ICraftingItem item1 && item.ItemId == target) {
                             if (item1.Amount == Requirements[target]) {
                                 return true;
                             }
+                        } else if (item is IQuestItem qItem && qItem.ItemId == target) {
+                            return true;
                         }
                     }
                 }

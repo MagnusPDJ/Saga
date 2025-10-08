@@ -60,45 +60,47 @@ namespace Saga.Dungeon.Rooms
             //slow print:
             Console.Clear();
             HUDTools.RoomHUD();
-            HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 30);
-            HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4):", 10);
-            HUDTools.Print("   o    <- starting position", 5);
+            HUDTools.ClearLastLine(1);
+            HUDTools.Print(" As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n so you decide to tread carefully.", 30);            
+            HUDTools.Print("    o    <- starting position", 5);
             for (int j = 0; j < 4; j++) {
-                HUDTools.Print(puzzle[j] + "\n", 10);
-            }
-
+                HUDTools.Print(" " + puzzle[j] + "\n", 10);
+            }           
             //Player action sequence:
             string location = "";
             for (int i = 0; i < 4;) {
                 Console.Clear();
                 HUDTools.RoomHUD();
+                HUDTools.ClearLastLine(1);
                 if (i == 0) {
-                    HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 0);
-                    HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4):", 0);
-                    HUDTools.Print("   o    <- starting position", 0);
+                    HUDTools.Print(" As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n so you decide to tread carefully.", 0);
+                    
+                    HUDTools.Print("    o    <- starting position", 0);
                     for (int j = 0; j < 4; j++) {
-                        HUDTools.Print(puzzle[j] + "\n", 0);
+                        HUDTools.Print(" " + puzzle[j] + "\n", 0);
                     }
+                    HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
                 } else {
-                    HUDTools.Print("As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\nso you decide to tread carefully.", 0);
-                    HUDTools.Print("Choose your path (each rune position corresponds to a number 1-4):", 0);
+                    HUDTools.Print(" As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n so you decide to tread carefully.", 0);
+                    
                     for (int j = 0; j < 4; j++) {
                         if (i == j) {
-                            Console.Write($"{location} <- Your position");
+                            Console.Write($" {location} <- Your position");
                         }
-                        HUDTools.Print("\n" + puzzle[j], 0);
+                        HUDTools.Print("\n " + puzzle[j], 0);
                     }
                     Console.WriteLine();
-                }
+                    HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
+                }                
                 string input = TextInput.PlayerPrompt();
                 if (int.TryParse(input, out int number) && number < 5 && number > 0) {
                     if (positions[i] == number - 1) {
                         Program.SoundController.Play("footsteps");
-                        HUDTools.Print($"You stepped on the {c} rune, nothing happens...", 10);
+                        HUDTools.Print($" You stepped on the {c} rune, nothing happens...", 10);
                         location = "";
                         i++;
                         for (int j = 1; j < number; j++) {
-                            location += "  ";
+                            location += "   ";
                         }
                         location += "o";
                         for (int j = 4; j > number; j--) {
@@ -107,13 +109,13 @@ namespace Saga.Dungeon.Rooms
                         TextInput.PressToContinue();
                     } else {
                         Program.SoundController.Play("darts");
-                        HUDTools.Print($"Darts fly out of the walls! You take 2 damage.)", 10);
+                        HUDTools.Print($" Darts fly out of the walls! You take 2 damage.)", 10);
                         Program.CurrentPlayer.TakeDamage(2);
                         TextInput.PressToContinue();
-                        Program.CurrentPlayer.CheckForDeath("You start to feel sick. The poison from the darts slowly kills you");
+                        Program.CurrentPlayer.CheckForDeath(" You start to feel sick. The poison from the darts slowly kills you");
                     }
                 } else if (int.TryParse(input, out _)) {
-                    Console.WriteLine("Invalid Input: Whole numbers 1-4 only");
+                    Console.WriteLine(" Invalid Input: Whole numbers 1-4 only");
                     TextInput.PressToContinue();
                 } else {
                     Program.CurrentPlayer.BasicActions(input);
@@ -123,7 +125,7 @@ namespace Saga.Dungeon.Rooms
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
             Cleared = true;
-            LootSystem.GetFixedExp(75 * Program.CurrentPlayer.Level);
+            LootSystem.GetFixedExp(70 * Program.CurrentPlayer.Level);
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(16);
         }

@@ -28,7 +28,7 @@ namespace Saga.Dungeon.Rooms
                 } else if (Enemy != null) {
                     HUDTools.RoomHUD();
                     HUDTools.ClearLastLine(1);
-                    HUDTools.Print($"You return to the room where you left the {Enemy.Name}...", 10);
+                    HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
                     TextInput.PressToContinue();
                     new CombatController(Program.CurrentPlayer, Enemy).Combat();
                     if (Program.RoomController.Ran == true) {
@@ -53,9 +53,9 @@ namespace Saga.Dungeon.Rooms
             Console.Clear();
             Program.SoundController.Play("laugh");
             HUDTools.RoomHUD();
-            HUDTools.Print("The door slowly creaks open as you peer into the dark room. You see a tall man with a ", 20);
+            HUDTools.Print(" The door slowly creaks open as you peer into the dark room. You see a tall man with a", 20);
             Program.SoundController.Play("troldmandskamp");
-            HUDTools.Print("long beard and pointy hat, looking at a large tome.", 20);
+            HUDTools.Print(" long beard and pointy hat, looking at a large tome.", 20);
             TextInput.PressToContinue();
 
             Enemy = EnemyFactory.CreateByName("Dark Wizard");
