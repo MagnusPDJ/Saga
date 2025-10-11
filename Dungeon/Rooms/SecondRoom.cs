@@ -12,8 +12,7 @@ namespace Saga.Dungeon.Rooms
         }
         public override void LoadRoom() {
             if (!Visited) Visited = true;
-            
-            EnemySpawned = true;
+                  
             SecondEncounter();
             if (Program.RoomController.Ran == true) {
                 Program.RoomController.Ran = false;
@@ -35,7 +34,8 @@ namespace Saga.Dungeon.Rooms
                            $" in the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
 
-            Enemy = EnemyFactory.CreateByName("Feral dog");          
+            Enemy = EnemyFactory.CreateByName("Feral dog");
+            EnemySpawned = true;
             new CombatController(Program.CurrentPlayer, Enemy).Combat();
         }
 

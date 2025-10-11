@@ -29,23 +29,22 @@ namespace Saga.Dungeon.Rooms
                             Enemy = null;
                         } else {
                             CorpseDescription = " The treasure chest stands with an open lid and looted for anything valuable.";
-                        }
-                        
+                        }                       
                     }
-                } else if (Enemy != null) {
-                    HUDTools.RoomHUD();
-                    HUDTools.ClearLastLine(1);
-                    HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
-                    TextInput.PressToContinue();
-                    new CombatController(Program.CurrentPlayer, Enemy).Combat();
-                    if (Program.RoomController.Ran == true) {
-                        Program.RoomController.Ran = false;
-                        Program.RoomController.ChangeRoom(Exits[0].keyString);
-                    } else {
-                        Cleared = true;
-                        CorpseDescription = Enemy!.EnemyCorpseDescription;
-                        Enemy = null;
-                    }
+                }
+            } else if (Enemy != null) {
+                HUDTools.RoomHUD();
+                HUDTools.ClearLastLine(1);
+                HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
+                TextInput.PressToContinue();
+                new CombatController(Program.CurrentPlayer, Enemy).Combat();
+                if (Program.RoomController.Ran == true) {
+                    Program.RoomController.Ran = false;
+                    Program.RoomController.ChangeRoom(Exits[0].keyString);
+                } else {
+                    Cleared = true;
+                    CorpseDescription = Enemy!.EnemyCorpseDescription;
+                    Enemy = null;
                 }
             }
 
@@ -68,8 +67,7 @@ namespace Saga.Dungeon.Rooms
                     break;
                 } else if (input == "y") {
                     chestOpened = true;
-                    if (Program.Rand.NextDouble() < 0.5f) {
-                        EnemySpawned = true;
+                    if (Program.Rand.NextDouble() < 0.5f) {                  
                         Program.SoundController.Play("mimic");
                         HUDTools.Print(" As you touch the frame of the chest, it springs open splashing you with saliva!");
                         Program.SoundController.Play("troldmandskamp");
@@ -78,6 +76,7 @@ namespace Saga.Dungeon.Rooms
                         TextInput.PressToContinue();
 
                         Enemy = EnemyFactory.CreateByName("Mimic");
+                        EnemySpawned = true;
                         new CombatController(Program.CurrentPlayer, Enemy).Combat();
                         break;
                     } else {

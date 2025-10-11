@@ -6,6 +6,8 @@ namespace Saga.Dungeon.Rooms
 {
     public class HallwayRoom : RoomBase
     {
+        private const double EnemySpawnChance = 0.10;
+        private const double PuzzleChance = 0.75;
         public HallwayRoom(string name, string desc) {
             RoomName = name;
             Description = desc;
@@ -14,11 +16,42 @@ namespace Saga.Dungeon.Rooms
         public override void LoadRoom() {
             if (!Visited) Visited = true;
 
-            if (!Cleared) PuzzleOneEncounter();
-
+            if (!EnemySpawned && !Cleared) {
+                double rollForEncounter = Program.Rand.NextDouble();
+                if (rollForEncounter <= EnemySpawnChance) {
+                    RandomCombatEncounter();
+                    if (Program.RoomController.Ran == true) {
+                        Program.RoomController.Ran = false;
+                        Program.RoomController.ChangeRoom(Exits[0].keyString);
+                    } else {
+                        Cleared = true;
+                        CorpseDescription = Enemy!.EnemyCorpseDescription;
+                        Enemy = null;
+                    }
+                } else if (rollForEncounter <= PuzzleChance) {
+                    RunePuzzleEncounter();
+                } else {
+                    Cleared = true;
+                }
+            } else if (Enemy != null) {
+                HUDTools.RoomHUD();
+                HUDTools.ClearLastLine(1);
+                HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
+                TextInput.PressToContinue();
+                new CombatController(Program.CurrentPlayer, Enemy).Combat();
+                if (Program.RoomController.Ran == true) {
+                    Program.RoomController.Ran = false;
+                    Program.RoomController.ChangeRoom(Exits[0].keyString);
+                } else {
+                    Cleared = true;
+                    CorpseDescription = Enemy!.EnemyCorpseDescription;
+                    Enemy = null;
+                }
+            }
+            
             IdleInRoom();
         }
-        public void PuzzleOneEncounter() {
+        public void RunePuzzleEncounter() {
             Console.Clear();
             Program.SoundController.Play("footsteps");
             Program.SoundController.Play("runetrap");

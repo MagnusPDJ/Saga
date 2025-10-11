@@ -46,6 +46,7 @@ namespace Saga.Dungeon.Rooms
             TextInput.PressToContinue();
 
             Enemy = EnemyFactory.CreateByName("Human captor");
+            EnemySpawned = true;
             new CombatController(Program.CurrentPlayer, Enemy).Combat();
         }
         public static void MeetGheed() {

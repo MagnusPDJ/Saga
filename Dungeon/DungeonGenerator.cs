@@ -88,7 +88,7 @@ namespace Saga.Dungeon
             }
 
             // Add one-way exits between rooms with less than 3 exits
-            int countToAdd = Program.Rand.Next(3);
+            int countToAdd = Program.Rand.Next(2);
             int numberAdded = 0;
                 for (int a = 0; a < rooms.Count; a++) {
                     if (countToAdd == numberAdded) break;

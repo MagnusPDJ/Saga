@@ -25,5 +25,22 @@ namespace Saga.Dungeon.Rooms
             }
             Program.RoomController.ChangeRoom(exit);
         }
+        public virtual void RandomCombatEncounter() {
+            Program.SoundController.Play("kamp");
+            Enemy = SpawnManager.SpawnEnemyInDungeon(Program.CurrentPlayer, Program.RoomController.CurrentDungeonInstance.DungeonName);
+            EnemySpawned = true;
+            HUDTools.RoomHUD();
+            HUDTools.ClearLastLine(1);
+            switch (Program.Rand.Next(0, 2)) {
+                case int x when x == 0:
+                    HUDTools.Print($"You turn a corner and there you see a {Enemy.Name}...", 10);
+                    break;
+                case int x when x == 1:
+                    HUDTools.Print($"You break down a door and find a {Enemy.Name} inside!", 10);
+                    break;
+            }
+            TextInput.PressToContinue();
+            new CombatController(Program.CurrentPlayer, Enemy).Combat();
+        }
     }
 }
