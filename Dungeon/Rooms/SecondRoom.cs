@@ -33,7 +33,8 @@ namespace Saga.Dungeon.Rooms
             Program.SoundController.Play("kamp");
             HUDTools.RoomHUD();
             HUDTools.ClearLastLine(1);
-            HUDTools.Print($" The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\n in the darkness, but before you could react the beastly dog engages you.");
+            HUDTools.Print($" The big door creaks and you continue down the gloomy hallway. You Spot a pair of red glowing eyes\n" +
+                           $" in the darkness, but before you could react the beastly dog engages you.");
             TextInput.PressToContinue();
 
             Enemy = EnemyFactory.CreateByName("Feral dog");          

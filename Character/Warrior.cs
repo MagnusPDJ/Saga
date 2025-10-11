@@ -1,9 +1,7 @@
-﻿using Saga.Assets;
-using Saga.Character.DmgLogic;
+﻿using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
 using Saga.Items;
 using Saga.Items.Loot;
-using System.Text.Json;
 
 namespace Saga.Character
 {

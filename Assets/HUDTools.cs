@@ -262,7 +262,7 @@ namespace Saga.Assets
             WriteCenterLine("      ##   ##          ##   ##      ##   ##          ## ");
             WriteCenterLine("########  ##            ##  ##########  ##            ##");
             WriteCenterLine("########  ##            ##  ##########  ##            ##");
-            WriteCenterLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            WriteCenterLine(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
             WriteCenterLine("1.          Play  \n");
             WriteCenterLine("2.        Settings\n");
             WriteCenterLine("3.       Quit Game\n");
@@ -533,7 +533,7 @@ namespace Saga.Assets
                     Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Min}/{s.Tier.Max})", 0);
                 }
             }
-            Print("\nEnter the number of the skill to unlock, or '(b)ack' to exit.", 10);
+            Print("\n Enter the number of the skill to unlock, or '(b)ack' to exit.", 10);
         }
         public static void InventoryScreen() {
             Console.Clear();
@@ -631,7 +631,7 @@ namespace Saga.Assets
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                  Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
                  Console.WriteLine($" Fighting: {Monster.Name}!");
-                 Console.WriteLine($" Strength: {Monster.Attack} <> Enemy health: {Monster.Health}/{Monster.MaxHealth}");
+                 Console.WriteLine($" Power: {Monster.Power}\tAttack: {Monster.Attack}\tEnemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (Program.CurrentPlayer.DerivedStats.Initiative >= Monster.Initiative) {
                 Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");
@@ -639,19 +639,19 @@ namespace Saga.Assets
                 Console.WriteLine("\n  The enemy goes first!");
                   Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
-            Console.WriteLine($"\t{Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($"\t     Your Health:   {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth                  }  | | Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($"\t          Mana:     {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana                      }  | | Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($"\t   Action Points:   {combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}  | | Gold: ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($"\tLevel: {Program.CurrentPlayer.Level}");
-                 Console.Write("\tEXP  ");Console.Write("[");ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25);Console.WriteLine("]");
-            Console.WriteLine($"\n ============== Actions ============|=============== Info ==============");
-            Console.WriteLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "\t\t   ")} |  (C)haracter screen              |");
-            Console.WriteLine($" |  (2) Attack     (3) Heal         |   Combat (L)og                   |");
-            Console.WriteLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
-            Console.WriteLine($" ===================================|===================================");
-            Console.WriteLine($" {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");
-            Console.WriteLine($"  Choose an action...\n");
+            Console.WriteLine($"\t\t{Program.CurrentPlayer.Name} the {Program.CurrentPlayer.CurrentClass}:");
+            WriteCenterLine($"  Your Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m | | Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
+            WriteCenterLine($"       Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m | |    Mana Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
+            WriteCenterLine($"Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}\u001b[0m | |         Gold:   ${Program.CurrentPlayer.Gold}");
+            WriteCenterLine($"Level: {Program.CurrentPlayer.Level}                                                            ");
+             WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25) + "]                                  \n");
+            WriteCenterLine($" ============== Actions ============|=============== Info ==============");
+            WriteCenterLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "\t\t   ")} |  (C)haracter screen              |");
+            WriteCenterLine($" |  (2) Attack     (3) Heal         |   Combat (L)og                   |");
+            WriteCenterLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
+            WriteCenterLine($" ===================================|===================================");
+            WriteCenterLine($" {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}                                                          ");
+            Console.WriteLine($"\n Choose an action...\n");
         }
         public static void RoomHUD() {
             Console.Clear();

@@ -28,24 +28,23 @@ namespace Saga.Dungeon.Rooms
         public void FirstEncounter() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
-            HUDTools.Print("You awake in a cold and dark room. You feel dazed and are having trouble remembering");
-            HUDTools.Print("anything about your past.");
+            HUDTools.Print(" You awake in a cold and dark room. You feel dazed and are having trouble remembering anything\n about your past.");
             if (string.IsNullOrWhiteSpace(Program.CurrentPlayer.Name) == true) {
-                HUDTools.Print("You can't even remember your own name...");
+                HUDTools.Print(" You can't even remember your own name...");
                 Program.CurrentPlayer.Name = "Adventurer";
             } else {
-                HUDTools.Print($"You know your name is {Program.CurrentPlayer.Name}.");
+                HUDTools.Print($" You know your name is {Program.CurrentPlayer.Name}.");
             }
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
-            HUDTools.Print("You grope around in the darkness until you find a door handle. You feel some resistance as");
-            HUDTools.Print("you turn the handle, but the rusty lock breaks with little effort. You see your captor");
-            HUDTools.Print("standing with his back to you outside the door.");
-            HUDTools.Print($"You throw open the door, grabbing a {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
+            HUDTools.Print(" You grope around in the darkness until you find a door handle. You feel some resistance as you\n" +
+                           " turn the handle, but the rusty lock breaks with little effort. You see your captor standing with\n" +
+                           " his back to you outside the door.");
+            HUDTools.Print($" You throw open the door, grabbing a {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName} then {(Program.CurrentPlayer.CurrentClass == "Mage" ? "preparing an incantation" : "")}{(Program.CurrentPlayer.CurrentClass == "Warrior" ? "charging toward your captor" : "")}{(Program.CurrentPlayer.CurrentClass == "Archer" ? "nocking an arrow" : "")}.", 30);
             Program.SoundController.Stop();
             Program.SoundController.Play("taunt");
             Program.SoundController.Play("kamp");
-            HUDTools.Print("He turns...");
+            HUDTools.Print(" He turns...");
             TextInput.PressToContinue();
 
             Enemy = EnemyFactory.CreateByName("Human captor");

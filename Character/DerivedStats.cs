@@ -104,7 +104,7 @@ namespace Saga.Character
             }
         }
         int CalculateMaxHealth() {
-            int baseHealth = 5;
+            int baseHealth = 6;
             if (_player!.CurrentClass == "Warrior") baseHealth += 6 * _player!.Attributes.Constitution;
             if (_player!.CurrentClass == "Mage") baseHealth += 4 * _player!.Attributes.Constitution;
             if (_player!.CurrentClass == "Archer") baseHealth += 5 * _player!.Attributes.Constitution;

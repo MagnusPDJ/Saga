@@ -9,7 +9,6 @@ using System.Configuration;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
-using static System.Windows.Forms.Design.AxImporter;
 
 namespace Saga
 {
@@ -240,7 +239,7 @@ namespace Saga
                                 }
                             }
                         }
-                    } else if (data[0] == "new game") {
+                    } else if (data[0].Equals("new game", StringComparison.InvariantCultureIgnoreCase)) {
                         newP = true;
                         Player newPlayer = CreateCharacter(PickName(), PickClass());
                         newPlayer.Id = idCount; 
@@ -282,21 +281,23 @@ namespace Saga
             string input1;
             do {
                 Console.Clear();
-                Console.WriteLine("//////////////");
-                Console.WriteLine("Enter a name: ");
+                Console.WriteLine("///////////////");
+                Console.WriteLine(" Enter a name: ");
                 do {
                     input = Console.ReadLine() ?? throw new ArgumentNullException("User Input Failed.");
                     if (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027')) {
-                        Console.WriteLine("Invalid name");
+                        Console.WriteLine(" Invalid name.");
+                        TextInput.PressToContinue();
+                        HUDTools.ClearLastLine(3);
                     }
                     else if (input.Length >= 30) {
-                        Console.WriteLine("Name is too long. Max 30 characters!");
+                        Console.WriteLine(" Name is too long. Max 30 characters!");
+                        TextInput.PressToContinue();
+                        HUDTools.ClearLastLine(3);
                     }
-                    else {
-                    }
-                } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length >= 30);
+                } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length > 30);
                 Console.Clear();
-                HUDTools.Print($"This is your name?\n{input}.\n(Y/N)",10);
+                HUDTools.Print($" This is your name?\n{input}.\n(Y/N)",10);
                 while (true) {
                     input1 = TextInput.PlayerPrompt();
                     if (input1 != "y" && input1 != "n") {

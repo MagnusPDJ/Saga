@@ -35,7 +35,7 @@ namespace Saga.Assets
                 HUDTools.CombatHUD(_enemy, this);
                 Program.SoundController.Stop();
                 Program.SoundController.Play("win");
-                LootSystem.GetCombatLoot(_enemy, $"You Won against the {_enemy.Name} on turn {Turn}!");
+                LootSystem.GetCombatLoot(_enemy, $" You Won against the {_enemy.Name} on turn {Turn}!");
                 Act1Quest.GainQuestProgress(_enemy);
             }
             _player.CheckForDeath(_enemy.PlayerDeathDescription);
