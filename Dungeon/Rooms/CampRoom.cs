@@ -1,7 +1,7 @@
 ﻿using Saga.Assets;
 using Saga.Character;
+using Saga.Dungeon.Quests;
 using Saga.Items.Loot;
-using static Saga.Dungeon.Encounters;
 
 namespace Saga.Dungeon.Rooms
 {
@@ -12,7 +12,7 @@ namespace Saga.Dungeon.Rooms
             Description = "";
         }
         public override void LoadRoom() {
-            if (Program.CurrentPlayer.CurrentAct == Encounters.Act.Start) {
+            if (Program.CurrentPlayer.CurrentAct == Act.Start) {
                 FirstCamp();
             }
             if (Program.CurrentPlayer.TimesExplored == 1) {
@@ -79,13 +79,14 @@ namespace Saga.Dungeon.Rooms
         public static void FirstCamp() {
             Console.Clear();
             Program.SoundController.Play("typewriter");
-            HUDTools.Print("You venture deeper and deeper, but while you explore your surroundings, you get queasy.");
-            HUDTools.Print("The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
+            HUDTools.Print(" You venture deeper and deeper, but while you explore your surroundings, you get queasy.");
+            HUDTools.Print(" The dark and cold dungeon walls seem to creep closer, you feel claustrophobic.");
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
             Program.SoundController.Stop();
             Program.SoundController.Play("campfire");
-            HUDTools.Print("You hastily gather some old wood scattered about and make a campfire. The shadows retract and\nyou feel at ease again. Although you are not out of danger, you can stay for a while and rest.");
+            HUDTools.Print(" You hastily gather some old wood scattered about and make a campfire. The shadows retract and\n" +
+                           " you feel at ease again. Although you are not out of danger, you can stay for a while and rest.");
             Program.CurrentPlayer.CurrentAct = Act.Act1;
             TextInput.PressToContinue();
         }
@@ -93,11 +94,16 @@ namespace Saga.Dungeon.Rooms
             Console.Clear();
             Program.SoundController.Play("typewriter");
             Program.SoundController.Play("labyrinthchange");
-            HUDTools.Print($"As you enter the camp and close the door behind you, everything shakes and there are loud\nsounds of stone grinding against each other. Sand and pebbles fall from the ceiling and you\ncollapse to the floor from the vibrations.");
-            HUDTools.Print($"After a few moments, you regain your composure and you check on Gheed.");
+            HUDTools.Print($" As you enter the camp and close the door behind you, everything shakes and there are loud\n" +
+                           $" sounds of stone grinding against each other. Sand and pebbles fall from the ceiling and you\n" +
+                           $" collapse to the floor from the vibrations.");
+            HUDTools.Print($" After a few moments, you regain your composure and you check on Gheed.");
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(1);
-            HUDTools.Print($"'What was that?', you ask, 'it sounded like an earthquake'.\n'Indeed', Gheed answers, 'Although, I suspect it wasn't destructive in nature. That is what makes\nthis labyrinth a prison for those who enter. When you open that door again, you will find that\nall the rooms have changed.'");
+            HUDTools.Print($" 'What was that?', you ask, 'it sounded like an earthquake'.\n" +
+                           $" 'Indeed', Gheed answers, 'Although, I suspect it wasn't destructive in nature. That is what makes\n" +
+                           $" this labyrinth a prison for those who enter. When you open that door again, you will find that\n" +
+                           $" all the rooms have changed.'");
             TextInput.PressToContinue();
             Program.SoundController.Stop();
         }

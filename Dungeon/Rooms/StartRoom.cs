@@ -13,17 +13,15 @@ namespace Saga.Dungeon.Rooms
             Exits = [new Exit() { keyString = "1", ExitTemplateDescription = "You see a big wooden door with rusted hinges leading into the {0}.", valueRoom = new SecondRoom() }];
         }
         public override void LoadRoom() {
-            string exit = "";
+            if (!Visited) Visited = true;
+            
             FirstEncounter();
-            MeetGheed();
-            Cleared = true;        
+            Cleared = true;
             CorpseDescription = Enemy!.EnemyCorpseDescription;
             Enemy = null;
-            HUDTools.RoomHUD();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
-            }
-            Program.RoomController.ChangeRoom(exit);
+            MeetGheed();
+
+            IdleInRoom();
         }
         public void FirstEncounter() {
             Console.Clear();
@@ -70,7 +68,7 @@ namespace Saga.Dungeon.Rooms
             HUDTools.Print(" 'Then come back to me, I will then have been able to set up a shop where you can spend ");
             HUDTools.Print(" some of that gold you are bound to have found,' he chuckles and rubs his hands at the thought.");
             NonPlayableCharacters.AddNpcToCamp("Gheed");
-            HUDTools.Print($" You nod and prepare your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}. You should start by \u001b[96mlooking around\u001b[0m...");
+            HUDTools.Print($" You nod and prepare your {(Program.CurrentPlayer.Equipment.Right_Hand as IItem)?.ItemName}. You should start by '\u001b[96mlook around\u001b[0m'...");
             TextInput.PressToContinue();
             Program.SoundController.Stop();
         }

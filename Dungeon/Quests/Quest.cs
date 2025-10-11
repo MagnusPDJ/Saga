@@ -3,6 +3,15 @@ using System.Text.Json.Serialization;
 
 namespace Saga.Dungeon.Quests
 {
+    public enum Act
+    {
+        Start,
+        Act1,
+        Act2,
+        Act3,
+        Act4,
+        Act5
+    }
 
     public enum Type {
         Elimination,

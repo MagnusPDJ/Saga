@@ -44,12 +44,7 @@ namespace Saga.Dungeon.Rooms
                 }
             }
 
-            string exit = "";
-            HUDTools.RoomHUD();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
-            }
-            Program.RoomController.ChangeRoom(exit);
+            IdleInRoom();
         }
         public void RandomBasicCombatEncounter() {
             Program.SoundController.Play("kamp");

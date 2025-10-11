@@ -11,12 +11,9 @@ namespace Saga.Dungeon.Rooms
             MaxExits = 1;
         }
         public override void LoadRoom() {
-            string exit = "";
-            HUDTools.RoomHUD();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
-            }
-            Program.RoomController.ChangeRoom(exit);
+            if (!Visited) Visited = true;
+
+            IdleInRoom();
         }
     }
 }

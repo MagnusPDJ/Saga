@@ -7,11 +7,12 @@ namespace Saga.Dungeon.Rooms
     {
         public SecondRoom() {
             RoomName = "Hallway";
-            Description = "";
+            Description = " Nothing noteworthy.";
             Exits = [new Exit() { keyString = "1", ExitTemplateDescription = "The hallway continues deeper into the {0}.", valueRoom = RoomController.Camp }];
         }
         public override void LoadRoom() {
-            string exit = "";
+            if (!Visited) Visited = true;
+            
             EnemySpawned = true;
             SecondEncounter();
             if (Program.RoomController.Ran == true) {
@@ -21,12 +22,9 @@ namespace Saga.Dungeon.Rooms
                 Cleared = true;
                 CorpseDescription = Enemy!.EnemyCorpseDescription;
                 Enemy = null;
-                HUDTools.RoomHUD();
-                while (exit == "") {
-                    exit = TextInput.PlayerPrompt(true);
-                }
-                Program.RoomController.ChangeRoom(exit);
             }
+
+            IdleInRoom();
         }
         public void SecondEncounter() {
             Console.Clear();

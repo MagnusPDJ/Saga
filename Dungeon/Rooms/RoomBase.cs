@@ -1,4 +1,5 @@
 ﻿using Saga.Dungeon.Enemies;
+using Saga.Assets;
 
 namespace Saga.Dungeon.Rooms
 {
@@ -16,5 +17,13 @@ namespace Saga.Dungeon.Rooms
         public string CorpseDescription { set; get; } = "";
 
         public abstract void LoadRoom();
+        public virtual void IdleInRoom() {
+            string exit = "";
+            HUDTools.RoomHUD();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
+            Program.RoomController.ChangeRoom(exit);
+        }
     }
 }

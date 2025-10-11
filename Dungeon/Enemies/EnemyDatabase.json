@@ -36,7 +36,7 @@
     "Name": "Feral dog",
     "Power": 1,
     "PlayerDeathDescription": "The dog clamps onto your throat, ripping it open and drowning your scream in a wet gurgle.",
-    "EnemeyCorpseDescription": " The feral dog lies dead, its body torn and bleeding.",
+    "EnemyCorpseDescription": " The feral dog lies dead, its body torn and bleeding.",
     "MaxHealth": 8,
     "Health": 8,
     "Attack": 2,
@@ -150,11 +150,11 @@
   {
     "Name": "Big slime",
     "Power": 1,
-    "PlayerDeathDescription": " The slime engulfs you whole, all your gear, hair and skin starts to corrode away - the acid burns while you suffocate.",
+    "PlayerDeathDescription": " The slime engulfs you whole, all your gear, hair and skin starts to corrode away - the acid burns\n while you suffocate.",
     "EnemyCorpseDescription": " There is a slimy pool slowly melting the floor creating unbearable fumes.",
-    "MaxHealth": 15,
-    "Health": 15,
-    "Attack": 2,
+    "MaxHealth": 12,
+    "Health": 12,
+    "Attack": 1,
     "Initiative": 1,
     "Armor": 0,
     "PhysicalResistance": {
@@ -191,7 +191,7 @@
   {
     "Name": "Kobold",
     "Power": 1,
-    "PlayerDeathDescription": " The kobold hits your shin making you fall over. Then the kobold manages to finish you off with its weapon.",
+    "PlayerDeathDescription": " The kobold hits your shin making you fall over. Then the kobold manages to finish you off with its\n weapon.",
     "EnemyCorpseDescription": " The kobold lies dead, murdered, candle brutally taken.",
     "MaxHealth": 7,
     "Health": 7,

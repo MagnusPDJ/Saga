@@ -15,7 +15,7 @@ namespace Saga.Character
     [JsonDerivedType(typeof(Mage), typeDiscriminator: "mage")]
     public abstract class Player {
         public string CurrentClass { get; }
-        public Encounters.Act CurrentAct { get; set; }
+        public Act CurrentAct { get; set; }
         public string Name { get; set; }
         public int Id { get; set; }
         public int Level { get; set; }
@@ -45,7 +45,7 @@ namespace Saga.Character
             CurrentClass = currentClass;
             SkillTree = skillTree;
             Level = 1;
-            CurrentAct = Encounters.Act.Start;
+            CurrentAct = Act.Start;
             Equipment = new Equipment(this);
             Inventory = new IItem[10];
             QuestLog = [];

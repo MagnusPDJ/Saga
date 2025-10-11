@@ -15,11 +15,13 @@ namespace Saga.Dungeon
             int roomCount = Program.Rand.Next(minRooms, maxRooms + 1);
 
             // Give each room a name and description:
-            var roomNamesAndDesc = DungeonDatabase.GetDungeons()[dungeonName];
+            var roomNamesAndDesc = DungeonDatabase.GetDungeons()[dungeonName][0];
+            var hallwayNamesAndDesc = DungeonDatabase.GetDungeons()[dungeonName][1];
             var rooms = new List<RoomBase>(roomCount);
             for (int i = 0; i < roomCount; i++)
             {
-                int index = Program.Rand.Next(roomNamesAndDesc.Length);
+                int roomPicked = Program.Rand.Next(roomNamesAndDesc.Count);
+                int hallPicked = Program.Rand.Next(hallwayNamesAndDesc.Count);
                 if (dungeonName == "Undercroft" && i !=0 && !rooms.Exists(room => room.RoomName == "Old jail cells")  &&
                     !Program.CurrentPlayer.FailedQuests.Exists(quest => quest.Name == "Free Flemsha") &&
                     !Program.CurrentPlayer.CompletedQuests.Exists(quest => quest.Name == "Free Flemsha")) {
@@ -40,16 +42,16 @@ namespace Saga.Dungeon
 
                     switch (Program.Rand.Next(1, 100 + 1)) {
                         default:
-                            rooms.Add(new DungeonRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                            rooms.Add(new DungeonRoom(roomNamesAndDesc[roomPicked][0], roomNamesAndDesc[roomPicked][1]));
                             break;
                         case int n when n <= 10 && Program.CurrentPlayer.Level > 1:
                             rooms.Add(new WizardRoom());
                             break;
                         case int n when 10 < n && n <= 20 && Program.CurrentPlayer.Level > 1:
-                            rooms.Add(new ChestRoom(roomNamesAndDesc[index][0], roomNamesAndDesc[index][1]));
+                            rooms.Add(new ChestRoom(roomNamesAndDesc[roomPicked][0], roomNamesAndDesc[roomPicked][1]));
                             break;
                         case int n when 20 < n && n <= 40:
-                            rooms.Add(new HallwayRoom());
+                            rooms.Add(new HallwayRoom(hallwayNamesAndDesc[hallPicked][0], hallwayNamesAndDesc[hallPicked][1]));
                             break;
                     }                           
                 }
@@ -132,18 +134,16 @@ namespace Saga.Dungeon
 
         private static void ConnectRoomsBidirectional(RoomBase a, RoomBase b, string dungeonName)
         {
-            var exits = DungeonDatabase.GetExits()[dungeonName];
-            string exitA = exits[0][Program.Rand.Next(exits[0].Count)];
-            string exitB = exits[0][Program.Rand.Next(exits[0].Count)];
+            var exits = DungeonDatabase.GetExits()[dungeonName][0];
+            string exitTemplate = exits[Program.Rand.Next(exits.Count)];
             
-            a.Exits.Add(new Exit() { valueRoom = b, ExitTemplateDescription = exitA });
+            a.Exits.Add(new Exit() { valueRoom = b, ExitTemplateDescription = exitTemplate });
         
-            string backExitTemplate = exitB;
-            b.Exits.Add(new Exit() { valueRoom = a, ExitTemplateDescription = backExitTemplate });
+            b.Exits.Add(new Exit() { valueRoom = a, ExitTemplateDescription = exitTemplate });
         }
         private static void ConnectRoomsOneDirectional(RoomBase a, RoomBase b, string dungeonName) {
-            var exits = DungeonDatabase.GetExits()[dungeonName];
-            string exitTemplate = exits[1][Program.Rand.Next(exits[1].Count)];
+            var exits = DungeonDatabase.GetExits()[dungeonName][1];
+            string exitTemplate = exits[Program.Rand.Next(exits.Count)];
             a.Exits.Add(new Exit { valueRoom = b, ExitTemplateDescription = exitTemplate,
                 IsOneWay = true
             });

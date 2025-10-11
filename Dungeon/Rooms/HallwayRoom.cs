@@ -6,9 +6,9 @@ namespace Saga.Dungeon.Rooms
 {
     public class HallwayRoom : RoomBase
     {
-        public HallwayRoom() {
-            RoomName = "Hallway";
-            Description = " The runes you crossed cover the lenght of the floor. The trap seems inert now.";
+        public HallwayRoom(string name, string desc) {
+            RoomName = name;
+            Description = desc;
             MaxExits = 2;
         }
         public override void LoadRoom() {
@@ -16,15 +16,7 @@ namespace Saga.Dungeon.Rooms
 
             if (!Cleared) PuzzleOneEncounter();
 
-            Program.SoundController.Stop();
-
-
-            string exit = "";
-            HUDTools.RoomHUD();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
-            }
-            Program.RoomController.ChangeRoom(exit);
+            IdleInRoom();
         }
         public void PuzzleOneEncounter() {
             Console.Clear();
@@ -100,7 +92,7 @@ namespace Saga.Dungeon.Rooms
                         location = "";
                         i++;
                         for (int j = 1; j < number; j++) {
-                            location += "   ";
+                            location += "  ";
                         }
                         location += "o";
                         for (int j = 4; j > number; j--) {
@@ -124,6 +116,7 @@ namespace Saga.Dungeon.Rooms
             HUDTools.ClearLastLine(1);
             Program.SoundController.Stop();
             Program.SoundController.Play("win");
+            CorpseDescription = " The runes you crossed cover the lenght of the floor. The trap seems inert now.";
             Cleared = true;
             LootSystem.GetFixedExp(70 * Program.CurrentPlayer.Level);
             TextInput.PressToContinue();

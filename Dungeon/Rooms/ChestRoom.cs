@@ -49,12 +49,7 @@ namespace Saga.Dungeon.Rooms
                 }
             }
 
-            string exit = "";
-            HUDTools.RoomHUD();
-            while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
-            }
-            Program.RoomController.ChangeRoom(exit);
+            IdleInRoom();
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public void Encounter() {

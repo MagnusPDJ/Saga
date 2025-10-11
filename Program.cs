@@ -3,6 +3,7 @@ using Saga.Character;
 using Saga.Character.Skills;
 using Saga.Dungeon;
 using Saga.Dungeon.Enemies;
+using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;
@@ -122,7 +123,7 @@ namespace Saga
             CurrentPlayer = Load(out bool newP);
             NewStart(newP);
             if (CurrentPlayer != null) {
-                if (CurrentPlayer.CurrentAct == Encounters.Act.Act1) {                       
+                if (CurrentPlayer.CurrentAct == Act.Act1) {                       
                     SoundController.Stop();                       
                     RoomController.ChangeRoom("", RoomController.Camp);
                 }

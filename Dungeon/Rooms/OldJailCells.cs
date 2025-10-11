@@ -12,22 +12,17 @@ namespace Saga.Dungeon.Rooms
             MaxExits = 1;
         }
         public override void LoadRoom() {
-            string exit = "";
+            if (!Visited) Visited = true;
+
             if (!Cleared) {
                 MeetFlemsha();
-            }
-            
-            if (Program.RoomController.Ran == true) {
-                Program.RoomController.Ran = false;
-                Program.RoomController.ChangeRoom(Exits[0].keyString);
-            } else {
-                HUDTools.RoomHUD();
-                while (exit == "") {
-                    exit = TextInput.PlayerPrompt(true);
+                if (Program.RoomController.Ran == true) {
+                    Program.RoomController.Ran = false;
+                    Program.RoomController.ChangeRoom(Exits[0].keyString);
                 }
-                Description = " You look around the old jail. There is nothing of value.";
-                Program.RoomController.ChangeRoom(exit);
             }
+
+            IdleInRoom();
         }
         public void MeetFlemsha() {
             Console.Clear();
@@ -114,6 +109,15 @@ namespace Saga.Dungeon.Rooms
                     break;
                 }
             }
+        }
+        public override void IdleInRoom() {
+            string exit = "";
+            HUDTools.RoomHUD();
+            while (exit == "") {
+                exit = TextInput.PlayerPrompt(true);
+            }
+            Description = " You look around the old jail. There is nothing of value.";
+            Program.RoomController.ChangeRoom(exit);
         }
     }
 }
