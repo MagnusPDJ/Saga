@@ -32,13 +32,22 @@ namespace Saga.Items
         }
         public string Equip() {
             int index = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i == null || Program.CurrentPlayer.Equipment.Potion.Length == 0);
-            Program.CurrentPlayer.Equipment.Potion.SetValue(this, index);
-            return "New potion equipped!";
+            if (index != -1) {
+                Program.CurrentPlayer.Equipment.Potion.SetValue(this, index);
+                int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
+                if (a == -1) {
+                } else {
+                    Program.CurrentPlayer.Inventory.SetValue(null, a);
+                }
+                return "New potion equipped!";
+            } else {
+                return "No empty potion slot available!";
+            }
         }
         public string UnEquip() {
             int index1 = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(this, index1);
-            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i is IItem { ItemName: "Mana Potion" });
+            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i is IItem { ItemId: "manapotion" });
             Program.CurrentPlayer.Equipment.Potion.SetValue(null, index2);
             return "Potion unequipped!";
         }

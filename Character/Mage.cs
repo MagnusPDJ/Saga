@@ -11,8 +11,6 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("magestarterweapon") as IEquipable)?.Equip();
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
-            HealingPotion healingPotion = new();
-            healingPotion.Equip();
             LearnedSkills.Add(new ArcaneMissile());
             SkillTree.QuickCast = "Arcane Missiles";
         }

@@ -192,8 +192,8 @@ namespace Saga.Character
         }
         //Metode til at kalde basic actions (heal, inventory og character).
         public void BasicActions(string input) {
-            if (input == "h" || input == "heal") {
-                //Heal
+            if (input == "d" || input == "drink" || input == "potion" || input == "drink potion") {
+                Equipment.ChoosePotionToDrink();
                 var potion = Array.Find(Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
                 potion?.Consume();
             } else if (input == "c" || input == "character" || input == "character screen") {
@@ -255,7 +255,7 @@ namespace Saga.Character
             Program.SoundController.Play("win");
             HUDTools.Print($"\u001b[96m You've completed the quest: {quest.Name}!\u001b[0m", 15);
             LootSystem.GetFixedGold(quest.Gold);
-            LootSystem.GetPotions(quest.Potions);
+            LootSystem.GetHealingPotions(quest.Potions);
             LootSystem.GetFixedExp(quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);

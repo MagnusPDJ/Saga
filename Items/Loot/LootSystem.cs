@@ -26,9 +26,9 @@ namespace Saga.Items.Loot
             HUDTools.Print(message, 15);
             GetGold(monster.GoldModifier);
             if (monster.Name == "Human captor") {
-                GetPotions(Program.Rand.Next(5, 8));
+                GetHealingPotions(Program.Rand.Next(5, 8));
             } else if (monster is IHuman || monster is IGreenskin || monster.Name == "Mimic") {
-                GetPotions();
+                GetHealingPotions();
             }
             List<IItem> drops = RollLoot(monster.LootTable);
             foreach (var item in drops) {
@@ -56,7 +56,7 @@ namespace Saga.Items.Loot
             List<IArmor> armors = JsonSerializer.Deserialize<List<IArmor>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.ArmorDatabase.json"), Program.Options) ?? [];
             HUDTools.Print(" You find Treasure!", 10);
             GetGold(3);
-            GetPotions();
+            GetHealingPotions();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             int getTreasure = Program.Rand.Next(1, 100 + 1);
             if (getTreasure <= 20) {
@@ -209,7 +209,7 @@ namespace Saga.Items.Loot
         public static void GetQuestLoot(int findgold, int findpotions, string questname) {
             GetGold(findgold);
             if (findpotions != 0) {
-                GetPotions(findpotions);
+                GetHealingPotions(findpotions);
             }
             Console.ForegroundColor = ConsoleColor.Cyan;
             if (questname == "MeetFlemsha") {
@@ -239,20 +239,26 @@ namespace Saga.Items.Loot
             }
         }
         //Metode til at få healing potions, default random 0-2:
-        public static void GetPotions(int amount = 0) {
-            int p;
+        public static void GetHealingPotions(int amount = 0) {
+            int potionsToGet;
             if (amount == 0) {
                 int[] numbers = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2];
                 var picked = Program.Rand.Next(0, numbers.Length);
-                p = numbers[picked];
+                potionsToGet = numbers[picked];
             } else {
-                p = amount;
+                potionsToGet = amount;
             }
-            if (p > 0) {
-                var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
-                if (potion is not null) {
-                    HUDTools.Print($"\u001b[90m You loot {p} healing potions\u001b[0m", 20);
-                    potion.PotionQuantity += p;
+            if (potionsToGet > 0) {
+                var equippedPotion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                var potionInInv = Array.Find(Program.CurrentPlayer.Inventory, p => p is IItem { ItemName: "Healing Potion" });
+                if (equippedPotion != null) {
+                    equippedPotion.PotionQuantity += potionsToGet;
+                    return;
+                } else if (potionInInv != null && potionInInv is IConsumable cPotion) {
+                    cPotion.PotionQuantity += potionsToGet;
+                } else {
+                    var emptySlot = Array.FindIndex(Program.CurrentPlayer.Inventory, slot => slot == null || Program.CurrentPlayer.Inventory.Length == 0);
+                    Program.CurrentPlayer.Inventory.SetValue(new HealingPotion { PotionQuantity = potionsToGet }, emptySlot);
                 }
             }
         }

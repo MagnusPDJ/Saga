@@ -119,7 +119,6 @@ namespace Saga.Assets
                     }
                 break;
                 case "3":
-                    //Heal
                     var potion = Array.Find(_player.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
                     if (potion is not null) {
                         if (CanUseAction(potion)) {

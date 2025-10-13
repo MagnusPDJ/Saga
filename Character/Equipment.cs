@@ -266,5 +266,9 @@ namespace Saga.Character
             BonusAttackSpeed = bonusAttackSpeed;
             BonusCastingSpeed = bonusCastingSpeed;
         }
+
+        public void ChoosePotionToDrink() {
+
+        }
     }
 }

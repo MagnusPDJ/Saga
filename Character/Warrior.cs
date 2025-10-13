@@ -11,8 +11,6 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("warriorstarterweapon") as IEquipable)?.Equip();
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
-            HealingPotion healingPotion = new();
-            healingPotion.Equip();
         }
         public override (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {          
             (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);

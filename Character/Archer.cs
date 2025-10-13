@@ -13,8 +13,6 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("archerstarterweapon") as IEquipable)?.Equip();
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
-            HealingPotion healingPotion = new();
-            healingPotion.Equip();
         }
         public override bool RunAway(EnemyBase Monster) {
             bool escaped = false;

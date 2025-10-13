@@ -125,10 +125,12 @@ namespace Saga.Assets
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
             var equipped = Program.CurrentPlayer.Equipment.AsEnumerable().FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
-            if (equipped.Value == null) {
+            var potion = Program.CurrentPlayer.Equipment.Potion.FirstOrDefault(x => x != null && (x as IItem)!.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            if (equipped.Value == null && potion == null) {
                 Console.WriteLine("\nNo such item equipped...");
-            }
-            else {
+            } else if (potion != null && potion is IEquipable ePotion) {
+                HUDTools.Print($"\n{ePotion.UnEquip()}", 3);
+            } else if (equipped.Value != null) {
                 HUDTools.Print($"\n{equipped.Value.UnEquip()}", 3);
             }
             TextInput.PressToContinue();
