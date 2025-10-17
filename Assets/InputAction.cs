@@ -125,7 +125,7 @@ namespace Saga.Assets
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
             var equipped = Program.CurrentPlayer.Equipment.AsEnumerable().FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
-            var potion = Program.CurrentPlayer.Equipment.Potion.FirstOrDefault(x => x != null && (x as IItem)!.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            var potion = Program.CurrentPlayer.Equipment.Potions.FirstOrDefault(x => x != null && (x as IItem)!.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
             if (equipped.Value == null && potion == null) {
                 Console.WriteLine("\nNo such item equipped...");
             } else if (potion != null && potion is IEquipable ePotion) {
@@ -169,7 +169,7 @@ namespace Saga.Assets
     }
     public class DrinkHealingPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
-            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
             potion?.Consume();
             HUDTools.RoomHUD();
             return "";

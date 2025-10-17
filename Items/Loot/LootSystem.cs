@@ -249,17 +249,17 @@ namespace Saga.Items.Loot
                 potionsToGet = amount;
             }
             if (potionsToGet > 0) {
-                var equippedPotion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                var equippedPotion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
                 var potionInInv = Array.Find(Program.CurrentPlayer.Inventory, p => p is IItem { ItemName: "Healing Potion" });
                 if (equippedPotion != null) {
-                    equippedPotion.PotionQuantity += potionsToGet;
-                    return;
+                    equippedPotion.PotionQuantity += potionsToGet;                 
                 } else if (potionInInv != null && potionInInv is IConsumable cPotion) {
                     cPotion.PotionQuantity += potionsToGet;
                 } else {
                     var emptySlot = Array.FindIndex(Program.CurrentPlayer.Inventory, slot => slot == null || Program.CurrentPlayer.Inventory.Length == 0);
                     Program.CurrentPlayer.Inventory.SetValue(new HealingPotion { PotionQuantity = potionsToGet }, emptySlot);
                 }
+                HUDTools.Print($"\u001b[90m You loot {potionsToGet} healing potions\u001b[0m", 20);
             }
         }
         //Metode til at få en tilfældig mængde exp eller en bestemt mængde:

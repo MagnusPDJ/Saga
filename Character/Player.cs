@@ -194,7 +194,7 @@ namespace Saga.Character
         public void BasicActions(string input) {
             if (input == "d" || input == "drink" || input == "potion" || input == "drink potion") {
                 Equipment.ChoosePotionToDrink();
-                var potion = Array.Find(Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                var potion = Array.Find(Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
                 potion?.Consume();
             } else if (input == "c" || input == "character" || input == "character screen") {
                 HUDTools.CharacterScreen();

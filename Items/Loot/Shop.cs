@@ -53,7 +53,7 @@ namespace Saga.Items.Loot
                 //Wait for input
                 string input = TextInput.PlayerPrompt();
                 if (input == "u" || input == "use" || input == "heal") {
-                    var potion = Array.Find(p.Equipment.Potion, po => po is IItem { ItemName: "Healing Potion" });
+                    var potion = Array.Find(p.Equipment.Potions, po => po is IItem { ItemName: "Healing Potion" });
                     potion?.Consume();
                     TextInput.PressToContinue();
                 } else if (input == "c" || input == "character" || input == "character screen") {
@@ -109,7 +109,7 @@ namespace Saga.Items.Loot
                         HUDTools.CharacterScreen();
                         TextInput.PressToContinue();
                     } else if (input1 == "u" || input == "use" || input == "heal") {
-                        var potion = Array.Find(p.Equipment.Potion, po => po is IItem { ItemName: "Healing Potion" });
+                        var potion = Array.Find(p.Equipment.Potions, po => po is IItem { ItemName: "Healing Potion" });
                         potion?.Consume();
                         TextInput.PressToContinue();
                     } else if (input1.Any(c => char.IsNumber(c))) {
@@ -129,7 +129,7 @@ namespace Saga.Items.Loot
         }
         //Metode til at genere priser i shoppen.
         public static int ShopPrice(string item) {
-            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
             int potionP = (potion as IItem)?.CalculateItemPrice() ?? 0;
             int sellPotionP = potionP / 2;
             switch (item) {
@@ -236,7 +236,7 @@ namespace Saga.Items.Loot
         }
         //Metode til at sælge til shoppen.
         static void TrySellPotion(string item, int price, Player p) {
-            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
             switch (item) {
                 case "potion":
                 if (potion?.PotionQuantity > 0) {

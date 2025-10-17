@@ -111,7 +111,7 @@ namespace Saga.Character
             return baseHealth;
         }
         int CalculateMaxMana() {
-            int baseMana = 5;
+            int baseMana = 6;
             if (_player!.CurrentClass == "Warrior") baseMana += 4 * _player!.Attributes.WillPower;
             if (_player!.CurrentClass == "Mage") baseMana += 6 * _player!.Attributes.WillPower;
             if (_player!.CurrentClass == "Archer") baseMana += 5 * _player!.Attributes.WillPower;

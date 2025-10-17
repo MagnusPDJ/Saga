@@ -23,7 +23,7 @@ namespace Saga.Items
             PotionQuantity = 0;
             ItemId = "manapotion";
             ItemName = "Mana Potion";
-            ItemDescription = "They are a bit minty but have a rancid after taste.";
+            ItemDescription = " They are a bit minty but have a rancid after taste.";
             ItemPrice = CalculateItemPrice();
         }
 
@@ -31,45 +31,48 @@ namespace Saga.Items
             return 20 + 10 * PotionPotency;
         }
         public string Equip() {
-            int index = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i == null || Program.CurrentPlayer.Equipment.Potion.Length == 0);
+            int index = Array.FindIndex(Program.CurrentPlayer.Equipment.Potions, i => i == null || Program.CurrentPlayer.Equipment.Potions.Length == 0);
             if (index != -1) {
-                Program.CurrentPlayer.Equipment.Potion.SetValue(this, index);
+                Program.CurrentPlayer.Equipment.Potions.SetValue(this, index);
                 int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                 if (a == -1) {
                 } else {
                     Program.CurrentPlayer.Inventory.SetValue(null, a);
                 }
-                return "New potion equipped!";
+                return " New potion equipped!";
             } else {
-                return "No empty potion slot available!";
+                return " No empty potion slot available!";
             }
         }
         public string UnEquip() {
             int index1 = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(this, index1);
-            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i is IItem { ItemId: "manapotion" });
-            Program.CurrentPlayer.Equipment.Potion.SetValue(null, index2);
-            return "Potion unequipped!";
+            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potions, i => i is IItem { ItemId: "manapotion" });
+            Program.CurrentPlayer.Equipment.Potions.SetValue(null, index2);
+            return " Potion unequipped!";
         }
         public bool Consume() {
             if (PotionQuantity == 0) {
-                HUDTools.Print("No potions left!", 5);
+                HUDTools.Print(" No potions left!", 5);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
                 return false;
             } else if (Program.CurrentPlayer.Mana == Program.CurrentPlayer.DerivedStats.MaxMana) {
-                HUDTools.Print("You are already at max mana...", 5);
+                HUDTools.Print(" You are already at max mana...", 5);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
                 return false;
             } else {
-                HUDTools.Print("You use a mana potion", 10);
+                HUDTools.Print(" You use a mana potion", 10);
                 PotionQuantity--;
+                if (PotionQuantity == 0) {
+                    Program.CurrentPlayer.Equipment.RemovePotion();
+                }
                 Program.CurrentPlayer.RegainMana(PotionPotency);
                 if (Program.CurrentPlayer.Mana == Program.CurrentPlayer.DerivedStats.MaxMana) {
-                    HUDTools.Print("You go to max mana!", 10);
+                    HUDTools.Print(" You go to max mana!", 10);
                 } else {
-                    HUDTools.Print($"You gain {PotionPotency} mana", 10);
+                    HUDTools.Print($" You gain {PotionPotency} mana", 10);
                 }
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(4);

@@ -23,7 +23,7 @@ namespace Saga.Items
             PotionQuantity = 0;
             ItemId = "healingpotion";
             ItemName = "Healing Potion";
-            ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur.";
+            ItemDescription = " They have a metallic taste and are somewhat sweet, but they reek of sulphur.";
             ItemPrice = CalculateItemPrice();
         }
 
@@ -31,58 +31,59 @@ namespace Saga.Items
             return 20 + 10 * PotionPotency;
         }
         public string Equip() {
-            int index = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i == null || Program.CurrentPlayer.Equipment.Potion.Length == 0);
+            int index = Array.FindIndex(Program.CurrentPlayer.Equipment.Potions, i => i == null || Program.CurrentPlayer.Equipment.Potions.Length == 0);
             if (index != -1) {
-                Program.CurrentPlayer.Equipment.Potion.SetValue(this, index);
+                Program.CurrentPlayer.Equipment.Potions.SetValue(this, index);
                 int a = Array.IndexOf(Program.CurrentPlayer.Inventory, this);
                 if (a == -1) {
                 } else {
                     Program.CurrentPlayer.Inventory.SetValue(null, a);
                 }
-                return "New potion equipped!";
+                return " New potion equipped!";
             } else {
-                return "No empty potion slot available!";
+                return " No empty potion slot available!";
             }
         }
         public string UnEquip() {
             int index1 = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
             Program.CurrentPlayer.Inventory.SetValue(this, index1);
-            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potion, i => i is IItem { ItemId: "healingpotion" });
-            Program.CurrentPlayer.Equipment.Potion.SetValue(null, index2);
-            return "Potion unequipped!";
+            int index2 = Array.FindIndex(Program.CurrentPlayer.Equipment.Potions, i => i is IItem { ItemId: "healingpotion" });
+            Program.CurrentPlayer.Equipment.Potions.SetValue(null, index2);
+            return " Potion unequipped!";
         }
         public bool Consume() {
-            if (PotionQuantity == 0) {
-                HUDTools.Print("No potions left!", 5);
-                TextInput.PressToContinue();
-                HUDTools.ClearLastLine(3);
-                return false;
-            } else if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                HUDTools.Print("You are already at max health...", 5);
+            if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
+                HUDTools.Print(" You are already at max health...", 5);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
                 return false;
             } else if (Program.CurrentPlayer.CurrentClass == "Mage") {
                 int mageBonus = 1 + Program.CurrentPlayer.Level * 2;
-                HUDTools.Print("You use a healing potion amplified by your magic", 10);
                 PotionQuantity--;
+                if (PotionQuantity == 0) {
+                    Program.CurrentPlayer.Equipment.RemovePotion();
+                }
+                HUDTools.Print(" You use a healing potion amplified by your magic", 10);
                 Program.CurrentPlayer.RegainHealth(PotionPotency + mageBonus);
                 if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                    HUDTools.Print("You heal to max health!", 10);
+                    HUDTools.Print(" You heal to max health!", 10);
                 } else {
-                    HUDTools.Print($"You gain {PotionPotency + mageBonus} health", 10);
+                    HUDTools.Print($" You gain {PotionPotency + mageBonus} health", 10);
                 }
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(4);
                 return true;
             } else {
-                HUDTools.Print("You use a healing potion", 10);
+                HUDTools.Print(" You use a healing potion", 10);
                 PotionQuantity--;
+                if (PotionQuantity == 0) {
+                    Program.CurrentPlayer.Equipment.RemovePotion();
+                }
                 Program.CurrentPlayer.RegainHealth(PotionPotency);
                 if (Program.CurrentPlayer.Health == Program.CurrentPlayer.DerivedStats.MaxHealth) {
-                    HUDTools.Print("You heal to max health!", 10);
+                    HUDTools.Print(" You heal to max health!", 10);
                 } else {
-                    HUDTools.Print($"You gain {PotionPotency} health", 10);
+                    HUDTools.Print($" You gain {PotionPotency} health", 10);
                 }
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(4);

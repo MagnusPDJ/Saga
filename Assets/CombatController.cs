@@ -119,13 +119,11 @@ namespace Saga.Assets
                     }
                 break;
                 case "3":
-                    var potion = Array.Find(_player.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
-                    if (potion is not null) {
-                        if (CanUseAction(potion)) {
-                            bool usedAP = potion.Consume();
-                            SpendActionPoints(usedAP, potion);
-                        }
-                    }
+                    var potion = _player.Equipment.ChoosePotionToDrink();
+                    if (potion != null && CanUseAction(potion)) {
+                        bool usedAP = potion.Consume();
+                        SpendActionPoints(usedAP, potion);
+                    }                    
                 break;
                 case "4":
                     //Run                   

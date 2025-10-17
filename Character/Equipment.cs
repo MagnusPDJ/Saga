@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using Saga.Character.DmgLogic;
+using Saga.Assets;
 
 namespace Saga.Character
 {  
@@ -25,7 +26,7 @@ namespace Saga.Character
         public IEquipable? Finger_2 { get; set; }
         public IEquipable? Crest { get; set; }
         public IEquipable? Trinket { get; set; }
-        public IConsumable[] Potion { get; set; } = new IConsumable[4];
+        public IConsumable[] Potions { get; set; } = new IConsumable[4];
 
         public event Action? EquipmentChanged;
 
@@ -267,8 +268,46 @@ namespace Saga.Character
             BonusCastingSpeed = bonusCastingSpeed;
         }
 
-        public void ChoosePotionToDrink() {
+        public IConsumable? ChoosePotionToDrink() {
+            if (Array.FindIndex(Potions, p => p != null) == -1) {
+                Console.WriteLine(" No potions equipped.");
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return null;
+            } else {
+                Console.WriteLine(" Choose a potion to drink:");
+                for (int i = 0; i < 4; i++) {
+                    if (Potions[i] != null) {
+                        Console.WriteLine($"   {i + 1} - {(Potions[i] as IItem)!.ItemName}");
+                    }
+                }
+                string input = TextInput.PlayerPrompt();
+                if (int.TryParse(input, out int slot) && 1 <= slot && slot <= 4) {
+                    if (Potions[slot - 1] != null) {
+                        return Potions[slot - 1];
+                    } else {
+                        HUDTools.Print(" No potion in that slot!", 3);
+                        TextInput.PressToContinue();
+                        HUDTools.ClearLastLine(3);
+                        return null;
+                    }
+                } else {
+                    HUDTools.Print(" Invalid input!", 3);
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
+                    return null;
+                }
+            }
+        }
 
+        public void RemovePotion() {
+            foreach (var potion in Potions) {
+                if (potion != null && potion.PotionQuantity <= 0) {
+                    int index = Array.IndexOf(Potions, potion);
+                    Potions.SetValue(null, index);
+                    Console.WriteLine($" You have used up all of your {(potion as IItem)!.ItemName}s in slot {index + 1}.");
+                }
+            }
         }
     }
 }

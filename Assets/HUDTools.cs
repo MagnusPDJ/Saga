@@ -105,7 +105,7 @@ namespace Saga.Assets
                         break;
                     case "heal":
                         Console.WriteLine($"Turn: ");
-                        var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                        var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
                         if (potion != null) {
                             if (potion.PotionQuantity == 0) {
                                 Console.WriteLine($"You tried to drink a potion you didn't have.");
@@ -136,7 +136,7 @@ namespace Saga.Assets
                         Console.WriteLine($"You defended and lowered the next two attacks.");
                         break;
                     case "heal":
-                        var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+                        var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
                         if (potion != null) {
                             if (potion.PotionQuantity == 0) {
                                 Console.WriteLine($"You tried to drink a potion you didn't have.");
@@ -333,7 +333,7 @@ namespace Saga.Assets
             Console.WriteLine("]");
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
-            Console.WriteLine($"| Healing Potions:        {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
+            Console.WriteLine($"| Healing Potions:        {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
@@ -413,7 +413,7 @@ namespace Saga.Assets
                 }
             }
                 Console.WriteLine($"|  Sell Healing (P)otion        $ {Shop.ShopPrice("sellpotion")}");
-            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potion, p => p is IItem { ItemName: "Healing Potion" });
+            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
             if (potion is not null && potion.PotionQuantity >= 5) {
                 Console.WriteLine($"|  Sell (F)ive Healing Potions  $ {Shop.ShopPrice("sellpotion5")}");
             }
@@ -576,21 +576,22 @@ namespace Saga.Assets
                     Console.WriteLine("");
                 }
             }
-            Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
-            Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
             int i = 1;
-            foreach (IConsumable potion in Program.CurrentPlayer.Equipment.Potion) {
+            foreach (IConsumable potion in Program.CurrentPlayer.Equipment.Potions) {
                 if (potion == null) {
                     Console.WriteLine($"\u001b[90m Potion slot {i} - Empty\u001b[0m");
-                }
-                else if (potion is IItem iPotion) {
+                } else if (potion is IItem iPotion) {
                     Console.WriteLine($" Potion slot {i} - {iPotion.ItemName}: +{potion.PotionPotency} {(potion.PotionType == PotionType.Healing && Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}, Quantity: {potion.PotionQuantity}");
                 }
                 i++;
             }
+            Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
+            Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
+                } else if (item is IConsumable conItem) {
+                    Console.WriteLine($" {item.ItemName}: +{conItem.PotionPotency} {(conItem.PotionType == PotionType.Healing && Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}, Quantity: {conItem.PotionQuantity}");
                 } else if (item is IQuestItem qItem) {
                     Console.WriteLine($"\u001b[96m Quest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
                 } else if (item is ICraftingItem cItem) {
@@ -646,16 +647,16 @@ namespace Saga.Assets
                   Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
             Console.WriteLine($"\t\t{Program.CurrentPlayer.Name} the {Program.CurrentPlayer.CurrentClass}:");
-            WriteCenterLine($"  Your Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potion[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            WriteCenterLine($"       Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m | |    {(Program.CurrentPlayer.Equipment.Potion[1] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            WriteCenterLine($"Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potion[2] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            WriteCenterLine($"               | | {(Program.CurrentPlayer.Equipment.Potion[1] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            WriteCenterLine($"               | | Gold:   ${Program.CurrentPlayer.Gold}");
+            WriteCenterLine($"                Your Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"                     Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"              Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"                           | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"            | | Gold:   ${Program.CurrentPlayer.Gold}");
            
             WriteCenterLine($"Level: {Program.CurrentPlayer.Level}                                                            ");
              WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25) + "]                                  \n");
             WriteCenterLine($" ============== Actions ============|=============== Info ==============");
-            WriteCenterLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "\t\t   ")} |  (C)haracter screen              |");
+            WriteCenterLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "               ")} |  (C)haracter screen              |");
             WriteCenterLine($" |  (2) Attack     (3) Drink Potion |   Combat (L)og                   |");
             WriteCenterLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
             WriteCenterLine($" ===================================|===================================");
@@ -666,8 +667,8 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine($" Location:\t{Program.RoomController.CurrentRoom.RoomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -684,8 +685,8 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine("[][][][][][][][]  Camp   [][][][][][][][]");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
-            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potion, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
+            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
             Console.Write(" EXP  ");
             Console.Write("[");

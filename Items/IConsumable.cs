@@ -15,5 +15,6 @@ namespace Saga.Items
         int PotionQuantity { get; set; }
         PotionType PotionType { get; }
         bool Consume();
+
     }
 }
