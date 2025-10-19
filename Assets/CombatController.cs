@@ -89,7 +89,7 @@ namespace Saga.Assets
                 case "1":
                     if (_player.SkillTree.QuickCast != string.Empty) {
                         ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
-                        if (quickcast is ITargetedSkill tSkill && tSkill.Cooldown >= tSkill.Timer) {
+                        if (quickcast is ITargetedSkill tSkill && tSkill.Cooldown > tSkill.Timer) {
                             if (CanUseAction(tSkill)) {
                                 bool usedAP = tSkill.Activate(_player, _enemy);
                                 if (usedAP) {
@@ -97,7 +97,7 @@ namespace Saga.Assets
                                     UsedMana = true;
                                 }
                             }
-                        } else if (quickcast is ISelfSkill sSkill && sSkill.Cooldown >= sSkill.Timer) {
+                        } else if (quickcast is ISelfSkill sSkill && sSkill.Cooldown > sSkill.Timer) {
                             if (CanUseAction(sSkill)) {
                                 bool usedAP = sSkill.Activate(_player);
                                 if (usedAP) {
@@ -106,7 +106,7 @@ namespace Saga.Assets
                                 }
                             }
                         } else {
-                            HUDTools.Print($" The skill is still on cooldown for {quickcast?.Timer} more turns!", 3);
+                            HUDTools.Print($" {quickcast?.Name} is still on cooldown for {quickcast?.Timer} more turn(s)!", 3);
                             TextInput.PressToContinue();
                             HUDTools.ClearLastLine(1);
                         }

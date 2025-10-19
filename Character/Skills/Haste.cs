@@ -26,7 +26,7 @@ namespace Saga.Character.Skills
 
                 // Buff logic here
 
-
+                Timer = Cooldown;
                 return true;
             } else {
                 HUDTools.Print(" Not enough mana!", 10);

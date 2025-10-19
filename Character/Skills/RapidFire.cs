@@ -20,7 +20,7 @@ namespace Saga.Character.Skills
         public string SpeedType => "Attack Speed";
         public RapidFire() {
             Name = "Rapid Fire";
-            Description = "Fire a ranged weapon more quickly, letting you shoot multiple times in one turn\n (Requires equipped ranged weapon.)";
+            Description = "Fire a weapon more quickly, letting you shoot multiple times in one turn\n (Requires equipped ranged weapon.)";
             IsUnlocked = true;
             ManaCost = 5;
         }
