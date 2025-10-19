@@ -1,4 +1,6 @@
-﻿using Saga.Character.DmgLogic;
+﻿
+
+using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
 using Saga.Items;
 using Saga.Items.Loot;

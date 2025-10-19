@@ -63,7 +63,10 @@ namespace Saga.Assets
                     UsedMana = false;
                 }
                 if (_enemy.Health > 0 && !Ran) {
-                    HUDTools.Print("Your turn ended.", 5);
+                    HUDTools.Print(" Your turn ended.", 5);
+                    foreach (var skill in _player.LearnedSkills) {
+                        if (skill.Timer > 0) skill.Timer--;
+                    }
                 }               
                 Endturn = false;
             }
@@ -79,32 +82,36 @@ namespace Saga.Assets
             string input = TextInput.PlayerPrompt();            
             switch (input) {
                 default:
-                    HUDTools.Print($"There is no {input} action!", 5);
+                    HUDTools.Print($" There is no {input} action!", 5);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(1);
                     break;
                 case "1":
                     if (_player.SkillTree.QuickCast != string.Empty) {
                         ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
-                        if (quickcast is ITargetedSkill skill) {
-                            if (CanUseAction(skill)) {
-                                bool usedAP = skill.Activate(_player, _enemy);
+                        if (quickcast is ITargetedSkill tSkill && tSkill.Cooldown >= tSkill.Timer) {
+                            if (CanUseAction(tSkill)) {
+                                bool usedAP = tSkill.Activate(_player, _enemy);
                                 if (usedAP) {
-                                    SpendActionPoints(usedAP, skill);
+                                    SpendActionPoints(usedAP, tSkill);
                                     UsedMana = true;
                                 }
                             }
-                        } else if (quickcast is ISelfSkill skill1) {
-                            if (CanUseAction(skill1)) {
-                                bool usedAP = skill1.Activate(_player);
+                        } else if (quickcast is ISelfSkill sSkill && sSkill.Cooldown >= sSkill.Timer) {
+                            if (CanUseAction(sSkill)) {
+                                bool usedAP = sSkill.Activate(_player);
                                 if (usedAP) {
-                                    SpendActionPoints(usedAP, skill1);
+                                    SpendActionPoints(usedAP, sSkill);
                                     UsedMana = true;
                                 }
                             }
+                        } else {
+                            HUDTools.Print($" The skill is still on cooldown for {quickcast?.Timer} more turns!", 3);
+                            TextInput.PressToContinue();
+                            HUDTools.ClearLastLine(1);
                         }
                     }  else {
-                        HUDTools.Print($"You have no skill selected for quickcast!", 3);
+                        HUDTools.Print($" You have no skill selected for quickcast!", 3);
                         TextInput.PressToContinue();
                         HUDTools.ClearLastLine(1);
                     }
@@ -137,7 +144,7 @@ namespace Saga.Assets
                 break;
                 case "5":
                     //Skill tree logic
-                    HUDTools.Print($"*Not implemented*", 3);
+                    HUDTools.Print($" *Not implemented*", 3);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                     break;
@@ -151,9 +158,9 @@ namespace Saga.Assets
                 break;
                 case "e":
                     if (RemainingActionPoints >= _player.DerivedStats.ActionPoints) {
-                        HUDTools.Print($"No Action Points spent, are you sure, you want to end turn? (Y/N)", 3);
-                        string input1 = TextInput.PlayerPrompt();
-                        if (input1 != "y") break;
+                        HUDTools.Print($" No Action Points spent, are you sure, you want to end turn? (Y/N)", 3);
+                        input = TextInput.PlayerPrompt();
+                        if (input != "y") break;
                     }
                     Endturn = true;
                 break;
@@ -167,25 +174,25 @@ namespace Saga.Assets
                 attack = 1;
             }
             Program.CurrentPlayer.TakeDamage(attack);
-            HUDTools.Print($"The Enemy Attacked and dealt {attack} damage!\n", 10);
+            HUDTools.Print($" The Enemy Attacked and dealt {attack} damage!\n", 10);
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(3);
         }
         bool CanUseAction(IAction action) {
-            if (action is IActiveSkill skill && skill.Name == "Basic Attack") {
-                if (skill.ActionPointCost / _player.DerivedStats.AttackSpeed <= RemainingActionPoints) {
+            if (action is IActiveSkill basicAttack && basicAttack.Name == "Basic Attack") {
+                if (basicAttack.ActionPointCost / _player.DerivedStats.AttackSpeed <= RemainingActionPoints) {
                     return true;
                 } else {
-                    HUDTools.Print("Not enough Action Points to use your weapon", 10);
+                    HUDTools.Print(" Not enough Action Points to use your weapon", 10);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                     return false;
                 }
-            } else if (action is IActiveSkill skill1) {
-                if (skill1.ActionPointCost / _player.DerivedStats.CastingSpeed <= RemainingActionPoints) {
+            } else if (action is IActiveSkill skill) {
+                if (skill.ActionPointCost / _player.DerivedStats.CastingSpeed <= RemainingActionPoints) {
                     return true;
                 } else {
-                    HUDTools.Print("Not enough Action Points to use that skill", 10);
+                    HUDTools.Print(" Not enough Action Points to use that skill", 10);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                     return false;
@@ -194,7 +201,7 @@ namespace Saga.Assets
                 if (potion.ActionPointCost <= RemainingActionPoints) {
                     return true;
                 } else {
-                    HUDTools.Print("Not enough Action Points to drink that potion", 10);
+                    HUDTools.Print(" Not enough Action Points to drink that potion", 10);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                     return false;
@@ -204,10 +211,10 @@ namespace Saga.Assets
         }
         void SpendActionPoints(bool usedAP, IAction action) {
             if (usedAP) {
-                if (action is IActiveSkill skill && skill.Name == "Basic Attack") {
-                    RemainingActionPoints -= skill.ActionPointCost / _player.DerivedStats.AttackSpeed;
-                } else if (action is IActiveSkill skill1) {
-                    RemainingActionPoints -= skill1.ActionPointCost / _player.DerivedStats.CastingSpeed;
+                if (action is IActiveSkill attackSkill && attackSkill.SpeedType == "Attack Speed") {
+                    RemainingActionPoints -= attackSkill.ActionPointCost / _player.DerivedStats.AttackSpeed;
+                } else if (action is IActiveSkill castingSkill && castingSkill.SpeedType == "Casting Speed") {
+                    RemainingActionPoints -= castingSkill.ActionPointCost / _player.DerivedStats.CastingSpeed;
                 } else if (action is IConsumable potion) {
                     RemainingActionPoints -= potion.ActionPointCost;
                 }                       

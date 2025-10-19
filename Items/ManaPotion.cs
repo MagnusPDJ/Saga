@@ -23,7 +23,7 @@ namespace Saga.Items
             PotionQuantity = 0;
             ItemId = "manapotion";
             ItemName = "Mana Potion";
-            ItemDescription = " They are a bit minty but have a rancid after taste.";
+            ItemDescription = "They are a bit minty but have a rancid after taste.";
             ItemPrice = CalculateItemPrice();
         }
 

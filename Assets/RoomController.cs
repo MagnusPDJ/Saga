@@ -12,7 +12,7 @@ namespace Saga.Assets
             new Go("go"),
             new Use("use"),
             new Look("look"),
-            new DrinkHealingPotion("heal", "h"),
+            new DrinkHealingPotion("drink", "d"),
             new SeeCharacterScreen("character", "c"),
             new SeeInventory("inventory", "i"),
             new SeeQuestLog("questlog", "l"),

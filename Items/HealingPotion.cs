@@ -23,7 +23,7 @@ namespace Saga.Items
             PotionQuantity = 0;
             ItemId = "healingpotion";
             ItemName = "Healing Potion";
-            ItemDescription = " They have a metallic taste and are somewhat sweet, but they reek of sulphur.";
+            ItemDescription = "They have a metallic taste and are somewhat sweet, but they reek of sulphur.";
             ItemPrice = CalculateItemPrice();
         }
 

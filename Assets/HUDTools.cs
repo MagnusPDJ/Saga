@@ -631,7 +631,7 @@ namespace Saga.Assets
                     Console.WriteLine("");
                 }
             }
-            Print($"\nTo equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\nTo examine item write examine Itemname else (b)ack\n", 0);
+            Print($"\n To equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\n To examine item write examine Itemname else (b)ack\n", 0);
         }
         public static void CombatHUD(EnemyBase Monster, CombatController combatController) {
             Console.Clear();
@@ -650,9 +650,7 @@ namespace Saga.Assets
             WriteCenterLine($"                Your Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
             WriteCenterLine($"                     Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
             WriteCenterLine($"              Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"                           | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"            | | Gold:   ${Program.CurrentPlayer.Gold}");
-           
+            WriteCenterLine($"                     Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             WriteCenterLine($"Level: {Program.CurrentPlayer.Level}                                                            ");
              WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25) + "]                                  \n");
             WriteCenterLine($" ============== Actions ============|=============== Info ==============");
@@ -667,9 +665,10 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine($" Location:\t{Program.RoomController.CurrentRoom.RoomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($" Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
@@ -685,9 +684,10 @@ namespace Saga.Assets
             Console.Clear();
             Console.WriteLine("[][][][][][][][]  Camp   [][][][][][][][]");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
-            Console.WriteLine($" Health: {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\t|| Healing Potions: {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
-            Console.WriteLine($" Mana:   {Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\t|| Mana Potions:    {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Mana Potion" }))?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($" Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
@@ -790,20 +790,21 @@ namespace Saga.Assets
             Print("\nPress the number to talk to that NPC else write (b)ack", 10);
         }
         public static void PickClassHUD() {
-            Print($"=== Pick a class ===", 3);
-            Print($"1. Warrior:\n" +
-                           $"   The warrior class has a bonus to damage (based on level) making them strong in the early game.\n" +
-                           $"   Their primary stat is strength. A warrior is trained to use swords, axes and maces.\n" +
-                           $"   They can wear mail and plate armor.", 15);
-            Print($"2. Archer:\n" +
-                           $"   The archer class can always escape enemies and therefore can choose their battles more carefully.\n" +
-                           $"   Their primary stat is dexterity. An archer is trained to use daggers, bows and crossbows.\n" +
-                           $"   They can wear leather and mail.", 15);
-            Print($"3. Mage:\n" +
-                           $"   The mage class uses magic to amplify healing potion potency (based on level), but are usually\n" +
-                           $"   weaker in the early game. Their primary stat is intellect. A mage is trained to use tomes, wands\n" +
-                           $"   and staves. They can wear cloth and leather.\n", 15);
-            Print($"Enter a number from 1 to 3:", 3);
+            Print($"==== Pick a class ====", 3);
+            Print($" 1. Warrior:\n" +
+                           $"    The warrior class has a bonus to damage (based on level) making them strong in the early game.\n" +
+                           $"    Their primary stat is strength. A warrior is trained to use swords, axes and maces.\n" +
+                           $"    They can wear mail and plate armor.", 15);
+            Print($" 2. Archer:\n" +
+                           $"    The archer class can always escape enemies and can choose their battles more carefully.\n" +
+                           $"    Their primary stat is dexterity. An archer is trained to use daggers, bows and crossbows.\n" +
+                           $"    They can wear leather and mail.", 15);
+            Print($" 3. Mage:\n" +
+                           $"    The mage class uses magic to amplify healing potion potency (based on level), but are usually\n" +
+                           $"    weaker in the early game.\n" +
+                           $"    Their primary stat is intellect. A mage is trained to use tomes, wands and staves.\n" +
+                           $"    They can wear cloth and leather.\n", 15);
+            Print($" Enter a number from 1 to 3:", 3);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Saga.Assets;
+using Saga.Dungeon.Enemies;
 using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
-using Saga.Dungeon.Enemies;
 using Saga.Items;
 using Saga.Items.Loot;
 
@@ -13,6 +13,8 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("archerstarterweapon") as IEquipable)?.Equip();
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
+            LearnedSkills.Add(new RapidFire());
+            SkillTree.QuickCast = "Rapid Fire";
         }
         public override bool RunAway(EnemyBase Monster) {
             bool escaped = false;

@@ -105,11 +105,11 @@ namespace Saga
                     HUDTools.MainMenu();
                 }
                 else if (input == "3") {
-                    Console.WriteLine("Come back soon!");
+                    Console.WriteLine(" Come back soon!");
                     Environment.Exit(0);
                 }
                 else {
-                    Console.WriteLine("Wrong Input");
+                    Console.WriteLine(" Wrong Input");
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(4);
                 }
@@ -185,19 +185,19 @@ namespace Saga
                                     return player;
                                 }
                             }
-                            Console.WriteLine("There is no player with that id!");
+                            Console.WriteLine(" There is no player with that id!");
                             TextInput.PressToContinue();
                             HUDTools.ClearLastLine(3);
 
                         } else {
-                            Console.WriteLine("Your id needs to be a number! Press to continue!");
+                            Console.WriteLine(" Your id needs to be a number! Press to continue!");
                             TextInput.PressToContinue();
                             HUDTools.ClearLastLine(3);
                         }
                     } else if (data[0] == "delete") {
                         if (int.TryParse(data[1], out int id)) {
                             if (players.Count == 0) {
-                                Console.WriteLine("There is no player with that id!");
+                                Console.WriteLine(" There is no player with that id!");
                                 TextInput.PressToContinue();
                                 HUDTools.ClearLastLine(3);
                             } else {
@@ -205,13 +205,13 @@ namespace Saga
                                     if (player.Id == id) {
                                         File.Delete($"saves/{player.Id}.player");
                                         players.Remove(player);
-                                        Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
+                                        Console.WriteLine($" Save game {player.Name} - level {player.Level}, was deleted");
                                         TextInput.PressToContinue();
                                         Console.Clear();
                                         HUDTools.LoadSaves(players);
                                         break;
                                     } else {
-                                        Console.WriteLine("There is no player with that id!");
+                                        Console.WriteLine(" There is no player with that id!");
                                         TextInput.PressToContinue();
                                         HUDTools.ClearLastLine(3);
                                     }
@@ -219,7 +219,7 @@ namespace Saga
                             }
                         } else {
                             if (players.Count == 0) {
-                                Console.WriteLine("There is no player with that id!");
+                                Console.WriteLine(" There is no player with that id!");
                                 TextInput.PressToContinue();
                                 HUDTools.ClearLastLine(3);
                             } else {
@@ -227,13 +227,13 @@ namespace Saga
                                     if (data[1] == player.Name) {
                                         File.Delete($"saves/{player.Id}.player");
                                         players.Remove(player);
-                                        Console.WriteLine($"Save game {player.Name} - level {player.Level}, was deleted");
+                                        Console.WriteLine($" Save game {player.Name} - level {player.Level}, was deleted");
                                         TextInput.PressToContinue();
                                         Console.Clear();
                                         HUDTools.LoadSaves(players);
                                         break;
                                     } else {
-                                        Console.WriteLine("There is no player with that name!");
+                                        Console.WriteLine(" There is no player with that name!");
                                         TextInput.PressToContinue();
                                         HUDTools.ClearLastLine(3);
                                     }
@@ -256,12 +256,12 @@ namespace Saga
                                 return player;
                             }
                         }
-                        Console.WriteLine("There is no player with that name!");
+                        Console.WriteLine(" There is no player with that name!");
                         TextInput.PressToContinue();
                         HUDTools.ClearLastLine(3);
                     }
                 } catch (IndexOutOfRangeException) {
-                    Console.WriteLine("Your id needs to be a number! Press to continue!");
+                    Console.WriteLine(" Your id needs to be a number! Press to continue!");
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                 }
@@ -282,7 +282,7 @@ namespace Saga
             string input1;
             do {
                 Console.Clear();
-                Console.WriteLine("///////////////");
+                Console.WriteLine("////////////////////");
                 Console.WriteLine(" Enter a name: ");
                 do {
                     input = Console.ReadLine() ?? throw new ArgumentNullException("User Input Failed.");
@@ -297,12 +297,12 @@ namespace Saga
                         HUDTools.ClearLastLine(3);
                     }
                 } while (input.Any(c => !char.IsLetter(c) && !char.IsWhiteSpace(c)) && !input.Contains('-') && !input.Contains('\u0027') || input.Length > 30);
-                Console.Clear();
-                HUDTools.Print($" This is your name?\n{input}.\n(Y/N)",10);
+                HUDTools.ClearLastLine(2);
+                HUDTools.Print($" This is your name?\n{input}.\n (Y/N)",10);
                 while (true) {
                     input1 = TextInput.PlayerPrompt();
                     if (input1 != "y" && input1 != "n") {
-                        HUDTools.Print("Invalid input.", 3);
+                        HUDTools.Print(" Invalid input.", 3);
                         TextInput.PressToContinue();
                         HUDTools.ClearLastLine(3);
                     } else {
@@ -310,6 +310,8 @@ namespace Saga
                     }
                 }
             } while (input1 != "y");
+            HUDTools.ClearLastLine(4);
+            HUDTools.Print($"Your name:  {input}\n", 3);
             return input;
         }
 
@@ -317,59 +319,38 @@ namespace Saga
         public static int PickClass() {
             HUDTools.PickClassHUD();
             while (true) {
-                string input1 = TextInput.PlayerPrompt();
-                if (input1 == "1") {
-                    HUDTools.Print($"You want to become a Warrior?\n(Y/N)", 5);
-                    while (true) {
-                        string input2 = TextInput.PlayerPrompt();
-                        if (input2 == "y") {
-                            return 1;
-                        } else if (input2 == "n") {
-                            HUDTools.ClearLastLine(4);
-                            break;
-                        } else {
-                            HUDTools.Print("Invalid input.", 3);
-                            TextInput.PressToContinue();
-                            HUDTools.ClearLastLine(3);
-                        }
-                    }
-                }
-                else if (input1 == "2") {
-                    HUDTools.Print($"You want to become a Archer?\n(Y/N)",5);
-                    while (true) {
-                        string input2 = TextInput.PlayerPrompt();
-                        if (input2 == "y") {
-                            return 2;
-                        } else if (input2 == "n") {
-                            HUDTools.ClearLastLine(4);
-                            break;
-                        } else {
-                            HUDTools.Print("Invalid input.", 3);
-                            TextInput.PressToContinue();
-                            HUDTools.ClearLastLine(3);
-                        }
-                    }
-                }
-                else if (input1 == "3") {
-                    HUDTools.Print($"You want to become a Mage?\n(Y/N)",5);
-                    while (true) {
-                        string input2 = TextInput.PlayerPrompt();
-                        if (input2 == "y") {
-                            return 3;
-                        } else if (input2 == "n") {
-                            HUDTools.ClearLastLine(4);
-                            break;
-                        } else {
-                            HUDTools.Print("Invalid input.", 3);
-                            TextInput.PressToContinue();                  
-                            HUDTools.ClearLastLine(3);
-                        }
-                    }
-                }
-                else {
-                    HUDTools.Print("Please choose a listed class!",3);
+                string className = "";
+                int classNumber = -1;
+                string input = TextInput.PlayerPrompt();
+                if (input == "1") {
+                    className = " warrior";
+                    classNumber = 1;
+                } else if (input == "2") {
+                    className = "n archer";
+                    classNumber = 2;
+                } else if (input == "3") {
+                    className = " mage";
+                    classNumber = 3;
+                } else {
+                    HUDTools.Print(" Please choose a listed class!", 3);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
+                }
+                if (className != "" && classNumber != -1) {
+                    HUDTools.Print($" Do you want to become a{className}?\n (Y/N)", 3);
+                    while (true) {
+                        input = TextInput.PlayerPrompt();
+                        if (input == "y") {
+                            return classNumber;
+                        } else if (input == "n") {
+                            HUDTools.ClearLastLine(4);
+                            break;
+                        } else {
+                            HUDTools.Print(" Invalid input.", 3);
+                            TextInput.PressToContinue();
+                            HUDTools.ClearLastLine(3);
+                        }
+                    }
                 }
             }
         }

@@ -305,7 +305,7 @@ namespace Saga.Character
                 if (potion != null && potion.PotionQuantity <= 0) {
                     int index = Array.IndexOf(Potions, potion);
                     Potions.SetValue(null, index);
-                    Console.WriteLine($" You have used up all of your {(potion as IItem)!.ItemName}s in slot {index + 1}.");
+                    HUDTools.Print($" You have used up all of your {(potion as IItem)!.ItemName}s in slot {index + 1}.", 10);
                 }
             }
         }

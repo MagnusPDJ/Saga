@@ -1,6 +1,8 @@
-﻿using Saga.Character.DmgLogic;
+﻿using Saga.Character;
+using Saga.Character.DmgLogic;
 using Saga.Dungeon.Rooms;
 using Saga.Items;
+using Windows.Media.Capture.Core;
 
 namespace Saga.Assets
 {
@@ -66,29 +68,32 @@ namespace Saga.Assets
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
             var equipped = Program.CurrentPlayer.Equipment.AsEnumerable().FirstOrDefault(x => x.Value != null && x.Value.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
+            var potion = Program.CurrentPlayer.Equipment.Potions.FirstOrDefault(x => x != null && (x as IItem)!.ItemName.Equals(itemToSearchFor, StringComparison.CurrentCultureIgnoreCase));
             var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
-            if (equipped.Value != null) {
+            if (potion != null && potion is IItem iPotion) {
+                HUDTools.Print($"\n {iPotion.ItemDescription.Replace("\\n", "\n")}", 3);
+            } else if (equipped.Value != null) {
                 if (equipped.Value is IWeapon weapon) {
                     if (equipped.Value.ItemSlot == Slot.Left_Hand) {
                         Program.CurrentPlayer.Equipment.TryGetSlot(Slot.Right_Hand, out IEquipable? equipped1);
-                        HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{equipped1?.ItemDescription.Replace("\\n", "\n")}", 3);
+                        HUDTools.Print($"\n This is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n {equipped1?.ItemDescription.Replace("\\n", "\n")}", 3);
                     }
-                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{weapon.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\n This is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n {weapon.ItemDescription.Replace("\\n", "\n")}", 3);
                 } else if (equipped.Value is IArmor armor) {
-                    HUDTools.Print($"\nThis is an armor of type {armor.ArmorType}.\n{armor.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\n This is an armor of type {armor.ArmorType}.\n {armor.ItemDescription.Replace("\\n", "\n")}", 3);
                 } else {
-                    HUDTools.Print($"\n{equipped.Value.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\n {equipped.Value.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
             } else if (item != null) {
                 if (item is IWeapon weapon) {
-                    HUDTools.Print($"\nThis is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n{weapon.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\n This is a {weapon.WeaponCategory} weapon. {DamageHelper.Describe((IDamageType)weapon)}\n {weapon.ItemDescription.Replace("\\n", "\n")}", 3);
                 } else if (item is IArmor armor) {
-                    HUDTools.Print($"\nThis is an armor of type {armor.ArmorType}.\n{armor.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\n This is an armor of type {armor.ArmorType}.\n {armor.ItemDescription.Replace("\\n", "\n")}", 3);
                 } else {
-                    HUDTools.Print($"\n{item.ItemDescription.Replace("\\n", "\n")}", 3);
+                    HUDTools.Print($"\n {item.ItemDescription.Replace("\\n", "\n")}", 3);
                 }
             } else {
-                Console.WriteLine("\nNo such item exists...");
+                Console.WriteLine("\n No such item exists...");
             }
                 TextInput.PressToContinue();
             HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
@@ -169,7 +174,7 @@ namespace Saga.Assets
     }
     public class DrinkHealingPotion(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
-            var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
+            var potion = Program.CurrentPlayer.Equipment.ChoosePotionToDrink();
             potion?.Consume();
             HUDTools.RoomHUD();
             return "";

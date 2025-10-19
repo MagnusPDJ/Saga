@@ -4,5 +4,6 @@ namespace Saga.Character.Skills
 {
     public interface IActiveSkill : ISkill, IAction
     {
+        string SpeedType { get; }
     }
 }
