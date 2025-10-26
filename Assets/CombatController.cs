@@ -32,6 +32,10 @@ namespace Saga.Assets
             }
             //Tjekker om monstret er besejret:
             if (_enemy.Health <= 0) {
+                _player.BuffedStats.ClearAllBuffs();
+                foreach (var skill in _player.LearnedSkills) {
+                    if (skill.Timer > 0) skill.Timer = 0;
+                }
                 HUDTools.CombatHUD(_enemy, this);
                 Program.SoundController.Stop();
                 Program.SoundController.Play("win");

@@ -29,27 +29,28 @@
       ],
       "Mine": [
         [
-          [ "Ore storer", "" ],
-          [ "Old stope", "" ],
-          [ "Crew quarters", "" ],
-          [ "Rusty hoist", "" ]
+          [ "Ore storer", " Here the ore was counted and stored before it was shipped out of the mine." ],
+          [ "Old stope", " An open area that once was covered in ore that now have been mined out." ],
+          [ "Crew quarters", " Beds and hammocks are scattered all over the place. It looks as though everyone left in a hurry." ],
+          [ "Rusty hoist", " There is a big shaft that goes down into a dark abyss. Next to it is hoist that seems so brittle\n that it would break if you tried to use it." ]
         ],
         [
-          [ "Mineshaft", "" ],
-          [ "Cartway", "" ]
+          [ "Mineshaft", " A long tunnel with wooden boards as floor and timber beams are used to support the roof and walls." ],
+          [ "Cartway", " A long tunnel with metal rails across the floor used for moving minecarts with debris or ore." ],
+          [ "Winze", " A long tunnel that goes down at an angle, there is a hoist that can be used to move minecarts up\n and down."]
         ]
 
       ],
       "Natural Cave": [
         [
-          [ "Grotto", "" ],
-          [ "Dripstone cavern", "" ],
-          [ "Creature lair", "" ],
-          [ "Mineral cavern", "" ],
-          [ "Ore deposits", "" ]
+          [ "Grotto", " The cave expands into a big hollow room formed by an ancient dried up river." ],
+          [ "Dripstone cavern", " Multiple small ponds play a soothing melody from the constant dripping of water from stalactites." ],
+          [ "Creature lair", " It seems like an unknown creature used to live here. There are corpse leftovers and remains from\n excrements." ],
+          [ "Mineral cavern", " Big crystals shine and sparkle in the low light of your torch." ],
+          [ "Ore deposits", " Veins of metal flicker on the walls surrounding you signalling undiscovered ores." ]
         ],
         [
-          [ "Dark tunnel", ""]
+          [ "Dark tunnel", " Jagged and narrow walls lead deeper into the cave. The curves makes it hard to see how far it continues."]
         ]
       ]
     }

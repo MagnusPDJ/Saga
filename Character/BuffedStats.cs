@@ -168,29 +168,28 @@ namespace Saga.Character
                     else
                         bonusMagicRes[kv.Key] = kv.Value;
                 }
-
-                //Pri affix
-                BuffStr = bonusStr;
-                BuffDex = bonusDex;
-                BuffInt = bonusInt;
-                BuffCon = bonusCon;
-                BuffWP = bonusWP;
-                BuffAwa = bonusAwa;
-                BuffVirtue = bonusVirtue;
-                //Second affix
-                BuffPhysicalRes = bonusPhysicalRes;
-                BuffElementRes = bonusElementRes;
-                BuffMagicRes = bonusMagicRes;
-                BuffInitiative = bonusInitiative;
-                BuffHealth = bonusHealth;
-                BuffMana = bonusMana;
-                BuffManaRegenRate = bonusManaRegenRate;
-                BuffActionPoints = bonusActionPoints;
-                BuffArmorRating = armorRating;
-                //W affix
-                BuffAttackSpeed = bonusAttackSpeed;
-                BuffCastingSpeed = bonusCastingSpeed;
             }
+            //Pri affix
+            BuffStr = bonusStr;
+            BuffDex = bonusDex;
+            BuffInt = bonusInt;
+            BuffCon = bonusCon;
+            BuffWP = bonusWP;
+            BuffAwa = bonusAwa;
+            BuffVirtue = bonusVirtue;
+            //Second affix
+            BuffPhysicalRes = bonusPhysicalRes;
+            BuffElementRes = bonusElementRes;
+            BuffMagicRes = bonusMagicRes;
+            BuffInitiative = bonusInitiative;
+            BuffHealth = bonusHealth;
+            BuffMana = bonusMana;
+            BuffManaRegenRate = bonusManaRegenRate;
+            BuffActionPoints = bonusActionPoints;
+            BuffArmorRating = armorRating;
+            //W affix
+            BuffAttackSpeed = bonusAttackSpeed;
+            BuffCastingSpeed = bonusCastingSpeed;
         }
 
         public void AddBuff(IBuff buff) {
@@ -204,8 +203,13 @@ namespace Saga.Character
             BuffsChanged?.Invoke();
         }
 
+        public void ClearAllBuffs() {
+            ActiveBuffs.Clear();
+            BuffsChanged?.Invoke();
+        }
+
         public void TickBuffs() {
-            for (int i = ActiveBuffs.Count - 1; i>=0; i--) {
+            for (int i = ActiveBuffs.Count - 1; i >= 0; i--) {
                 var buff = ActiveBuffs[i];
                 buff.RemainingTurns--;
                 if (buff.RemainingTurns <= 0) {

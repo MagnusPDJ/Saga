@@ -70,11 +70,11 @@ namespace Saga.Character
         }
 
         public void AttachAfterLoad() {
+            BuffedStats.AttachToPlayer(this);
             Equipment.AttachToPlayer(this);
             Attributes.AttachToPlayer(this);
             DerivedStats.AttachToPlayer(this);
-            BuffedStats.AttachToPlayer(this);
-
+            
             BuffedStats.BuffsChanged += () => PlayerChanged?.Invoke();
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
             Attributes.AttributesChanged += () => PlayerChanged?.Invoke();            
