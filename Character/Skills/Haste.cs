@@ -1,4 +1,5 @@
 ﻿using Saga.Assets;
+using Saga.Character.Buffs;
 
 namespace Saga.Character.Skills
 {
@@ -24,9 +25,13 @@ namespace Saga.Character.Skills
         public bool Activate(Player player) {
             if (player.SpendMana(ManaCost)) {
 
-                // Buff logic here
-
+                HUDTools.Print($" You've cast haste on yourself.", 10);
+                int duration = 1;
+                int speedBonus = 1;
+                player.BuffedStats.AddBuff(new HasteBuff(duration, speedBonus));               
                 Timer = Cooldown;
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
                 return true;
             } else {
                 HUDTools.Print(" Not enough mana!", 10);

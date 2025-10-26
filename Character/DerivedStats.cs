@@ -1,5 +1,4 @@
-﻿
-using Saga.Character.DmgLogic;
+﻿using Saga.Character.DmgLogic;
 using System.Text.Json.Serialization;
 
 namespace Saga.Character
@@ -7,6 +6,7 @@ namespace Saga.Character
     public class DerivedStats
     {
         private Player? _player;
+
         [JsonInclude]
         public int MaxHealth { get; private set; }
         [JsonInclude]
@@ -52,21 +52,29 @@ namespace Saga.Character
 
         [JsonConstructor]
         private DerivedStats() { }
+
         public void AttachToPlayer(Player player) {
             _player = player;
             _player.PlayerChanged += RecalculateDerivedStats;
             RecalculateDerivedStats();
         }
+
         private void RecalculateDerivedStats() {
             int temp_MaxHealth = MaxHealth;
             int temp_MaxMana = MaxMana;
-            ArmorRating = _player!.Equipment.ArmorRating;
-            MaxHealth = CalculateMaxHealth() + _player!.Equipment.BonusHealth;
-            MaxMana = CalculateMaxMana() + _player!.Equipment.BonusMana;
-            Initiative = CalculateInitiative() + _player!.Equipment.BonusInitiative;
+            ArmorRating = _player!.Equipment.ArmorRating + _player!.BuffedStats.BuffArmorRating;
+            MaxHealth = CalculateMaxHealth() + _player!.Equipment.BonusHealth + _player!.BuffedStats.BuffHealth;
+            MaxMana = CalculateMaxMana() + _player!.Equipment.BonusMana + _player!.BuffedStats.BuffMana;
+            Initiative = CalculateInitiative() + _player!.Equipment.BonusInitiative + _player!.BuffedStats.BuffInitiative;
 
             Dictionary<PhysicalType, int> resultPRes = new(CalculatePhysicalResistance());
             foreach (var kv in _player!.Equipment.BonusPhysicalRes) {
+                if (resultPRes.ContainsKey(kv.Key))
+                    resultPRes[kv.Key] += kv.Value;
+                else
+                    resultPRes[kv.Key] = kv.Value;
+            }
+            foreach (var kv in _player!.BuffedStats.BuffPhysicalRes) {
                 if (resultPRes.ContainsKey(kv.Key))
                     resultPRes[kv.Key] += kv.Value;
                 else
@@ -81,6 +89,12 @@ namespace Saga.Character
                 else
                     resultERes[kv.Key] = kv.Value;
             }
+            foreach (var kv in _player!.BuffedStats.BuffElementRes) {
+                if (resultERes.ContainsKey(kv.Key))
+                    resultERes[kv.Key] += kv.Value;
+                else
+                    resultERes[kv.Key] = kv.Value;
+            }
             ElementalResistance =  resultERes;
 
             Dictionary<MagicalType, int> resultMRes = new(CalculateMagicalResistance());
@@ -90,12 +104,18 @@ namespace Saga.Character
                 else
                     resultMRes[kv.Key] = kv.Value;
             }
+            foreach (var kv in _player!.BuffedStats.BuffMagicRes) {
+                if (resultMRes.ContainsKey(kv.Key))
+                    resultMRes[kv.Key] += kv.Value;
+                else
+                    resultMRes[kv.Key] = kv.Value;
+            }
             MagicalResistance = resultMRes;
 
-            ActionPoints = CalculateActionPoints() + _player!.Equipment.BonusActionPoints;
-            ManaRegenRate = CalculateManaRegenRate() + _player!.Equipment.BonusManaRegenRate;
-            AttackSpeed = CalculateAttackSpeed() + _player!.Equipment.BonusAttackSpeed;
-            CastingSpeed = CalculateCastingSpeed() + _player!.Equipment.BonusCastingSpeed;
+            ActionPoints = CalculateActionPoints() + _player!.Equipment.BonusActionPoints + _player!.BuffedStats.BuffActionPoints;
+            ManaRegenRate = CalculateManaRegenRate() + _player!.Equipment.BonusManaRegenRate + _player!.BuffedStats.BuffManaRegenRate;
+            AttackSpeed = CalculateAttackSpeed() + _player!.Equipment.BonusAttackSpeed + _player!.BuffedStats.BuffAttackSpeed;
+            CastingSpeed = CalculateCastingSpeed() + _player!.Equipment.BonusCastingSpeed + _player!.BuffedStats.BuffCastingSpeed;
             if (temp_MaxHealth < MaxHealth) {
                 _player.SetHealth(MaxHealth);
             }

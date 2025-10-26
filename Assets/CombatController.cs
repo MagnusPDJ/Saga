@@ -64,9 +64,7 @@ namespace Saga.Assets
                 }
                 if (_enemy.Health > 0 && !Ran) {
                     HUDTools.Print(" Your turn ended.", 5);
-                    foreach (var skill in _player.LearnedSkills) {
-                        if (skill.Timer > 0) skill.Timer--;
-                    }
+                    TickEndOfTurn();
                 }               
                 Endturn = false;
             }
@@ -88,7 +86,7 @@ namespace Saga.Assets
                     break;
                 case "1":
                     if (_player.SkillTree.QuickCast != string.Empty) {
-                        ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
+                        ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name.Replace(" ", "") == _player.SkillTree.QuickCast.Replace(" ", ""));
                         if (quickcast is ITargetedSkill tSkill && tSkill.Cooldown > tSkill.Timer) {
                             if (CanUseAction(tSkill)) {
                                 bool usedAP = tSkill.Activate(_player, _enemy);
@@ -222,6 +220,13 @@ namespace Saga.Assets
         }
         public int GetRemainingActionPoints() {
             return RemainingActionPoints;
+        }
+
+        public void TickEndOfTurn() {
+            foreach (var skill in _player.LearnedSkills) {
+                if (skill.Timer > 0) skill.Timer--;
+            }
+            _player.BuffedStats.TickBuffs();
         }
     }
 }

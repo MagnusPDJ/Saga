@@ -51,13 +51,13 @@ namespace Saga.Character
             RecalculateAttributes();
         }
         public void RecalculateAttributes() {
-            Strength = _strength + _player!.Equipment.BonusStr;
-            Dexterity = _dexterity + _player!.Equipment.BonusDex;
-            Intellect = _intellect + _player!.Equipment.BonusInt;
-            Constitution = CalculateConstiution() + _player!.Equipment.BonusCon;
-            WillPower = CalculateWillPower() + _player!.Equipment.BonusWP;
-            Awareness = CalculateAwareness() + _player!.Equipment.BonusAwa;
-            Virtue = CalculateVirtue() + _player!.Equipment.BonusVirtue;
+            Strength = _strength + _player!.Equipment.BonusStr + _player!.BuffedStats.BuffStr;
+            Dexterity = _dexterity + _player!.Equipment.BonusDex + _player!.BuffedStats.BuffDex;
+            Intellect = _intellect + _player!.Equipment.BonusInt + _player!.BuffedStats.BuffInt;
+            Constitution = CalculateConstiution() + _player!.Equipment.BonusCon + _player!.BuffedStats.BuffCon;
+            WillPower = CalculateWillPower() + _player!.Equipment.BonusWP + _player!.BuffedStats.BuffWP;
+            Awareness = CalculateAwareness() + _player!.Equipment.BonusAwa + _player!.BuffedStats.BuffAwa;
+            Virtue = CalculateVirtue() + _player!.Equipment.BonusVirtue + _player!.BuffedStats.BuffVirtue;
         }
         int CalculateConstiution() {
             return _constitution + (Strength + Dexterity) / 2;

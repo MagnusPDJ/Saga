@@ -14,7 +14,7 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
             LearnedSkills.Add(new RapidFire());
-            SkillTree.QuickCast = "Rapid Fire";
+            SkillTree.QuickCast = "Rapid Fire     ";
         }
         public override bool RunAway(EnemyBase Monster) {
             bool escaped = false;

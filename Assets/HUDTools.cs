@@ -673,10 +673,12 @@ namespace Saga.Assets
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            Console.WriteLine(" =================Actions=================");
-            Console.WriteLine(" V (C)haracter screen   (D)rink Potion   V");
+            Console.WriteLine(" ==================Actions================");
+            Console.WriteLine(" V Look around          Go #             V");
+            Console.WriteLine(" V (D)rink Potion       Go back/home     V");
+            Console.WriteLine(" ===================Menus=================");
+            Console.WriteLine(" V (C)haracter screen   S(K)illtree      V");
             Console.WriteLine(" V (I)nventory          Quest(L)og       V");
-            Console.WriteLine(" V S(K)illtree                           V");
             Console.WriteLine(" =========================================\n");
             Console.WriteLine(" Write an action:");
         }

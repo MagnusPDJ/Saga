@@ -26,7 +26,8 @@ namespace Saga.Character
         public int Mana { get; set; }
         public int FreeAttributePoints { get; set; }
         public Attributes Attributes { get; set; }
-        public DerivedStats DerivedStats { get; set; }       
+        public DerivedStats DerivedStats { get; set; }
+        public BuffedStats BuffedStats { get; set; }
         public List<ISkill> LearnedSkills { get; set; }
         public SkillTree SkillTree { get; init; }
         public int SkillPoints { get; set; }
@@ -55,6 +56,7 @@ namespace Saga.Character
             Exp = 0;
             Gold = 0;
             FreeAttributePoints = 0;
+            BuffedStats = new BuffedStats(this);
             Attributes = new Attributes(this, strength, dexterity, intellect);
             DerivedStats = new DerivedStats(this);
             Health = DerivedStats.MaxHealth;
@@ -62,17 +64,22 @@ namespace Saga.Character
             LearnedSkills = [new BasicAttack()];
             SkillPoints = 0;
             TimesExplored = 0;
+            BuffedStats.BuffsChanged += () => PlayerChanged?.Invoke();
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
             Attributes.AttributesChanged += () => PlayerChanged?.Invoke();         
         }
+
         public void AttachAfterLoad() {
             Equipment.AttachToPlayer(this);
             Attributes.AttachToPlayer(this);
             DerivedStats.AttachToPlayer(this);
+            BuffedStats.AttachToPlayer(this);
 
+            BuffedStats.BuffsChanged += () => PlayerChanged?.Invoke();
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
             Attributes.AttributesChanged += () => PlayerChanged?.Invoke();            
         }
+
         public void LevelUp() {
             int levels = 0;
             Program.SoundController.Play("levelup");
