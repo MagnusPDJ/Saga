@@ -30,7 +30,7 @@ namespace Saga.Dungeon.Quests
         public string Giver { get; set; } = string.Empty;
         public int Gold { get; set; }
         public int Exp { get; set; }
-        public int Potions { get; set; } = -1;
+        public List<(PotionType, int)>? Potions { get; set; }
         public IItem? Item { get; set; }
         public bool Accepted { get; set; } = false;
         public bool Completed { get; set; } = false;
@@ -44,11 +44,21 @@ namespace Saga.Dungeon.Quests
                         continue;
                     }                   
                     foreach (string target in Requirements.Keys) {
-                        if (item is ICraftingItem item1 && item.ItemId == target) {
-                            if (item1.Amount == Requirements[target]) {
+                        if (item.ItemId != target) {
+                            continue;
+                        } 
+                        if (item is ICraftingItem item1) {
+                            if (item1.Amount >= Requirements[target]) {
                                 return true;
                             }
-                        } else if (item is IQuestItem qItem && qItem.ItemId == target) {
+                        } else if (item is IQuestItem qItem) {
+                            if (qItem.Amount >= Requirements[target]) {
+                                return true;
+                            }
+                            if (Requirements[target] <= 1) {
+                                return true;
+                            }
+                        } else {
                             return true;
                         }
                     }

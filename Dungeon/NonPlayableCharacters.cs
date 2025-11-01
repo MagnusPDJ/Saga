@@ -90,6 +90,7 @@ namespace Saga.Dungeon
                     string input = TextInput.PlayerPrompt();
                     if (input == "b" || input == "back") {
                         donetalking = true;
+                        Program.CurrentPlayer.UpdateQuestLog();
                         break;
                     } else if (int.TryParse(input, out int n) && n >= 1 && n <= questions.Count) {
                         n--;

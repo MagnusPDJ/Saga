@@ -262,7 +262,7 @@ namespace Saga.Character
             Program.SoundController.Play("win");
             HUDTools.Print($"\u001b[96m You've completed the quest: {quest.Name}!\u001b[0m", 15);
             LootSystem.GetFixedGold(quest.Gold);
-            LootSystem.GetHealingPotions(quest.Potions);
+            if (quest.Potions is not null) LootSystem.GetPotionsByType(quest.Potions);
             LootSystem.GetFixedExp(quest.Exp);
             if (quest.Item != null) {
                 int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);

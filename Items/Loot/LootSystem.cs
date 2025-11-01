@@ -18,6 +18,70 @@ namespace Saga.Items.Loot
             }
             return drops;
         }
+        public static void GetPotionsByType(List<(PotionType, int)> potions) {
+            foreach (var potion in potions) {
+                switch (potion.Item1) {
+                    case PotionType.Healing:
+                        GetHealingPotions(potion.Item2);
+                        break;
+                    case PotionType.Mana:
+                        GetManaPotions(potion.Item2);
+                        break;
+                    case PotionType.Poison:
+                        break;
+                    case PotionType.Buff:
+                        break;
+                }
+            }
+        }
+        //Metode til at få healing potions, default random 0-2:
+        public static void GetHealingPotions(int amount = 0) {
+            int potionsToGet;
+            if (amount == 0) {
+                int[] numbers = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2];
+                var picked = Program.Rand.Next(0, numbers.Length);
+                potionsToGet = numbers[picked];
+            } else {
+                potionsToGet = amount;
+            }
+            if (potionsToGet > 0) {
+                var equippedPotion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemId: "healingpotion" });
+                var potionInInv = Array.Find(Program.CurrentPlayer.Inventory, p => p is IItem { ItemId: "healingpotion" });
+                if (equippedPotion != null) {
+                    equippedPotion.PotionQuantity += potionsToGet;
+                } else if (potionInInv != null && potionInInv is IConsumable cPotion) {
+                    cPotion.PotionQuantity += potionsToGet;
+                } else {
+                    var emptySlot = Array.FindIndex(Program.CurrentPlayer.Inventory, slot => slot == null || Program.CurrentPlayer.Inventory.Length == 0);
+                    Program.CurrentPlayer.Inventory.SetValue(new HealingPotion { PotionQuantity = potionsToGet }, emptySlot);
+                }
+                HUDTools.Print($"\u001b[31m You loot {potionsToGet} healing potions\u001b[0m", 20);
+            }
+        }
+        //Metode til at få healing potions, default random 0-2:
+        public static void GetManaPotions(int amount = 0) {
+            int potionsToGet;
+            if (amount == 0) {
+                int[] numbers = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2];
+                var picked = Program.Rand.Next(0, numbers.Length);
+                potionsToGet = numbers[picked];
+            } else {
+                potionsToGet = amount;
+            }
+            if (potionsToGet > 0) {
+                var equippedPotion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemId: "manapotion" });
+                var potionInInv = Array.Find(Program.CurrentPlayer.Inventory, p => p is IItem { ItemId: "manapotion" });
+                if (equippedPotion != null) {
+                    equippedPotion.PotionQuantity += potionsToGet;
+                } else if (potionInInv != null && potionInInv is IConsumable cPotion) {
+                    cPotion.PotionQuantity += potionsToGet;
+                } else {
+                    var emptySlot = Array.FindIndex(Program.CurrentPlayer.Inventory, slot => slot == null || Program.CurrentPlayer.Inventory.Length == 0);
+                    Program.CurrentPlayer.Inventory.SetValue(new ManaPotion { PotionQuantity = potionsToGet }, emptySlot);
+                }
+                HUDTools.Print($"\u001b[34m You loot {potionsToGet} mana potions\u001b[0m", 20);
+            }
+        }
 
         // OLD methods
 
@@ -238,30 +302,7 @@ namespace Saga.Items.Loot
                 Program.CurrentPlayer.Gold += g;
             }
         }
-        //Metode til at få healing potions, default random 0-2:
-        public static void GetHealingPotions(int amount = 0) {
-            int potionsToGet;
-            if (amount == 0) {
-                int[] numbers = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2];
-                var picked = Program.Rand.Next(0, numbers.Length);
-                potionsToGet = numbers[picked];
-            } else {
-                potionsToGet = amount;
-            }
-            if (potionsToGet > 0) {
-                var equippedPotion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
-                var potionInInv = Array.Find(Program.CurrentPlayer.Inventory, p => p is IItem { ItemName: "Healing Potion" });
-                if (equippedPotion != null) {
-                    equippedPotion.PotionQuantity += potionsToGet;                 
-                } else if (potionInInv != null && potionInInv is IConsumable cPotion) {
-                    cPotion.PotionQuantity += potionsToGet;
-                } else {
-                    var emptySlot = Array.FindIndex(Program.CurrentPlayer.Inventory, slot => slot == null || Program.CurrentPlayer.Inventory.Length == 0);
-                    Program.CurrentPlayer.Inventory.SetValue(new HealingPotion { PotionQuantity = potionsToGet }, emptySlot);
-                }
-                HUDTools.Print($"\u001b[90m You loot {potionsToGet} healing potions\u001b[0m", 20);
-            }
-        }
+
         //Metode til at få en tilfældig mængde exp eller en bestemt mængde:
         public static void GetExp(int monsterPower, int monsterExp = 0) {
             int powerDifference = monsterPower - Program.CurrentPlayer.Level;

@@ -32,14 +32,23 @@ namespace Saga.Dungeon.Quests
         }
         //Funktion til at lave random collect quests.
         public static Quest CreateRandomQuest() {
-            int roll = Program.Rand.Next(2);
+            int roll = Program.Rand.Next(4);
             string target = "";
             string name = "";
-            (int,int,int) reward = (0,0,-1);
-            if (roll == 0) { target = "rattail"; name = "Collect rat tails"; reward = (50 * Program.CurrentPlayer.Level, 50 * Program.CurrentPlayer.Level, -1); } 
-            else if (roll == 1) { target = "batwings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, 3 + Program.CurrentPlayer.Level); }
-            int amount = 3 + Program.CurrentPlayer.Level/2;
+            (int,int,List<(PotionType,int)>) reward = (0, 0, []);
+            int amount = 3 + Program.CurrentPlayer.Level / 2;
 
+            switch (roll) {
+                case 0:
+                    target = "rattail"; name = "Collect rat tails"; reward = (20 * amount * Math.Max(1, Program.CurrentPlayer.Level/2), 50 * Program.CurrentPlayer.Level, []);break;
+                case 1:
+                    target = "batwings"; name = "Collect bat wings"; reward = (0, 50 * Program.CurrentPlayer.Level, [(PotionType.Healing, 3 + Program.CurrentPlayer.Level)]);break;
+                case 2:
+                    target = "candle"; name = "Collect candles"; reward = (30 * amount * Math.Max(1, Program.CurrentPlayer.Level / 2), 25 * Program.CurrentPlayer.Level, []);break;
+                case 3:
+                    target = "greenslime"; name = "Collect green slime"; reward = (0, 50 * Program.CurrentPlayer.Level, [(PotionType.Mana, 3 + Program.CurrentPlayer.Level)]);break;
+            }
+            
             Quest quest = new Act1Quest() {
                 Name = name,
                 QuestType = Type.Collect,              

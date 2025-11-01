@@ -8,6 +8,7 @@ using Saga.Items.Loot;
 using System.Configuration;
 using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace Saga.Assets
 {
@@ -249,6 +250,31 @@ namespace Saga.Assets
             return sb.ToString().Trim().TrimEnd(',');
         }
 
+        // Helper: determine whether an item should be presented as a quest item for the current player
+        // returns (isQuestItem, displayAmount)
+        private static (bool, int) GetQuestItemInfo(IItem? item) {
+            if (item == null) return (false, 0);
+            var player = Program.CurrentPlayer;
+            if (player == null || player.QuestLog == null || player.QuestLog.Count == 0) return (false, 0);
+
+            // Quest is relevant if any active (not completed) quest requires this ItemId
+            var relevantQuests = player.QuestLog.Where(q => !q.Completed && q.Requirements != null && q.Requirements.ContainsKey(item.ItemId)).ToList();
+            if (relevantQuests.Count == 0) return (false, 0);
+
+            // Determine display amount:
+            if (item is ICraftingItem citem) {
+                return (true, citem.Amount);
+            }
+            if (item is IQuestItem qitem) {
+                return (true, qitem.Amount);
+            }
+
+            // For non-stackable items, show 1 (or if multiple quests require different amounts, keep 1)
+            // If player carries multiple separate entries in inventory for the same ItemId (non-stackable),
+            // this method returns 1 for display. Stackable items should implement ICraftingItem or IQuestItem.
+            return (true, 1);
+        }
+
         //HUDS
         public static void MainMenu() {
             Console.Clear();
@@ -335,39 +361,42 @@ namespace Saga.Assets
             Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
             Console.WriteLine($"| Healing Potions:        {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
-            foreach (IItem item in Program.CurrentPlayer.Inventory) {
+            foreach (var (item, i) in Program.CurrentPlayer.Inventory.Select((item, i) => (item, i))) {
                 if (item == null) {
-                } else if (item is IQuestItem qItem) {
-                    Console.WriteLine($"| \u001b[96mQuest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
-                } else if (item is ICraftingItem cItem) {
-                    Console.WriteLine($"| Crafting Item - {cItem.ItemName} #{cItem.Amount}");
-                } else if ((item is IEquipable eItem) && eItem.ItemSlot == Slot.Right_Hand) {
-                    Console.WriteLine($"| {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
-                } else if (item is IArmor) {
-                    Console.Write($"| {item.ItemName}:");
-                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
+                } else {
+                    var (isQuest, amount) = GetQuestItemInfo(item);
+                    if (isQuest) {
+                        Console.WriteLine($"| - \u001b[96mQuest Item - {item.ItemName} #{amount}\u001b[0m");
+                    } else if (item is ICraftingItem cItem) {
+                        Console.WriteLine($"| - Crafting Item - {cItem.ItemName} #{cItem.Amount}");
+                    } else if ((item is IEquipable eItem) && eItem.ItemSlot == Slot.Right_Hand) {
+                        Console.WriteLine($"| - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    } else if (item is IArmor) {
+                        Console.Write($"| - {item.ItemName}:");
+                        if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
+                            Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
+                        }
+                        if (item.ItemName == "Linen Rags") {
+                            Console.Write(" Offers no protection");
+                        }
+                        Console.WriteLine("");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
-                    }
-                    if (item.ItemName == "Linen Rags") {
-                        Console.Write(" Offers no protection");
-                    }
-                    Console.WriteLine("");
-                }
+                } 
             }
             Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
@@ -378,41 +407,44 @@ namespace Saga.Assets
             Console.WriteLine("         Gheed's Shop        ");
             Console.WriteLine("=======================================================");
             Console.WriteLine($"| Items in inventory:");
-            foreach (IItem item in Program.CurrentPlayer.Inventory) {
+            foreach (var (item, i) in Program.CurrentPlayer.Inventory.Select((item, i)=> (item, i))) {
                 if (item == null) {
-                } else if (item is IQuestItem qItem) {
-                    Console.WriteLine($"| \u001b[96mQuest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
-                } else if (item is ICraftingItem cItem) {
-                    Console.WriteLine($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) Crafting Item - {cItem.ItemName} #{cItem.Amount} per item $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, cItem)).ToString())}");
-                } else if ((item is IEquipable eItem) && eItem.ItemSlot == Slot.Right_Hand) {
-                    Console.WriteLine($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg,\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
-                } else if (item is IArmor) {
-                    Console.Write($"| ({1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)}) {item.ItemName}: ");
-                    if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
-                        Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
+                } else {
+                    var (isQuest, amount) = GetQuestItemInfo(item);
+                    if (isQuest) {
+                        Console.WriteLine($"| ({i + 1}) \u001b[96mQuest Item - {item.ItemName} #{amount}\u001b[0m");
+                    } else if (item is ICraftingItem cItem) {
+                        Console.WriteLine($"| ({i + 1}) Crafting Item - {cItem.ItemName} #{cItem.Amount}");
+                    } else if ((item is IEquipable eItem) && eItem.ItemSlot == Slot.Right_Hand) {
+                        Console.WriteLine($"| ({i + 1}) {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                    } else if (item is IArmor) {
+                        Console.Write($"| ({i + 1}) {item.ItemName}:");
+                        if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
+                            Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Const");
+                        }
+                        if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
+                            Console.Write($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
+                        }
+                        if (item.ItemName == "Linen Rags") {
+                            Console.Write(" Offers no protection");
+                        }
+                        Console.WriteLine("");
                     }
-                    if (((ArmorBase)item).PrimaryAffixes.Strength > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Strength} Str");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.Dexterity > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Dexterity} Dex");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.Intellect > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Intellect} Int");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.Constitution > 0) {
-                        Console.Write($", +{((ArmorBase)item).PrimaryAffixes.Constitution} Cons");
-                    }
-                    if (((ArmorBase)item).PrimaryAffixes.WillPower > 0) {
-                        Console.WriteLine($", +{((ArmorBase)item).PrimaryAffixes.WillPower} Wp");
-                    }
-                    if (item.ItemName == "Linen Rags") {
-                        Console.Write(" Offers no protection");
-                    }
-                    Console.WriteLine($"\t $ {Shop.ShopPrice((1 + Array.IndexOf(Program.CurrentPlayer.Inventory, item)).ToString())}");
                 }
             }
-                Console.WriteLine($"|  Sell Healing (P)otion        $ {Shop.ShopPrice("sellpotion")}");
+            Console.WriteLine($"|  Sell Healing (P)otion        $ {Shop.ShopPrice("sellpotion")}");
             var potion = Array.Find(Program.CurrentPlayer.Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
             if (potion is not null && potion.PotionQuantity >= 5) {
                 Console.WriteLine($"|  Sell (F)ive Healing Potions  $ {Shop.ShopPrice("sellpotion5")}");
@@ -590,46 +622,49 @@ namespace Saga.Assets
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
-                } else if (item is IConsumable conItem) {
-                    Console.WriteLine($" {item.ItemName}: +{conItem.PotionPotency} {(conItem.PotionType == PotionType.Healing && Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}, Quantity: {conItem.PotionQuantity}");
-                } else if (item is IQuestItem qItem) {
-                    Console.WriteLine($"\u001b[96m Quest Item - {qItem.ItemName} #{qItem.Amount}\u001b[0m");
-                } else if (item is ICraftingItem cItem) {
-                    Console.WriteLine($" Crafting Item - {cItem.ItemName} #{cItem.Amount}");
-                } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
-                    if (item is ITwoHanded twoHanded) {
-                        Console.WriteLine($" Both hands - {twoHanded.ItemName}: +{twoHanded.WeaponAttributes.MinDamage}-{twoHanded.WeaponAttributes.MaxDamage} dmg");
-                    } else {
-                        Console.WriteLine($" {((IEquipable)item).ItemSlot} - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                } else {
+                    var (isQuest, amount) = GetQuestItemInfo(item);
+                    if (isQuest) {
+                        Console.WriteLine($"\u001b[96m Quest Item - {item.ItemName} #{amount}\u001b[0m");
+                    } else if (item is IConsumable conItem) {
+                        Console.WriteLine($" {item.ItemName}: +{conItem.PotionPotency} {(conItem.PotionType == PotionType.Healing && Program.CurrentPlayer.CurrentClass == "Mage" ? $"(+{1 + Program.CurrentPlayer.Level * 2} Mage bonus)" : "")}, Quantity: {conItem.PotionQuantity}");
+                    } else if (item is ICraftingItem cItem) {
+                        Console.WriteLine($" Crafting Item - {cItem.ItemName} #{cItem.Amount}");
+                    } else if (((IEquipable)item).ItemSlot == Slot.Right_Hand) {
+                        if (item is ITwoHanded twoHanded) {
+                            Console.WriteLine($" Both hands - {twoHanded.ItemName}: +{twoHanded.WeaponAttributes.MinDamage}-{twoHanded.WeaponAttributes.MaxDamage} dmg");
+                        } else {
+                            Console.WriteLine($" {((IEquipable)item).ItemSlot} - {item.ItemName}: +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
+                        }
+                    } else if (item is IArmor armor) {
+                        Console.Write($" {armor.ItemSlot} - {armor.ItemName}:");
+                        if (armor.SecondaryAffixes.ArmorRating > 0) {
+                            Console.Write($" +{armor.SecondaryAffixes.ArmorRating} Armor Rating");
+                        }
+                        if (armor.PrimaryAffixes.Strength > 0) {
+                            Console.Write($", +{armor.PrimaryAffixes.Strength} Str");
+                        }
+                        if (armor.PrimaryAffixes.Dexterity > 0) {
+                            Console.Write($", +{armor.PrimaryAffixes.Dexterity} Dex");
+                        }
+                        if (armor.PrimaryAffixes.Intellect > 0) {
+                            Console.Write($", +{armor.PrimaryAffixes.Intellect} Int");
+                        }
+                        if (armor.PrimaryAffixes.Constitution > 0) {
+                            Console.Write($", +{armor.PrimaryAffixes.Constitution} Const");
+                        }
+                        if (armor.PrimaryAffixes.WillPower > 0) {
+                            Console.Write($", +{armor.PrimaryAffixes.WillPower} Wp");
+                        }
+                        if (armor.PrimaryAffixes.Awareness > 0) {
+                            Console.Write($", +{armor.PrimaryAffixes.Awareness} Awa");
+                        }
+                        if (item.ItemName == "Linen Rags") {
+                            Console.Write(" Offers no protection");
+                        }
+                        Console.WriteLine("");
                     }
-                } else if (item is IArmor armor) {
-                    Console.Write($" {armor.ItemSlot} - {armor.ItemName}:");
-                    if (armor.SecondaryAffixes.ArmorRating > 0) {
-                        Console.Write($" +{armor.SecondaryAffixes.ArmorRating} Armor Rating");
-                    }
-                    if (armor.PrimaryAffixes.Strength > 0) {
-                        Console.Write($", +{armor.PrimaryAffixes.Strength} Str");
-                    }
-                    if (armor.PrimaryAffixes.Dexterity > 0) {
-                        Console.Write($", +{armor.PrimaryAffixes.Dexterity} Dex");
-                    }
-                    if (armor.PrimaryAffixes.Intellect > 0) {
-                        Console.Write($", +{armor.PrimaryAffixes.Intellect} Int");
-                    }
-                    if (armor.PrimaryAffixes.Constitution > 0) {
-                        Console.Write($", +{armor.PrimaryAffixes.Constitution} Const");
-                    }
-                    if (armor.PrimaryAffixes.WillPower > 0) {
-                        Console.Write($", +{armor.PrimaryAffixes.WillPower} Wp");
-                    }
-                    if (armor.PrimaryAffixes.Awareness > 0) {
-                        Console.Write($", +{armor.PrimaryAffixes.Awareness} Awa");
-                    }
-                    if (item.ItemName == "Linen Rags") {
-                        Console.Write(" Offers no protection");
-                    }
-                    Console.WriteLine("");
-                }
+                } 
             }
             Print($"\n To equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\n To examine item write examine Itemname else (b)ack\n", 0);
         }
@@ -689,7 +724,7 @@ namespace Saga.Assets
             Console.WriteLine($" Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
             Console.WriteLine($" Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
             Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| {(Program.CurrentPlayer.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             Console.Write(" EXP  ");
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
@@ -715,17 +750,22 @@ namespace Saga.Assets
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Quest Items @@@@@@@@@@@@@@@@@@@");
             int i = 0;
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
-                if (item is null || item is not IQuestItem) {
+                if (item is null) {
                     i++;
-                } else if (item is IQuestItem item1) {
-                    Console.WriteLine($" \u001b[96m Quest Item - {item.ItemName} #{item1.Amount}\u001b[0m");
+                    if (i == 10) {
+                        Console.WriteLine(" You don't have any quest items...\n");
+                    }
                     continue;
                 }
-                if (i == 10) {
-                    Console.WriteLine(" You don't have any quest items...\n");
-                }
+                var (isQuest, amount) = GetQuestItemInfo(item);
+                if (!isQuest) {
+                    i++;
+                } else {
+                    Console.WriteLine($" \u001b[96m Quest Item - {item.ItemName} #{amount}\u001b[0m");
+                    continue;
+                }            
             }
-            Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
+            Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
             if (Program.CurrentPlayer.QuestLog.Count == 0) {
                 Console.WriteLine(" You don't have any active quests...\n");
             } else {
@@ -737,11 +777,11 @@ namespace Saga.Assets
                         Console.WriteLine($" {quest.TurnIn}");
                     }
                     Console.WriteLine(" Rewards:");
-                    if (quest.Gold > 0 && quest.Potions > 0) {
-                        Console.WriteLine($" {quest.Potions} healing potions, {quest.Gold} gold pieces and {quest.Exp} experience points.");
-                    } else if (quest.Gold == 0 && quest.Potions > 0) {
-                        Console.WriteLine($" {quest.Potions} healing potions and {quest.Exp} experience points.");
-                    } else if (quest.Gold > 0 && quest.Potions == -1) {
+                    if (quest.Gold > 0 && quest.Potions is not null) {
+                        Console.WriteLine($" {quest.Potions[0].Item2} {quest.Potions[0].Item1} potions, {quest.Gold} gold pieces and {quest.Exp} experience points.");
+                    } else if (quest.Gold == 0 && quest.Potions is not null) {
+                        Console.WriteLine($" {quest.Potions[0].Item2} {quest.Potions[0].Item1} potions and {quest.Exp} experience points.");
+                    } else if (quest.Gold > 0 && quest.Potions is null) {
                         Console.WriteLine($" {quest.Gold} gold pieces and {quest.Exp} experience points.");
                     }                 
                     if (quest.Item != null) {
