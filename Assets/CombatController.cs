@@ -1,4 +1,5 @@
 ﻿using Saga.Character;
+using Saga.Character.Buffs;
 using Saga.Character.Skills;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
@@ -23,7 +24,7 @@ namespace Saga.Assets
             Action[] states = _player.DerivedStats.Initiative >= _enemy.Initiative
                 ? [PlayerTurn, EnemyTurn]
                 : [EnemyTurn, PlayerTurn];
-            HUDTools.CombatHUD(_enemy, this);
+            HUDTools.CombatHUD(_player, _enemy, this);
             while (_enemy.Health > 0 && _player.Health > 0 && Ran == false) {
                 Turn++;         
                 foreach (var state in states) {
@@ -36,7 +37,7 @@ namespace Saga.Assets
                 foreach (var skill in _player.LearnedSkills) {
                     if (skill.Timer > 0) skill.Timer = 0;
                 }
-                HUDTools.CombatHUD(_enemy, this);
+                HUDTools.CombatHUD(_player, _enemy, this);
                 Program.SoundController.Stop();
                 Program.SoundController.Play("win");
                 LootSystem.GetCombatLoot(_enemy, $" You Won against the {_enemy.Name} on turn {Turn}!");
@@ -58,7 +59,7 @@ namespace Saga.Assets
             if (_player.Health > 0 && _enemy.Health > 0) {             
                 RemainingActionPoints = _player.DerivedStats.ActionPoints;
                 while (!EndTurn() && _enemy.Health > 0) {
-                    HUDTools.CombatHUD(_enemy, this);
+                    HUDTools.CombatHUD(_player, _enemy, this);
                     PlayerActions();
                 }
                 if (!UsedMana && _enemy.Health > 0) {
@@ -90,7 +91,7 @@ namespace Saga.Assets
                     break;
                 case "1":
                     if (_player.SkillTree.QuickCast != string.Empty) {
-                        ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name.Replace(" ", "") == _player.SkillTree.QuickCast.Replace(" ", ""));
+                        ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
                         if (quickcast is ITargetedSkill tSkill && tSkill.Cooldown > tSkill.Timer) {
                             if (CanUseAction(tSkill)) {
                                 bool usedAP = tSkill.Activate(_player, _enemy);
@@ -136,14 +137,25 @@ namespace Saga.Assets
                 break;
                 case "4":
                     //Run                   
-                    if (_player.RunAway(_enemy)) {
-                        Program.SoundController.Stop();
-                        Ran = true;
-                        Program.RoomController.Ran = true;
-                        Endturn = true;
+                    if (_player.DerivedStats.ActionPoints != RemainingActionPoints) {
+                        HUDTools.Print($" You have used action points this turn and can't run away...", 3);
                         TextInput.PressToContinue();
+                        HUDTools.ClearLastLine(3);
+                    } else {
+                        HUDTools.Print($" Are you sure, you want to try and run? (Y/N)", 3);
+                        input = TextInput.PlayerPrompt();
+                        if (input == "y") {
+                            if (_player.RunAway(_enemy)) {
+                                Program.SoundController.Stop();
+                                Ran = true;
+                                Program.RoomController.Ran = true;
+                                Endturn = true;
+                                TextInput.PressToContinue();
+                            }
+                            Endturn = true;
+                        }
                     }
-                break;
+                        break;
                 case "5":
                     //Skill tree logic
                     HUDTools.Print($" *Not implemented*", 3);
@@ -200,6 +212,17 @@ namespace Saga.Assets
                     return false;
                 }             
             } else if (action is IConsumable potion) {
+                int hbIndex = _player.BuffedStats.ActiveBuffs.FindIndex(buff => buff.Name == "Haste");
+                bool potionDrunk;
+                if (hbIndex != -1) {
+                    potionDrunk = ((HasteBuff)_player.BuffedStats.ActiveBuffs[hbIndex]).PotionDrunk;
+                } else {
+                    potionDrunk = true;
+                }
+                if (!potionDrunk) {
+                    ((HasteBuff)_player.BuffedStats.ActiveBuffs[hbIndex]).PotionDrunk = true;
+                    return true;
+                }
                 if (potion.ActionPointCost <= RemainingActionPoints) {
                     return true;
                 } else {
@@ -219,8 +242,11 @@ namespace Saga.Assets
                     RemainingActionPoints -= castingSkill.ActionPointCost / _player.DerivedStats.CastingSpeed;
                 } else if (action is IConsumable potion) {
                     RemainingActionPoints -= potion.ActionPointCost;
-                }                       
-            }          
+                }
+                if (RemainingActionPoints < 0) {
+                    RemainingActionPoints = 0;
+                }
+            }
         }
         public int GetRemainingActionPoints() {
             return RemainingActionPoints;

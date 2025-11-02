@@ -9,6 +9,8 @@ using System.Configuration;
 using System.Reflection;
 using System.Text;
 using System.Linq;
+using Saga.Character.Skills;
+using Saga.Character.Buffs;
 
 namespace Saga.Assets
 {
@@ -668,29 +670,31 @@ namespace Saga.Assets
             }
             Print($"\n To equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\n To examine item write examine Itemname else (b)ack\n", 0);
         }
-        public static void CombatHUD(EnemyBase Monster, CombatController combatController) {
+        public static void CombatHUD(Player player, EnemyBase Monster, CombatController combatController) {
+            var quickCastSkill = player.LearnedSkills.Find(x => x.Name == player.SkillTree.QuickCast) as IActiveSkill;
+            var basicAttackSkill = player.LearnedSkills.Find(x => x.Name == "Basic Attack") as IActiveSkill;
             Console.Clear();
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                  Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
                  Console.WriteLine($" Fighting: {Monster.Name}!");
                  Console.WriteLine($" Power: {Monster.Power}\tAttack: {Monster.Attack}\tEnemy health: {Monster.Health}/{Monster.MaxHealth}");
-            if (Program.CurrentPlayer.DerivedStats.Initiative >= Monster.Initiative) {
+            if (player.DerivedStats.Initiative >= Monster.Initiative) {
                 Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");
             } else {
                 Console.WriteLine("\n  The enemy goes first!");
                   Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
-            Console.WriteLine($"\t\t{Program.CurrentPlayer.Name} the {Program.CurrentPlayer.CurrentClass}:");
-            WriteCenterLine($"                Your Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"                     Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"              Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{Program.CurrentPlayer.DerivedStats.ActionPoints}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"                     Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m | | {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"Level: {Program.CurrentPlayer.Level}                                                            ");
-             WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 25) + "]                                  \n");
+            Console.WriteLine($"\t\t{player.Name} the {player.CurrentClass}:");
+            WriteCenterLine($"                Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m | | {(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"                     Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"              Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{player.DerivedStats.ActionPoints}\u001b[0m | | {(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"                     Gold:   \u001b[33m${player.Gold}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"Level: {player.Level}                                                            ");
+             WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
             WriteCenterLine($" ============== Actions ============|=============== Info ==============");
-            WriteCenterLine($" |  (1) Quick Cast: {(Program.CurrentPlayer.SkillTree.QuickCast != string.Empty? Program.CurrentPlayer.SkillTree.QuickCast : "               ")} |  (C)haracter screen              |");
-            WriteCenterLine($" |  (2) Attack     (3) Drink Potion |   Combat (L)og                   |");
+            Console.WriteLine($"               |  (1) Quick Cast: {player.SkillTree.QuickCast} ({quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP) |  (C)haracter screen |");
+            Console.WriteLine($"               |  (2) Attack ({basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP)    (3) Drink Potion ({(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP) |   Combat (L)og |");
             WriteCenterLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
             WriteCenterLine($" ===================================|===================================");
             WriteCenterLine($" {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}                                                          ");
