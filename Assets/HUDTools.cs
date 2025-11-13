@@ -360,7 +360,7 @@ namespace Saga.Assets
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
-            Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Equipment.GetGoldAmount()}");
             Console.WriteLine($"| Healing Potions:        {Array.Find(Program.CurrentPlayer.Equipment.Potions, (p => p is IItem { ItemName: "Healing Potion" }))?.PotionQuantity}");
             Console.WriteLine($"| Items in inventory:");
             foreach (var (item, i) in Program.CurrentPlayer.Inventory.Select((item, i) => (item, i))) {
@@ -461,7 +461,7 @@ namespace Saga.Assets
             ProgressBar("+", " ", ((decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue()), 20);
             Console.WriteLine("]");
             Console.WriteLine($"| Health:                 {Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}");
-            Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($"| Gold:                  ${Program.CurrentPlayer.Equipment.GetGoldAmount()}");
             Console.WriteLine($"| Healing Potions:        {potion?.PotionQuantity}");
             Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Healing Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
@@ -620,7 +620,7 @@ namespace Saga.Assets
                 i++;
             }
             Console.WriteLine("\n@@@@@@@@@@@@@@@@@ Inventory @@@@@@@@@@@@@@@@@@@");
-            Console.WriteLine($" Gold: ${Program.CurrentPlayer.Gold}");
+            Console.WriteLine($" {Program.CurrentPlayer.Equipment.Pouch.ItemName}: ${Program.CurrentPlayer.Equipment.GetGoldAmount()}");
             foreach (IItem item in Program.CurrentPlayer.Inventory) {
                 if (item == null) {
                     Console.WriteLine("\u001b[90m Empty slot\u001b[0m");
@@ -689,7 +689,7 @@ namespace Saga.Assets
             WriteCenterLine($"                Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m | | {(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}");
             WriteCenterLine($"                     Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}");
             WriteCenterLine($"              Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{player.DerivedStats.ActionPoints}\u001b[0m | | {(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"                     Gold:   \u001b[33m${player.Gold}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"                     Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             WriteCenterLine($"Level: {player.Level}                                                            ");
              WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
             WriteCenterLine($" ============== Actions ============|=============== Info ==============");
@@ -706,7 +706,7 @@ namespace Saga.Assets
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
             Console.WriteLine($" Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
             Console.WriteLine($" Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Equipment.GetGoldAmount()}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             Console.Write(" EXP  ");
             Console.Write("[");
@@ -727,7 +727,7 @@ namespace Saga.Assets
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
             Console.WriteLine($" Health: \u001b[31m{Program.CurrentPlayer.Health}/{Program.CurrentPlayer.DerivedStats.MaxHealth}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {Program.CurrentPlayer.Equipment.Potions[0]?.PotionQuantity ?? 0}");
             Console.WriteLine($" Mana:   \u001b[34m{Program.CurrentPlayer.Mana}/{Program.CurrentPlayer.DerivedStats.MaxMana}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {Program.CurrentPlayer.Equipment.Potions[1]?.PotionQuantity ?? 0}");
-            Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Gold}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
+            Console.WriteLine($" Gold:   \u001b[33m${Program.CurrentPlayer.Equipment.GetGoldAmount()}\u001b[0m\t|| {(Program.CurrentPlayer.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {Program.CurrentPlayer.Equipment.Potions[2]?.PotionQuantity ?? 0}");
             Console.WriteLine($" Level: {Program.CurrentPlayer.Level}\t|| {(Program.CurrentPlayer.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {Program.CurrentPlayer.Equipment.Potions[3]?.PotionQuantity ?? 0}");
             Console.Write(" EXP  ");
             Console.Write("[");

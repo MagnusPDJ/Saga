@@ -224,11 +224,11 @@ namespace Saga.Items.Loot
         }
         //Metode til at købe fra shoppen.
         static void TryBuyItem(int index, int cost, Shop s, Player p) {
-            if (p.Gold >= cost) {
+            if (p.Equipment.GetGoldAmount() >= cost) {
                 int index1 = Array.FindIndex(p.Inventory, i => i == null || p.Inventory.Length == 0);
                 p.Inventory.SetValue(s.Forsale[index], index1);
                 s.Forsale.RemoveAt(index);
-                p.Gold -= cost;
+                p.Equipment.RemoveGold(cost);
                 HUDTools.Print("Item bought!", 3);
             } else {
                 HUDTools.Print("You don't have enough gold!");
@@ -241,7 +241,7 @@ namespace Saga.Items.Loot
                 case "potion":
                 if (potion?.PotionQuantity > 0) {
                     potion.PotionQuantity--;
-                    p.Gold += price;
+                    p.Equipment.AddGold(price);
                     break;
                 } else {
                     Console.WriteLine("You don't have any potions to sell!");
@@ -251,7 +251,7 @@ namespace Saga.Items.Loot
                 case "5x potion":
                 if (potion?.PotionQuantity >= 5) {
                     potion.PotionQuantity -= 5;
-                    p.Gold += price;
+                    p.Equipment.AddGold(price);
                     break;
                 } else {
                     Console.WriteLine("You don't that many potions to sell!");
@@ -282,7 +282,7 @@ namespace Saga.Items.Loot
                 } else {
                     p.Inventory.SetValue(null, index);
                 }                 
-                p.Gold += price;
+                p.Equipment.AddGold(price);
                 HUDTools.Print("Item sold!", 3);
             }
         }
@@ -296,7 +296,7 @@ namespace Saga.Items.Loot
                 ItemName = RandomArmorName((ArmorType)armorType, (Slot)slot),
                 ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
             };
-            return (IEquipable)item;
+            return item;
         }
         public static IEquipable CreateRandomWeapon(int level) {
             int weapon = Program.Rand.Next(10);
@@ -309,7 +309,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $" You swing your {itemName}",
                     };
                     return item;
                 case 1:
@@ -318,7 +318,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $" You swing your {itemName}",
                     };
                     return item;
                 case 2:
@@ -327,7 +327,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $" You swing your {itemName}",
                     };
                     return item;
                 case 3:
@@ -336,7 +336,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $" You swing your {itemName}",
                     };
                     return item;
                 case 4:
@@ -345,7 +345,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You fire an arrow from your {itemName}",
+                        AttackDescription = $" You fire an arrow from your {itemName}",
                     };
                     return item;
                 case 5:
@@ -354,7 +354,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You stab with your {itemName}",
+                        AttackDescription = $" You stab with your {itemName}",
                     };
                     return item;
                 case 6:
@@ -363,7 +363,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You fire a bolt with your {itemName}",
+                        AttackDescription = $" You fire a bolt with your {itemName}",
                     };
                     return item;
                 case 7:
@@ -372,7 +372,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You swing your {itemName}",
+                        AttackDescription = $" You swing your {itemName}",
                     };
                     return item;
                 case 8:
@@ -381,7 +381,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You stab with your {itemName}",
+                        AttackDescription = $" You stab with your {itemName}",
                     };
                     return item;
                 case 9:
@@ -390,7 +390,7 @@ namespace Saga.Items.Loot
                         ItemLevel = Math.Max(1, Program.CurrentPlayer.Level + level),
                         ItemDescription = "A piece from Gheed's collection.\nYou start to wonder where he gets his items from...",
                         ItemName = itemName,
-                        AttackDescription = $"You bash with your {itemName}",
+                        AttackDescription = $" You bash with your {itemName}",
                     };
                     return item;
             }

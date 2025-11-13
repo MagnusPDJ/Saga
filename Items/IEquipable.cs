@@ -19,7 +19,8 @@ namespace Saga.Items
         Finger_2,
         Crest,
         Trinket,
-        Potion
+        Potion,
+        Pouch
     }
     public interface IEquipable : IItem
     {

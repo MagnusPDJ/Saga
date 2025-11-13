@@ -21,7 +21,6 @@ namespace Saga.Character
         public int Level { get; set; }
         public int Exp { get; set; }
         private int LevelUpValue { get; set; } = 265;
-        public int Gold { get; set; }
         public int Health { get; private set; }
         public int Mana { get; set; }
         public int FreeAttributePoints { get; set; }
@@ -54,7 +53,6 @@ namespace Saga.Character
             CompletedQuests = [];
             NpcsInCamp = [];
             Exp = 0;
-            Gold = 0;
             FreeAttributePoints = 0;
             BuffedStats = new BuffedStats(this);
             Attributes = new Attributes(this, strength, dexterity, intellect);

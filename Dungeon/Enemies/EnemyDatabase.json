@@ -40,7 +40,7 @@
     "MaxHealth": 8,
     "Health": 8,
     "Attack": 2,
-    "Initiative": 1,
+    "Initiative": 2,
     "Armor": 0,
     "PhysicalResistance": {
       "Normal": 0,

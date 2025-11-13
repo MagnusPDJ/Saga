@@ -26,6 +26,7 @@ namespace Saga.Character
         public IEquipable? Finger_2 { get; set; }
         public IEquipable? Crest { get; set; }
         public IEquipable? Trinket { get; set; }
+        public IEquipable Pouch { get; set; } = new GoldPouch();
         public IConsumable[] Potions { get; set; } = new IConsumable[4];
 
         public event Action? EquipmentChanged;
@@ -97,6 +98,7 @@ namespace Saga.Character
             yield return new(nameof(Finger_2), Finger_2);
             yield return new(nameof(Crest), Crest);
             yield return new(nameof(Trinket), Trinket);
+            yield return new(nameof(Pouch), Pouch);
         }
 
         /// <summary>
@@ -307,6 +309,26 @@ namespace Saga.Character
                     Potions.SetValue(null, index);
                     HUDTools.Print($" You have used up all of your {(potion as IItem)!.ItemName}s in slot {index + 1}.", 10);
                 }
+            }
+        }
+
+        public void AddGold(int amount) {
+            if (Pouch is GoldPouch goldPouch) {
+                goldPouch.GoldAmount += amount;
+            }
+        }
+
+        public void RemoveGold(int amount) {
+            if (Pouch is GoldPouch goldPouch) {
+                goldPouch.GoldAmount -= amount;
+            }
+        }
+
+        public int GetGoldAmount() {
+            if (Pouch is GoldPouch goldPouch) {
+                return goldPouch.GoldAmount;
+            } else {
+                return 0;
             }
         }
     }

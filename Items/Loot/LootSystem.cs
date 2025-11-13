@@ -292,14 +292,14 @@ namespace Saga.Items.Loot
             int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
             if (g > 0) {
                 HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
-                Program.CurrentPlayer.Gold += g;
+                Program.CurrentPlayer.Equipment.AddGold(g);
             }
         }
         //Metode til at få en bestemt mængde guld:
         public static void GetFixedGold(int g) {
             if (g > 0) {
                 HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
-                Program.CurrentPlayer.Gold += g;
+                Program.CurrentPlayer.Equipment.AddGold(g);
             }
         }
 
