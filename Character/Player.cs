@@ -1,8 +1,8 @@
 ﻿using Saga.Assets;
 using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
-using Saga.Dungeon;
 using Saga.Dungeon.Enemies;
+using Saga.Dungeon.People;
 using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;

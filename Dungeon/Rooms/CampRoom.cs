@@ -1,5 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Character;
+using Saga.Dungeon.People;
 using Saga.Dungeon.Quests;
 using Saga.Items.Loot;
 

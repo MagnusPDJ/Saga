@@ -2,7 +2,7 @@
 using Saga.Dungeon.Quests;
 using System.Text.Json;
 
-namespace Saga.Dungeon 
+namespace Saga.Dungeon.People 
 {
     public class NonPlayableCharacters {
         public required string Name { get; set; }
@@ -30,7 +30,7 @@ namespace Saga.Dungeon
         }
         //Funktion til at tilføje en NPC til campen som kan snakkes med.
         public static void AddNpcToCamp(string name) {
-            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.Npcs.json"), Program.Options) ?? [];
+            var allNpcs = JsonSerializer.Deserialize<List<NonPlayableCharacters>>(HUDTools.ReadAllResourceText("Saga.Dungeon.People.NpcsDatabase.json"), Program.Options) ?? [];
             var npcToAdd = allNpcs.FirstOrDefault(x => x.Name.Equals(name));
             if (npcToAdd != null) {
                 npcToAdd.Greeting = npcToAdd.Greeting.Replace("playername", Program.CurrentPlayer.Name);
@@ -41,7 +41,7 @@ namespace Saga.Dungeon
         }
         //Metode til at opdatere dialog mulighederne baseret på valg taget igennem spillet.
         public static void UpdateDialogueOptions(string instance) {
-            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.Dialogue.txt");
+            List<string> lines = HUDTools.ReadAllResourceLines("Saga.Dungeon.People.Dialogue.txt");
             lines.RemoveAt(0);
 
             foreach (NonPlayableCharacters npc in Program.CurrentPlayer.NpcsInCamp) {

@@ -1,6 +1,5 @@
 ﻿using Saga.Character;
 using Saga.Character.DmgLogic;
-using Saga.Dungeon;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
 using Saga.Items;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Linq;
 using Saga.Character.Skills;
 using Saga.Character.Buffs;
+using Saga.Dungeon.People;
 
 namespace Saga.Assets
 {

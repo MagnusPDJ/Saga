@@ -50,8 +50,8 @@
     <EmbeddedResource Include="Dungeon\Enemies\EnemyDatabase.json" />
     <EmbeddedResource Include="Dungeon\Enemies\SpawnRulesDatabase.json" />
     <EmbeddedResource Include="Dungeon\Quests\Act1Quests.json" />
-    <EmbeddedResource Include="Dungeon\Npcs.json" />
-    <EmbeddedResource Include="Dungeon\Dialogue.txt" />
+    <EmbeddedResource Include="Dungeon\People\NpcsDatabase.json" />
+    <EmbeddedResource Include="Dungeon\People\Dialogue.txt" />
     <EmbeddedResource Include="Items\Loot\CraftingItemDatabase.json" />
     <EmbeddedResource Include="Items\Loot\QuestItemDatabase.json" />
     <EmbeddedResource Include="Items\Loot\ArmorDatabase.json" />
