@@ -276,6 +276,32 @@ namespace Saga.Assets
             return (true, 1);
         }
 
+        //Tilføjer spaces før og efter en string, bruges til at bygge HUDS med varierende string længder.
+        // \u001b[0m Reset color
+        // \u001b[31m rød
+        // \u001b[34m blå
+        // \u001b[32m grøn
+        // \u001b[33m gul
+        private static string AddSpacesToEnds(string input, string side, int width) {           
+            int inputWidth = input.Replace("\u001b[0m", "").Replace("\u001b[31m", "").Replace("\u001b[32m", "").Replace("\u001b[33m", "").Replace("\u001b[34m", "").Length;
+            if (side == "Left") {
+                for (int i = 0; i < width-inputWidth; i++) {
+                    input = " " + input;
+                }
+            } else if (side == "Right") {
+                for (int i = 0; i < width - inputWidth; i++) {
+                    input += " ";
+                }
+            } else if (side == "Both") {
+                for (int i = 0; i < width - inputWidth; i++) {
+                    input = " " + input;
+                    input = input + " ";
+                    i++;
+                }
+            }
+            return input;
+        }
+
         //HUDS
         public static void MainMenu() {
             Console.Clear();
@@ -685,19 +711,19 @@ namespace Saga.Assets
                   Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
             Console.WriteLine($"\t\t{player.Name} the {player.CurrentClass}:");
-            WriteCenterLine($"                Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m | | {(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"                     Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"              Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{player.DerivedStats.ActionPoints}\u001b[0m | | {(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 3 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}");
-            WriteCenterLine($"                     Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m | | {(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 4 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}");
+            WriteCenterLine($"              {AddSpacesToEnds($"  Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m", "Right", 25)                                 }| | {AddSpacesToEnds($"{(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"       Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m", "Right", 25)                                     }| | {AddSpacesToEnds($"{(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{player.DerivedStats.ActionPoints}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"       Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m", "Right", 25)                                             }| | {AddSpacesToEnds($"{(player.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}", "Right", 25)}");
             WriteCenterLine($"Level: {player.Level}                                                            ");
              WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
-            WriteCenterLine($" ============== Actions ============|=============== Info ==============");
-            Console.WriteLine($"               |  (1) Quick Cast: {player.SkillTree.QuickCast} ({quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP) |  (C)haracter screen |");
-            Console.WriteLine($"               |  (2) Attack ({basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP)    (3) Drink Potion ({(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP) |   Combat (L)og |");
-            WriteCenterLine($" |  (4) Run        (5) Skills       |  (Q)uestlog                      |");
-            WriteCenterLine($" ===================================|===================================");
-            WriteCenterLine($" {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}                                                          ");
-            Console.WriteLine($"\n Choose an action...\n");
+              Console.WriteLine($"       ======================= Actions =====================|======== Info ========");
+              Console.WriteLine($"       |  {AddSpacesToEnds($"(1) Quick Cast: {player.SkillTree.QuickCast} (\u001b[32m{quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m & \u001b[34m{quickCastSkill?.ManaCost} Mana\u001b[0m)", "Right", 50)}|  (C)haracter screen |");
+              Console.WriteLine($"       |  (2) Attack {AddSpacesToEnds($"(\u001b[32m{basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP\u001b[0m)", "Right", 15)}(4) Skills              |   Combat (L)og      |");
+              Console.WriteLine($"       |  (3) Drink Potion (\u001b[32m{(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP\u001b[0m)   (5) Run                 |  (Q)uestlog         |");
+              Console.WriteLine($"       =====================================================|======================");
+              Console.WriteLine($"          {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");
+            Console.WriteLine($"\n   Choose an action...\n");
         }
         public static void RoomHUD() {
             Console.Clear();

@@ -135,7 +135,7 @@ namespace Saga.Assets
                         SpendActionPoints(usedAP, potion);
                     }                    
                 break;
-                case "4":
+                case "5":
                     //Run                   
                     if (_player.DerivedStats.ActionPoints != RemainingActionPoints) {
                         HUDTools.Print($" You have used action points this turn and can't run away...", 3);
@@ -156,7 +156,7 @@ namespace Saga.Assets
                         }
                     }
                         break;
-                case "5":
+                case "4":
                     //Skill tree logic
                     HUDTools.Print($" *Not implemented*", 3);
                     TextInput.PressToContinue();
