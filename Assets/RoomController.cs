@@ -7,27 +7,9 @@ namespace Saga.Assets
     {
         public static readonly CampRoom Camp = new();
         public static readonly StartRoom StartRoom = new();
-
-        public InputAction[] InputRoomActions = [
-            new Go("go"),
-            new Use("use"),
-            new Look("look"),
-            new DrinkHealingPotion("drink", "d"),
-            new SeeCharacterScreen("character", "c"),
-            new SeeInventory("inventory", "i"),
-            new SeeQuestLog("questlog", "l"),
-            new SeeSkillTree("skilltree", "k")
-        ];
-        public InputAction[] InputInvActions = [
-            new Examine("examine"),
-            new Equip("equip"),
-            new UnEquip("unequip"),
-            new Back("back", "b"),
-        ];
         public RoomBase CurrentRoom { get; set; } = Camp;
         public DungeonInstance CurrentDungeonInstance { get; set; } = new();
         public bool Ran { get; set; } = false;
-        
 
         public void ChangeRoom(string keystring, RoomBase? room = null) {
             bool foundRoom = false;

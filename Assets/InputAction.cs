@@ -1,8 +1,6 @@
-﻿using Saga.Character;
-using Saga.Character.DmgLogic;
+﻿using Saga.Character.DmgLogic;
 using Saga.Dungeon.Rooms;
 using Saga.Items;
-using Windows.Media.Capture.Core;
 
 namespace Saga.Assets
 {
@@ -192,7 +190,7 @@ namespace Saga.Assets
         public override string RespondToInput(string[] separatedInputWords) {        
             while (true) {
                 HUDTools.InventoryScreen();
-                string input = TextInput.PlayerPrompt(false);
+                string input = TextInput.PlayerPrompt("InvActions");
                 if (input == "back") {
                     break;
                 }

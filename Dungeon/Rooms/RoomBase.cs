@@ -21,7 +21,7 @@ namespace Saga.Dungeon.Rooms
             string exit = "";
             HUDTools.RoomHUD();
             while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
+                exit = TextInput.PlayerPrompt("RoomActions");
             }
             Program.RoomController.ChangeRoom(exit);
         }

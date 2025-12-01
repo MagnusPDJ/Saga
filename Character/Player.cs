@@ -195,46 +195,6 @@ namespace Saga.Character
                 Program.MainMenu();
             }
         }
-        //Metode til at kalde basic actions (heal, inventory og character).
-        public void BasicActions(string input) {
-            if (input == "d" || input == "drink" || input == "potion" || input == "drink potion") {
-                Equipment.ChoosePotionToDrink();
-                var potion = Array.Find(Equipment.Potions, p => p is IItem { ItemName: "Healing Potion" });
-                potion?.Consume();
-            } else if (input == "c" || input == "character" || input == "character screen") {
-                HUDTools.CharacterScreen();
-                TextInput.PressToContinue();
-            } else if (input == "i" || input == "inventory") {
-                while (true) {
-                    HUDTools.InventoryScreen();
-                    string input2 = TextInput.PlayerPrompt(false);
-                    if (input2 == "back") {
-                        break;
-                    }
-                }
-            } else if (input == "l" || input == "questlog") {
-                HUDTools.QuestLogHUD();
-                TextInput.PressToContinue();
-            } else if (input == "k" || input == "skill" || input == "skills" || input == "skilltree") {
-                while (true) {
-                    HUDTools.ShowSkillTree();
-                    string input2 = TextInput.PlayerPrompt();
-                    if (input2 == "b") {
-                        break;
-                    } else if (int.TryParse(input, out int choice)) {
-                        Program.CurrentPlayer.SpendSkillPoint(choice - 1);
-                    }
-                }
-            } else {
-                HUDTools.Print($"There is no {input} action...", 15);
-                TextInput.PressToContinue();
-                HUDTools.ClearLastLine(3);
-                return;
-            }
-            if (Program.RoomController.CurrentRoom == RoomController.Camp) {
-                HUDTools.FullCampHUD();
-            }
-        }
         //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
         public void UpdateQuestLog() {
             foreach (Quest quest in QuestLog) {

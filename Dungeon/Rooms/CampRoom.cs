@@ -72,7 +72,8 @@ namespace Saga.Dungeon.Rooms
                 }
                 //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
                 else {
-                    Program.CurrentPlayer.BasicActions(input);
+                    TextInput.PlayerPrompt("EventActions", input);
+                    HUDTools.FullCampHUD();
                 }
             }
             return choice;

@@ -162,6 +162,12 @@ namespace Saga.Assets
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                     break;
+                case "l":
+                    //View combat log
+                    HUDTools.Print($" *Not implemented*", 3);
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
+                    break;
                 case "c":
                     HUDTools.CharacterScreen();
                     TextInput.PressToContinue();

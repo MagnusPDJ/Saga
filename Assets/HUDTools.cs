@@ -7,7 +7,6 @@ using Saga.Items.Loot;
 using System.Configuration;
 using System.Reflection;
 using System.Text;
-using System.Linq;
 using Saga.Character.Skills;
 using Saga.Character.Buffs;
 using Saga.Dungeon.People;

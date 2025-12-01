@@ -143,7 +143,7 @@ namespace Saga.Dungeon.Rooms
                     Console.WriteLine(" Invalid Input: Whole numbers 1-4 only");
                     TextInput.PressToContinue();
                 } else {
-                    Program.CurrentPlayer.BasicActions(input);
+                    TextInput.PlayerPrompt("EventActions", input);
                 }
             }
             HUDTools.ClearLastLine(1);

@@ -81,7 +81,7 @@ namespace Saga.Dungeon.Rooms
                         TextInput.PressToContinue();
                         break;
                     } else {
-                        Program.CurrentPlayer.BasicActions(input);
+                        TextInput.PlayerPrompt("EventActions", input);
                     }
                 }
                 if (leftForDead) {
@@ -115,7 +115,7 @@ namespace Saga.Dungeon.Rooms
             string exit = "";
             HUDTools.RoomHUD();
             while (exit == "") {
-                exit = TextInput.PlayerPrompt(true);
+                exit = TextInput.PlayerPrompt("RoomActions");
             }
             Description = " You look around the old jail. There is nothing of value.";
             Program.RoomController.ChangeRoom(exit);

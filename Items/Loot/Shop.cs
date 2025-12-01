@@ -64,7 +64,7 @@ namespace Saga.Items.Loot
                 } else if (input == "i" || input == "inventory") {
                     while (true) {
                         HUDTools.InventoryScreen();
-                        string input2 = TextInput.PlayerPrompt(false);
+                        string input2 = TextInput.PlayerPrompt("InvActions");
                         if (input2 == "back") {
                             break;
                         }
@@ -97,7 +97,7 @@ namespace Saga.Items.Loot
                     } else if (input1 == "i" || input1 == "inventory") {
                         while (true) {
                             HUDTools.InventoryScreen();
-                            string input2 = TextInput.PlayerPrompt(false);
+                            string input2 = TextInput.PlayerPrompt("InvActions");
                             if (input2 == "back") {
                                 break;
                             }
