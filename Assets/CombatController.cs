@@ -155,19 +155,39 @@ namespace Saga.Assets
                             Endturn = true;
                         }
                     }
-                        break;
+                break;
                 case "4":
                     //Skill tree logic
-                    HUDTools.Print($" *Not implemented*", 3);
-                    TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
-                    break;
+                    HUDTools.ShowSkillsCombat(_player, this);
+                    while (true) {
+                        input = TextInput.PlayerPrompt();
+                        if (input == "b") {
+                            break;
+                        } else if (int.TryParse(input, out int choice)) {
+                            if (CanUseAction((IAction)_player.LearnedSkills[choice - 1])) {
+                                HUDTools.CombatHUD(_player, _enemy, this);
+                                if (_player.LearnedSkills[choice - 1] is ISelfSkill selfSkill) {
+                                    bool usedAP = selfSkill.Activate(_player);
+                                    SpendActionPoints(usedAP, selfSkill);
+                                } else if (_player.LearnedSkills[choice - 1] is ITargetedSkill targetedSkill) {
+                                    bool usedAP = targetedSkill.Activate(Program.CurrentPlayer, _enemy);
+                                    SpendActionPoints(usedAP, targetedSkill);
+                                }
+                                break;
+                            }                           
+                        } else {
+                            HUDTools.Print("Wrong input.", 5);
+                            TextInput.PressToContinue();
+                            HUDTools.ClearLastLine(3);
+                        }
+                    }
+                break;
                 case "l":
                     //View combat log
                     HUDTools.Print($" *Not implemented*", 3);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
-                    break;
+                break;
                 case "c":
                     HUDTools.CharacterScreen();
                     TextInput.PressToContinue();
@@ -254,7 +274,7 @@ namespace Saga.Assets
                 }
             }
         }
-        public int GetRemainingActionPoints() {
+        public int GetRemainingAP() {
             return RemainingActionPoints;
         }
 

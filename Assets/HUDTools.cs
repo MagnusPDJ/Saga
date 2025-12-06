@@ -594,6 +594,19 @@ namespace Saga.Assets
             }
             Print("\n Enter the number of the skill to unlock, or '(b)ack' to exit.", 10);
         }
+        public static void ShowSkillsCombat(Player player, CombatController cController) {
+            Console.Clear();
+            Console.WriteLine($" Health:        \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m");
+            Console.WriteLine($" Mana:          \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m");
+            Console.WriteLine($" Action Points: \u001b[32m{cController.GetRemainingAP()}/{player.DerivedStats.ActionPoints}\u001b[0m");
+            Console.WriteLine("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-");
+            Print($" Useable Skills:", 0);
+            for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
+                var s = Program.CurrentPlayer.LearnedSkills[i];
+                Print($"{i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - \u001b[32m{((IActiveSkill)s).ActionPointCost / (((IActiveSkill)s).SpeedType == "Casting Speed" ? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(s.ManaCost > 0 ? $"& \u001b[34m{s.ManaCost} Mana\u001b[0m" : "")}", 0);
+            }
+            Print("\n Enter the number of the skill to use, or '(b)ack'.", 10);
+        }
         public static void InventoryScreen() {
             Console.Clear();
             Console.WriteLine("******************** Equipment *****************************");
@@ -695,12 +708,12 @@ namespace Saga.Assets
             }
             Print($"\n To equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\n To examine item write examine Itemname else (b)ack\n", 0);
         }
-        public static void CombatHUD(Player player, EnemyBase Monster, CombatController combatController) {
+        public static void CombatHUD(Player player, EnemyBase Monster, CombatController cController) {
             var quickCastSkill = player.LearnedSkills.Find(x => x.Name == player.SkillTree.QuickCast) as IActiveSkill;
             var basicAttackSkill = player.LearnedSkills.Find(x => x.Name == "Basic Attack") as IActiveSkill;
             Console.Clear();
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-                 Console.WriteLine($" Turn: {combatController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
+                 Console.WriteLine($" Turn: {cController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
                  Console.WriteLine($" Fighting: {Monster.Name}!");
                  Console.WriteLine($" Power: {Monster.Power}\tAttack: {Monster.Attack}\tEnemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (player.DerivedStats.Initiative >= Monster.Initiative) {
@@ -711,14 +724,14 @@ namespace Saga.Assets
                   Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }           
             Console.WriteLine($"\t\t{player.Name} the {player.CurrentClass}:");
-            WriteCenterLine($"              {AddSpacesToEnds($"  Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m", "Right", 25)                                 }| | {AddSpacesToEnds($"{(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}", "Right", 25)}");
-            WriteCenterLine($"              {AddSpacesToEnds($"       Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m", "Right", 25)                                     }| | {AddSpacesToEnds($"{(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}", "Right", 25)}");
-            WriteCenterLine($"              {AddSpacesToEnds($"Action Points: \u001b[32m{combatController.GetRemainingActionPoints()}/{player.DerivedStats.ActionPoints}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}", "Right", 25)}");
-            WriteCenterLine($"              {AddSpacesToEnds($"       Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m", "Right", 25)                                             }| | {AddSpacesToEnds($"{(player.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"  Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m", "Right", 25)                  }| | {AddSpacesToEnds($"{(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"       Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m", "Right", 25)                      }| | {AddSpacesToEnds($"{(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"Action Points: \u001b[32m{cController.GetRemainingAP()}/{player.DerivedStats.ActionPoints}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"       Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m", "Right", 25)                              }| | {AddSpacesToEnds($"{(player.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}", "Right", 25)}");
             WriteCenterLine($"Level: {player.Level}                                                            ");
              WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
               Console.WriteLine($"       ======================= Actions =====================|======== Info ========");
-              Console.WriteLine($"       |  {AddSpacesToEnds($"(1) Quick Cast: {player.SkillTree.QuickCast} (\u001b[32m{quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m & \u001b[34m{quickCastSkill?.ManaCost} Mana\u001b[0m)", "Right", 50)}|  (C)haracter screen |");
+              Console.WriteLine($"       |  {AddSpacesToEnds($"(1) Quick Cast: {player.SkillTree.QuickCast} (\u001b[32m{quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(quickCastSkill?.ManaCost > 0? $"& \u001b[34m{quickCastSkill?.ManaCost} Mana\u001b[0m" : "")})", "Right", 50)}|  (C)haracter screen |");
               Console.WriteLine($"       |  (2) Attack {AddSpacesToEnds($"(\u001b[32m{basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP\u001b[0m)", "Right", 15)}(4) Skills              |   Combat (L)og      |");
               Console.WriteLine($"       |  (3) Drink Potion (\u001b[32m{(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP\u001b[0m)   (5) Run                 |  (Q)uestlog         |");
               Console.WriteLine($"       =====================================================|======================");

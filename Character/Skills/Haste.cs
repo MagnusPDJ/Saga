@@ -18,7 +18,7 @@ namespace Saga.Character.Skills
         public string SpeedType => "Casting Speed";
         public Haste() {
             Name = "Haste";
-            Description = "Being trained for combat you can take multiple actions during a turn. (Lowers the AP cost of attacks, skills and Potions)";
+            Description = "Being trained for combat you can take multiple actions during a turn. (Lowers the\n AP cost of attacks, skills and Potions)";
             IsUnlocked = true;
             ManaCost = 5;
         }

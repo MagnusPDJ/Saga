@@ -218,6 +218,10 @@ namespace Saga.Assets
                     break;
                 } else if (int.TryParse(input, out int choice)) {
                     Program.CurrentPlayer.SpendSkillPoint(choice - 1);
+                } else {
+                    HUDTools.Print("Wrong input.", 5);
+                    TextInput.PressToContinue();
+                    HUDTools.ClearLastLine(3);
                 }
             }
             HUDTools.RoomHUD();
