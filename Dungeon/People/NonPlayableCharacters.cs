@@ -90,7 +90,7 @@ namespace Saga.Dungeon.People
                     string input = TextInput.PlayerPrompt();
                     if (input == "b" || input == "back") {
                         donetalking = true;
-                        Program.CurrentPlayer.UpdateQuestLog();
+                        Quest.UpdateQuestLog(Program.CurrentPlayer);
                         break;
                     } else if (int.TryParse(input, out int n) && n >= 1 && n <= questions.Count) {
                         n--;
@@ -112,7 +112,7 @@ namespace Saga.Dungeon.People
                                 HUDTools.Print($"Thanks alot {Program.CurrentPlayer.Name}", 20);
                                 var questToAdd = Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == talkto.AvailableQuests[0].Name);
                                 if (questToAdd != null) {
-                                    Program.CurrentPlayer.CompleteAndTurnInQuest(questToAdd);
+                                    Quest.TurnInQuest(Program.CurrentPlayer, questToAdd);
                                 }
                                 talkto.AvailableQuests.RemoveAt(0);
                                 TextInput.PressToContinue();
@@ -159,7 +159,7 @@ namespace Saga.Dungeon.People
                             if ((found = Program.CurrentPlayer.QuestLog.Find(quest => quest.Giver == "Gheed" && quest.Completed == true)) != null) {
                                 HUDTools.Print($"I did what you asked.", 0);
                                 HUDTools.Print($"Magnificent {Program.CurrentPlayer.Name}!", 20);
-                                Program.CurrentPlayer.CompleteAndTurnInQuest(found);
+                                Quest.TurnInQuest(Program.CurrentPlayer, found);
                                 TextInput.PressToContinue();
                                 HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
                             } else {

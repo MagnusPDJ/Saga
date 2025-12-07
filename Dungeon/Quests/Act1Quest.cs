@@ -69,7 +69,7 @@ namespace Saga.Dungeon.Quests
                     found.Amount++;
                 }
             }
-            Program.CurrentPlayer.UpdateQuestLog();
+            UpdateQuestLog(Program.CurrentPlayer);
         } 
     }
 }

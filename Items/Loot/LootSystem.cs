@@ -1,6 +1,7 @@
 ﻿using Saga.Assets;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Enemies.Interfaces;
+using Saga.Dungeon.Quests;
 using System.Text.Json;
 
 namespace Saga.Items.Loot
@@ -283,7 +284,7 @@ namespace Saga.Items.Loot
                 HUDTools.Print($" You gain {questItem?.ItemName}", 15);
             }
             Console.ResetColor();
-            Program.CurrentPlayer.UpdateQuestLog();
+            Quest.UpdateQuestLog(Program.CurrentPlayer);
         }
         //Metode til at få en tilfældig mængde guld:
         public static void GetGold(float modifier = 1) {

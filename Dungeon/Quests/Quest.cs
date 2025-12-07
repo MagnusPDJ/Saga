@@ -1,4 +1,7 @@
-﻿using Saga.Items;
+﻿using Saga.Assets;
+using Saga.Character;
+using Saga.Items;
+using Saga.Items.Loot;
 using System.Text.Json.Serialization;
 
 namespace Saga.Dungeon.Quests
@@ -71,6 +74,33 @@ namespace Saga.Dungeon.Quests
                 }
             }
                 return false;
+        }
+        //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
+        public static void UpdateQuestLog(Player player) {
+            foreach (Quest quest in player.QuestLog) {
+                quest.Completed = quest.CheckRequirements();
+            }
+        }
+        //Metode til at få alle quest rewards og opdatere questlogs.
+        public static void TurnInQuest(Player player, Quest quest) {
+            if (quest.QuestType == Type.Collect || quest.QuestType == Type.Find) {
+                int qItem = Array.FindIndex(player.Inventory, item => item != null && item.ItemId == quest.Target);
+                if (qItem != -1) {
+                    player.Inventory.SetValue(null, qItem);
+                }
+            }
+            player.QuestLog.Remove(quest);
+            player.CompletedQuests.Add(quest);
+            Program.SoundController.Play("win");
+            HUDTools.Print($"\u001b[96m You've completed the quest: {quest.Name}!\u001b[0m", 15);
+            LootSystem.GetFixedGold(quest.Gold);
+            if (quest.Potions is not null) LootSystem.GetPotionsByType(quest.Potions);
+            LootSystem.GetFixedExp(quest.Exp);
+            if (quest.Item != null) {
+                int index = Array.FindIndex(player.Inventory, i => i == null || player.Inventory.Length == 0);
+                player.Inventory.SetValue(quest.Item, index);
+                HUDTools.Print($"\u001b[35m You've gained {quest.Item.ItemName}\u001b[0m");
+            }
         }
 
     }

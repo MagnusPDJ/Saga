@@ -195,39 +195,6 @@ namespace Saga.Character
                 Program.MainMenu();
             }
         }
-        //Metode til at opdatere questloggen hver gang ny quest eller item bliver added til spilleren.
-        public void UpdateQuestLog() {
-            foreach (Quest quest in QuestLog) {
-                quest.Completed = quest.CheckRequirements();
-            }
-        }
-        //Metode til at få alle quest rewards og opdatere questlogs.
-        public void CompleteAndTurnInQuest(Quest quest)  {
-            int qItem = Array.FindIndex(Inventory, item => item != null && item.ItemId == "oldkey");
-            if (qItem != -1) {
-                Inventory.SetValue(null, qItem);
-            }
-            qItem = Array.FindIndex(Inventory, item => item != null && item.ItemId == "rattail");
-            if (qItem != -1) {
-                Inventory.SetValue(null, qItem);
-            }
-            qItem = Array.FindIndex(Inventory, item => item != null && item.ItemId == "batwings");
-            if (qItem != -1) {
-                Inventory.SetValue(null, qItem);
-            }
-            QuestLog.Remove(quest);
-            CompletedQuests.Add(quest);
-            Program.SoundController.Play("win");
-            HUDTools.Print($"\u001b[96m You've completed the quest: {quest.Name}!\u001b[0m", 15);
-            LootSystem.GetFixedGold(quest.Gold);
-            if (quest.Potions is not null) LootSystem.GetPotionsByType(quest.Potions);
-            LootSystem.GetFixedExp(quest.Exp);
-            if (quest.Item != null) {
-                int index = Array.FindIndex(Inventory, i => i == null || Inventory.Length == 0);
-                Inventory.SetValue(quest.Item, index);
-                HUDTools.Print($"\u001b[35m You've gained {quest.Item.ItemName}\u001b[0m");
-            }
-        }
         public void TakeDamage(int damage) {
             Health -= damage;
         }

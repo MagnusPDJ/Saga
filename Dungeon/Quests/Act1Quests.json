@@ -2,6 +2,7 @@
   {
     "Name": "Free Flemsha",
     "QuestType": 2,
+    "Target":  "oldkey",
     "Giver": "Flemsha",
     "Objective": "You've met a prisoner who calls himself Flemsha. He claims if you free him,\n he will offer his alchemical expertise to your cause.",
     "TurnIn": "You have found an old key, it is likely a prison key.\n You should return to Flemsha's cell.",

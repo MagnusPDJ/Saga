@@ -59,7 +59,7 @@ namespace Saga.Dungeon.Rooms
                             input = TextInput.PlayerPrompt();
                             if (input == "y") {
                                 Act1Quest.AddQuest("Free Flemsha");
-                                Program.CurrentPlayer.UpdateQuestLog();
+                                Quest.UpdateQuestLog(Program.CurrentPlayer);
                                 break;
                             } else if (input == "n") {
                                 HUDTools.Print(" A locked up prisoner doesn't seem that useful to you. So you decide to leave him behind");
@@ -101,7 +101,7 @@ namespace Saga.Dungeon.Rooms
                     HUDTools.Print(" He thanks you very much and you tell him about your camp, where Gheed is too.", 20);
                     var quest = Program.CurrentPlayer.QuestLog.Find(quest => quest.Name == "Free Flemsha");
                     if (quest != null) {
-                        Program.CurrentPlayer.CompleteAndTurnInQuest(quest);
+                        Quest.TurnInQuest(Program.CurrentPlayer, quest);
                     }
                     NonPlayableCharacters.AddNpcToCamp("Flemsha");
                     TextInput.PressToContinue();
