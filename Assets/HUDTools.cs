@@ -295,11 +295,24 @@ namespace Saga.Assets
             } else if (side == "Both") {
                 for (int i = 0; i < width - inputWidth; i++) {
                     input = " " + input;
-                    input += " ";
                     i++;
+                    if (i >= width - inputWidth) {
+                        break;
+                    }
+                    input += " ";              
                 }
             }
             return input;
+        }
+        private static string DisplaySkill(int index) {
+            ISkill skill = Program.CurrentPlayer.SkillTree.Skills[index];
+            if (skill.IsUnlocked) {
+                return AddSpacesToEnds($"\u001b[32m[X]{skill.Name}\u001b[0m", "Both", 18);
+            } else if (Program.CurrentPlayer.Level >= skill.LevelRequired) {
+                return AddSpacesToEnds($"\u001b[33m[*]{skill.Name}\u001b[0m", "Both", 18);
+            } else {
+                return AddSpacesToEnds($"[ ]{skill.Name}", "Both", 18);
+            }
         }
 
         //HUDS
@@ -533,68 +546,52 @@ namespace Saga.Assets
             }       
         }
         public static void ConstructSkillTree() {
-            //Metode til at bygge et skill tree.
-            //Console.WriteLine("************************************* Skill Tree ***************************************************\n" +
-            //                  "                                    ┌───────────┐\r\n" +
-            //                  "                                    │  [X] ROOT │\r\n" +
-            //                  "             ┌──────────────────────┴─────┬─────┴───────────────────────┐\r\n" +
-            //                  "        ┌────┴────┐                       │                        ┌────┴─────┐\r\n" +
-            //                  "        │[*]Attack│                       │                        │[X]Defense│\r\n" +
-            //                  "        └────┬────┘                       │                        └──────┬───┘\r\n" +
-            //                  "     ┌───────┴────────────┐               │                      ┌────────┴──────┐\r\n" +
-            //                  " ┌───┴────┐           ┌───┴─────┐         │                ┌─────┴─────┐    ┌────┴────┐\r\n" +
-            //                  " │[ ]Sword│           │[ ]Ranged│         │                │ [*]Armor  │    │[*]Shield│\r\n" +
-            //                  " └───┬────┘           └───┬─────┘         │                └─────┬─────┘    └────┬────┘\r\n" +
-            //                  "     │                    │               │                      │               │\r\n" +
-            //                  "┌────┴────┐         ┌─────┴──────┐        │                ┌─────┴────┐      ┌───┴────┐\r\n" +
-            //                  "│ [ ]Slash│         │[ ]Precision│        │                │[ ]Fortify│      │[ ]Block│\r\n" +
-            //                  "└────┬────┘         └─────┬──────┘        │                └─────┬────┘      └───┬────┘\r\n" +
-            //                  "     │                    │               │                      │               │\r\n" +
-            //                  "┌────┴──────┐      ┌──────┴──┐            │               ┌──────┴─────┐     ┌───┴────────┐\r\n" +
-            //                  "│[ ]Critical│      │[ ]Volley│            │               │[ ]Iron Skin│     │[ ]Iron Will│\r\n" +
-            //                  "└───────────┘      └─────────┘            │               └────────────┘     └────────────┘\r\n" +
-            //                  "             ┌────────────────────────────┴────────────────────────────┐\r\n" +
-            //                  "        ┌────┴────┐                                               ┌────┴─────┐\r\n" +
-            //                  "        │[ ]Magic │                                               │[ ]Utility│\r\n" +
-            //                  "        └────┬────┘                                               └────┬─────┘\r\n" +
-            //                  "     ┌───────┴─────────┐                                   ┌───────────┴─────────┐\r\n" +
-            //                  " ┌───┴────┐        ┌───┴────┐                         ┌────┴─────┐         ┌─────┴─────┐\r\n" +
-            //                  " │[ ]Fire │        │[ ]Frost│                         │[ ]Stealth│         │[ ]Crafting│\r\n" +
-            //                  " └───┬────┘        └───┬────┘                         └────┬─────┘         └─────┬─────┘\r\n" +
-            //                  "     │                 │                                   │                     │\r\n" +
-            //                  "┌────┴──────┐      ┌───┴────────┐                   ┌──────┴────┐        ┌───────┴──┐\r\n" +
-            //                  "│[ ]Fireball│      │[ ]Ice Shard│                   │[ ]Backstab│        │[ ]Alchemy│\r\n" +
-            //                  "└────┬──────┘      └───┬────────┘                   └──────┬────┘        └───────┬──┘\r\n" +
-            //                  "     │                 │                                   │                     │\r\n" +
-            //                  "┌────┴─────┐       ┌───┴───────┐                      ┌────┴─────────┐     ┌─────┴────┐\r\n" +
-            //                  "│[ ]Inferno│       │[ ]Blizzard│                      │[ ]Assassinate│     │[ ]Enchant│\r\n" +
-            //                  "└──────────┘       └───────────┘                      └──────────────┘     └──────────┘\r\n" +
-            //                  "****************************************************************************************************\n" +
-            //                  "Legend:\r\n" +
-            //                  "[X] = unlocked skill\r\n" +
-            //                  "[*] = available to learn\r\n" +
-            //                  "[ ] = locked\r\n" +
-            //                  "Commands: \r\n" +
-            //                  "- learn <SkillName>   → Unlock a skill\r\n" +
-            //                  "- info <SkillName>    → View skill details\r\n" +
-            //                  "- (b)ack              → Return");
+            StringBuilder stats = new("************************************* Skill Tree ***************************************************\n");
+                  stats.AppendFormat($"                                      ┌──────────────────┐\r\n");
+                  stats.AppendFormat($"                                      │{DisplaySkill(0)}│\r\n");
+                  stats.AppendFormat($"                        ┌─────────────┴────────┬─────────┴────────────┐\r\n");
+                  stats.AppendFormat($"              ┌─────────┴────────┐             │             ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"              │{DisplaySkill(1)}│             │             │[X]Defense        │\r\n");
+                  stats.AppendFormat($"              └─────────┬────────┘             │             └────────┬─────────┘\r\n");
+                  stats.AppendFormat($"            ┌───────────┴──────────┐           │           ┌──────────┴───────────┐\r\n");
+                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐ │ ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"  │[ ]Sword          │    │[ ]Ranged         │ │ │ [*]Armor         │    │[*]Shield         │\r\n");
+                  stats.AppendFormat($"  └─────────┬────────┘    └────────┬─────────┘ │ └─────────┬────────┘    └────────┬─────────┘\r\n");
+                  stats.AppendFormat($"            │                      │           │           │                      │\r\n");
+                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐ │ ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"  │[ ]Slash          │    │[ ]Precision      │ │ │[ ]Fortify        │    │[ ]Block          │\r\n");
+                  stats.AppendFormat($"  └─────────┬────────┘    └────────┬─────────┘ │ └─────────┬────────┘    └────────┬─────────┘\r\n");
+                  stats.AppendFormat($"            │                      │           │           │                      │\r\n");
+                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐ │ ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"  │[ ]Critical       │    │[ ]Volley         │ │ │[ ]Iron Skin      │    │[ ]Iron Will      │\r\n");
+                  stats.AppendFormat($"  └──────────────────┘    └──────────────────┘ │ └──────────────────┘    └──────────────────┘\r\n");
+                  stats.AppendFormat($"                        ┌──────────────────────┴──────────────────────┐\r\n");
+                  stats.AppendFormat($"              ┌─────────┴───────┐                            ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"              │[ ]Magic         │                            │[ ]Utility        │\r\n");
+                  stats.AppendFormat($"              └─────────┬───────┘                            └────────┬─────────┘\r\n");
+                  stats.AppendFormat($"            ┌───────────┴──────────┐                       ┌──────────┴───────────┐\r\n");
+                  stats.AppendFormat($"   ┌────────┴────────┐    ┌────────┴─────────┐   ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"   │[ ]Fire          │    │[ ]Frost          │   │[ ]Stealth        │    │[ ]Crafting       │\r\n");
+                  stats.AppendFormat($"   └────────┬────────┘    └────────┬─────────┘   └─────────┬────────┘    └────────┬─────────┘\r\n");
+                  stats.AppendFormat($"            │                      │                       │                      │\r\n");
+                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐   ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"  │[ ]Fireball       │    │[ ]Ice Shard      │   │[ ]Backstab       │    │[ ]Alchemy        │\r\n");
+                  stats.AppendFormat($"  └─────────┬────────┘    └────────┬─────────┘   └─────────┬────────┘    └────────┬─────────┘\r\n");
+                  stats.AppendFormat($"            │                      │                       │                      │\r\n");
+                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐   ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
+                  stats.AppendFormat($"  │[ ]Inferno        │    │[ ]Blizzard       │   │[ ]Assassinate    │    │[ ]Enchant        │\r\n");
+                  stats.AppendFormat($"  └──────────────────┘    └──────────────────┘   └──────────────────┘    └──────────────────┘\r\n");
+                  stats.AppendFormat($"****************************************************************************************************\n");
+            stats.AppendFormat(" Legend:\r\n");
+            stats.AppendFormat("  [X] = unlocked skill  [*] = available to learn  [ ] = locked\r\n");
+            stats.AppendFormat(" Commands: \r\n");
+            stats.AppendFormat("  - learn <SkillName>   → Unlock a skill\r\n");
+            stats.AppendFormat("  - info <SkillName>    → View skill details");
+            Print(stats.ToString(), 0);
         }
         public static void ShowSkillTree() {           
             Console.Clear();
-            Print($"Learned Skills:", 0);
-            List <ISkill> learnedSkills = Program.CurrentPlayer.SkillTree.GetLearnedSkills();
-            for (int i = 0; i < learnedSkills.Count; i++) {
-                var s = learnedSkills[i];
-                Print($" {i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - {s.Description}", 0);
-            }
-            var availableSkills = Program.CurrentPlayer.SkillTree.GetUnlockableSkills(Program.CurrentPlayer.Level);
-            if (availableSkills.Count != 0) {
-                Print("Available Skills:", 0);
-                for (int i = 0; i < availableSkills.Count; i++) {
-                    var s = availableSkills[i];
-                    Print($" {i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Min}/{s.Tier.Max})", 0);
-                }
-            }
+            ConstructSkillTree();
             Print("\n Enter '(b)ack' to exit.", 10);
         }
         public static void ShowSkillsCombat(Player player, CombatController cController) {
