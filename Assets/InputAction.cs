@@ -215,9 +215,7 @@ namespace Saga.Assets
                 HUDTools.ShowSkillTree();
                 string input = TextInput.PlayerPrompt();
                 if (input == "b") {
-                    break;
-                } else if (int.TryParse(input, out int choice)) {
-                    Program.CurrentPlayer.SpendSkillPoint(choice - 1);
+                    break;              
                 } else {
                     HUDTools.Print("Wrong input.", 5);
                     TextInput.PressToContinue();

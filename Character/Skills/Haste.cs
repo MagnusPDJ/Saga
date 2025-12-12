@@ -9,7 +9,7 @@ namespace Saga.Character.Skills
         public string Name { get; set; }
         public string Description { get; set; }
         public int LevelRequired => 0;
-        public bool IsUnlocked { get; set; }
+        public bool IsUnlocked { get; set; } = true;
         public TierRange Tier { get; set; } = new TierRange(1, 5);
         public int ManaCost { get; set; }
         public int Cooldown => 1;

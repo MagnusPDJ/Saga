@@ -1,12 +1,12 @@
-﻿using Saga.Assets;
+﻿using System.Text.Json.Serialization;
+using Saga.Assets;
 using Saga.Character.DmgLogic;
 using Saga.Character.Skills;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.People;
 using Saga.Dungeon.Quests;
 using Saga.Items;
-using Saga.Items.Loot;
-using System.Text.Json.Serialization;
+using Windows.Networking.Sockets;
 
 namespace Saga.Character
 {
@@ -26,8 +26,7 @@ namespace Saga.Character
         public int FreeAttributePoints { get; set; }
         public Attributes Attributes { get; set; }
         public DerivedStats DerivedStats { get; set; }
-        public BuffedStats BuffedStats { get; set; }
-        public List<ISkill> LearnedSkills { get; set; }
+        public BuffedStats BuffedStats { get; set; }      
         public SkillTree SkillTree { get; init; }
         public int SkillPoints { get; set; }
         public Equipment Equipment { get; set; }
@@ -59,7 +58,6 @@ namespace Saga.Character
             DerivedStats = new DerivedStats(this);
             Health = DerivedStats.MaxHealth;
             Mana = DerivedStats.MaxMana;
-            LearnedSkills = [new BasicAttack()];
             SkillPoints = 0;
             TimesExplored = 0;
             BuffedStats.BuffsChanged += () => PlayerChanged?.Invoke();
@@ -157,19 +155,7 @@ namespace Saga.Character
             return i;
         }
         public void SpendSkillPoint(int skillIndex) {
-            var availableSkills = SkillTree.GetAvailableSkills(Level);
-            if (SkillPoints > 0 && skillIndex >= 0 && skillIndex < availableSkills.Count) {
-                var skill = availableSkills[skillIndex];
-                skill.IsUnlocked = true;
-                var tier = skill.Tier;
-                tier.Min += 1;
-                skill.Tier = tier;
-                LearnedSkills.Add(skill);
-                SkillPoints--;
-                HUDTools.Print($"Unlocked skill: {skill.Name}", 15);
-            } else {
-                HUDTools.Print("Cannot unlock this skill.", 15);
-            }
+            throw new NotImplementedException();
         }
         //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();

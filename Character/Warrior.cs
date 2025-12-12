@@ -13,8 +13,6 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("warriorstarterweapon") as IEquipable)?.Equip();
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
-            LearnedSkills.Add(new Haste());
-            SkillTree.QuickCast = "Haste";
         }
         public override (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {          
             (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);

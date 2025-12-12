@@ -13,8 +13,6 @@ namespace Saga.Character
             (ItemDatabase.GetByItemId("magestarterweapon") as IEquipable)?.Equip();
             (ItemDatabase.GetByItemId("starterarmor") as IEquipable)?.Equip();
             SetLevelUpValue();
-            LearnedSkills.Add(new ArcaneMissile());
-            SkillTree.QuickCast = "Arcane Missiles";
         }
         public override (IDamageType, int) CalculateDamageModifiers((IDamageType, int) damage) {          
             (IDamageType, int) modifiedDamage = (new OneHandedSword(), 0);

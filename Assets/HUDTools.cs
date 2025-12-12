@@ -295,7 +295,7 @@ namespace Saga.Assets
             } else if (side == "Both") {
                 for (int i = 0; i < width - inputWidth; i++) {
                     input = " " + input;
-                    input = input + " ";
+                    input += " ";
                     i++;
                 }
             }
@@ -532,8 +532,8 @@ namespace Saga.Assets
                 i = Program.CurrentPlayer.SpendAttributePoint(i);           
             }       
         }
-        public static void ShowSkillTree() {
-            //Console.Clear();
+        public static void ConstructSkillTree() {
+            //Metode til at bygge et skill tree.
             //Console.WriteLine("************************************* Skill Tree ***************************************************\n" +
             //                  "                                    ┌───────────┐\r\n" +
             //                  "                                    │  [X] ROOT │\r\n" +
@@ -578,21 +578,24 @@ namespace Saga.Assets
             //                  "- learn <SkillName>   → Unlock a skill\r\n" +
             //                  "- info <SkillName>    → View skill details\r\n" +
             //                  "- (b)ack              → Return");
+        }
+        public static void ShowSkillTree() {           
             Console.Clear();
             Print($"Learned Skills:", 0);
-            for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
-                var s = Program.CurrentPlayer.LearnedSkills[i];
-                Print($"{i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - {s.Description}", 0);
+            List <ISkill> learnedSkills = Program.CurrentPlayer.SkillTree.GetLearnedSkills();
+            for (int i = 0; i < learnedSkills.Count; i++) {
+                var s = learnedSkills[i];
+                Print($" {i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - {s.Description}", 0);
             }
-            var availableSkills = Program.CurrentPlayer.SkillTree.GetAvailableSkills(Program.CurrentPlayer.Level);
+            var availableSkills = Program.CurrentPlayer.SkillTree.GetUnlockableSkills(Program.CurrentPlayer.Level);
             if (availableSkills.Count != 0) {
                 Print("Available Skills:", 0);
                 for (int i = 0; i < availableSkills.Count; i++) {
                     var s = availableSkills[i];
-                    Print($"{i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Min}/{s.Tier.Max})", 0);
+                    Print($" {i + 1}: {s.Name} - {s.Description} (Requires Level {s.LevelRequired}, {s.Tier.Min}/{s.Tier.Max})", 0);
                 }
             }
-            Print("\n Enter the number of the skill to unlock, or '(b)ack' to exit.", 10);
+            Print("\n Enter '(b)ack' to exit.", 10);
         }
         public static void ShowSkillsCombat(Player player, CombatController cController) {
             Console.Clear();
@@ -600,10 +603,11 @@ namespace Saga.Assets
             Console.WriteLine($" Mana:          \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m");
             Console.WriteLine($" Action Points: \u001b[32m{cController.GetRemainingAP()}/{player.DerivedStats.ActionPoints}\u001b[0m");
             Console.WriteLine("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-");
-            Print($" Useable Skills:", 0);
-            for (int i = 0; i < Program.CurrentPlayer.LearnedSkills.Count; i++) {
-                var s = Program.CurrentPlayer.LearnedSkills[i];
-                Print($"{i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - \u001b[32m{((IActiveSkill)s).ActionPointCost / (((IActiveSkill)s).SpeedType == "Casting Speed" ? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(s.ManaCost > 0 ? $"& \u001b[34m{s.ManaCost} Mana\u001b[0m" : "")}", 0);
+            Print($" Available Skills:", 0);
+            List<ISkill> learnedSkills = Program.CurrentPlayer.SkillTree.GetLearnedSkills();
+            for (int i = 0; i < learnedSkills.Count; i++) {
+                var s = learnedSkills[i];
+                Print($"  {i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - \u001b[32m{((IActiveSkill)s).ActionPointCost / (((IActiveSkill)s).SpeedType == "Casting Speed" ? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(s.ManaCost > 0 ? $"& \u001b[34m{s.ManaCost} Mana\u001b[0m" : "")}", 0);
             }
             Print("\n Enter the number of the skill to use, or '(b)ack'.", 10);
         }
@@ -709,8 +713,9 @@ namespace Saga.Assets
             Print($"\n To equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\n To examine item write examine Itemname else (b)ack\n", 0);
         }
         public static void CombatHUD(Player player, EnemyBase Monster, CombatController cController) {
-            var quickCastSkill = player.LearnedSkills.Find(x => x.Name == player.SkillTree.QuickCast) as IActiveSkill;
-            var basicAttackSkill = player.LearnedSkills.Find(x => x.Name == "Basic Attack") as IActiveSkill;
+            List<ISkill> learnedSkills = player.SkillTree.GetLearnedSkills();
+            var quickCastSkill = learnedSkills.Find(x => x.Name == player.SkillTree.QuickCast) as IActiveSkill;
+            var basicAttackSkill = learnedSkills.Find(x => x.Name == "Basic Attack") as IActiveSkill;
             Console.Clear();
                   Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                  Console.WriteLine($" Turn: {cController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
@@ -732,7 +737,7 @@ namespace Saga.Assets
              WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
               Console.WriteLine($"       ======================= Actions =====================|======== Info ========");
               Console.WriteLine($"       |  {AddSpacesToEnds($"(1) Quick Cast: {player.SkillTree.QuickCast} (\u001b[32m{quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(quickCastSkill?.ManaCost > 0? $"& \u001b[34m{quickCastSkill?.ManaCost} Mana\u001b[0m" : "")})", "Right", 50)}|  (C)haracter screen |");
-              Console.WriteLine($"       |  (2) Attack {AddSpacesToEnds($"(\u001b[32m{basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP\u001b[0m)", "Right", 15)}(4) Skills              |   Combat (L)og      |");
+              Console.WriteLine($"       |  (2) Basic Attack {AddSpacesToEnds($"(\u001b[32m{basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP\u001b[0m)", "Right", 9)}(4) Skills              |   Combat (L)og      |");
               Console.WriteLine($"       |  (3) Drink Potion (\u001b[32m{(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP\u001b[0m)   (5) Run                 |  (Q)uestlog         |");
               Console.WriteLine($"       =====================================================|======================");
               Console.WriteLine($"          {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");

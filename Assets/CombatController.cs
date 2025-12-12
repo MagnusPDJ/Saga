@@ -18,12 +18,14 @@ namespace Saga.Assets
         private bool Ran { get; set; } = false;
         private bool UsedMana { get; set; } = false;
         private bool Endturn { get; set; } = false;
-        private int RemainingActionPoints { get; set; } = 0;       
+        private int RemainingActionPoints { get; set; } = 0;
+        private List<ISkill> AvailableSkills { get; set; } = [];
 
         public void Combat() {
             Action[] states = _player.DerivedStats.Initiative >= _enemy.Initiative
                 ? [PlayerTurn, EnemyTurn]
                 : [EnemyTurn, PlayerTurn];
+            AvailableSkills = _player.SkillTree.GetLearnedSkills();
             HUDTools.CombatHUD(_player, _enemy, this);
             while (_enemy.Health > 0 && _player.Health > 0 && Ran == false) {
                 Turn++;         
@@ -34,7 +36,7 @@ namespace Saga.Assets
             //Tjekker om monstret er besejret:
             if (_enemy.Health <= 0) {
                 _player.BuffedStats.ClearAllBuffs();
-                foreach (var skill in _player.LearnedSkills) {
+                foreach (var skill in AvailableSkills) {
                     if (skill.Timer > 0) skill.Timer = 0;
                 }
                 HUDTools.CombatHUD(_player, _enemy, this);
@@ -91,7 +93,7 @@ namespace Saga.Assets
                     break;
                 case "1":
                     if (_player.SkillTree.QuickCast != string.Empty) {
-                        ISkill? quickcast = _player.LearnedSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
+                        ISkill? quickcast = AvailableSkills.Find(skill => skill is not null && skill.Name == _player.SkillTree.QuickCast);
                         if (quickcast is ITargetedSkill tSkill && tSkill.Cooldown > tSkill.Timer) {
                             if (CanUseAction(tSkill)) {
                                 bool usedAP = tSkill.Activate(_player, _enemy);
@@ -121,7 +123,7 @@ namespace Saga.Assets
                 break;
                 case "2":
                     //Attack
-                    if (_player.LearnedSkills.Find(s => s.Name == "Basic Attack") is ITargetedSkill skill2) {
+                    if (AvailableSkills.Find(s => s.Name == "Basic Attack") is ITargetedSkill skill2) {
                         if (CanUseAction(skill2)) {
                             bool usedAP = skill2.Activate(Program.CurrentPlayer, _enemy);
                             SpendActionPoints(usedAP, skill2);
@@ -164,12 +166,12 @@ namespace Saga.Assets
                         if (input == "b") {
                             break;
                         } else if (int.TryParse(input, out int choice)) {
-                            if (CanUseAction((IAction)_player.LearnedSkills[choice - 1])) {
+                            if (CanUseAction((IAction)AvailableSkills[choice - 1])) {
                                 HUDTools.CombatHUD(_player, _enemy, this);
-                                if (_player.LearnedSkills[choice - 1] is ISelfSkill selfSkill) {
+                                if (AvailableSkills[choice - 1] is ISelfSkill selfSkill) {
                                     bool usedAP = selfSkill.Activate(_player);
                                     SpendActionPoints(usedAP, selfSkill);
-                                } else if (_player.LearnedSkills[choice - 1] is ITargetedSkill targetedSkill) {
+                                } else if (AvailableSkills[choice - 1] is ITargetedSkill targetedSkill) {
                                     bool usedAP = targetedSkill.Activate(Program.CurrentPlayer, _enemy);
                                     SpendActionPoints(usedAP, targetedSkill);
                                 }
@@ -279,7 +281,7 @@ namespace Saga.Assets
         }
 
         public void TickEndOfTurn() {
-            foreach (var skill in _player.LearnedSkills) {
+            foreach (var skill in AvailableSkills) {
                 if (skill.Timer > 0) skill.Timer--;
             }
             _player.BuffedStats.TickBuffs();

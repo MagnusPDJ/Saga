@@ -11,7 +11,10 @@ namespace Saga.Character.Skills
         public List<ISkill> Skills { get; set; } = [];
         public string QuickCast { get; set; } = string.Empty;
 
-        public List<ISkill> GetAvailableSkills(int playerlvl) {
+        public List<ISkill> GetLearnedSkills() {
+            return Skills.FindAll(skill => skill.IsUnlocked);
+        }
+        public List<ISkill> GetUnlockableSkills(int playerlvl) {
             return Skills.FindAll(skill => !skill.IsUnlocked && skill.LevelRequired <= playerlvl);
         }
     }
