@@ -23,7 +23,6 @@ namespace Saga.Character.Skills
         public MagicMissile() {
             Name = "MagicMissile";
             Description = "Conjure magic in form of small rays that can pierce most material.\n (Requires an equipped magic weapon.)";
-            IsUnlocked = true;
             ManaCost = 5;
         }
         public bool Activate(Player player, EnemyBase target) {

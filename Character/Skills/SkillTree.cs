@@ -8,20 +8,24 @@ namespace Saga.Character.Skills
     [JsonDerivedType(typeof(MageSkillTree), typeDiscriminator: "mageSkillTree")]
     public abstract class SkillTree
     {
-        public List<ISkill> Skills { get; set; } = [];
+        public List<List<ISkill>> Skills { get; set; } = [];
         public string QuickCast { get; set; } = string.Empty;
 
         public List<ISkill> GetLearnedSkills() {
-            return Skills.FindAll(skill => skill.IsUnlocked);
+            List<ISkill> learnedSkills = [];
+            foreach(List<ISkill> skills in Skills) {
+                learnedSkills.AddRange(skills.FindAll(skill => skill.IsUnlocked));
+            }
+            return learnedSkills;
         }
-        public void UpgradeSkill(int index) {
+        public void UpgradeSkill(int branch, int index) {
 
         }
-        public void UnlockSkill(int index) {
+        public void UnlockSkill(int branch, int index) {
         
         }
         public void ChangeQuickCast(int index) {
-            QuickCast = Skills[index].Name;
+            QuickCast = GetLearnedSkills()[index].Name;
             HUDTools.Print($" Quickcast was changed to '{QuickCast}'", 5);
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(3);

@@ -22,7 +22,7 @@ namespace Saga.Character.Skills
         public BasicAttack() {
             Name = "Basic Attack";
             Description = "Attack using your equipped weapon.";
-            IsUnlocked = true;
+            ManaCost = 0;
         }
         public bool Activate(Player player, EnemyBase target) {
             if (player.Equipment.Right_Hand is IWeapon weapon) {

@@ -21,7 +21,6 @@ namespace Saga.Character.Skills
         public RapidFire() {
             Name = "Rapid Fire";
             Description = "Fire a weapon more quickly, letting you shoot multiple times in one turn\n (Requires equipped ranged weapon.)";
-            IsUnlocked = true;
             ManaCost = 5;
         }
         public bool Activate(Player player, EnemyBase target) {

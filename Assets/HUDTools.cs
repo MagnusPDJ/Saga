@@ -304,10 +304,10 @@ namespace Saga.Assets
             }
             return input;
         }
-        private static string DisplaySkill(int index) {
+        private static string DisplaySkill(int branch, int index) {
             ISkill skill;
             try {
-                skill = Program.CurrentPlayer.SkillTree.Skills[index];
+                skill = Program.CurrentPlayer.SkillTree.Skills[branch][index];
             } catch (Exception) {
                 return AddSpacesToEnds($"\u001b[90m*No skill*\u001b[0m", "Both", 20);
             }
@@ -555,34 +555,34 @@ namespace Saga.Assets
         public static void ConstructSkillTree(Player player) {
             StringBuilder stats = new("******************************************** Skill Tree ********************************************\n");
             stats.AppendFormat($"                                       ┌────────────────────┐\r\n");
-            stats.AppendFormat($"                                       │{DisplaySkill(0)   }│\r\n");
+            stats.AppendFormat($"                                       │{DisplaySkill(0,0) }│\r\n");
             stats.AppendFormat($"                         ┌─────────────┴──────────┬─────────┴──────────────┐\r\n");
             stats.AppendFormat($"              ┌──────────┴─────────┐              │             ┌──────────┴─────────┐\r\n");
-            stats.AppendFormat($"              │{DisplaySkill(1)   }│              │             │{DisplaySkill(8)   }│\r\n");
+            stats.AppendFormat($"              │{DisplaySkill(1, 0)}│              │             │{DisplaySkill(2, 0)}│\r\n");
             stats.AppendFormat($"              └──────────┬─────────┘              │             └──────────┬─────────┘\r\n");
             stats.AppendFormat($"             ┌───────────┴───────────┐            │            ┌───────────┴───────────┐\r\n");
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐ │ ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"  │{DisplaySkill(2)   }│   │{DisplaySkill(5)   }│ │ │{DisplaySkill(9)   }│   │{DisplaySkill(12)  }│\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(1, 1)}│   │{DisplaySkill(1, 4)}│ │ │{DisplaySkill(2, 1)}│   │{DisplaySkill(2, 4)}│\r\n");
             stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘ │ └──────────┬─────────┘   └─────────┬──────────┘\r\n");
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐ │ ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"  │{DisplaySkill(3)   }│   │{DisplaySkill(6)   }│ │ │{DisplaySkill(10)  }│   │{DisplaySkill(13)  }│\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(1, 2)}│   │{DisplaySkill(1, 5)}│ │ │{DisplaySkill(2, 2)}│   │{DisplaySkill(2, 5)}│\r\n");
             stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘ │ └──────────┬─────────┘   └─────────┬──────────┘\r\n");
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐ │ ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"  │{DisplaySkill(4)   }│   │{DisplaySkill(7)   }│ │ │{DisplaySkill(11)  }│   │{DisplaySkill(14)  }│\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(1, 3)}│   │{DisplaySkill(1, 6)}│ │ │{DisplaySkill(2, 3)}│   │{DisplaySkill(2, 6)}│\r\n");
             stats.AppendFormat($"  └────────────────────┘   └────────────────────┘ │ └────────────────────┘   └────────────────────┘\r\n");
             stats.AppendFormat($"                         ┌────────────────────────┴────────────────────────┐\r\n");
             stats.AppendFormat($"              ┌──────────┴─────────┐                             ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"              │{DisplaySkill(15)  }│                             │{DisplaySkill(22)  }│\r\n");
+            stats.AppendFormat($"              │{DisplaySkill(3, 0)}│                             │{DisplaySkill(4, 0)}│\r\n");
             stats.AppendFormat($"              └──────────┬─────────┘                             └─────────┬──────────┘\r\n");
             stats.AppendFormat($"             ┌───────────┴───────────┐                         ┌───────────┴───────────┐\r\n");
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"  │{DisplaySkill(16)  }│   │{DisplaySkill(19)  }│   │{DisplaySkill(23)  }│   │{DisplaySkill(26)  }│\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(3, 1)}│   │{DisplaySkill(3, 4)}│   │{DisplaySkill(4, 1)}│   │{DisplaySkill(4, 4)}│\r\n");
             stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘   └──────────┬─────────┘   └─────────┬──────────┘\r\n");
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"  │{DisplaySkill(17)  }│   │{DisplaySkill(20)  }│   │{DisplaySkill(24)  }│   │{DisplaySkill(27)  }│\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(3, 2)}│   │{DisplaySkill(3 ,5)}│   │{DisplaySkill(4, 2)}│   │{DisplaySkill(4, 5)}│\r\n");
             stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘   └──────────┬─────────┘   └─────────┬──────────┘\r\n");
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
-            stats.AppendFormat($"  │{DisplaySkill(18)  }│   │{DisplaySkill(21)  }│   │{DisplaySkill(25)  }│   │{DisplaySkill(28)  }│\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(3, 3)}│   │{DisplaySkill(3, 6)}│   │{DisplaySkill(4 ,3)}│   │{DisplaySkill(4, 6)}│\r\n");
             stats.AppendFormat($"  └────────────────────┘   └────────────────────┘   └────────────────────┘   └────────────────────┘\r\n");
             stats.AppendFormat($" Bound Quickcast: {player.SkillTree.QuickCast}.\r\n");
             stats.AppendFormat($"****************************************************************************************************\n");

@@ -226,7 +226,12 @@ namespace Saga.Assets
     public class LearnSkill(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             string skillToLearn = String.Join(" ", separatedInputWords.Skip(1));
-            int skillToLearnIndex = Program.CurrentPlayer.SkillTree.Skills.FindIndex(s => s.Name.Equals(skillToLearn, StringComparison.CurrentCultureIgnoreCase));
+            int skillToLearnBranch =-1;
+            int skillToLearnIndex = -1;
+            foreach (var branch in Program.CurrentPlayer.SkillTree.Skills) {
+                skillToLearnBranch = Program.CurrentPlayer.SkillTree.Skills.IndexOf(branch);
+                skillToLearnIndex = branch.FindIndex(s => s.Name.Equals(skillToLearn, StringComparison.CurrentCultureIgnoreCase));
+            }
             if (skillToLearnIndex == -1) {
                 HUDTools.Print($" No such skill as '{skillToLearn}' exists...", 3);
                 TextInput.PressToContinue();
@@ -239,20 +244,20 @@ namespace Saga.Assets
                 HUDTools.ClearLastLine(3);
                 return "";
             }
-            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].Tier.Min == Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].Tier.Max) {
+            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].Tier.Min == Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].Tier.Max) {
                 HUDTools.Print($" You have '{skillToLearn}' already maxed...", 3);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
             }
-            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].LevelRequired > Program.CurrentPlayer.Level) {
+            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].LevelRequired > Program.CurrentPlayer.Level) {
                 HUDTools.Print($" You are not high enough level to learn this skill...", 3);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
             }
-            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].IsUnlocked) {
-                Program.CurrentPlayer.SkillTree.UpgradeSkill(skillToLearnIndex);
+            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].IsUnlocked) {
+                Program.CurrentPlayer.SkillTree.UpgradeSkill(skillToLearnBranch, skillToLearnIndex);
             } else {
-                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnIndex);
+                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnBranch, skillToLearnIndex);
             }
             HUDTools.ShowSkillTree(Program.CurrentPlayer);
             return "";

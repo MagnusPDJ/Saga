@@ -4,8 +4,8 @@
     {
         public ArcherSkillTree()
         {
-            Skills.Add(new BasicAttack());
-            Skills.Add(new RapidFire());
+            Skills.Add([new BasicAttack()]);
+            Skills.Add([new RapidFire()]);
             //Skills.Add(new PiercingArrow());
             //Skills.Add(new MultiShot());
             //Skills.Add(new Evasion());
