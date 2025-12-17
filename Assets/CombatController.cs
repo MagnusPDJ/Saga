@@ -165,6 +165,21 @@ namespace Saga.Assets
                         input = TextInput.PlayerPrompt();
                         if (input == "b") {
                             break;
+                        } else if (input == "q") {
+                            Console.WriteLine(" Enter number of the skill to rebind it for quickcast:");
+                            input = TextInput.PlayerPrompt();
+                            if (input == "1") {
+                                HUDTools.Print($" Basic attack cannot be set as quickcast...", 3);
+                                TextInput.PressToContinue();
+                                HUDTools.ClearLastLine(5);
+                            } else if (int.TryParse(input, out int choice)) {
+                                _player.SkillTree.ChangeQuickCast(choice - 1);
+                                HUDTools.ShowSkillsCombat(_player, this);
+                            } else {
+                                HUDTools.Print($" Wrong input...", 3);
+                                TextInput.PressToContinue();
+                                HUDTools.ClearLastLine(5);
+                            }
                         } else if (int.TryParse(input, out int choice)) {
                             if (CanUseAction((IAction)AvailableSkills[choice - 1])) {
                                 HUDTools.CombatHUD(_player, _enemy, this);
@@ -176,9 +191,9 @@ namespace Saga.Assets
                                     SpendActionPoints(usedAP, targetedSkill);
                                 }
                                 break;
-                            }                           
+                            }
                         } else {
-                            HUDTools.Print(" Wrong input.", 5);
+                            HUDTools.Print(" Wrong input...", 5);
                             TextInput.PressToContinue();
                             HUDTools.ClearLastLine(3);
                         }

@@ -5,8 +5,8 @@ using Saga.Items;
 
 namespace Saga.Character.Skills
 {
-    [Discriminator("arcaneMissile")]
-    public class ArcaneMissile : ITargetedSkill, IMagical
+    [Discriminator("magicMissile")]
+    public class MagicMissile : ITargetedSkill, IMagical
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -20,8 +20,8 @@ namespace Saga.Character.Skills
         public MagicalType MagicalType => MagicalType.Arcane;
         public string SpeedType => "Casting Speed";
 
-        public ArcaneMissile() {
-            Name = "Arcane Missiles";
+        public MagicMissile() {
+            Name = "MagicMissile";
             Description = "Conjure magic in form of small rays that can pierce most material.\n (Requires an equipped magic weapon.)";
             IsUnlocked = true;
             ManaCost = 5;
@@ -32,7 +32,7 @@ namespace Saga.Character.Skills
                     (IDamageType, int) damage = (this, 5);
                     (IDamageType, int) modifiedDamage = player.CalculateDamageModifiers(damage);
                     target.TakeDamage(modifiedDamage);
-                    HUDTools.Print($" You shoot an arcane missile from your {weapon.ItemName}", 15);
+                    HUDTools.Print($" You shoot a magic missile from your {weapon.ItemName}", 15);
                     HUDTools.Print($" You deal {modifiedDamage.Item2} damage to {target.Name}.", 10);
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(4);

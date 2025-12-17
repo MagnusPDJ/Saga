@@ -586,19 +586,17 @@ namespace Saga.Assets
             stats.AppendFormat($"  └────────────────────┘   └────────────────────┘   └────────────────────┘   └────────────────────┘\r\n");
             stats.AppendFormat($" Bound Quickcast: {player.SkillTree.QuickCast}.\r\n");
             stats.AppendFormat($"****************************************************************************************************\n");
-            stats.AppendFormat(" Legend:\r\n");
-            stats.AppendFormat("  [X] = Maxed skill  [*] = Available to learn/upgrade  [ ] = Locked\r\n");
+            stats.AppendFormat(" Legend:  [X] = Maxed skill   [*] = Available to learn/upgrade   [ ] = Locked\r");
             Console.WriteLine(stats.ToString());
         }
         public static void ShowSkillTree(Player player) {
             Console.Clear();
             ConstructSkillTree(player);
-            Console.WriteLine(" Commands:");
-            Console.WriteLine("  - learn <SkillName>     → Unlock/Upgrade a skill");
-            Console.WriteLine("  - info <SkillName>      → View skill details");
-            Console.WriteLine("  - quickcast <SkillName> → Rebind skill to quickcast");
-            Console.WriteLine("  - (b)ack                → To Return");
-            Console.WriteLine($"Available skill points: {player.FreeSkillPoints}\n");
+            Console.WriteLine(" Commands:   learn <SkillName>     → Unlock/Upgrade a skill");
+            Console.WriteLine("  -          info <SkillName>      → View skill details");
+            Console.WriteLine("  -          quickcast <SkillName> → Rebind skill to quickcast");
+            Console.WriteLine("  -          (b)ack                → To Return");
+            Console.WriteLine($" Available skill points: {player.FreeSkillPoints}\n");
         }
         public static void ShowSkillsCombat(Player player, CombatController cController) {
             Console.Clear();
@@ -606,13 +604,15 @@ namespace Saga.Assets
             Console.WriteLine($" Mana:          \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m");
             Console.WriteLine($" Action Points: \u001b[32m{cController.GetRemainingAP()}/{player.DerivedStats.ActionPoints}\u001b[0m");
             Console.WriteLine("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-");
-            Print($" Available Skills:", 0);
+            Console.WriteLine($" Bound Quickcast: {player.SkillTree.QuickCast}");
+            Console.WriteLine("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-");
+            Console.WriteLine($" Available Skills:", 0);
             List<ISkill> learnedSkills = Program.CurrentPlayer.SkillTree.GetLearnedSkills();
             for (int i = 0; i < learnedSkills.Count; i++) {
                 var s = learnedSkills[i];
                 Print($"  {i + 1}: {s.Name} ({s.Tier.Min}/{s.Tier.Max}) - \u001b[32m{((IActiveSkill)s).ActionPointCost / (((IActiveSkill)s).SpeedType == "Casting Speed" ? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(s.ManaCost > 0 ? $"& \u001b[34m{s.ManaCost} Mana\u001b[0m" : "")}", 0);
             }
-            Print("\n Enter the number of the skill to use, or '(b)ack'.", 10);
+            Print("\n Enter the number of the skill to use, 'q' to rebind quickcast, or '(b)ack'.", 10);
         }
         public static void InventoryScreen() {
             Console.Clear();
