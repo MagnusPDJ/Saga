@@ -22,7 +22,7 @@ namespace Saga.Character.Skills
         }
         public void ChangeQuickCast(int index) {
             QuickCast = Skills[index].Name;
-            HUDTools.Print($" Quickcast was changes to '{QuickCast}'", 5);
+            HUDTools.Print($" Quickcast was changed to '{QuickCast}'", 5);
             TextInput.PressToContinue();
             HUDTools.ClearLastLine(3);
         }

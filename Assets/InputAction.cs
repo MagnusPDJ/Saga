@@ -279,6 +279,7 @@ namespace Saga.Assets
                 return "";
             }
             Program.CurrentPlayer.SkillTree.ChangeQuickCast(skillToSetIndex);
+            HUDTools.ShowSkillTree(Program.CurrentPlayer);
             return "";
         }
     }

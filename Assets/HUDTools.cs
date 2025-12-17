@@ -552,7 +552,7 @@ namespace Saga.Assets
                 i = Program.CurrentPlayer.SpendAttributePoint(i);
             }
         }
-        public static void ConstructSkillTree() {
+        public static void ConstructSkillTree(Player player) {
             StringBuilder stats = new("******************************************** Skill Tree ********************************************\n");
             stats.AppendFormat($"                                       ┌────────────────────┐\r\n");
             stats.AppendFormat($"                                       │{DisplaySkill(0)   }│\r\n");
@@ -584,6 +584,7 @@ namespace Saga.Assets
             stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
             stats.AppendFormat($"  │{DisplaySkill(18)  }│   │{DisplaySkill(21)  }│   │{DisplaySkill(25)  }│   │{DisplaySkill(28)  }│\r\n");
             stats.AppendFormat($"  └────────────────────┘   └────────────────────┘   └────────────────────┘   └────────────────────┘\r\n");
+            stats.AppendFormat($" Bound Quickcast: {player.SkillTree.QuickCast}.\r\n");
             stats.AppendFormat($"****************************************************************************************************\n");
             stats.AppendFormat(" Legend:\r\n");
             stats.AppendFormat("  [X] = Maxed skill  [*] = Available to learn/upgrade  [ ] = Locked\r\n");
@@ -591,7 +592,7 @@ namespace Saga.Assets
         }
         public static void ShowSkillTree(Player player) {
             Console.Clear();
-            ConstructSkillTree();
+            ConstructSkillTree(player);
             Console.WriteLine(" Commands:");
             Console.WriteLine("  - learn <SkillName>     → Unlock/Upgrade a skill");
             Console.WriteLine("  - info <SkillName>      → View skill details");
