@@ -606,7 +606,7 @@ namespace Saga.Assets
             Console.WriteLine("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-");
             Console.WriteLine($" Bound Quickcast: {player.SkillTree.QuickCast}");
             Console.WriteLine("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-");
-            Console.WriteLine($" Available Skills:", 0);
+            Console.WriteLine($" Available Skills:");
             List<ISkill> learnedSkills = Program.CurrentPlayer.SkillTree.GetLearnedSkills();
             for (int i = 0; i < learnedSkills.Count; i++) {
                 var s = learnedSkills[i];
