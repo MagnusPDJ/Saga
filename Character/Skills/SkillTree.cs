@@ -14,8 +14,17 @@ namespace Saga.Character.Skills
         public List<ISkill> GetLearnedSkills() {
             return Skills.FindAll(skill => skill.IsUnlocked);
         }
-        public List<ISkill> GetUnlockableSkills(int playerlvl) {
-            return Skills.FindAll(skill => !skill.IsUnlocked && skill.LevelRequired <= playerlvl);
+        public void UpgradeSkill(int index) {
+
+        }
+        public void UnlockSkill(int index) {
+        
+        }
+        public void ChangeQuickCast(int index) {
+            QuickCast = Skills[index].Name;
+            HUDTools.Print($" Quickcast was changes to '{QuickCast}'", 5);
+            TextInput.PressToContinue();
+            HUDTools.ClearLastLine(3);
         }
     }
 }

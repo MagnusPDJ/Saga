@@ -1,4 +1,6 @@
 ﻿
+using Windows.AI.MachineLearning;
+
 namespace Saga.Assets
 {
     class TextInput
@@ -25,6 +27,12 @@ namespace Saga.Assets
             new SeeInventory("inventory", "i"),
             new SeeQuestLog("questlog", "l"),
             new SeeSkillTree("skilltree", "k")
+            ];
+        public static InputAction[] InputSkillActions = [
+            new LearnSkill("learn"),
+            new InfoSkill("info"),
+            new ChangeQuickCast("quickcast"),
+            new Back("back", "b")
             ];
 
         /// <summary>
@@ -57,6 +65,8 @@ namespace Saga.Assets
                 inputActions = InputInvActions;
             } else if (inputActionsToUse == "EventActions") {
                 inputActions = InputEventActions;
+            } else if (inputActionsToUse == "SkillActions") {
+                inputActions = InputSkillActions;
             }
             string userInput = (Console.ReadLine() ?? "").ToLower();
             if (userInput.Length == 1) {
@@ -73,7 +83,7 @@ namespace Saga.Assets
                     return action.RespondToInput(separatedInputWords);
                 }
             }
-            HUDTools.Print($"There is no '{userInput}' action...", 15);
+            HUDTools.Print($" There is no '{userInput}' action...", 15);
             PressToContinue();
             HUDTools.ClearLastLine(3);
             return "";
@@ -94,6 +104,8 @@ namespace Saga.Assets
                 inputActions = InputInvActions;
             } else if (inputActionsToUse == "EventActions") {
                 inputActions = InputEventActions;
+            } else if (inputActionsToUse == "SkillActions") {
+                inputActions = InputSkillActions;
             }
             string inputAction = (userInput ?? "").ToLower();
             if (inputAction.Length == 1) {
@@ -110,7 +122,7 @@ namespace Saga.Assets
                     return action.RespondToInput(separatedInputWords);
                 }
             }
-            HUDTools.Print($"There is no '{inputAction}' action...", 15);
+            HUDTools.Print($" There is no '{inputAction}' action...", 15);
             PressToContinue();
             HUDTools.ClearLastLine(3);
             return "";

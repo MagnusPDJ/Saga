@@ -28,7 +28,7 @@ namespace Saga.Character
         public DerivedStats DerivedStats { get; set; }
         public BuffedStats BuffedStats { get; set; }      
         public SkillTree SkillTree { get; init; }
-        public int SkillPoints { get; set; }
+        public int FreeSkillPoints { get; set; }
         public Equipment Equipment { get; set; }
         public IItem[] Inventory { get; set; }
         public List<Quest> QuestLog { get; set; }
@@ -58,7 +58,7 @@ namespace Saga.Character
             DerivedStats = new DerivedStats(this);
             Health = DerivedStats.MaxHealth;
             Mana = DerivedStats.MaxMana;
-            SkillPoints = 0;
+            FreeSkillPoints = 0;
             TimesExplored = 0;
             BuffedStats.BuffsChanged += () => PlayerChanged?.Invoke();
             Equipment.EquipmentChanged += () => PlayerChanged?.Invoke();
@@ -83,7 +83,7 @@ namespace Saga.Character
                 Program.CurrentPlayer.Exp -= LevelUpValue;
                 Program.CurrentPlayer.Level++;
                 Program.CurrentPlayer.FreeAttributePoints += 6;
-                Program.CurrentPlayer.SkillPoints++;
+                Program.CurrentPlayer.FreeSkillPoints++;
                 levels++;
             }
             SetLevelUpValue();

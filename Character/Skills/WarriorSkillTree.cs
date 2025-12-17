@@ -6,6 +6,8 @@
         {
             Skills.Add(new BasicAttack());
             Skills.Add(new Haste());
+            Skills.Add(new RapidFire());
+            Skills.Add(new ArcaneMissile());
             //    Skills.Add(new ShieldBlock());
             //    Skills.Add(new PowerStrike());
             //    Skills.Add(new Whirlwind());

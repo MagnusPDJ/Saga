@@ -178,7 +178,7 @@ namespace Saga.Assets
                                 break;
                             }                           
                         } else {
-                            HUDTools.Print("Wrong input.", 5);
+                            HUDTools.Print(" Wrong input.", 5);
                             TextInput.PressToContinue();
                             HUDTools.ClearLastLine(3);
                         }

@@ -1,4 +1,5 @@
 ﻿using Saga.Character.DmgLogic;
+using Saga.Character.Skills;
 using Saga.Dungeon.Rooms;
 using Saga.Items;
 
@@ -211,18 +212,73 @@ namespace Saga.Assets
     public class SeeSkillTree(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord)
     {
         public override string RespondToInput(string[] separatedInputWords) {
-            while (true) {
-                HUDTools.ShowSkillTree();
-                string input = TextInput.PlayerPrompt();
-                if (input == "b") {
+            HUDTools.ShowSkillTree(Program.CurrentPlayer);
+            while (true) {               
+                string input = TextInput.PlayerPrompt("SkillActions");
+                if (input == "back") {
                     break;              
-                } else {
-                    HUDTools.Print("Wrong input.", 5);
-                    TextInput.PressToContinue();
-                    HUDTools.ClearLastLine(3);
                 }
             }
             HUDTools.RoomHUD();
+            return "";
+        }
+    }
+    public class LearnSkill(string keyWord) : InputAction(keyWord) {
+        public override string RespondToInput(string[] separatedInputWords) {
+            string skillToLearn = String.Join(" ", separatedInputWords.Skip(1));
+            int skillToLearnIndex = Program.CurrentPlayer.SkillTree.Skills.FindIndex(s => s.Name.Equals(skillToLearn, StringComparison.CurrentCultureIgnoreCase));
+            if (skillToLearnIndex == -1) {
+                HUDTools.Print($" No such skill as '{skillToLearn}' exists...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            }
+            if (Program.CurrentPlayer.FreeSkillPoints <= 0) {
+                HUDTools.Print(" You have no free skill points to spend...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            }
+            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].Tier.Min == Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].Tier.Max) {
+                HUDTools.Print($" You have '{skillToLearn}' already maxed...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+            }
+            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].LevelRequired > Program.CurrentPlayer.Level) {
+                HUDTools.Print($" You are not high enough level to learn this skill...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+            }
+            if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnIndex].IsUnlocked) {
+                Program.CurrentPlayer.SkillTree.UpgradeSkill(skillToLearnIndex);
+            } else {
+                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnIndex);
+            }
+            HUDTools.ShowSkillTree(Program.CurrentPlayer);
+            return "";
+        }
+    }
+    public class InfoSkill(string keyWord) : InputAction(keyWord) {
+        public override string RespondToInput(string[] separatedInputWords) {           
+            return "";
+        }
+    }
+    public class ChangeQuickCast(string keyWord) : InputAction(keyWord) {
+        public override string RespondToInput(string[] separatedInputWords) {
+            string skillToSet = String.Join(" ", separatedInputWords.Skip(1));          
+            int skillToSetIndex = Program.CurrentPlayer.SkillTree.GetLearnedSkills().FindIndex(s => s.Name.Equals(skillToSet, StringComparison.CurrentCultureIgnoreCase));
+            if (skillToSetIndex == -1) {
+                HUDTools.Print($" No such skill as '{skillToSet}' exists...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            } else if (skillToSetIndex == 0) {
+                HUDTools.Print($" Basic attack cannot be set as quickcast...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            }
+            Program.CurrentPlayer.SkillTree.ChangeQuickCast(skillToSetIndex);
             return "";
         }
     }

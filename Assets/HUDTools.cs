@@ -1,15 +1,15 @@
 ﻿using Saga.Character;
+using Saga.Character.Buffs;
 using Saga.Character.DmgLogic;
+using Saga.Character.Skills;
 using Saga.Dungeon.Enemies;
+using Saga.Dungeon.People;
 using Saga.Dungeon.Quests;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;
 using System.Reflection;
 using System.Text;
-using Saga.Character.Skills;
-using Saga.Character.Buffs;
-using Saga.Dungeon.People;
 
 namespace Saga.Assets
 {
@@ -18,7 +18,8 @@ namespace Saga.Assets
         //Metode til at "Slow-print" tekst, med indbygget toggle setting.
         public static void Print(string text, int time = 40) {
             if (Convert.ToBoolean(ConfigurationManager.AppSettings.Get("toggleSlowPrint")) == true) {
-                Task t = Task.Run(() => {
+                Task t = Task.Run(() =>
+                {
                     foreach (char c in text) {
                         if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Spacebar) {
                             time = 0;
@@ -28,10 +29,10 @@ namespace Saga.Assets
                     }
                     Console.WriteLine();
                 });
-                t.Wait();          
-            }
-            else {
-                Task t = Task.Run(() => {
+                t.Wait();
+            } else {
+                Task t = Task.Run(() =>
+                {
                     foreach (char c in text) {
                         Console.Write(c);
                         Thread.Sleep(0);
@@ -48,8 +49,7 @@ namespace Saga.Assets
             for (int i = 0; i < size; i++) {
                 if (i < dif) {
                     Console.Write(fillerChar);
-                }
-                else {
+                } else {
                     Console.Write(backgroundChar);
                 }
             }
@@ -62,8 +62,7 @@ namespace Saga.Assets
             for (int i = 0; i < size; i++) {
                 if (i < dif) {
                     output += fillerChar;
-                }
-                else {
+                } else {
                     output += backgroundChar;
                 }
             }
@@ -71,7 +70,7 @@ namespace Saga.Assets
         }
 
         // Metode til at skrive en logfil til kamp
-        public static void WriteCombatLog(string action, EnemyBase monster, int damage=0, int attack = 0) {
+        public static void WriteCombatLog(string action, EnemyBase monster, int damage = 0, int attack = 0) {
             if (!File.Exists("combatlog.txt")) {
                 File.Create("combatlog.txt");
             }
@@ -119,7 +118,7 @@ namespace Saga.Assets
                                     Console.WriteLine($"You gained {potion.PotionPotency + mageBonus} health by drinking a potion.");
                                 }
                             }
-                        }                       
+                        }
                         break;
                     case "run":
                         Console.WriteLine($"Turn: ");
@@ -282,10 +281,11 @@ namespace Saga.Assets
         // \u001b[34m blå
         // \u001b[32m grøn
         // \u001b[33m gul
-        private static string AddSpacesToEnds(string input, string side, int width) {           
-            int inputWidth = input.Replace("\u001b[0m", "").Replace("\u001b[31m", "").Replace("\u001b[32m", "").Replace("\u001b[33m", "").Replace("\u001b[34m", "").Length;
+        // \u001b[90m grå
+        private static string AddSpacesToEnds(string input, string side, int width) {
+            int inputWidth = input.Replace("\u001b[0m", "").Replace("\u001b[31m", "").Replace("\u001b[32m", "").Replace("\u001b[33m", "").Replace("\u001b[34m", "").Replace("\u001b[90m", "").Length;
             if (side == "Left") {
-                for (int i = 0; i < width-inputWidth; i++) {
+                for (int i = 0; i < width - inputWidth; i++) {
                     input = " " + input;
                 }
             } else if (side == "Right") {
@@ -299,19 +299,28 @@ namespace Saga.Assets
                     if (i >= width - inputWidth) {
                         break;
                     }
-                    input += " ";              
+                    input += " ";
                 }
             }
             return input;
         }
         private static string DisplaySkill(int index) {
-            ISkill skill = Program.CurrentPlayer.SkillTree.Skills[index];
+            ISkill skill;
+            try {
+                skill = Program.CurrentPlayer.SkillTree.Skills[index];
+            } catch (Exception) {
+                return AddSpacesToEnds($"\u001b[90m*No skill*\u001b[0m", "Both", 20);
+            }
             if (skill.IsUnlocked) {
-                return AddSpacesToEnds($"\u001b[32m[X]{skill.Name}\u001b[0m", "Both", 18);
+                if (skill.Tier.Min == skill.Tier.Max) {
+                    return AddSpacesToEnds($"\u001b[32m[X]{skill.Name}({skill.Tier.Min}/{skill.Tier.Max})\u001b[0m", "Both", 20);
+                } else {
+                    return AddSpacesToEnds($"\u001b[34m[*]{skill.Name}({skill.Tier.Min}/{skill.Tier.Max})\u001b[0m", "Both", 20);
+                }                    
             } else if (Program.CurrentPlayer.Level >= skill.LevelRequired) {
-                return AddSpacesToEnds($"\u001b[33m[*]{skill.Name}\u001b[0m", "Both", 18);
+                return AddSpacesToEnds($"\u001b[33m[*]{skill.Name}\u001b[0m", "Both", 20);
             } else {
-                return AddSpacesToEnds($"[ ]{skill.Name}", "Both", 18);
+                return AddSpacesToEnds($"[ ]{skill.Name}", "Both", 20);
             }
         }
 
@@ -361,11 +370,9 @@ namespace Saga.Assets
             Console.WriteLine($"| Items for sale:");
             foreach (IEquipable item in shop.GetForsale()) {
                 if (item == null) {
-                }
-                else if (item.ItemSlot == Slot.Right_Hand) {
+                } else if (item.ItemSlot == Slot.Right_Hand) {
                     Console.WriteLine($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {item.ItemLevel}, {((IWeapon)item).WeaponCategory}, {item.ItemName}, $ {item.CalculateItemPrice()}, +{((IWeapon)item).WeaponAttributes.MinDamage}-{((IWeapon)item).WeaponAttributes.MaxDamage} dmg");
-                }
-                else {
+                } else {
                     Console.Write($"| ({1 + shop.GetForsale().IndexOf(item)}) Ilvl: {item.ItemLevel}, {item.ItemSlot}, {((ArmorBase)item).ArmorType}, {item.ItemName}, $ {item.CalculateItemPrice()},");
                     if (((ArmorBase)item).SecondaryAffixes.ArmorRating > 0) {
                         Console.Write($" +{((ArmorBase)item).SecondaryAffixes.ArmorRating} Armor Rating");
@@ -436,7 +443,7 @@ namespace Saga.Assets
                         }
                         Console.WriteLine("");
                     }
-                } 
+                }
             }
             Console.WriteLine("==============================");
             Console.WriteLine(" (U)se Potion (C)haracter screen\n (I)nventory (Q)uestlog\n");
@@ -447,7 +454,7 @@ namespace Saga.Assets
             Console.WriteLine("         Gheed's Shop        ");
             Console.WriteLine("=======================================================");
             Console.WriteLine($"| Items in inventory:");
-            foreach (var (item, i) in Program.CurrentPlayer.Inventory.Select((item, i)=> (item, i))) {
+            foreach (var (item, i) in Program.CurrentPlayer.Inventory.Select((item, i) => (item, i))) {
                 if (item == null) {
                 } else {
                     var (isQuest, amount) = GetQuestItemInfo(item);
@@ -506,93 +513,91 @@ namespace Saga.Assets
             Console.WriteLine("Choose what to sell");
         }
         public static void DisplayStats(Player player) {
-          StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-                stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
-                stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
-                stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ",(decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25)}] {player.Exp}/{player.GetLevelUpValue()}\n");
-              stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
-                stats.AppendFormat($" ┌(S)trength ⤵           {player.Attributes.Strength    }\t=> Elemental Resistance:  {FormatDictionary(player.DerivedStats.ElementalResistance)}\n");
-                stats.AppendFormat($" │      (C)onstitution⤵  {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
-                stats.AppendFormat($" │(D)exterity ⇵          {player.Attributes.Dexterity   }\t=> Physical Resistance:   {FormatDictionary(player.DerivedStats.PhysicalResistance)}\n");
-                stats.AppendFormat($" │      (A)wareness ⤵    {player.Attributes.Awareness   }\t=> Initiative:            {player.DerivedStats.Initiative}\n");
-                stats.AppendFormat($" │(I)ntellect ⇵          {player.Attributes.Intellect   }\t=> Magical Resistance:    {FormatDictionary(player.DerivedStats.MagicalResistance)}\n");
-                stats.AppendFormat($" └>     (W)illpower ⤵    {player.Attributes.WillPower   }\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
-                stats.AppendFormat($"                 Virtue  {player.Attributes.Virtue      }\t=> Action Points:         {player.DerivedStats.ActionPoints}\n");
-                stats.AppendFormat($"  Attribute points to spend: {player.FreeAttributePoints}\n\n");
-                stats.AppendFormat($" Attack Speed:   {player.DerivedStats.AttackSpeed}\t(Constitution and Awareness)\n");
-                stats.AppendFormat($" Casting Speed:  {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
-                stats.AppendFormat($" Mana Regen:     {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
-              stats.AppendFormat($"\n----------------------------------------- Equipment Stats ------------------------------------------\n");
-                stats.AppendFormat($" Armor Rating:  {player.Equipment.ArmorRating}\n");
-              stats.AppendFormat($"\n Weapon Attributes:\n");
-                stats.AppendFormat($"  Weapon Damage:  {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage} {(player.CurrentClass == "Warrior" && (player.Equipment.Right_Hand as IWeapon is IPhysical) ? $"(+{player.Level} warrior bonus)" : "")},\t+Attack Speed:  {player.Equipment.BonusAttackSpeed},\t+Casting Speed:  {player.Equipment.BonusCastingSpeed}.\n");
-              stats.AppendFormat($"\n Primary Attributes:\n");
-                stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
-              stats.AppendFormat($"\n Secondary Attributes:\n");
-                stats.AppendFormat($"  +Max Health:  {player.Equipment.BonusHealth    },\t+Max Mana:       {player.Equipment.BonusMana},\t+Mana Regen:  {player.Equipment.BonusManaRegenRate},\n");
-                stats.AppendFormat($"  +Initiative:  {player.Equipment.BonusInitiative},\t+Action Points:  {player.Equipment.BonusActionPoints}\n");
-                stats.AppendFormat($"  +Physical Resistance:  {FormatDictionary(player.Equipment.BonusPhysicalRes, indent: 22)}\n");
-                stats.AppendFormat($"  +Elemental Resistance: {FormatDictionary(player.Equipment.BonusElementRes, indent: 22)}\n");
-                stats.AppendFormat($"  +Magical Resistance:   {FormatDictionary(player.Equipment.BonusMagicRes, indent: 22)}\n");
+            StringBuilder stats = new("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Character screen ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            stats.AppendFormat($" Name: {player.Name}\t\t\tClass: {player.CurrentClass}\n");
+            stats.AppendFormat($" Level: {player.Level}\t\t\tTimes Explored: {player.TimesExplored}\n");
+            stats.AppendFormat($" EXP  [{ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25)}] {player.Exp}/{player.GetLevelUpValue()}\n");
+            stats.AppendFormat($"\n---------------------------------------------- Stats -----------------------------------------------\n");
+            stats.AppendFormat($" ┌(S)trength ⤵           {player.Attributes.Strength}\t=> Elemental Resistance:  {FormatDictionary(player.DerivedStats.ElementalResistance)}\n");
+            stats.AppendFormat($" │      (C)onstitution⤵  {player.Attributes.Constitution}\t=> Health:                {player.Health} / {player.DerivedStats.MaxHealth}\n");
+            stats.AppendFormat($" │(D)exterity ⇵          {player.Attributes.Dexterity}\t=> Physical Resistance:   {FormatDictionary(player.DerivedStats.PhysicalResistance)}\n");
+            stats.AppendFormat($" │      (A)wareness ⤵    {player.Attributes.Awareness}\t=> Initiative:            {player.DerivedStats.Initiative}\n");
+            stats.AppendFormat($" │(I)ntellect ⇵          {player.Attributes.Intellect}\t=> Magical Resistance:    {FormatDictionary(player.DerivedStats.MagicalResistance)}\n");
+            stats.AppendFormat($" └>     (W)illpower ⤵    {player.Attributes.WillPower}\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
+            stats.AppendFormat($"                 Virtue  {player.Attributes.Virtue}\t=> Action Points:         {player.DerivedStats.ActionPoints}\n");
+            stats.AppendFormat($"  Attribute points to spend: {player.FreeAttributePoints}\n\n");
+            stats.AppendFormat($" Attack Speed:   {player.DerivedStats.AttackSpeed}\t(Constitution and Awareness)\n");
+            stats.AppendFormat($" Casting Speed:  {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
+            stats.AppendFormat($" Mana Regen:     {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
+            stats.AppendFormat($"\n----------------------------------------- Equipment Stats ------------------------------------------\n");
+            stats.AppendFormat($" Armor Rating:  {player.Equipment.ArmorRating}\n");
+            stats.AppendFormat($"\n Weapon Attributes:\n");
+            stats.AppendFormat($"  Weapon Damage:  {(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MinDamage}-{(player.Equipment.Right_Hand as IWeapon)?.WeaponAttributes.MaxDamage} {(player.CurrentClass == "Warrior" && (player.Equipment.Right_Hand as IWeapon is IPhysical) ? $"(+{player.Level} warrior bonus)" : "")},\t+Attack Speed:  {player.Equipment.BonusAttackSpeed},\t+Casting Speed:  {player.Equipment.BonusCastingSpeed}.\n");
+            stats.AppendFormat($"\n Primary Attributes:\n");
+            stats.AppendFormat($"  +Str:  {player.Equipment.BonusStr},  +Dex:  {player.Equipment.BonusDex},  +Int:  {player.Equipment.BonusInt},  +Con:  {player.Equipment.BonusCon},  +Awa:  {player.Equipment.BonusAwa}, +Wp:  {player.Equipment.BonusWP},  +Virtue:  {player.Equipment.BonusVirtue},\n");
+            stats.AppendFormat($"\n Secondary Attributes:\n");
+            stats.AppendFormat($"  +Max Health:  {player.Equipment.BonusHealth},\t+Max Mana:       {player.Equipment.BonusMana},\t+Mana Regen:  {player.Equipment.BonusManaRegenRate},\n");
+            stats.AppendFormat($"  +Initiative:  {player.Equipment.BonusInitiative},\t+Action Points:  {player.Equipment.BonusActionPoints}\n");
+            stats.AppendFormat($"  +Physical Resistance:  {FormatDictionary(player.Equipment.BonusPhysicalRes, indent: 22)}\n");
+            stats.AppendFormat($"  +Elemental Resistance: {FormatDictionary(player.Equipment.BonusElementRes, indent: 22)}\n");
+            stats.AppendFormat($"  +Magical Resistance:   {FormatDictionary(player.Equipment.BonusMagicRes, indent: 22)}\n");
 
-        Print(stats.ToString(), 0);
-    }
-        public static void CharacterScreen() {
-            //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
-            for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0 ; i--) {
-                Console.Clear();
-                DisplayStats(Program.CurrentPlayer);
-                i = Program.CurrentPlayer.SpendAttributePoint(i);           
-            }       
-        }
-        public static void ConstructSkillTree() {
-            StringBuilder stats = new("************************************* Skill Tree ***************************************************\n");
-                  stats.AppendFormat($"                                      ┌──────────────────┐\r\n");
-                  stats.AppendFormat($"                                      │{DisplaySkill(0)}│\r\n");
-                  stats.AppendFormat($"                        ┌─────────────┴────────┬─────────┴────────────┐\r\n");
-                  stats.AppendFormat($"              ┌─────────┴────────┐             │             ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"              │{DisplaySkill(1)}│             │             │[X]Defense        │\r\n");
-                  stats.AppendFormat($"              └─────────┬────────┘             │             └────────┬─────────┘\r\n");
-                  stats.AppendFormat($"            ┌───────────┴──────────┐           │           ┌──────────┴───────────┐\r\n");
-                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐ │ ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"  │[ ]Sword          │    │[ ]Ranged         │ │ │ [*]Armor         │    │[*]Shield         │\r\n");
-                  stats.AppendFormat($"  └─────────┬────────┘    └────────┬─────────┘ │ └─────────┬────────┘    └────────┬─────────┘\r\n");
-                  stats.AppendFormat($"            │                      │           │           │                      │\r\n");
-                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐ │ ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"  │[ ]Slash          │    │[ ]Precision      │ │ │[ ]Fortify        │    │[ ]Block          │\r\n");
-                  stats.AppendFormat($"  └─────────┬────────┘    └────────┬─────────┘ │ └─────────┬────────┘    └────────┬─────────┘\r\n");
-                  stats.AppendFormat($"            │                      │           │           │                      │\r\n");
-                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐ │ ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"  │[ ]Critical       │    │[ ]Volley         │ │ │[ ]Iron Skin      │    │[ ]Iron Will      │\r\n");
-                  stats.AppendFormat($"  └──────────────────┘    └──────────────────┘ │ └──────────────────┘    └──────────────────┘\r\n");
-                  stats.AppendFormat($"                        ┌──────────────────────┴──────────────────────┐\r\n");
-                  stats.AppendFormat($"              ┌─────────┴───────┐                            ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"              │[ ]Magic         │                            │[ ]Utility        │\r\n");
-                  stats.AppendFormat($"              └─────────┬───────┘                            └────────┬─────────┘\r\n");
-                  stats.AppendFormat($"            ┌───────────┴──────────┐                       ┌──────────┴───────────┐\r\n");
-                  stats.AppendFormat($"   ┌────────┴────────┐    ┌────────┴─────────┐   ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"   │[ ]Fire          │    │[ ]Frost          │   │[ ]Stealth        │    │[ ]Crafting       │\r\n");
-                  stats.AppendFormat($"   └────────┬────────┘    └────────┬─────────┘   └─────────┬────────┘    └────────┬─────────┘\r\n");
-                  stats.AppendFormat($"            │                      │                       │                      │\r\n");
-                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐   ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"  │[ ]Fireball       │    │[ ]Ice Shard      │   │[ ]Backstab       │    │[ ]Alchemy        │\r\n");
-                  stats.AppendFormat($"  └─────────┬────────┘    └────────┬─────────┘   └─────────┬────────┘    └────────┬─────────┘\r\n");
-                  stats.AppendFormat($"            │                      │                       │                      │\r\n");
-                  stats.AppendFormat($"  ┌─────────┴────────┐    ┌────────┴─────────┐   ┌─────────┴────────┐    ┌────────┴─────────┐\r\n");
-                  stats.AppendFormat($"  │[ ]Inferno        │    │[ ]Blizzard       │   │[ ]Assassinate    │    │[ ]Enchant        │\r\n");
-                  stats.AppendFormat($"  └──────────────────┘    └──────────────────┘   └──────────────────┘    └──────────────────┘\r\n");
-                  stats.AppendFormat($"****************************************************************************************************\n");
-            stats.AppendFormat(" Legend:\r\n");
-            stats.AppendFormat("  [X] = unlocked skill  [*] = available to learn  [ ] = locked\r\n");
-            stats.AppendFormat(" Commands: \r\n");
-            stats.AppendFormat("  - learn <SkillName>   → Unlock a skill\r\n");
-            stats.AppendFormat("  - info <SkillName>    → View skill details");
             Print(stats.ToString(), 0);
         }
-        public static void ShowSkillTree() {           
+        public static void CharacterScreen() {
+            //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
+            for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0; i--) {
+                Console.Clear();
+                DisplayStats(Program.CurrentPlayer);
+                i = Program.CurrentPlayer.SpendAttributePoint(i);
+            }
+        }
+        public static void ConstructSkillTree() {
+            StringBuilder stats = new("******************************************** Skill Tree ********************************************\n");
+            stats.AppendFormat($"                                       ┌────────────────────┐\r\n");
+            stats.AppendFormat($"                                       │{DisplaySkill(0)   }│\r\n");
+            stats.AppendFormat($"                         ┌─────────────┴──────────┬─────────┴──────────────┐\r\n");
+            stats.AppendFormat($"              ┌──────────┴─────────┐              │             ┌──────────┴─────────┐\r\n");
+            stats.AppendFormat($"              │{DisplaySkill(1)   }│              │             │{DisplaySkill(8)   }│\r\n");
+            stats.AppendFormat($"              └──────────┬─────────┘              │             └──────────┬─────────┘\r\n");
+            stats.AppendFormat($"             ┌───────────┴───────────┐            │            ┌───────────┴───────────┐\r\n");
+            stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐ │ ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(2)   }│   │{DisplaySkill(5)   }│ │ │{DisplaySkill(9)   }│   │{DisplaySkill(12)  }│\r\n");
+            stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘ │ └──────────┬─────────┘   └─────────┬──────────┘\r\n");
+            stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐ │ ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(3)   }│   │{DisplaySkill(6)   }│ │ │{DisplaySkill(10)  }│   │{DisplaySkill(13)  }│\r\n");
+            stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘ │ └──────────┬─────────┘   └─────────┬──────────┘\r\n");
+            stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐ │ ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(4)   }│   │{DisplaySkill(7)   }│ │ │{DisplaySkill(11)  }│   │{DisplaySkill(14)  }│\r\n");
+            stats.AppendFormat($"  └────────────────────┘   └────────────────────┘ │ └────────────────────┘   └────────────────────┘\r\n");
+            stats.AppendFormat($"                         ┌────────────────────────┴────────────────────────┐\r\n");
+            stats.AppendFormat($"              ┌──────────┴─────────┐                             ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"              │{DisplaySkill(15)  }│                             │{DisplaySkill(22)  }│\r\n");
+            stats.AppendFormat($"              └──────────┬─────────┘                             └─────────┬──────────┘\r\n");
+            stats.AppendFormat($"             ┌───────────┴───────────┐                         ┌───────────┴───────────┐\r\n");
+            stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(16)  }│   │{DisplaySkill(19)  }│   │{DisplaySkill(23)  }│   │{DisplaySkill(26)  }│\r\n");
+            stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘   └──────────┬─────────┘   └─────────┬──────────┘\r\n");
+            stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(17)  }│   │{DisplaySkill(20)  }│   │{DisplaySkill(24)  }│   │{DisplaySkill(27)  }│\r\n");
+            stats.AppendFormat($"  └──────────┬─────────┘   └─────────┬──────────┘   └──────────┬─────────┘   └─────────┬──────────┘\r\n");
+            stats.AppendFormat($"  ┌──────────┴─────────┐   ┌─────────┴──────────┐   ┌──────────┴─────────┐   ┌─────────┴──────────┐\r\n");
+            stats.AppendFormat($"  │{DisplaySkill(18)  }│   │{DisplaySkill(21)  }│   │{DisplaySkill(25)  }│   │{DisplaySkill(28)  }│\r\n");
+            stats.AppendFormat($"  └────────────────────┘   └────────────────────┘   └────────────────────┘   └────────────────────┘\r\n");
+            stats.AppendFormat($"****************************************************************************************************\n");
+            stats.AppendFormat(" Legend:\r\n");
+            stats.AppendFormat("  [X] = Maxed skill  [*] = Available to learn/upgrade  [ ] = Locked\r\n");
+            Console.WriteLine(stats.ToString());
+        }
+        public static void ShowSkillTree(Player player) {
             Console.Clear();
             ConstructSkillTree();
-            Print("\n Enter '(b)ack' to exit.", 10);
+            Console.WriteLine(" Commands:");
+            Console.WriteLine("  - learn <SkillName>     → Unlock/Upgrade a skill");
+            Console.WriteLine("  - info <SkillName>      → View skill details");
+            Console.WriteLine("  - quickcast <SkillName> → Rebind skill to quickcast");
+            Console.WriteLine("  - (b)ack                → To Return");
+            Console.WriteLine($"Available skill points: {player.FreeSkillPoints}\n");
         }
         public static void ShowSkillsCombat(Player player, CombatController cController) {
             Console.Clear();
@@ -614,9 +619,9 @@ namespace Saga.Assets
             foreach (var slot in Program.CurrentPlayer.Equipment.AsEnumerable()) {
                 if (slot.Value is IWeapon weapon) {
                     if (weapon is ITwoHanded) {
-                        if (slot.Key != "Left_Hand") { 
-                            Console.WriteLine($" Both hands - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg"); 
-                        }                        
+                        if (slot.Key != "Left_Hand") {
+                            Console.WriteLine($" Both hands - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");
+                        }
                     } else {
                         Console.WriteLine($" {weapon.ItemSlot} - {weapon.ItemName}: +{weapon.WeaponAttributes.MinDamage}-{weapon.WeaponAttributes.MaxDamage} dmg");
                     }
@@ -705,7 +710,7 @@ namespace Saga.Assets
                         }
                         Console.WriteLine("");
                     }
-                } 
+                }
             }
             Print($"\n To equip item write 'equip Itemname', to unequip item write 'unequip Itemname'\n To examine item write examine Itemname else (b)ack\n", 0);
         }
@@ -714,30 +719,30 @@ namespace Saga.Assets
             var quickCastSkill = learnedSkills.Find(x => x.Name == player.SkillTree.QuickCast) as IActiveSkill;
             var basicAttackSkill = learnedSkills.Find(x => x.Name == "Basic Attack") as IActiveSkill;
             Console.Clear();
-                  Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-                 Console.WriteLine($" Turn: {cController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
-                 Console.WriteLine($" Fighting: {Monster.Name}!");
-                 Console.WriteLine($" Power: {Monster.Power}\tAttack: {Monster.Attack}\tEnemy health: {Monster.Health}/{Monster.MaxHealth}");
+            Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   In Combat!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            Console.WriteLine($" Turn: {cController.Turn} \tLocation: {Program.RoomController.CurrentRoom.RoomName}\n");
+            Console.WriteLine($" Fighting: {Monster.Name}!");
+            Console.WriteLine($" Power: {Monster.Power}\tAttack: {Monster.Attack}\tEnemy health: {Monster.Health}/{Monster.MaxHealth}");
             if (player.DerivedStats.Initiative >= Monster.Initiative) {
                 Console.WriteLine("\n----------------------------------------------------------------------------------------------------");
                 Console.WriteLine("  You go first!\n");
             } else {
                 Console.WriteLine("\n  The enemy goes first!");
-                  Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
-            }           
+                Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
+            }
             Console.WriteLine($"\t\t{player.Name} the {player.CurrentClass}:");
-            WriteCenterLine($"              {AddSpacesToEnds($"  Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m", "Right", 25)                  }| | {AddSpacesToEnds($"{(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}", "Right", 25)}");
-            WriteCenterLine($"              {AddSpacesToEnds($"       Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m", "Right", 25)                      }| | {AddSpacesToEnds($"{(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"  Your Health: \u001b[31m{player.Health}/{player.DerivedStats.MaxHealth}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[0] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[0]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"       Mana:   \u001b[34m{player.Mana}/{player.DerivedStats.MaxMana}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[1] as IItem)?.ItemName ?? "Potion slot 2 - empty"}: {player.Equipment.Potions[1]?.PotionQuantity ?? 0}", "Right", 25)}");
             WriteCenterLine($"              {AddSpacesToEnds($"Action Points: \u001b[32m{cController.GetRemainingAP()}/{player.DerivedStats.ActionPoints}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[2] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[2]?.PotionQuantity ?? 0}", "Right", 25)}");
-            WriteCenterLine($"              {AddSpacesToEnds($"       Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m", "Right", 25)                              }| | {AddSpacesToEnds($"{(player.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}", "Right", 25)}");
+            WriteCenterLine($"              {AddSpacesToEnds($"       Gold:   \u001b[33m${player.Equipment.GetGoldAmount()}\u001b[0m", "Right", 25)}| | {AddSpacesToEnds($"{(player.Equipment.Potions[3] as IItem)?.ItemName ?? "Potion slot 1 - empty"}: {player.Equipment.Potions[3]?.PotionQuantity ?? 0}", "Right", 25)}");
             WriteCenterLine($"Level: {player.Level}                                                            ");
-             WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
-              Console.WriteLine($"       ======================= Actions =====================|======== Info ========");
-              Console.WriteLine($"       |  {AddSpacesToEnds($"(1) Quick Cast: {player.SkillTree.QuickCast} (\u001b[32m{quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed"? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(quickCastSkill?.ManaCost > 0? $"& \u001b[34m{quickCastSkill?.ManaCost} Mana\u001b[0m" : "")})", "Right", 50)}|  (C)haracter screen |");
-              Console.WriteLine($"       |  (2) Basic Attack {AddSpacesToEnds($"(\u001b[32m{basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP\u001b[0m)", "Right", 9)}(4) Skills              |   Combat (L)og      |");
-              Console.WriteLine($"       |  (3) Drink Potion (\u001b[32m{(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP\u001b[0m)   (5) Run                 |  (Q)uestlog         |");
-              Console.WriteLine($"       =====================================================|======================");
-              Console.WriteLine($"          {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");
+            WriteCenterLine("EXP  " + "[" + ProgressBarForPrint("+", " ", (decimal)player.Exp / (decimal)player.GetLevelUpValue(), 25) + "]                                  \n");
+            Console.WriteLine($"       ======================= Actions =====================|======== Info ========");
+            Console.WriteLine($"       |  {AddSpacesToEnds($"(1) Quick Cast: {player.SkillTree.QuickCast} (\u001b[32m{quickCastSkill?.ActionPointCost / (quickCastSkill?.SpeedType == "Casting Speed" ? player.DerivedStats.CastingSpeed : player.DerivedStats.AttackSpeed)} AP\u001b[0m {(quickCastSkill?.ManaCost > 0 ? $"& \u001b[34m{quickCastSkill?.ManaCost} Mana\u001b[0m" : "")})", "Right", 50)}|  (C)haracter screen |");
+            Console.WriteLine($"       |  (2) Basic Attack {AddSpacesToEnds($"(\u001b[32m{basicAttackSkill?.ActionPointCost / player.DerivedStats.AttackSpeed} AP\u001b[0m)", "Right", 9)}(4) Skills              |   Combat (L)og      |");
+            Console.WriteLine($"       |  (3) Drink Potion (\u001b[32m{(player.BuffedStats.ActiveBuffs.Find(x => x.Name == "Haste" && !((HasteBuff)x).PotionDrunk) != null ? 0 : 1)} AP\u001b[0m)   (5) Run                 |  (Q)uestlog         |");
+            Console.WriteLine($"       =====================================================|======================");
+            Console.WriteLine($"          {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");
             Console.WriteLine($"\n   Choose an action...\n");
         }
         public static void RoomHUD() {
@@ -807,7 +812,7 @@ namespace Saga.Assets
                 } else {
                     Console.WriteLine($" \u001b[96m Quest Item - {item.ItemName} #{amount}\u001b[0m");
                     continue;
-                }            
+                }
             }
             Console.WriteLine("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Quests ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
             if (Program.CurrentPlayer.QuestLog.Count == 0) {
@@ -827,7 +832,7 @@ namespace Saga.Assets
                         Console.WriteLine($" {quest.Potions[0].Item2} {quest.Potions[0].Item1} potions and {quest.Exp} experience points.");
                     } else if (quest.Gold > 0 && quest.Potions is null) {
                         Console.WriteLine($" {quest.Gold} gold pieces and {quest.Exp} experience points.");
-                    }                 
+                    }
                     if (quest.Item != null) {
                         if (((IEquipable)quest.Item).ItemSlot == Slot.Right_Hand) {
                             Console.WriteLine($" {((IEquipable)quest.Item).ItemSlot} - {quest.Item.ItemName}: +{((IWeapon)quest.Item).WeaponAttributes.MinDamage}-{((IWeapon)quest.Item).WeaponAttributes.MaxDamage} dmg");
@@ -869,8 +874,7 @@ namespace Saga.Assets
                 foreach (NonPlayableCharacters npc in Program.CurrentPlayer.NpcsInCamp) {
                     Print($"({1 + Program.CurrentPlayer.NpcsInCamp.IndexOf(npc)}) - {npc.Name}", 20);
                 }
-            } 
-            else {
+            } else {
                 Print("There are no one in your camp :(");
             }
             Print("\nPress the number to talk to that NPC else write (b)ack", 10);
