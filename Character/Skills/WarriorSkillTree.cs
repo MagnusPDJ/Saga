@@ -5,7 +5,7 @@
         public WarriorSkillTree()
         {
             Skills.Add([new BasicAttack()]);
-            Skills.Add([new Haste(), new RapidFire(), new MagicMissile()]);
+            Skills.Add([new Haste()]);
             //    Skills.Add(new ShieldBlock());
             //    Skills.Add(new PowerStrike());
             //    Skills.Add(new Whirlwind());

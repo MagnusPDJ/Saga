@@ -23,12 +23,12 @@ namespace Saga.Character
         private int LevelUpValue { get; set; } = 265;
         public int Health { get; private set; }
         public int Mana { get; set; }
-        public int FreeAttributePoints { get; set; }
+        private int FreeAttributePoints { get; set; }
         public Attributes Attributes { get; set; }
         public DerivedStats DerivedStats { get; set; }
         public BuffedStats BuffedStats { get; set; }      
         public SkillTree SkillTree { get; init; }
-        public int FreeSkillPoints { get; set; }
+        private int FreeSkillPoints { get; set; }
         public Equipment Equipment { get; set; }
         public IItem[] Inventory { get; set; }
         public List<Quest> QuestLog { get; set; }
@@ -154,8 +154,14 @@ namespace Saga.Character
             }
             return i;
         }
-        public void SpendSkillPoint(int skillIndex) {
-            throw new NotImplementedException();
+        public int GetFreeAttributePoints() {
+            return FreeAttributePoints;
+        }
+        public int GetFreeSkillPoints() {
+            return FreeSkillPoints;
+        }
+        public void SpendSkillPoint(int amount) {
+            FreeSkillPoints -= amount;
         }
         //Metode til at sætte start udstyr.
         public abstract void SetStartingGear();

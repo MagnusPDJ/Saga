@@ -231,6 +231,9 @@ namespace Saga.Assets
             foreach (var branch in Program.CurrentPlayer.SkillTree.Skills) {
                 skillToLearnBranch = Program.CurrentPlayer.SkillTree.Skills.IndexOf(branch);
                 skillToLearnIndex = branch.FindIndex(s => s.Name.Equals(skillToLearn, StringComparison.CurrentCultureIgnoreCase));
+                if (skillToLearnIndex != -1) {
+                    break;
+                }
             }
             if (skillToLearnIndex == -1) {
                 HUDTools.Print($" No such skill as '{skillToLearn}' exists...", 3);
@@ -238,7 +241,7 @@ namespace Saga.Assets
                 HUDTools.ClearLastLine(3);
                 return "";
             }
-            if (Program.CurrentPlayer.FreeSkillPoints <= 0) {
+            if (Program.CurrentPlayer.GetFreeSkillPoints() <= 0) {
                 HUDTools.Print(" You have no free skill points to spend...", 3);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
@@ -248,24 +251,52 @@ namespace Saga.Assets
                 HUDTools.Print($" You have '{skillToLearn}' already maxed...", 3);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
+                return "";
             }
             if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].LevelRequired > Program.CurrentPlayer.Level) {
                 HUDTools.Print($" You are not high enough level to learn this skill...", 3);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
+                return "";
             }
             if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].IsUnlocked) {
                 Program.CurrentPlayer.SkillTree.UpgradeSkill(skillToLearnBranch, skillToLearnIndex);
+            } else if (skillToLearnIndex != 0 && Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex - 1].IsUnlocked || skillToLearnIndex == 0) {
+                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnBranch, skillToLearnIndex);               
             } else {
-                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnBranch, skillToLearnIndex);
+                HUDTools.Print($" You need to unlock '{Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex-1].Name}' before '{skillToLearn}'...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
             }
-            HUDTools.ShowSkillTree(Program.CurrentPlayer);
+                HUDTools.ShowSkillTree(Program.CurrentPlayer);
             return "";
         }
     }
     public class InfoSkill(string keyWord) : InputAction(keyWord) {
-        public override string RespondToInput(string[] separatedInputWords) {           
-            return "";
+        public override string RespondToInput(string[] separatedInputWords) {
+            (int, int) startCursor = Console.GetCursorPosition();
+            string skillForInfo = String.Join(" ", separatedInputWords.Skip(1));
+            int skillForInfoBranch = -1;
+            int skillForInfoIndex = -1;
+            foreach (var branch in Program.CurrentPlayer.SkillTree.Skills) {
+                skillForInfoBranch = Program.CurrentPlayer.SkillTree.Skills.IndexOf(branch);
+                skillForInfoIndex = branch.FindIndex(s => s.Name.Equals(skillForInfo, StringComparison.CurrentCultureIgnoreCase));
+                if (skillForInfoIndex != -1) {
+                    break;
+                }
+            }
+            if (skillForInfoIndex == -1) {
+                HUDTools.Print($" No such skill as '{skillForInfo}' exists...", 3);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastLine(3);
+                return "";
+            } else {
+                Program.CurrentPlayer.SkillTree.GetSkillInfo(skillForInfoBranch, skillForInfoIndex);
+                TextInput.PressToContinue();
+                HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
+            }
+                return "";
         }
     }
     public class ChangeQuickCast(string keyWord) : InputAction(keyWord) {

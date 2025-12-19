@@ -10,5 +10,6 @@
         int ManaCost { get; set; }
         int Cooldown { get; }
         int Timer { get; set; }
+        virtual void UpgradeTier() { }
     }
 }

@@ -317,7 +317,7 @@ namespace Saga.Assets
                 } else {
                     return AddSpacesToEnds($"\u001b[34m[*]{skill.Name}({skill.Tier.Min}/{skill.Tier.Max})\u001b[0m", "Both", 20);
                 }                    
-            } else if (Program.CurrentPlayer.Level >= skill.LevelRequired) {
+            } else if (Program.CurrentPlayer.Level >= skill.LevelRequired && (index == 0 || Program.CurrentPlayer.SkillTree.Skills[branch][index-1].IsUnlocked)) {
                 return AddSpacesToEnds($"\u001b[33m[*]{skill.Name}\u001b[0m", "Both", 20);
             } else {
                 return AddSpacesToEnds($"[ ]{skill.Name}", "Both", 20);
@@ -525,7 +525,7 @@ namespace Saga.Assets
             stats.AppendFormat($" │(I)ntellect ⇵          {player.Attributes.Intellect}\t=> Magical Resistance:    {FormatDictionary(player.DerivedStats.MagicalResistance)}\n");
             stats.AppendFormat($" └>     (W)illpower ⤵    {player.Attributes.WillPower}\t=> Mana:                  {player.Mana} / {player.DerivedStats.MaxMana}\n");
             stats.AppendFormat($"                 Virtue  {player.Attributes.Virtue}\t=> Action Points:         {player.DerivedStats.ActionPoints}\n");
-            stats.AppendFormat($"  Attribute points to spend: {player.FreeAttributePoints}\n\n");
+            stats.AppendFormat($"  Attribute points to spend: {player.GetFreeAttributePoints()}\n\n");
             stats.AppendFormat($" Attack Speed:   {player.DerivedStats.AttackSpeed}\t(Constitution and Awareness)\n");
             stats.AppendFormat($" Casting Speed:  {player.DerivedStats.CastingSpeed}\t(Willpower and Awareness)\n");
             stats.AppendFormat($" Mana Regen:     {player.DerivedStats.ManaRegenRate}\t(Constitution and Wilpower)\n");
@@ -546,7 +546,7 @@ namespace Saga.Assets
         }
         public static void CharacterScreen() {
             //Metode til at kalde og gernerer en character screen som viser alle funktionelle variabler der er i brug.
-            for (int i = Program.CurrentPlayer.FreeAttributePoints; i >= 0; i--) {
+            for (int i = Program.CurrentPlayer.GetFreeAttributePoints(); i >= 0; i--) {
                 Console.Clear();
                 DisplayStats(Program.CurrentPlayer);
                 i = Program.CurrentPlayer.SpendAttributePoint(i);
@@ -596,7 +596,7 @@ namespace Saga.Assets
             Console.WriteLine("  -          info <SkillName>      → View skill details");
             Console.WriteLine("  -          quickcast <SkillName> → Rebind skill to quickcast");
             Console.WriteLine("  -          (b)ack                → To Return");
-            Console.WriteLine($" Available skill points: {player.FreeSkillPoints}\n");
+            Console.WriteLine($" Available skill points: {player.GetFreeSkillPoints()}\n");
         }
         public static void ShowSkillsCombat(Player player, CombatController cController) {
             Console.Clear();
