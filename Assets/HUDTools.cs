@@ -253,26 +253,20 @@ namespace Saga.Assets
         // Helper: determine whether an item should be presented as a quest item for the current player
         // returns (isQuestItem, displayAmount)
         private static (bool, int) GetQuestItemInfo(IItem? item) {
-            if (item == null) return (false, 0);
-            var player = Program.CurrentPlayer;
+            if (item == null) return (false, 0);           
+            
+            if (item is IQuestItem qitem) return (true, qitem.Amount);
+            
+            var player = Program.CurrentPlayer;            
             if (player == null || player.QuestLog == null || player.QuestLog.Count == 0) return (false, 0);
 
-            // Quest is relevant if any active (not completed) quest requires this ItemId
-            var relevantQuests = player.QuestLog.Where(q => !q.Completed && q.Requirements != null && q.Requirements.ContainsKey(item.ItemId)).ToList();
+            // Quest is relevant if any active quest requires this ItemId
+            var relevantQuests = player.QuestLog.Where(q => q.Requirements != null && q.Requirements.ContainsKey(item.ItemId)).ToList();            
             if (relevantQuests.Count == 0) return (false, 0);
-
-            // Determine display amount:
+           
             if (item is ICraftingItem citem) {
                 return (true, citem.Amount);
-            }
-            if (item is IQuestItem qitem) {
-                return (true, qitem.Amount);
-            }
-
-            // For non-stackable items, show 1 (or if multiple quests require different amounts, keep 1)
-            // If player carries multiple separate entries in inventory for the same ItemId (non-stackable),
-            // this method returns 1 for display. Stackable items should implement ICraftingItem or IQuestItem.
-            return (true, 1);
+            } else return (true, 1);
         }
 
         //Tilføjer spaces før og efter en string, bruges til at bygge HUDS med varierende string længder.
@@ -827,11 +821,11 @@ namespace Saga.Assets
                         Console.WriteLine($" {quest.TurnIn}");
                     }
                     Console.WriteLine(" Rewards:");
-                    if (quest.Gold > 0 && quest.Potions is not null) {
+                    if (quest.Gold > 0 && quest.Potions != null && quest.Potions.Count != 0) {
                         Console.WriteLine($" {quest.Potions[0].Item2} {quest.Potions[0].Item1} potions, {quest.Gold} gold pieces and {quest.Exp} experience points.");
-                    } else if (quest.Gold == 0 && quest.Potions is not null) {
+                    } else if (quest.Gold == 0 && quest.Potions is not null && quest.Potions.Count != 0) {
                         Console.WriteLine($" {quest.Potions[0].Item2} {quest.Potions[0].Item1} potions and {quest.Exp} experience points.");
-                    } else if (quest.Gold > 0 && quest.Potions is null) {
+                    } else if (quest.Gold > 0 && (quest.Potions is null || quest.Potions.Count == 0)) {
                         Console.WriteLine($" {quest.Gold} gold pieces and {quest.Exp} experience points.");
                     }
                     if (quest.Item != null) {

@@ -311,7 +311,7 @@ namespace Saga
                 }
             } while (input1 != "y");
             HUDTools.ClearLastLine(4);
-            HUDTools.Print($"Your name:  {input}\n", 3);
+            HUDTools.Print($" Your name:  {input}\n", 3);
             return input;
         }
 
@@ -357,17 +357,17 @@ namespace Saga
         
         //Metode til at 'Save and Quit' spillet.
         public static string Quit() {
-            HUDTools.Print("Want to Quit? (Y/N)",10);
+            HUDTools.Print(" Want to Quit? (Y/N)",10);
             string input = TextInput.PlayerPrompt();
             if (input == "y") {
                 SoundController.Stop();
                 SoundController.Play("laugh");
-                Console.WriteLine("Want to save? (Y/N)");
+                Console.WriteLine(" Want to save? (Y/N)");
                 while (true) {
                     string input1 = TextInput.PlayerPrompt();
                     if (input1 == "y") {
                         Save();
-                        Console.WriteLine("Game has been saved!");
+                        Console.WriteLine(" Game has been saved!");
                         TextInput.PressToContinue();
                         break;
                     }
@@ -375,7 +375,7 @@ namespace Saga
                         break;
                     }
                     else {
-                        Console.WriteLine("Invalid input");
+                        Console.WriteLine(" Invalid input");
                         TextInput.PressToContinue();
                         HUDTools.ClearLastLine(3);
                     }

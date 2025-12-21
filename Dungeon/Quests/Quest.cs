@@ -84,9 +84,13 @@ namespace Saga.Dungeon.Quests
         //Metode til at få alle quest rewards og opdatere questlogs.
         public static void TurnInQuest(Player player, Quest quest) {
             if (quest.QuestType == Type.Collect || quest.QuestType == Type.Find) {
-                int qItem = Array.FindIndex(player.Inventory, item => item != null && item.ItemId == quest.Target);
-                if (qItem != -1) {
-                    player.Inventory.SetValue(null, qItem);
+                int qItemIndex = Array.FindIndex(player.Inventory, item => item != null && item.ItemId == quest.Target);
+                if (qItemIndex != -1) {
+                    if ((player.Inventory[qItemIndex] is ICraftingItem cItem) && cItem.Amount > quest.Requirements[quest.Target]) {
+                        cItem.Amount -= quest.Requirements[quest.Target];
+                    } else {
+                        player.Inventory.SetValue(null, qItemIndex);
+                    }
                 }
             }
             player.QuestLog.Remove(quest);
