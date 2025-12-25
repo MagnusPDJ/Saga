@@ -1,6 +1,4 @@
 ﻿
-using Windows.AI.MachineLearning;
-
 namespace Saga.Assets
 {
     class TextInput
@@ -9,6 +7,8 @@ namespace Saga.Assets
             new Go("go"),
             new Use("use"),
             new Look("look"),
+            new ExamineObject("examine"),
+            new Search("search"),
             new DrinkHealingPotion("drink", "d"),
             new SeeCharacterScreen("character", "c"),
             new SeeInventory("inventory", "i"),
@@ -16,17 +16,10 @@ namespace Saga.Assets
             new SeeSkillTree("skilltree", "k")
             ];
         public static InputAction[] InputInvActions = [
-            new Examine("examine"),
+            new ExamineItem("examine"),
             new Equip("equip"),
             new UnEquip("unequip"),
             new Back("back", "b"),
-            ];
-        public static InputAction[] InputEventActions = [
-            new DrinkHealingPotion("drink", "d"),
-            new SeeCharacterScreen("character", "c"),
-            new SeeInventory("inventory", "i"),
-            new SeeQuestLog("questlog", "l"),
-            new SeeSkillTree("skilltree", "k")
             ];
         public static InputAction[] InputSkillActions = [
             new LearnSkill("learn"),
@@ -34,7 +27,11 @@ namespace Saga.Assets
             new ChangeQuickCast("quickcast"),
             new Back("back", "b")
             ];
-
+        public static List<InputAction[]> InputActions = [
+            InputRoomActions,
+            InputInvActions,
+            InputSkillActions
+            ];
         /// <summary>
         /// 'Pauses' the game and prompts the player to press any button to continue.
         /// </summary>
@@ -46,29 +43,24 @@ namespace Saga.Assets
         /// Waits for and reads the player's one key input through the console.
         /// </summary>
         /// <returns>The one key input</returns>
-        public static string PlayerPrompt() {
+        public static string UserKeyInput() {
             string userInput = Console.ReadKey().KeyChar.ToString().ToLower();
             Console.WriteLine("");
+            return userInput;
+        }
+        public static string UserLineInput() {
+            string userInput = (Console.ReadLine() ?? "").ToLower();
             return userInput;
         }
         ///<summary>
         ///Waits for and reads the player's input through the console and calls the correct method based on input.</summary>
         ///<param name="inputActionsToUse">
-        ///RoomActions: inputs used in rooms, InvActions: inputs used while in inventory and EventActions: inputs used during room events.</param>
+        ///0: inputs used in rooms, 1: inputs used while in inventory and 2: inputs used in skilltree.</param>
         ///<returns>
         ///Empty string or an exit from the currentRoom.</returns>
-        public static string PlayerPrompt(string inputActionsToUse) {
-            InputAction[] inputActions = [];
-            if (inputActionsToUse == "RoomActions") { 
-                inputActions = InputRoomActions;
-            } else if (inputActionsToUse == "InvActions") {
-                inputActions = InputInvActions;
-            } else if (inputActionsToUse == "EventActions") {
-                inputActions = InputEventActions;
-            } else if (inputActionsToUse == "SkillActions") {
-                inputActions = InputSkillActions;
-            }
-            string userInput = (Console.ReadLine() ?? "").ToLower();
+        public static string SelectPlayerAction(int inputActionsToUse) {
+            InputAction[] inputActions = InputActions[inputActionsToUse];            
+            string userInput = UserLineInput();
             if (userInput.Length == 1) {
                 foreach (InputAction action in inputActions) {
                     if (action.AbrKeyWord == userInput) {
@@ -76,8 +68,7 @@ namespace Saga.Assets
                     }
                 }
             }
-            char[] delimiterCharacters = [' '];
-            string[] separatedInputWords = userInput.Split(delimiterCharacters);
+            string[] separatedInputWords = userInput.Split(' ');
             foreach (InputAction action in inputActions) {
                 if (action.KeyWord == separatedInputWords[0]) {
                     return action.RespondToInput(separatedInputWords);
@@ -96,33 +87,22 @@ namespace Saga.Assets
         ///The string inputted by the player.</param>
         ///<returns>
         ///Empty string or an exit from the currentRoom.</returns>
-        public static string PlayerPrompt(string inputActionsToUse, string userInput) {
-            InputAction[] inputActions = [];
-            if (inputActionsToUse == "RoomActions") {
-                inputActions = InputRoomActions;
-            } else if (inputActionsToUse == "InvActions") {
-                inputActions = InputInvActions;
-            } else if (inputActionsToUse == "EventActions") {
-                inputActions = InputEventActions;
-            } else if (inputActionsToUse == "SkillActions") {
-                inputActions = InputSkillActions;
-            }
-            string inputAction = (userInput ?? "").ToLower();
-            if (inputAction.Length == 1) {
+        public static string SelectPlayerAction(int inputActionsToUse, string userInput) {
+            InputAction[] inputActions = InputActions[inputActionsToUse];
+            if (userInput.Length == 1) {
                 foreach (InputAction action in inputActions) {
-                    if (action.AbrKeyWord == inputAction) {
+                    if (action.AbrKeyWord == userInput) {
                         return action.RespondToInput([]);
                     }
                 }
             }
-            char[] delimiterCharacters = [' '];
-            string[] separatedInputWords = inputAction.Split(delimiterCharacters);
+            string[] separatedInputWords = userInput.Split(' ');
             foreach (InputAction action in inputActions) {
                 if (action.KeyWord == separatedInputWords[0]) {
                     return action.RespondToInput(separatedInputWords);
                 }
             }
-            HUDTools.Print($" There is no '{inputAction}' action...", 15);
+            HUDTools.Print($" There is no '{userInput}' action...", 15);
             PressToContinue();
             HUDTools.ClearLastLine(3);
             return "";

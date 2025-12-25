@@ -84,7 +84,7 @@ namespace Saga.Assets
         }
         
         void PlayerActions() {
-            string input = TextInput.PlayerPrompt();            
+            string input = TextInput.UserKeyInput();            
             switch (input) {
                 default:
                     HUDTools.Print($" There is no {input} action!", 5);
@@ -145,7 +145,7 @@ namespace Saga.Assets
                         HUDTools.ClearLastLine(3);
                     } else {
                         HUDTools.Print($" Are you sure, you want to try and run? (Y/N)", 3);
-                        input = TextInput.PlayerPrompt();
+                        input = TextInput.UserKeyInput();
                         if (input == "y") {
                             if (_player.RunAway(_enemy)) {
                                 Program.SoundController.Stop();
@@ -162,12 +162,12 @@ namespace Saga.Assets
                     //Skill tree logic
                     HUDTools.ShowSkillsCombat(_player, this);
                     while (true) {
-                        input = TextInput.PlayerPrompt();
+                        input = TextInput.UserKeyInput();
                         if (input == "b") {
                             break;
                         } else if (input == "q") {
                             Console.WriteLine(" Enter number of the skill to rebind it for quickcast:");
-                            input = TextInput.PlayerPrompt();
+                            input = TextInput.UserKeyInput();
                             if (input == "1") {
                                 HUDTools.Print($" Basic attack cannot be set as quickcast...", 3);
                                 TextInput.PressToContinue();
@@ -216,14 +216,13 @@ namespace Saga.Assets
                 case "e":
                     if (RemainingActionPoints >= _player.DerivedStats.ActionPoints) {
                         HUDTools.Print($" No Action Points spent, are you sure, you want to end turn? (Y/N)", 3);
-                        input = TextInput.PlayerPrompt();
+                        input = TextInput.UserKeyInput();
                         if (input != "y") break;
                     }
                     Endturn = true;
                 break;
             }
         }
-
         void EnemyActions() {
             int attack = _enemy.Attack;
             attack -= Program.CurrentPlayer.DerivedStats.ArmorRating;

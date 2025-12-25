@@ -276,8 +276,9 @@ namespace Saga.Assets
         // \u001b[32m grøn
         // \u001b[33m gul
         // \u001b[90m grå
+        // \u001b[96m cyan
         private static string AddSpacesToEnds(string input, string side, int width) {
-            int inputWidth = input.Replace("\u001b[0m", "").Replace("\u001b[31m", "").Replace("\u001b[32m", "").Replace("\u001b[33m", "").Replace("\u001b[34m", "").Replace("\u001b[90m", "").Length;
+            int inputWidth = input.Replace("\u001b[0m", "").Replace("\u001b[31m", "").Replace("\u001b[32m", "").Replace("\u001b[33m", "").Replace("\u001b[34m", "").Replace("\u001b[90m", "").Replace("\u001b[96m", "").Length;
             if (side == "Left") {
                 for (int i = 0; i < width - inputWidth; i++) {
                     input = " " + input;
@@ -740,7 +741,7 @@ namespace Saga.Assets
             Console.WriteLine($"          {(CombatController.AutoEndturn == false ? "(E)nd Turn." : "")}");
             Console.WriteLine($"\n   Choose an action...\n");
         }
-        public static void RoomHUD() {
+        public static void RoomHUD(bool entrance = false) {
             Console.Clear();
             Console.WriteLine($" Location:\t{Program.RoomController.CurrentRoom.RoomName}");
             Console.WriteLine($" {Program.CurrentPlayer.CurrentClass} {Program.CurrentPlayer.Name}:");
@@ -752,14 +753,17 @@ namespace Saga.Assets
             Console.Write("[");
             ProgressBar("+", " ", (decimal)Program.CurrentPlayer.Exp / (decimal)Program.CurrentPlayer.GetLevelUpValue(), 20);
             Console.WriteLine("]");
-            Console.WriteLine(" ==================Actions================");
-            Console.WriteLine(" V Look around          Go #             V");
-            Console.WriteLine(" V (D)rink Potion       Go back/home     V");
-            Console.WriteLine(" ===================Menus=================");
-            Console.WriteLine(" V (C)haracter screen   S(K)illtree      V");
-            Console.WriteLine(" V (I)nventory          Quest(L)og       V");
-            Console.WriteLine(" =========================================\n");
-            Console.WriteLine(" Write an action:");
+            Console.WriteLine(" ==========================Actions===========================");
+            Console.WriteLine(" V Look around          Go #               Examine <object> V");
+            Console.WriteLine(" V (D)rink Potion       Go back/home       Search <area>    V");
+            Console.WriteLine(" ===========================Menus============================");
+            Console.WriteLine(" V (C)haracter screen   S(K)illtree                         V");
+            Console.WriteLine(" V (I)nventory          Quest(L)og                          V");
+            Console.WriteLine(" ============================================================");
+            if (entrance) {
+                Print(Program.RoomController.CurrentRoom.EntranceDescription, 20);
+            }
+            Console.WriteLine("\n Write an action:");
         }
         public static void FullCampHUD() {
             Console.Clear();

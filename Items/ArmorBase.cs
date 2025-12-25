@@ -99,7 +99,7 @@ namespace Saga.Items
             if (Program.CurrentPlayer.Equipment.TryGetSlot(ItemSlot, out IEquipable? value)) {
                 Console.WriteLine($"Do you want to switch '{value.ItemName}' for '{ItemName}'? (Y/N)");
                 while (true) {
-                    string input = TextInput.PlayerPrompt();
+                    string input = TextInput.UserKeyInput();
                     if (input == "y") {
                         value.UnEquip();
                         Program.CurrentPlayer.Equipment.SetSlot(ItemSlot, this);                        

@@ -39,7 +39,7 @@ namespace Saga.Items
             if (hasRight || hasLeft) {
                 Console.WriteLine($"Do you want to switch {(valueRight != null ? valueRight.ItemName : "")}{(valueRight != null && valueLeft != null ? " and " : "")}{(valueLeft != null ? valueLeft.ItemName : "")} for '{ItemName}'? (Y/N)");
                 while (true) {
-                    string input = TextInput.PlayerPrompt();
+                    string input = TextInput.UserKeyInput();
                     if (input == "y") {
                         valueRight?.UnEquip();
                         if (hasLeft) {

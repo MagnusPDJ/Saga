@@ -20,6 +20,7 @@ namespace Saga.Dungeon.Rooms
                     RandomCombatEncounter();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
+                        EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
                         Program.RoomController.ChangeRoom(Exits[0].keyString);
                     } else {
                         Cleared = true;
@@ -30,9 +31,8 @@ namespace Saga.Dungeon.Rooms
                     Cleared = true;
                 }
             } else if (Enemy != null) {
-                HUDTools.RoomHUD();
+                HUDTools.RoomHUD(true);
                 HUDTools.ClearLastLine(1);
-                HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
                 TextInput.PressToContinue();
                 new CombatController(Program.CurrentPlayer, Enemy).Combat();
                 if (Program.RoomController.Ran == true) {

@@ -96,7 +96,7 @@ namespace Saga
             SoundController.Play("mainmenu");
             HUDTools.MainMenu();
             while (true) {
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (input == "1") {
                     Play();
                 }
@@ -300,7 +300,7 @@ namespace Saga
                 HUDTools.ClearLastLine(2);
                 HUDTools.Print($" This is your name?\n{input}.\n (Y/N)",10);
                 while (true) {
-                    input1 = TextInput.PlayerPrompt();
+                    input1 = TextInput.UserKeyInput();
                     if (input1 != "y" && input1 != "n") {
                         HUDTools.Print(" Invalid input.", 3);
                         TextInput.PressToContinue();
@@ -321,7 +321,7 @@ namespace Saga
             while (true) {
                 string className = "";
                 int classNumber = -1;
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (input == "1") {
                     className = " warrior";
                     classNumber = 1;
@@ -339,7 +339,7 @@ namespace Saga
                 if (className != "" && classNumber != -1) {
                     HUDTools.Print($" Do you want to become a{className}?\n (Y/N)", 3);
                     while (true) {
-                        input = TextInput.PlayerPrompt();
+                        input = TextInput.UserKeyInput();
                         if (input == "y") {
                             return classNumber;
                         } else if (input == "n") {
@@ -358,13 +358,13 @@ namespace Saga
         //Metode til at 'Save and Quit' spillet.
         public static string Quit() {
             HUDTools.Print(" Want to Quit? (Y/N)",10);
-            string input = TextInput.PlayerPrompt();
+            string input = TextInput.UserKeyInput();
             if (input == "y") {
                 SoundController.Stop();
                 SoundController.Play("laugh");
                 Console.WriteLine(" Want to save? (Y/N)");
                 while (true) {
-                    string input1 = TextInput.PlayerPrompt();
+                    string input1 = TextInput.UserKeyInput();
                     if (input1 == "y") {
                         Save();
                         Console.WriteLine(" Game has been saved!");
@@ -392,7 +392,7 @@ namespace Saga
             var settings = configFile.AppSettings.Settings;        
             while (true) {
                 HUDTools.Settings();
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (input == "1") {
                     if (settings["toggleAutoEndturn"].Value == "true") {
                         settings["toggleAutoEndturn"].Value = "false";

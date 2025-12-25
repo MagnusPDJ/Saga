@@ -118,7 +118,7 @@ namespace Saga.Character
             if (FreeAttributePoints > 0 && i != 0) {
                 HUDTools.Print(" Allocate attribute point? Type the corresponding (A)ttribute abbr. to spent 1 point, else (N)o", 0);
                 while (true) {
-                    string input = TextInput.PlayerPrompt();
+                    string input = TextInput.UserLineInput();
                     if (input == "s" || input == "strength") {
                         Attributes.AddValues(strength: 1);
                         FreeAttributePoints--;

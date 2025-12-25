@@ -11,6 +11,7 @@ namespace Saga.Dungeon.Rooms
         public ChestRoom(string name, string desc) {
             RoomName = name;
             Description = desc;
+            EntranceDescription = " You open a door and find a treasure chest inside!";
         }
         public override void LoadRoom() {
             if (!Visited) Visited = true;
@@ -21,6 +22,7 @@ namespace Saga.Dungeon.Rooms
                     Encounter();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
+                        EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
                         Program.RoomController.ChangeRoom(Exits[0].keyString);
                     } else {
                         Cleared = true;
@@ -33,9 +35,8 @@ namespace Saga.Dungeon.Rooms
                     }
                 }
             } else if (Enemy != null) {
-                HUDTools.RoomHUD();
+                HUDTools.RoomHUD(true);
                 HUDTools.ClearLastLine(1);
-                HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
                 TextInput.PressToContinue();
                 new CombatController(Program.CurrentPlayer, Enemy).Combat();
                 if (Program.RoomController.Ran == true) {
@@ -52,14 +53,12 @@ namespace Saga.Dungeon.Rooms
         }
         //Encounter der "spawner" en Mimic som skal dræbes.
         public void Encounter() {
-            Console.Clear();
             Program.SoundController.Play("dooropen");
-            HUDTools.RoomHUD();
+            HUDTools.RoomHUD(true);
             HUDTools.ClearLastLine(1);
-            HUDTools.Print(" You open a door and find a treasure chest inside!");
             HUDTools.Print(" Do you want to try and open it?\n(Y/N)");
             while (true) {
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (input == "n") {
                     HUDTools.Print(" You decide to leave the chest for now...", 20);
                     TextInput.PressToContinue();

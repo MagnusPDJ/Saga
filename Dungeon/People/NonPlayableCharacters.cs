@@ -13,12 +13,12 @@ namespace Saga.Dungeon.People
         public static void TalkToNpc() {
             HUDTools.TalkToNpcHUD();
             while (true) {
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (int.TryParse(input, out int n) && n <= Program.CurrentPlayer.NpcsInCamp.Count && n >= 1) {
                     LoadDialogueOptions(int.Parse(input) - 1);
                     HUDTools.TalkToNpcHUD();
                 }
-                else if (input == "b" || input == "back") {
+                else if (input == "b") {
                     break;
                 }
                 else {
@@ -87,7 +87,7 @@ namespace Saga.Dungeon.People
                 
                 while (true) {
                     (int, int) startCursor = Console.GetCursorPosition();
-                    string input = TextInput.PlayerPrompt();
+                    string input = TextInput.UserKeyInput();
                     if (input == "b" || input == "back") {
                         donetalking = true;
                         Quest.UpdateQuestLog(Program.CurrentPlayer);
@@ -122,7 +122,7 @@ namespace Saga.Dungeon.People
                                 HUDTools.Print($"Do you have any work?", 0);
                                 HUDTools.Print($"Yes, if you could go and {talkto.AvailableQuests[0].Name}, I will make it worth your while.\n(Y)es to accept (n)o to decline.", 15);
                                 while (true) {
-                                    string input1 = TextInput.PlayerPrompt();
+                                    string input1 = TextInput.UserKeyInput();
                                     if (input1 == "y") {
                                         Program.CurrentPlayer.QuestLog.Add(talkto.AvailableQuests[0]);
                                         talkto.AvailableQuests[0].Accepted = true;

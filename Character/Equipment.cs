@@ -283,7 +283,7 @@ namespace Saga.Character
                         Console.WriteLine($"   {i + 1} - {(Potions[i] as IItem)!.ItemName}");
                     }
                 }
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (int.TryParse(input, out int slot) && 1 <= slot && slot <= 4) {
                     if (Potions[slot - 1] != null) {
                         return Potions[slot - 1];

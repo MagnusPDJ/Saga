@@ -1,5 +1,4 @@
-﻿
-using Saga.Assets;
+﻿using Saga.Assets;
 using Saga.Items.Loot;
 
 namespace Saga.Dungeon.Rooms
@@ -11,6 +10,8 @@ namespace Saga.Dungeon.Rooms
         public HallwayRoom(string name, string desc) {
             RoomName = name;
             Description = desc;
+            EntranceDescription = " As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n" +
+                                  " so you decide to tread carefully.";
             MaxExits = 2;
         }
         public override void LoadRoom() {
@@ -22,6 +23,7 @@ namespace Saga.Dungeon.Rooms
                     RandomCombatEncounter();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
+                        EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
                         Program.RoomController.ChangeRoom(Exits[0].keyString);
                     } else {
                         Cleared = true;
@@ -34,9 +36,8 @@ namespace Saga.Dungeon.Rooms
                     Cleared = true;
                 }
             } else if (Enemy != null) {
-                HUDTools.RoomHUD();
+                HUDTools.RoomHUD(true);
                 HUDTools.ClearLastLine(1);
-                HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
                 TextInput.PressToContinue();
                 new CombatController(Program.CurrentPlayer, Enemy).Combat();
                 if (Program.RoomController.Ran == true) {
@@ -83,10 +84,8 @@ namespace Saga.Dungeon.Rooms
             }
 
             //slow print:
-            Console.Clear();
-            HUDTools.RoomHUD();
-            HUDTools.ClearLastLine(1);
-            HUDTools.Print(" As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n so you decide to tread carefully.", 30);            
+            HUDTools.RoomHUD(true);
+            HUDTools.ClearLastLine(1);     
             HUDTools.Print("    o    <- starting position", 5);
             for (int j = 0; j < 4; j++) {
                 HUDTools.Print(" " + puzzle[j] + "\n", 10);
@@ -94,20 +93,15 @@ namespace Saga.Dungeon.Rooms
             //Player action sequence:
             string location = "";
             for (int i = 0; i < 4;) {
-                Console.Clear();
-                HUDTools.RoomHUD();
+                HUDTools.RoomHUD(true);
                 HUDTools.ClearLastLine(1);
                 if (i == 0) {
-                    HUDTools.Print(" As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n so you decide to tread carefully.", 0);
-                    
                     HUDTools.Print("    o    <- starting position", 0);
                     for (int j = 0; j < 4; j++) {
                         HUDTools.Print(" " + puzzle[j] + "\n", 0);
                     }
                     HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
-                } else {
-                    HUDTools.Print(" As you are walking down the dark corridors, you see that the floor is suddenly covered in runes,\n so you decide to tread carefully.", 0);
-                    
+                } else {                    
                     for (int j = 0; j < 4; j++) {
                         if (i == j) {
                             Console.Write($" {location} <- Your position");
@@ -117,7 +111,7 @@ namespace Saga.Dungeon.Rooms
                     Console.WriteLine();
                     HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
                 }                
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 if (int.TryParse(input, out int number) && number < 5 && number > 0) {
                     if (positions[i] == number - 1) {
                         Program.SoundController.Play("footsteps");
@@ -143,7 +137,7 @@ namespace Saga.Dungeon.Rooms
                     Console.WriteLine(" Invalid Input: Whole numbers 1-4 only");
                     TextInput.PressToContinue();
                 } else {
-                    TextInput.PlayerPrompt("EventActions", input);
+                    TextInput.SelectPlayerAction(0, input);
                 }
             }
             HUDTools.ClearLastLine(1);

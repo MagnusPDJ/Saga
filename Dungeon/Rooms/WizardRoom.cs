@@ -7,7 +7,10 @@ namespace Saga.Dungeon.Rooms
     {
         public WizardRoom() {
             RoomName = "Black library";
-            Description = " There are vast amount of black tomes on tall shelves. Every book is written in pictograms and\n scribbles sharing no secrets. The whole room is emitting a fell aura.";
+            Description = " There are vast amount of black tomes on tall shelves. Every book is written in pictograms and\n" +
+                          " scribbles sharing no secrets. The whole room is emitting a fell aura.";
+            EntranceDescription = " The door slowly creaks open as you peer into the dark room. You see a tall man with a long beard\n" +
+                                  " and pointy hat, looking at a large tome.";
             MaxExits = 1;
         }
         public override void LoadRoom() {
@@ -18,6 +21,7 @@ namespace Saga.Dungeon.Rooms
                     WizardEncounter();
                     if (Program.RoomController.Ran == true) {
                         Program.RoomController.Ran = false;
+                        EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
                         Program.RoomController.ChangeRoom(Exits[0].keyString);
                     } else {
                         Cleared = true;
@@ -26,9 +30,8 @@ namespace Saga.Dungeon.Rooms
                     }
                 }
             } else if (Enemy != null) {
-                HUDTools.RoomHUD();
+                HUDTools.RoomHUD(true);
                 HUDTools.ClearLastLine(1);
-                HUDTools.Print($" You return to the room where you left the {Enemy.Name}...", 10);
                 TextInput.PressToContinue();
                 new CombatController(Program.CurrentPlayer, Enemy).Combat();
                 if (Program.RoomController.Ran == true) {
@@ -44,12 +47,10 @@ namespace Saga.Dungeon.Rooms
             IdleInRoom();
         }
         public void WizardEncounter() {
-            Console.Clear();
             Program.SoundController.Play("laugh");
-            HUDTools.RoomHUD();
-            HUDTools.Print(" The door slowly creaks open as you peer into the dark room. You see a tall man with a", 20);
+            HUDTools.RoomHUD(true);
+            HUDTools.ClearLastLine(1);
             Program.SoundController.Play("troldmandskamp");
-            HUDTools.Print(" long beard and pointy hat, looking at a large tome.", 20);
             TextInput.PressToContinue();
 
             Enemy = EnemyFactory.CreateByName("Dark Wizard");

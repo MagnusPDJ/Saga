@@ -1,12 +1,11 @@
 ﻿using Saga.Character.DmgLogic;
-using Saga.Character.Skills;
 using Saga.Dungeon.Rooms;
+using Saga.Dungeon.Rooms.Room_Objects;
 using Saga.Items;
 
 namespace Saga.Assets
 {
-    public abstract class InputAction(string keyWord, string? abrKeyWord = null)
-    {
+    public abstract class InputAction(string keyWord, string? abrKeyWord = null) {
         public string KeyWord { get; set; } = keyWord;
         public string? AbrKeyWord { get; set; } = abrKeyWord;
 
@@ -25,7 +24,7 @@ namespace Saga.Assets
             // Universal "go home" support
             if (separatedInputWords[1].Equals("home", StringComparison.OrdinalIgnoreCase)) {
                 HUDTools.Print("Are you sure you want to return? (Y/N)", 10);
-                string confirm = TextInput.PlayerPrompt();
+                string confirm = TextInput.UserKeyInput();
                 if (confirm == "y") {
                     HUDTools.Print("You return to your camp.", 10);
                     TextInput.PressToContinue();
@@ -62,7 +61,7 @@ namespace Saga.Assets
             }
         }
     }
-    public class Examine(string keyWord) : InputAction(keyWord) {
+    public class ExamineItem(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             string itemToSearchFor = String.Join(" ", separatedInputWords.Skip(1));
             (int, int) startCursor = Console.GetCursorPosition();
@@ -94,7 +93,7 @@ namespace Saga.Assets
             } else {
                 Console.WriteLine("\n No such item exists...");
             }
-                TextInput.PressToContinue();
+            TextInput.PressToContinue();
             HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
             return "";
         }
@@ -105,17 +104,15 @@ namespace Saga.Assets
             (int, int) startCursor = Console.GetCursorPosition();
             if (Program.CurrentPlayer.Inventory.All(x => x == null)) {
                 Console.WriteLine("\nNo items in inventory...");
-            }
-            else {
+            } else {
                 var item = Program.CurrentPlayer.Inventory.FirstOrDefault(x => x?.ItemName.ToLower() == itemToSearchFor);
                 if (item != null) {
                     if (item is IEquipable equipable) {
-                        HUDTools.Print($"\n{equipable.Equip()}", 3);                      
-                    }else {
+                        HUDTools.Print($"\n{equipable.Equip()}", 3);
+                    } else {
                         HUDTools.Print("\nYou cannot equip this item...", 3);
                     }
-                }
-                else {
+                } else {
                     Console.WriteLine("\nNo such item in inventory...");
                 }
             }
@@ -147,8 +144,7 @@ namespace Saga.Assets
             throw new NotImplementedException();
         }
     }
-    public class Back(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord)
-    {
+    public class Back(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             return "back";
         }
@@ -158,6 +154,9 @@ namespace Saga.Assets
             (int, int) startCursorPosition = Console.GetCursorPosition();
             if (separatedInputWords[1] == "around") {
                 HUDTools.Print(Program.RoomController.CurrentRoom.Description, 10);
+                foreach (IInteractable interactable in Program.RoomController.CurrentRoom.Interactables) {
+                    HUDTools.Print(interactable.LookDescription, 10);
+                }
                 HUDTools.Print(Program.RoomController.CurrentRoom.CorpseDescription, 10);
                 foreach (Exit exit in Program.RoomController.CurrentRoom.Exits) {
                     HUDTools.Print(exit.exitDescription, 10);
@@ -188,10 +187,10 @@ namespace Saga.Assets
         }
     }
     public class SeeInventory(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
-        public override string RespondToInput(string[] separatedInputWords) {        
+        public override string RespondToInput(string[] separatedInputWords) {
             while (true) {
                 HUDTools.InventoryScreen();
-                string input = TextInput.PlayerPrompt("InvActions");
+                string input = TextInput.SelectPlayerAction(1);
                 if (input == "back") {
                     break;
                 }
@@ -200,8 +199,7 @@ namespace Saga.Assets
             return "";
         }
     }
-    public class SeeQuestLog(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) 
-    {
+    public class SeeQuestLog(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             HUDTools.QuestLogHUD();
             TextInput.PressToContinue();
@@ -209,14 +207,13 @@ namespace Saga.Assets
             return "";
         }
     }
-    public class SeeSkillTree(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord)
-    {
+    public class SeeSkillTree(string keyWord, string abrKeyWord) : InputAction(keyWord, abrKeyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             HUDTools.ShowSkillTree(Program.CurrentPlayer);
-            while (true) {               
-                string input = TextInput.PlayerPrompt("SkillActions");
+            while (true) {
+                string input = TextInput.SelectPlayerAction(2);
                 if (input == "back") {
-                    break;              
+                    break;
                 }
             }
             HUDTools.RoomHUD();
@@ -226,7 +223,7 @@ namespace Saga.Assets
     public class LearnSkill(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
             string skillToLearn = String.Join(" ", separatedInputWords.Skip(1));
-            int skillToLearnBranch =-1;
+            int skillToLearnBranch = -1;
             int skillToLearnIndex = -1;
             foreach (var branch in Program.CurrentPlayer.SkillTree.Skills) {
                 skillToLearnBranch = Program.CurrentPlayer.SkillTree.Skills.IndexOf(branch);
@@ -262,14 +259,14 @@ namespace Saga.Assets
             if (Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex].IsUnlocked) {
                 Program.CurrentPlayer.SkillTree.UpgradeSkill(skillToLearnBranch, skillToLearnIndex);
             } else if (skillToLearnIndex != 0 && Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex - 1].IsUnlocked || skillToLearnIndex == 0) {
-                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnBranch, skillToLearnIndex);               
+                Program.CurrentPlayer.SkillTree.UnlockSkill(skillToLearnBranch, skillToLearnIndex);
             } else {
-                HUDTools.Print($" You need to unlock '{Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex-1].Name}' before '{skillToLearn}'...", 3);
+                HUDTools.Print($" You need to unlock '{Program.CurrentPlayer.SkillTree.Skills[skillToLearnBranch][skillToLearnIndex - 1].Name}' before '{skillToLearn}'...", 3);
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
                 return "";
             }
-                HUDTools.ShowSkillTree(Program.CurrentPlayer);
+            HUDTools.ShowSkillTree(Program.CurrentPlayer);
             return "";
         }
     }
@@ -296,12 +293,12 @@ namespace Saga.Assets
                 TextInput.PressToContinue();
                 HUDTools.ClearLastText((startCursor.Item1, startCursor.Item2 - 1));
             }
-                return "";
+            return "";
         }
     }
     public class ChangeQuickCast(string keyWord) : InputAction(keyWord) {
         public override string RespondToInput(string[] separatedInputWords) {
-            string skillToSet = String.Join(" ", separatedInputWords.Skip(1));          
+            string skillToSet = String.Join(" ", separatedInputWords.Skip(1));
             int skillToSetIndex = Program.CurrentPlayer.SkillTree.GetLearnedSkills().FindIndex(s => s.Name.Equals(skillToSet, StringComparison.CurrentCultureIgnoreCase));
             if (skillToSetIndex == -1) {
                 HUDTools.Print($" No such skill as '{skillToSet}' exists...", 3);
@@ -316,6 +313,41 @@ namespace Saga.Assets
             }
             Program.CurrentPlayer.SkillTree.ChangeQuickCast(skillToSetIndex);
             HUDTools.ShowSkillTree(Program.CurrentPlayer);
+            return "";
+        }
+    }
+    public class ExamineObject(string keyWord) : InputAction(keyWord) {
+        public override string RespondToInput(string[] separatedInputWords) {
+            string objectToExamine = String.Join(" ", separatedInputWords.Skip(1));
+            foreach (IInteractable interactable in Program.RoomController.CurrentRoom.Interactables) {
+                if (interactable is IExaminable examinable) {
+                    if (interactable.Name.Equals(objectToExamine, StringComparison.CurrentCultureIgnoreCase)) {
+                        examinable.Examine();
+                        return "";
+                    }
+                }
+            }
+            HUDTools.Print($" There is no \u001b[90m{objectToExamine}\u001b[0m here to examine...", 3);
+            TextInput.PressToContinue();
+            HUDTools.ClearLastLine(3);
+            return "";
+        }
+    }
+    public class Search(string keyWord) : InputAction(keyWord)
+    {
+        public override string RespondToInput(string[] separatedInputWords) {
+            string areaToSearch = String.Join(" ", separatedInputWords.Skip(1));
+            foreach (IInteractable interactable in Program.RoomController.CurrentRoom.Interactables) {
+                if (interactable is ISearchable searchable) {
+                    if (interactable.Name.Equals(areaToSearch, StringComparison.CurrentCultureIgnoreCase)) {
+                        searchable.Search();
+                        return "";
+                    }
+                }
+            }
+            HUDTools.Print($" There is no \u001b[90m{areaToSearch}\u001b[0m here to search...", 3);
+            TextInput.PressToContinue();
+            HUDTools.ClearLastLine(3);
             return "";
         }
     }

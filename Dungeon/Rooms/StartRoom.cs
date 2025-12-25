@@ -2,6 +2,7 @@
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.People;
 using Saga.Dungeon.Quests;
+using Saga.Dungeon.Rooms.Room_Objects;
 using Saga.Items;
 
 namespace Saga.Dungeon.Rooms
@@ -12,6 +13,7 @@ namespace Saga.Dungeon.Rooms
             RoomName = "Jail cells";
             Description = " You look around and see Gheed rummage through big wooden crates. You hear him counting.";
             Exits = [new Exit() { keyString = "1", ExitTemplateDescription = "You see a big wooden door with rusted hinges leading into the {0}.", valueRoom = new SecondRoom() }];
+            Interactables = [new Crate()];
         }
         public override void LoadRoom() {
             if (!Visited) Visited = true;

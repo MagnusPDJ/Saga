@@ -37,21 +37,21 @@ namespace Saga.Dungeon.Rooms
             Shop shop = Shop.SetForsale();
             HUDTools.FullCampHUD();
             while (leave == false) {
-                string input = TextInput.PlayerPrompt();
+                string input = TextInput.UserKeyInput();
                 //Explore, måden man progresser sin karakter:
-                if (input == "e" || input == "explore") {
+                if (input == "e") {
                     leave = true;
                     choice = "explore";
                 }
                 //Gemmer spillet:
-                else if (input == "s" || input == "sleep" || input == "quit" || input == "quit game") {
+                else if (input == "s") {
                     Program.Save();
                     HUDTools.Print("Game saved!");
                     TextInput.PressToContinue();
                     HUDTools.ClearLastLine(3);
                 }
                 //Gheed's shop:
-                else if (input == "g" || input == "gheed" || input == "gheed's shop" || input == "shop") {
+                else if (input == "g") {
                     Program.SoundController.Stop();
                     Shop.Loadshop(Program.CurrentPlayer, shop);
                     Program.SoundController.Play("campfire");
@@ -59,20 +59,20 @@ namespace Saga.Dungeon.Rooms
                     HUDTools.FullCampHUD();
                 }
                 //Quit and/or save the game:
-                else if (input == "q" || input == "quit") {
+                else if (input == "q") {
                     if (Program.Quit() == "quit") {
                         leave = true;
                         choice = "quit";
                     }
                 }
                 //Tale med NPC'er mens man er tilbage i campen.
-                else if (input == "t" || input == "talk") {
+                else if (input == "t") {
                     NonPlayableCharacters.TalkToNpc();
                     HUDTools.FullCampHUD();
                 }
                 //Kalder metode til at tjekke input for, inventory, character, heale eller questloggen:
                 else {
-                    TextInput.PlayerPrompt("EventActions", input);
+                    TextInput.SelectPlayerAction(0, input);
                     HUDTools.FullCampHUD();
                 }
             }
