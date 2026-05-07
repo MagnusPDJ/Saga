@@ -19,15 +19,6 @@ namespace Saga.Dungeon.Rooms
             if (!EnemySpawned && !Cleared) {
                 if (Enemy == null) {
                     WizardEncounter();
-                    if (Program.RoomController.Ran == true) {
-                        Program.RoomController.Ran = false;
-                        EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
-                        Program.RoomController.ChangeRoom(Exits[0].keyString);
-                    } else {
-                        Cleared = true;
-                        CorpseDescription = Enemy!.EnemyCorpseDescription;
-                        Enemy = null;
-                    }
                 }
             } else if (Enemy != null) {
                 HUDTools.RoomHUD(true);
@@ -56,6 +47,15 @@ namespace Saga.Dungeon.Rooms
             Enemy = EnemyFactory.CreateByName("Dark Wizard");
             EnemySpawned = true;
             new CombatController(Program.CurrentPlayer, Enemy).Combat();
+            if (Program.RoomController.Ran == true) {
+                Program.RoomController.Ran = false;
+                EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
+                Program.RoomController.ChangeRoom(Exits[0].keyString);
+            } else {
+                Cleared = true;
+                CorpseDescription = Enemy!.EnemyCorpseDescription;
+                Enemy = null;
+            }
         }
     }
 }

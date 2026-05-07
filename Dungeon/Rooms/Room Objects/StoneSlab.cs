@@ -8,8 +8,15 @@ namespace Saga.Dungeon.Rooms.Room_Objects
     public class StoneSlab : ISearchable
     {
         public string Name => "stone slabs";
-        public string LookDescription => " You spot some loose \u001b[96mstone slabs\u001b[0m on the floor that look like you could search under them.";
+        public string DescriptionBeforeInteracted => " You spot some loose \u001b[96mstone slabs\u001b[0m on the floor that look like you could search under them.";
+        public string DescriptionAfterInteracted => " The \u001b[90mstone slabs\u001b[0m you flipped over.";
+        public string LookDescription { get; set; } = string.Empty;
         public bool Searched { get; set; } = false;
+
+        public StoneSlab() { 
+            LookDescription = DescriptionBeforeInteracted; 
+        }
+
         public void Search() { 
             if (!Searched) {
                 Searched = true;
@@ -34,6 +41,7 @@ namespace Saga.Dungeon.Rooms.Room_Objects
                     }
                 }
                 HUDTools.Print($" You search under the {Name} and you find some {item?.ItemName}.", 20);
+                LookDescription = DescriptionAfterInteracted;
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(3);
             } else {

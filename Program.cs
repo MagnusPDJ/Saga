@@ -4,6 +4,7 @@ using Saga.Character.Skills;
 using Saga.Dungeon;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
+using Saga.Dungeon.Rooms;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;

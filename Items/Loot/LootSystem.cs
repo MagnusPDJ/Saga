@@ -2,6 +2,9 @@
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Enemies.Interfaces;
 using Saga.Dungeon.Quests;
+using Saga.Dungeon.Rooms;
+using Saga.Dungeon.Rooms.Room_Objects;
+using System.Security.Policy;
 using System.Text.Json;
 
 namespace Saga.Items.Loot
@@ -19,6 +22,35 @@ namespace Saga.Items.Loot
             }
             return drops;
         }
+
+        public static void GetItems(LootTable table) {
+            List<IItem> drops = RollLoot(table);
+            foreach (var item in drops) {
+                if (item is ICraftingItem cItem) {
+                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i is not null && i.ItemName == cItem.ItemName);
+                    if (index != -1) {
+                        cItem.Amount++;
+                    } else {
+                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                        Program.CurrentPlayer.Inventory.SetValue(item, index);
+                    }
+                } else {
+                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
+                    Program.CurrentPlayer.Inventory.SetValue(item, index);
+                }
+
+                HUDTools.Print($" You gain {item?.ItemName}", 15);
+            }
+        }
+
+        public static void GetRoomObjectLoot(ILootable roomObject) {
+            int[] modifier = [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2];
+            var picked = Program.Rand.Next(0, modifier.Length);
+            GetGold(modifier[picked]);
+            GetHealingPotions();
+            GetItems(roomObject.LootTable);           
+        }
+
         public static void GetPotionsByType(List<(PotionType, int)> potions) {
             foreach (var potion in potions) {
                 switch (potion.Item1) {
@@ -95,23 +127,7 @@ namespace Saga.Items.Loot
             } else if (monster is IHuman || monster is IGreenskin || monster.Name == "Mimic") {
                 GetHealingPotions();
             }
-            List<IItem> drops = RollLoot(monster.LootTable);
-            foreach (var item in drops) {
-                if (item is ICraftingItem cItem) {
-                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i is not null && i.ItemName == cItem.ItemName);
-                    if (index != -1) {
-                        cItem.Amount++;
-                    } else {
-                        index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                        Program.CurrentPlayer.Inventory.SetValue(item, index);
-                    }
-                } else {
-                    int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
-                    Program.CurrentPlayer.Inventory.SetValue(item, index);
-                }
-              
-                HUDTools.Print($" You gain {item?.ItemName}", 15);
-            }
+            GetItems(monster.LootTable);
             GetExp(monster.Power, monster.ExpGain);
             TextInput.PressToContinue();
         }

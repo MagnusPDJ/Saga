@@ -22,7 +22,7 @@ namespace Saga.Assets
             }
 
             // Universal "go home" support
-            if (separatedInputWords[1].Equals("home", StringComparison.OrdinalIgnoreCase)) {
+            if (separatedInputWords[1].Equals("home", StringComparison.OrdinalIgnoreCase) && Program.RoomController.CurrentRoom.RoomName != "Jail cells") {
                 HUDTools.Print("Are you sure you want to return? (Y/N)", 10);
                 string confirm = TextInput.UserKeyInput();
                 if (confirm == "y") {

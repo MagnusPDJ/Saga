@@ -18,15 +18,6 @@ namespace Saga.Dungeon.Rooms
             if (!Visited) Visited = true;
                   
             SecondEncounter();
-            if (Program.RoomController.Ran == true) {
-                Program.RoomController.Ran = false;
-                EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
-                Program.RoomController.ChangeRoom(Exits[0].keyString);
-            } else {
-                Cleared = true;
-                CorpseDescription = Enemy!.EnemyCorpseDescription;
-                Enemy = null;
-            }
 
             IdleInRoom();
         }
@@ -39,6 +30,15 @@ namespace Saga.Dungeon.Rooms
             Enemy = EnemyFactory.CreateByName("Feral dog");
             EnemySpawned = true;
             new CombatController(Program.CurrentPlayer, Enemy).Combat();
+            if (Program.RoomController.Ran == true) {
+                Program.RoomController.Ran = false;
+                EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
+                Program.RoomController.ChangeRoom(Exits[0].keyString);
+            } else {
+                Cleared = true;
+                CorpseDescription = Enemy!.EnemyCorpseDescription;
+                Enemy = null;
+            }
         }
 
     }

@@ -6,7 +6,6 @@ using Saga.Dungeon.Enemies;
 using Saga.Dungeon.People;
 using Saga.Dungeon.Quests;
 using Saga.Items;
-using Windows.Networking.Sockets;
 
 namespace Saga.Character
 {

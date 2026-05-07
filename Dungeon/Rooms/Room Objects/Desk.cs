@@ -6,13 +6,21 @@ namespace Saga.Dungeon.Rooms.Room_Objects
     public class Desk : IExaminable
     {
         public string Name { get; set; } = "desk";
-        public string LookDescription => " An old wooden \u001b[96mdesk\u001b[0m you could examine.";
+        public string DescriptionBeforeInteracted => " An old wooden \u001b[96mdesk\u001b[0m you could examine.";
+        public string DescriptionAfterInteracted => " An empty wooden \u001b[90mdesk\u001b[0m.";
+        public string LookDescription { set; get; } = string.Empty;
         public bool Examined { get; set; } = false;
+
+        public Desk() {
+            LookDescription = DescriptionBeforeInteracted;
+        }
+
         public void Examine() {
             if (!Examined) {
                 Examined = true;
                 HUDTools.Print(" You rummage through dusty documents and moldy records illegible or in unknown languages,\n but in a drawer you find some gold and a key.", 20);
                 LootSystem.GetQuestLoot(1, 0, "MeetFlemsha");
+                LookDescription = DescriptionAfterInteracted;
                 TextInput.PressToContinue();
                 HUDTools.ClearLastLine(6);
             } else {

@@ -50,7 +50,7 @@
           [ "Ore deposits", " Veins of metal flicker on the walls surrounding you signalling undiscovered ores." ]
         ],
         [
-          [ "Dark tunnel", " Jagged and narrow walls lead deeper into the cave. The curves makes it hard to see how far it continues."]
+          [ "Dark tunnel", " Jagged and narrow walls lead deeper into the cave. The curves makes it hard to see how far it\n continues."]
         ]
       ]
     }

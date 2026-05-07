@@ -18,19 +18,10 @@ namespace Saga.Dungeon.Rooms
             if (!Visited) Visited = true;
 
             if (!EnemySpawned && !Cleared) {
-                double rollForEncounter = Program.Rand.NextDouble();
-                if (rollForEncounter <= EnemySpawnChance) {
-                    RandomCombatEncounter();
-                    if (Program.RoomController.Ran == true) {
-                        Program.RoomController.Ran = false;
-                        EntranceDescription = $" You return to the room where you left the {Enemy!.Name}...";
-                        Program.RoomController.ChangeRoom(Exits[0].keyString);
-                    } else {
-                        Cleared = true;
-                        CorpseDescription = Enemy!.EnemyCorpseDescription;
-                        Enemy = null;
-                    }
-                } else if (rollForEncounter <= PuzzleChance) {
+                SpawnEnemy(EnemySpawnChance);
+                if (Enemy != null) {              
+                    StartCombatEncounter(Enemy);
+                } else if (Enemy == null) {
                     RunePuzzleEncounter();
                 } else {
                     Cleared = true;
@@ -93,14 +84,15 @@ namespace Saga.Dungeon.Rooms
             //Player action sequence:
             string location = "";
             for (int i = 0; i < 4;) {
-                HUDTools.RoomHUD(true);
-                HUDTools.ClearLastLine(1);
+                HUDTools.RoomHUD();
+                HUDTools.ClearLastLine(2);
+                HUDTools.Print(Program.RoomController.CurrentRoom.EntranceDescription +"\n", 0);
                 if (i == 0) {
                     HUDTools.Print("    o    <- starting position", 0);
                     for (int j = 0; j < 4; j++) {
                         HUDTools.Print(" " + puzzle[j] + "\n", 0);
                     }
-                    HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
+                    
                 } else {                    
                     for (int j = 0; j < 4; j++) {
                         if (i == j) {
@@ -109,8 +101,8 @@ namespace Saga.Dungeon.Rooms
                         HUDTools.Print("\n " + puzzle[j], 0);
                     }
                     Console.WriteLine();
-                    HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
-                }                
+                }
+                HUDTools.Print(" Choose your path (each rune position corresponds to a number 1-4):", 0);
                 string input = TextInput.UserKeyInput();
                 if (int.TryParse(input, out int number) && number < 5 && number > 0) {
                     if (positions[i] == number - 1) {

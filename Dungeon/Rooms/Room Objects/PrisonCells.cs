@@ -7,8 +7,16 @@ namespace Saga.Dungeon.Rooms.Room_Objects
     public class PrisonCells : ISearchable
     {
         public string Name => "prison cells";
-        public string LookDescription => " There are several \u001b[96mprison cells\u001b[0m you could search through.";
+        public string DescriptionBeforeInteracted => " There are several \u001b[96mprison cells\u001b[0m you could search through.";
+        public string DescriptionAfterInteracted => " There are several \u001b[90mprison cells\u001b[0m.";
+        public string LookDescription { get; set; } = string.Empty;
         public bool Searched { get; set; } = false;
+
+        public PrisonCells()
+        {
+            LookDescription = DescriptionBeforeInteracted;
+        }
+
         public void Search()
         {
             if (!Searched) {
@@ -41,6 +49,7 @@ namespace Saga.Dungeon.Rooms.Room_Objects
                     }
                 }
                 Searched = true;
+                LookDescription = DescriptionAfterInteracted;
                 TextInput.PressToContinue();
                 HUDTools.ClearLastText((startCursorPosition.Item1, startCursorPosition.Item2 - 1));
             } else {
