@@ -35,7 +35,6 @@ namespace Saga.Dungeon.Enemies
         };
         public virtual List<string> Tags { get; set; } = [];
         public virtual int ExpGain { get; set; }
-        public virtual float GoldModifier { get; set; }
         public virtual LootTable LootTable { get; set; } = new();
         public virtual void TakeDamage((IDamageType, int) amount) {
             Health -= amount.Item2;

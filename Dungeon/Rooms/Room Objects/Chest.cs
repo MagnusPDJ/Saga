@@ -13,6 +13,9 @@ namespace Saga.Dungeon.Rooms.Room_Objects
 
         public LootTable LootTable { get; set; } = new() {
             Items = [
+                        new LootEntry() {ItemId = "gold", DropChance = 0.8, Modifier = 1.0},
+                        new LootEntry() {ItemId = "healthpotion", DropChance = 0.8, MinQuantity = 1, MaxQuantity = 3},
+                        new LootEntry() {ItemId = "manapotion", DropChance = 0.5, MinQuantity = 1, MaxQuantity = 2},
                         new LootEntry() {ItemId = "rattail", DropChance = 0.1},
                         new LootEntry() {ItemId = "greenslime", DropChance = 0.1},
                         new LootEntry() {ItemId = "batwings", DropChance = 0.1},
@@ -28,7 +31,7 @@ namespace Saga.Dungeon.Rooms.Room_Objects
             if (!Examined) {
                 Examined = true;
                 HUDTools.Print($" You rummage through the {Name}:", 20);
-                LootSystem.GetRoomObjectLoot(this);
+                LootSystem.GetLootFromTable(LootTable);
                 LookDescription = DescriptionAfterInteracted;
                 TextInput.PressToContinue();
                 HUDTools.RoomHUD();

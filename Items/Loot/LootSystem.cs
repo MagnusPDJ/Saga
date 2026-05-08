@@ -2,9 +2,7 @@
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Enemies.Interfaces;
 using Saga.Dungeon.Quests;
-using Saga.Dungeon.Rooms;
 using Saga.Dungeon.Rooms.Room_Objects;
-using System.Security.Policy;
 using System.Text.Json;
 
 namespace Saga.Items.Loot
@@ -12,21 +10,50 @@ namespace Saga.Items.Loot
     public static class LootSystem
     {
         public static List<IItem> RollLoot(LootTable table) {
+            int numberOfDrops = table.NumberOfDrops;
             var drops = new List<IItem>();
             foreach (var loot in table.Items) {
-                if ((loot.Class != string.Empty && loot.Class != Program.CurrentPlayer.CurrentClass) || drops.Count == table.Drops) continue;
-                if (Program.Rand.NextDouble() <= loot.DropChance) {
-                    var item = ItemDatabase.GetByItemId(loot.ItemId);
+                IItem? item = null;
+                if (loot.Class != string.Empty && loot.Class != Program.CurrentPlayer.CurrentClass) continue;
+                else if (Program.Rand.NextDouble() <= loot.DropChance && loot.ItemId == "gold") {
+                    int upper = 26 * Program.CurrentPlayer.Level + 61;
+                    int lower = 5 * Program.CurrentPlayer.Level;
+                    int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * loot.Modifier);
+                    item = new GoldPouch { GoldAmount = g };
+                    if (item != null) drops.Add(item);
+                    numberOfDrops++;
+                } else if (Program.Rand.NextDouble() <= loot.DropChance && loot.ItemId == "healingpotion") {
+                    int potionsToGet;                     
+                    potionsToGet = Program.Rand.Next(loot.MinQuantity, loot.MaxQuantity + 1);
+                    if (potionsToGet > 0) item = new HealingPotion { PotionQuantity = potionsToGet };
+                    if (item != null) drops.Add(item);
+                    numberOfDrops++;
+                } else if (Program.Rand.NextDouble() <= loot.DropChance && loot.ItemId == "manapotion") {
+                    int potionsToGet;
+                    potionsToGet = Program.Rand.Next(loot.MinQuantity, loot.MaxQuantity + 1);
+                    if (potionsToGet > 0) item = new ManaPotion { PotionQuantity = potionsToGet };
+                    if (item != null) drops.Add(item);
+                    numberOfDrops++;
+                } else if (Program.Rand.NextDouble() <= loot.DropChance && drops.Count < numberOfDrops) {
+                    item = ItemDatabase.GetByItemId(loot.ItemId);
                     if (item != null) drops.Add(item);
                 }
             }
             return drops;
         }
 
-        public static void GetItems(LootTable table) {
+        public static void GetLootFromTable(LootTable table) {
             List<IItem> drops = RollLoot(table);
+            if (drops.Count == 0) {                
+                return;
+            }
             foreach (var item in drops) {
-                if (item is ICraftingItem cItem) {
+                if (item is GoldPouch goldPouch) {
+                    HUDTools.Print($"\u001b[33m You loot {goldPouch.GoldAmount} gold coins.\u001b[0m", 15);
+                    Program.CurrentPlayer.Equipment.AddGold(goldPouch.GoldAmount);
+                } else if (item is IConsumable potion) {
+                    GetPotionsByType([(potion.PotionType, potion.PotionQuantity)]);
+                } else if (item is ICraftingItem cItem) {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i is not null && i.ItemName == cItem.ItemName);
                     if (index != -1) {
                         cItem.Amount++;
@@ -34,21 +61,13 @@ namespace Saga.Items.Loot
                         index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                         Program.CurrentPlayer.Inventory.SetValue(item, index);
                     }
+                    HUDTools.Print($" You gain {item?.ItemName}", 15);
                 } else {
                     int index = Array.FindIndex(Program.CurrentPlayer.Inventory, i => i == null || Program.CurrentPlayer.Inventory.Length == 0);
                     Program.CurrentPlayer.Inventory.SetValue(item, index);
-                }
-
-                HUDTools.Print($" You gain {item?.ItemName}", 15);
+                    HUDTools.Print($" You gain {item?.ItemName}", 15);
+                }              
             }
-        }
-
-        public static void GetRoomObjectLoot(ILootable roomObject) {
-            int[] modifier = [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2];
-            var picked = Program.Rand.Next(0, modifier.Length);
-            GetGold(modifier[picked]);
-            GetHealingPotions();
-            GetItems(roomObject.LootTable);           
         }
 
         public static void GetPotionsByType(List<(PotionType, int)> potions) {
@@ -115,22 +134,20 @@ namespace Saga.Items.Loot
                 HUDTools.Print($"\u001b[34m You loot {potionsToGet} mana potions\u001b[0m", 20);
             }
         }
-
-        // OLD methods
-
         //Metode til at få loot efter successfuld kamp:
         public static void GetCombatLoot(EnemyBase monster, string message) {
             HUDTools.Print(message, 15);
-            GetGold(monster.GoldModifier);
-            if (monster.Name == "Human captor") {
-                GetHealingPotions(Program.Rand.Next(5, 8));
-            } else if (monster is IHuman || monster is IGreenskin || monster.Name == "Mimic") {
-                GetHealingPotions();
-            }
-            GetItems(monster.LootTable);
+            GetLootFromTable(monster.LootTable);
             GetExp(monster.Power, monster.ExpGain);
             TextInput.PressToContinue();
         }
+
+
+
+
+
+        // OLD methods  
+
         //Metode til at få loot fra en skattekiste:
         public static void GetTreasureChestLoot() {
             List<IWeapon> weapons = JsonSerializer.Deserialize<List<IWeapon>>(HUDTools.ReadAllResourceText("Saga.Items.Loot.WeaponDatabase.json"), Program.Options) ?? [];

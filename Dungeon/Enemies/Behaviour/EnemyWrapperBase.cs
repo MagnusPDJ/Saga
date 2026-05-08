@@ -23,7 +23,6 @@ namespace Saga.Dungeon.Enemies.Behaviour
 
         public override List<string> Tags { get => inner.Tags; set => inner.Tags = value; }
         public override int ExpGain { get => inner.ExpGain; set => inner.ExpGain = value; }
-        public override float GoldModifier { get => inner.GoldModifier; set => inner.GoldModifier = value; }
         public override LootTable LootTable { get => inner.LootTable; set => inner.LootTable = value; }
     }
 }

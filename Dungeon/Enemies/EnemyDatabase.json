@@ -30,7 +30,21 @@
     },
     "Tags": [ "Human", "Living" ],
     "ExpGain": 20,
-    "GoldModifier": 1.0
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "gold",
+          "DropChance": 1.0,
+          "Modifier": 1.0
+        },
+        {
+          "ItemId": "healingpotion",
+          "DropChance": 1.0,
+          "MinQuantity": 5,
+          "MaxQuantity": 8
+        }
+      ]
+    }
   },
   {
     "Name": "Feral dog",
@@ -62,8 +76,7 @@
       "Death": 0
     },
     "Tags": [ "Beast", "Living" ],
-    "ExpGain": 35,
-    "GoldModifier": 0.0
+    "ExpGain": 35
   },
   {
     "Name": "Huge Rat",
@@ -96,7 +109,6 @@
     },
     "Tags": [ "Beast", "Living" ],
     "ExpGain": 40,
-    "GoldModifier": 0.0,
     "LootTable": {
       "Items": [
         {
@@ -137,7 +149,6 @@
     },
     "Tags": [ "Beast", "Living" ],
     "ExpGain": 40,
-    "GoldModifier": 0.0,
     "LootTable": {
       "Items": [
         {
@@ -178,7 +189,6 @@
     },
     "Tags": [ "Mythical", "Living" ],
     "ExpGain": 40,
-    "GoldModifier": 0.0,
     "LootTable": {
       "Items": [
         {
@@ -219,7 +229,6 @@
     },
     "Tags": [ "Troll", "Living" ],
     "ExpGain": 40,
-    "GoldModifier": 0.0,
     "LootTable": {
       "Items": [
         {
@@ -260,9 +269,19 @@
     },
     "Tags": [ "Mythical", "Living" ],
     "ExpGain": 200,
-    "GoldModifier": 4.0,
     "LootTable": {
       "Items": [
+        {
+          "ItemId": "gold",
+          "DropChance": 1.0,
+          "Modifier": 4.0
+        },
+        {
+          "ItemId": "healingpotion",
+          "DropChance": 0.9,
+          "MinQuantity": 1,
+          "MaxQuantity": 4
+        },
         {
           "ItemId": "enchantedwand",
           "DropChance": 0.5,
@@ -387,9 +406,19 @@
     },
     "Tags": [ "Human", "Boss", "Living" ],
     "ExpGain": 500,
-    "GoldModifier": 3.0,
     "LootTable": {
       "Items": [
+        {
+          "ItemId": "gold",
+          "DropChance": 1.0,
+          "Modifier": 3.0
+        },
+        {
+          "ItemId": "healingpotion",
+          "DropChance": 0.9,
+          "MinQuantity": 2,
+          "MaxQuantity": 5
+        },
         {
           "ItemId": "greypowder",
           "DropChance": 1.0
@@ -426,8 +455,7 @@
       "Death": 100
     },
     "Tags": [ "Undead", "Boss" ],
-    "ExpGain": 200,
-    "GoldModifier": 3.0
+    "ExpGain": 200
   },
   {
     "Name": "Skeleton Warrior",
@@ -458,8 +486,7 @@
       "Death": 50
     },
     "Tags": [ "Undead" ],
-    "ExpGain": 15,
-    "GoldModifier": 1.0
+    "ExpGain": 15
   },
   {
     "Name": "Goblin Raider",
@@ -490,8 +517,7 @@
       "Death": 0
     },
     "Tags": [ "Greenskin", "Living" ],
-    "ExpGain": 10,
-    "GoldModifier": 0.5
+    "ExpGain": 10
   },
   {
     "Name": "Orc Warrior",
@@ -522,8 +548,7 @@
       "Death": 0
     },
     "Tags": [ "Greenskin", "Living" ],
-    "ExpGain": 25,
-    "GoldModifier": 1.5
+    "ExpGain": 25
   },
   {
     "Name": "Fire Elemental",
@@ -554,7 +579,6 @@
       "Death": 0
     },
     "Tags": [ "Mythical", "Boss" ],
-    "ExpGain": 150,
-    "GoldModifier": 2.0
+    "ExpGain": 150
   }
 ]
