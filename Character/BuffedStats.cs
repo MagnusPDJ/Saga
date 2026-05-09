@@ -1,6 +1,5 @@
 ﻿using Saga.Character.Buffs;
 using Saga.Character.DmgLogic;
-using Saga.Items;
 using System.Text.Json.Serialization;
 
 namespace Saga.Character

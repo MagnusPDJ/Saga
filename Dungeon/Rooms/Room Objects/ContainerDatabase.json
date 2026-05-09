@@ -1,0 +1,66 @@
+[
+  {
+    "Type": "containerBase",
+    "LootableId": "chest",
+    "Name": "wooden chest",
+    "DescriptionBeforeInteracted": " A \u001b[96mwooden chest\u001b[0m you could examine.",
+    "DescriptionAfterInteracted": " An empty \u001b[90mwooden chest\u001b[0m.",
+    "LookDescription": " A \u001b[96mwooden chest\u001b[0m you could examine.",
+    "Examined": false,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "gold",
+          "DropChance": 0.8,
+          "Modifier": 1.0
+        },
+        {
+          "ItemId": "healingpotion",
+          "DropChance": 0.8,
+          "MinQuantity": 1,
+          "MaxQuantity": 3
+        },
+        {
+          "ItemId": "manapotion",
+          "DropChance": 0.5,
+          "MinQuantity": 1,
+          "MaxQuantity": 2
+        },
+        {
+          "ItemId": "rattail",
+          "DropChance": 0.1
+        },
+        {
+          "ItemId": "greenslime",
+          "DropChance": 0.1
+        },
+        {
+          "ItemId": "batwings",
+          "DropChance": 0.1
+        },
+        {
+          "ItemId": "candle",
+          "DropChance": 0.1
+        }
+      ]
+    }
+  },
+  {
+    "Type": "containerBase",
+    "LootableId": "crate",
+    "Name": "crate",
+    "DescriptionBeforeInteracted": " There is a wooden \u001b[96mcrate\u001b[0m you could examine.",
+    "DescriptionAfterInteracted": " There is an empty wooden \u001b[90mcrate\u001b[0m.",
+    "LookDescription": " There is a wooden \u001b[96mcrate\u001b[0m you could examine.",
+    "Examined": false,
+    "LootTable": {
+      "Items": [
+        {
+          "ItemId": "gold",
+          "DropChance": 1.0,
+          "Modifier": 1.0
+        }
+      ]
+    }
+  }
+]

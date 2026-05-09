@@ -1,7 +1,6 @@
 ﻿using Saga.Assets;
 using Saga.Character.DmgLogic;
 using Saga.Dungeon.Enemies;
-using System;
 
 namespace Saga.Items
 {

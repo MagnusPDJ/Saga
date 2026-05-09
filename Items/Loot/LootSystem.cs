@@ -142,7 +142,60 @@ namespace Saga.Items.Loot
             TextInput.PressToContinue();
         }
 
+        //Metode til at få en tilfældig mængde guld:
+        public static void GetGold(float modifier = 1) {
+            int upper = 26 * Program.CurrentPlayer.Level + 61;
+            int lower = 5 * Program.CurrentPlayer.Level;
+            int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
+            if (g > 0) {
+                HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
+                Program.CurrentPlayer.Equipment.AddGold(g);
+            }
+        }
+        //Metode til at få en bestemt mængde guld:
+        public static void GetFixedGold(int g) {
+            if (g > 0) {
+                HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
+                Program.CurrentPlayer.Equipment.AddGold(g);
+            }
+        }
 
+        //Metode til at få en tilfældig mængde exp eller en bestemt mængde:
+        public static void GetExp(int monsterPower, int monsterExp = 0) {
+            int powerDifference = monsterPower - Program.CurrentPlayer.Level;
+            int xpGain;
+            if (powerDifference >= 0) {
+                xpGain = powerDifference switch {
+                    0 => monsterExp,
+                    1 => (int)(monsterExp * 1.1),
+                    2 => (int)(monsterExp * 1.25),
+                    3 => (int)(monsterExp * 1.5),
+                    4 => (int)(monsterExp * 1.9),
+                    5 => (int)(monsterExp * 2.5),
+                    _ => (int)(monsterExp * 0.5 * powerDifference),
+                };
+            } else {
+                xpGain = powerDifference switch {
+                    -1 => (int)(monsterExp * 0.9),
+                    -2 => (int)(monsterExp * 0.75),
+                    -3 => (int)(monsterExp * 0.5),
+                    -4 => (int)(monsterExp * 0.1),
+                    _ => monsterExp * 0,
+                };
+            }
+            if (xpGain > 0) {
+                HUDTools.Print($"\u001b[32m You've gained {xpGain} experience points!\u001b[0m", 10);
+                Program.CurrentPlayer.Exp += xpGain;
+            }
+            Program.CurrentPlayer.CheckForLevelUp();
+        }
+        public static void GetFixedExp(int expGain) {
+            if (expGain > 0) {
+                HUDTools.Print($"\u001b[32m You've gained {expGain} experience points!\u001b[0m", 10);
+                Program.CurrentPlayer.Exp += expGain;
+            }
+            Program.CurrentPlayer.CheckForLevelUp();
+        }
 
 
 
@@ -319,59 +372,6 @@ namespace Saga.Items.Loot
             Console.ResetColor();
             Quest.UpdateQuestLog(Program.CurrentPlayer);
         }
-        //Metode til at få en tilfældig mængde guld:
-        public static void GetGold(float modifier = 1) {
-            int upper = 26 * Program.CurrentPlayer.Level + 61;
-            int lower = 5 * Program.CurrentPlayer.Level;
-            int g = (int)Math.Floor(Program.Rand.Next(lower, upper + 1) * modifier);
-            if (g > 0) {
-                HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
-                Program.CurrentPlayer.Equipment.AddGold(g);
-            }
-        }
-        //Metode til at få en bestemt mængde guld:
-        public static void GetFixedGold(int g) {
-            if (g > 0) {
-                HUDTools.Print($"\u001b[33m You loot {g} gold coins.\u001b[0m", 15);
-                Program.CurrentPlayer.Equipment.AddGold(g);
-            }
-        }
 
-        //Metode til at få en tilfældig mængde exp eller en bestemt mængde:
-        public static void GetExp(int monsterPower, int monsterExp = 0) {
-            int powerDifference = monsterPower - Program.CurrentPlayer.Level;
-            int xpGain;
-            if (powerDifference >= 0) {
-                xpGain = powerDifference switch {
-                    0 => monsterExp,
-                    1 => (int)(monsterExp * 1.1),
-                    2 => (int)(monsterExp * 1.25),
-                    3 => (int)(monsterExp * 1.5),
-                    4 => (int)(monsterExp * 1.9),
-                    5 => (int)(monsterExp * 2.5),
-                    _ => (int)(monsterExp * 0.5 * powerDifference),
-                };
-            } else {
-                xpGain = powerDifference switch {
-                    -1 => (int)(monsterExp * 0.9),
-                    -2 => (int)(monsterExp * 0.75),
-                    -3 => (int)(monsterExp * 0.5),
-                    -4 => (int)(monsterExp * 0.1),
-                    _ => monsterExp * 0,
-                };
-            }
-            if (xpGain > 0) {
-                HUDTools.Print($"\u001b[32m You've gained {xpGain} experience points!\u001b[0m", 10);
-                Program.CurrentPlayer.Exp += xpGain;
-            }
-            Program.CurrentPlayer.CheckForLevelUp();
-        }
-        public static void GetFixedExp(int expGain) {
-            if (expGain > 0) {
-                HUDTools.Print($"\u001b[32m You've gained {expGain} experience points!\u001b[0m", 10);
-                Program.CurrentPlayer.Exp += expGain;
-            }
-            Program.CurrentPlayer.CheckForLevelUp();
-        }
     }
 }

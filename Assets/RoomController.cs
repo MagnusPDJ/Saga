@@ -6,7 +6,6 @@ namespace Saga.Assets
     public class RoomController
     {
         public static readonly CampRoom Camp = new();
-        public static readonly StartRoom StartRoom = new();
         public RoomBase CurrentRoom { get; set; } = Camp;
         public DungeonInstance CurrentDungeonInstance { get; set; } = new();
         public bool Ran { get; set; } = false;

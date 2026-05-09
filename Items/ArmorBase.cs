@@ -1,5 +1,4 @@
 ﻿using Saga.Assets;
-using Saga.Character;
 
 namespace Saga.Items
 {

@@ -15,6 +15,7 @@ namespace Saga.Dungeon.Rooms
             MaxExits = 1;
             Interactables = [new PrisonCells(), new Desk()];
         }
+
         public override void LoadRoom() {
             if (!Visited) Visited = true;
 

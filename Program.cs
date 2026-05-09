@@ -5,6 +5,7 @@ using Saga.Dungeon;
 using Saga.Dungeon.Enemies;
 using Saga.Dungeon.Quests;
 using Saga.Dungeon.Rooms;
+using Saga.Dungeon.Rooms.Room_Objects;
 using Saga.Items;
 using Saga.Items.Loot;
 using System.Configuration;
@@ -86,7 +87,7 @@ namespace Saga
             ItemDatabase.LoadFromFile("Saga.Items.Loot.WeaponDatabase.json");
             ItemDatabase.LoadFromFile("Saga.Items.Loot.CraftingItemDatabase.json");
             DungeonDatabase.LoadFromFile("Saga.Dungeon.DungeonDatabase.json");
-
+            ContainerDatabase.LoadFromFile("Saga.Dungeon.Rooms.Room_Objects.ContainerDatabase.json");
 
             //Kalder MainMenu metoden.
             MainMenu();
@@ -146,7 +147,7 @@ namespace Saga
         public static void NewStart(bool newP) {
             if (newP) {
                 CurrentPlayer.SetStartingGear();
-                RoomController.ChangeRoom("", RoomController.StartRoom);
+                RoomController.ChangeRoom("", new StartRoom());
             }
         }
 
@@ -456,6 +457,8 @@ namespace Saga
             options.Converters.Add(new PolymorphicConverter<IActiveSkill>());
             options.Converters.Add(new PolymorphicConverter<ITargetedSkill>());
             options.Converters.Add(new PolymorphicConverter<ISelfSkill>());
+            //Loot container types til json serializer
+            options.Converters.Add(new PolymorphicConverter<ILootable>());
         }
     }
 }

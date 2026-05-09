@@ -45,10 +45,12 @@ namespace Saga.Dungeon.Rooms
             }
         }
 
-        public virtual void SpawnInteractable(double chestSpawnChance) {
-            double rollForChest = Program.Rand.NextDouble();
-            if (rollForChest < chestSpawnChance) { 
-                Interactables.Add(new Chest());
+        public virtual void SpawnInteractable(string containerToSpawn, double spawnChance) {
+            double rollForContainer = Program.Rand.NextDouble();
+            if (rollForContainer < spawnChance) {
+                ILootable? container = ContainerDatabase.GetByLootableId(containerToSpawn);
+                if (container is IInteractable interactable)
+                Interactables.Add(interactable);
             }
         }
 
